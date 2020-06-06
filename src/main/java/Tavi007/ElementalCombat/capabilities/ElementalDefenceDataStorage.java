@@ -19,17 +19,17 @@ public class ElementalDefenceDataStorage implements Capability.IStorage<IElement
     @Override
     public INBT writeNBT(Capability<IElementalDefenceData> capability, IElementalDefenceData instance, Direction side) 
     {
-    	List<String> weaknessList = instance.getWeaknessList();
-    	List<String> resistanceList = instance.getResistanceList();
+    	List<String> weakList = instance.getWeaknessList();
+    	List<String> resiList = instance.getResistanceList();
     	List<String> wallList = instance.getWallList();
-    	List<String> absorbList = instance.getAbsorbList();
+    	List<String> absoList = instance.getAbsorbList();
     	
     	//fill nbt with data
     	CompoundNBT nbt = new CompoundNBT();
-    	nbt.put("elem_weakness", fromListToNBT(weaknessList));
-    	nbt.put("elem_resistance", fromListToNBT(resistanceList));
+    	nbt.put("elem_weak", fromListToNBT(weakList));
+    	nbt.put("elem_resi", fromListToNBT(resiList));
     	nbt.put("elem_wall", fromListToNBT(wallList));
-    	nbt.put("elem_absorb", fromListToNBT(absorbList));
+    	nbt.put("elem_abso", fromListToNBT(absoList));
     	
     	return nbt;
     }
@@ -42,22 +42,18 @@ public class ElementalDefenceDataStorage implements Capability.IStorage<IElement
         
         //fill lists with nbt data
         CompoundNBT nbtCompound = (CompoundNBT)nbt;
-        ListNBT weaknessNBT = nbtCompound.getList("elem_weakness", ????);
-       
-        
-        instance.setWeaknessList(fromNBTToList(weaknessNBT));
-        instance.setResistanceList(fromNBTToList(resistanceNBT));
-        instance.setWallList(fromNBTToList(wallNBT));
-        instance.setAbsorbList(fromNBTToList(absorbNBT));
+        instance.setWeaknessList(  fromNBTToList(nbtCompound.getList("elem_weak", 0)));
+        instance.setResistanceList(fromNBTToList(nbtCompound.getList("elem_resi", 0)));
+        instance.setWallList(      fromNBTToList(nbtCompound.getList("elem_wall", 0)));
+        instance.setAbsorbList(    fromNBTToList(nbtCompound.getList("elem_abso", 0)));
     }
     
     private List<String> fromNBTToList(ListNBT nbt)
     {
     	List<String> list = new ArrayList<String>();
-    	Iterator<INBT> iterator = nbt.iterator(); 
-    	while (iterator.hasNext()) 
+    	for (INBT item : nbt)
     	{
-    		list.add(iterator.toString());
+    		list.add(item.toString());
     	}
     	return list;
     }
@@ -65,11 +61,10 @@ public class ElementalDefenceDataStorage implements Capability.IStorage<IElement
     private ListNBT fromListToNBT(List<String> list)
     {
     	ListNBT nbt = new ListNBT();
-    	Iterator<String> iterator = list.iterator(); 
-    	while (iterator.hasNext()) 
-    	{
-    		String s = iterator.toString();
-    		nbt.add(StringNBT(s));
+    	for (String item : list) 
+    	{	
+    		nbt.add(StringNBT.valueOf(item));
     	}
+    	return nbt;
     }
 }

@@ -1,8 +1,8 @@
 package Tavi007.ElementalCombat.events;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.capabilities.ElementalCombatDataCapability;
-import Tavi007.ElementalCombat.capabilities.IElementalCombatData;
+import Tavi007.ElementalCombat.capabilities.ElementalDefenceDataCapability;
+import Tavi007.ElementalCombat.capabilities.IElementalDefenceData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
@@ -29,7 +29,7 @@ public class ElementifyLivingHurtEvent
 		String targetName = target.getEntityString();
 		
 		// get target properties
-		Capability<IElementalCombatData> cap = null;
+		Capability<IElementalDefenceData> cap = null;
 		target.getCapability(cap);
 		//cap.getStorage().readNBT(cap, instance, side, nbt);
 	}
