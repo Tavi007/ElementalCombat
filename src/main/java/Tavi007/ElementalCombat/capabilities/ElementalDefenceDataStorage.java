@@ -1,7 +1,6 @@
 package Tavi007.ElementalCombat.capabilities;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -42,10 +41,11 @@ public class ElementalDefenceDataStorage implements Capability.IStorage<IElement
         
         //fill lists with nbt data
         CompoundNBT nbtCompound = (CompoundNBT)nbt;
-        instance.setWeaknessList(  fromNBTToList(nbtCompound.getList("elem_weak", 0)));
-        instance.setResistanceList(fromNBTToList(nbtCompound.getList("elem_resi", 0)));
-        instance.setWallList(      fromNBTToList(nbtCompound.getList("elem_wall", 0)));
-        instance.setAbsorbList(    fromNBTToList(nbtCompound.getList("elem_abso", 0)));
+        
+        instance.setWeaknessList(  fromNBTToList(nbtCompound.getList("elem_weak", nbt.getId())));
+        instance.setResistanceList(fromNBTToList(nbtCompound.getList("elem_resi", nbt.getId())));
+        instance.setWallList(      fromNBTToList(nbtCompound.getList("elem_wall", nbt.getId())));
+        instance.setAbsorbList(    fromNBTToList(nbtCompound.getList("elem_abso", nbt.getId())));
     }
     
     private List<String> fromNBTToList(ListNBT nbt)

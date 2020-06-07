@@ -3,7 +3,7 @@ package Tavi007.ElementalCombat.capabilities;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -11,7 +11,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class ElementalDefenceDataCapability implements ICapabilitySerializable<ListNBT> 
+public class ElementalDefenceDataCapability implements ICapabilitySerializable<CompoundNBT> 
 {
 
     @CapabilityInject(IElementalDefenceData.class)
@@ -31,13 +31,13 @@ public class ElementalDefenceDataCapability implements ICapabilitySerializable<L
     }
 
     @Override
-    public ListNBT serializeNBT() 
+    public CompoundNBT serializeNBT() 
     {
-        return (ListNBT) DATA_CAPABILITY.getStorage().writeNBT(DATA_CAPABILITY, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null);
+        return (CompoundNBT) DATA_CAPABILITY.getStorage().writeNBT(DATA_CAPABILITY, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null);
     }
 
     @Override
-    public void deserializeNBT(ListNBT nbt) 
+    public void deserializeNBT(CompoundNBT nbt) 
     {
     	DATA_CAPABILITY.getStorage().readNBT(DATA_CAPABILITY, instance.orElseThrow(() -> new IllegalArgumentException("LazyOptional cannot be empty!")), null, nbt);
     }
