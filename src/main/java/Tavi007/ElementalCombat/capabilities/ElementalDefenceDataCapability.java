@@ -16,6 +16,7 @@ public class ElementalDefenceDataCapability implements ICapabilitySerializable<C
 
     @CapabilityInject(IElementalDefenceData.class)
     public static final Capability<IElementalDefenceData> DATA_CAPABILITY = null;
+    
     private LazyOptional<IElementalDefenceData> instance = LazyOptional.of(DATA_CAPABILITY::getDefaultInstance);
 
     public static void register()

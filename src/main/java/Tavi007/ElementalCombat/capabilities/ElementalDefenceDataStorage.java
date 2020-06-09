@@ -41,7 +41,6 @@ public class ElementalDefenceDataStorage implements Capability.IStorage<IElement
         
         //fill lists with nbt data
         CompoundNBT nbtCompound = (CompoundNBT)nbt;
-        
         instance.setWeaknessList(  fromNBTToList(nbtCompound.getList("elem_weak", nbt.getId())));
         instance.setResistanceList(fromNBTToList(nbtCompound.getList("elem_resi", nbt.getId())));
         instance.setWallList(      fromNBTToList(nbtCompound.getList("elem_wall", nbt.getId())));

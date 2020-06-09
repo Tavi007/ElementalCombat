@@ -3,7 +3,12 @@ package Tavi007.ElementalCombat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import Tavi007.ElementalCombat.capabilities.ElementalDefenceData;
+import Tavi007.ElementalCombat.capabilities.ElementalDefenceDataStorage;
+import Tavi007.ElementalCombat.capabilities.IElementalDefenceData;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -20,11 +25,14 @@ public class ElementalCombat
 	
 	public ElementalCombat()
 	{
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+        final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.addListener(this::setup);
+		modEventBus.addListener(this::doClientStuff);
+        modEventBus.addListener(this::onCommonSetup);
 		
 		instance = this;
-		MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(this);
+        
 	}
 	
 	private void setup(final FMLCommonSetupEvent event)
@@ -42,5 +50,11 @@ public class ElementalCombat
 	{
 		
 	}
+	
+	private void onCommonSetup(FMLCommonSetupEvent e)
+    {
+        //ExceedPacketHandler.init();
+        CapabilityManager.INSTANCE.register(IElementalDefenceData.class, new ElementalDefenceDataStorage(), () -> new ElementalDefenceData());
+    }
 	
 }
