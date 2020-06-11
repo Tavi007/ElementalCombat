@@ -53,8 +53,8 @@ public class ElementalCombat
 	
 	private void onCommonSetup(FMLCommonSetupEvent e)
     {
-        //ExceedPacketHandler.init();
-        CapabilityManager.INSTANCE.register(IElementalDefenceData.class, new ElementalDefenceDataStorage(), () -> new ElementalDefenceData());
+        CapabilityManager.INSTANCE.register(IElementalDefenceData.class, new ElementalDefenceDataStorage(), ElementalDefenceData::new);
+        
     }
 	
 }
