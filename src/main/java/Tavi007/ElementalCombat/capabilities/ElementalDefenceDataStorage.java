@@ -50,9 +50,12 @@ public class ElementalDefenceDataStorage implements Capability.IStorage<IElement
     private List<String> fromNBTToList(ListNBT nbt)
     {
     	List<String> list = new ArrayList<String>();
-    	for (INBT item : nbt)
+    	if(nbt!=null)
     	{
-    		list.add(item.toString());
+	    	for (INBT item : nbt)
+	    	{
+	    		list.add(item.toString());
+	    	}
     	}
     	return list;
     }
@@ -60,9 +63,12 @@ public class ElementalDefenceDataStorage implements Capability.IStorage<IElement
     private ListNBT fromListToNBT(List<String> list)
     {
     	ListNBT nbt = new ListNBT();
-    	for (String item : list) 
-    	{	
-    		nbt.add(StringNBT.valueOf(item));
+    	if(list != null)
+    	{
+	    	for (String item : list) 
+	    	{	
+	    		nbt.add(StringNBT.valueOf(item));
+	    	}
     	}
     	return nbt;
     }
