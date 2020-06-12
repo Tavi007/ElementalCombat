@@ -1,0 +1,17 @@
+{
+	"weakness": [
+	],
+	
+	"resistance": [
+		"fire",
+		"water",
+		"ice",
+		"thunder"
+	],
+	
+	"absorb": [
+	],
+	
+	"wall": [
+	]
+}
