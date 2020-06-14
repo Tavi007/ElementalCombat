@@ -3,8 +3,11 @@ package Tavi007.ElementalCombat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
+import Tavi007.ElementalCombat.capabilities.ElementalAttackDataStorage;
 import Tavi007.ElementalCombat.capabilities.ElementalDefenceData;
 import Tavi007.ElementalCombat.capabilities.ElementalDefenceDataStorage;
+import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenceData;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -54,7 +57,7 @@ public class ElementalCombat
 	private void onCommonSetup(FMLCommonSetupEvent e)
     {
         CapabilityManager.INSTANCE.register(IElementalDefenceData.class, new ElementalDefenceDataStorage(), ElementalDefenceData::new);
-        
+        CapabilityManager.INSTANCE.register(IElementalAttackData.class, new ElementalAttackDataStorage(), ElementalAttackData::new);
     }
 	
 }

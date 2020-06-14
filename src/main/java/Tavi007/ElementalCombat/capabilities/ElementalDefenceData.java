@@ -1,13 +1,14 @@
 package Tavi007.ElementalCombat.capabilities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ElementalDefenceData implements IElementalDefenceData
 {
-	private List<String> weaknessList = null;
-	private List<String> resistanceList = null;
-	private List<String> wallList = null;
-	private List<String> absorbList = null;
+	private List<String> weaknessList = new ArrayList<String>();
+	private List<String> resistanceList = new ArrayList<String>();
+	private List<String> wallList = new ArrayList<String>();
+	private List<String> absorbList = new ArrayList<String>();
 	
 	
 	// Setter
