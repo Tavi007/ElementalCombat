@@ -11,7 +11,6 @@ import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -32,14 +31,11 @@ public class ElementifyLivingHurtEvent
 		List<String> source_elem_atck = new ArrayList<String>();
 		if(damageSource.getImmediateSource()!=null) 
 		{
-			// damage source can be either a mob or a projectile (arrow/trident/witherskull)
+			// damage source should be either a mob, player or projectile (arrow/trident/witherskull)
 			// get lists from ImmediateSource?
 			Entity source = damageSource.getImmediateSource();
-			LazyOptional<IElementalAttackData> elem_atk_cap = source.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY);
-			elem_atk_cap.ifPresent(atk_cap -> {
-				
-			System.out.println("Hello!");	
-			});
+			IElementalAttackData elem_atck_cap = (IElementalAttackData) source.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null);
+			source_elem_atck = elem_atck_cap.getAttackList();
 		}
 		else
 		{
@@ -73,71 +69,69 @@ public class ElementifyLivingHurtEvent
 		if( !source_elem_atck.isEmpty())
 		{
 			// Get the elemental combat data from target
-			LazyOptional<IElementalDefenseData> elem_def_cap = target.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY);
-			elem_def_cap.ifPresent(def_cap -> {
-	
-				List<String> target_elem_abso = def_cap.getAbsorbList();
-				List<String> target_elem_wall = def_cap.getWallList();
-				List<String> target_elem_resi = def_cap.getResistanceList();
-				List<String> target_elem_weak = def_cap.getWeaknessList();
-				
-				// for testing. To see, if lists are filled with data
-				//System.out.println("weaknessList: " + target_elem_weak);
-				//System.out.println("wallList: " + target_elem_wall);
-				//System.out.println("absorbList: " + target_elem_abso);
-				//System.out.println("resistanceList: " + target_elem_resi);
-				//System.out.println("attackList: " + source_elem_atck);
-				
-				
-				// I might rewrite this part to be more time efficient. 
-				// TODO: I could change List<String> to the ListNBT. Then I wouldn't have to convert the lists in the capability.
-				// Keep in mind, that target_elem_abso and target_elem_wall are usually empty.
-				float damageAmount = event.getAmount();
-				
-				//Check Absorption list first, because the remaining lists don't need to be checked, if 'absorption' happens
-				if(target_elem_abso!=null) //null should not happen, but this will make it safe.
+			IElementalDefenseData elem_atck_cap = (IElementalDefenseData) target.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null);
+
+			List<String> target_elem_abso = elem_atck_cap.getAbsorbList();
+			List<String> target_elem_wall = elem_atck_cap.getWallList();
+			List<String> target_elem_resi = elem_atck_cap.getResistanceList();
+			List<String> target_elem_weak = elem_atck_cap.getWeaknessList();
+			
+			// for testing. To see, if lists are filled with data
+			//System.out.println("weaknessList: " + target_elem_weak);
+			//System.out.println("wallList: " + target_elem_wall);
+			//System.out.println("absorbList: " + target_elem_abso);
+			//System.out.println("resistanceList: " + target_elem_resi);
+			//System.out.println("attackList: " + source_elem_atck);
+			
+			
+			// I might rewrite this part to be more time efficient. 
+			// TODO: I could change List<String> to the ListNBT. Then I wouldn't have to convert the lists in the capability.
+			// Keep in mind, that target_elem_abso and target_elem_wall are usually empty.
+			float damageAmount = event.getAmount();
+			
+			//Check Absorption list first, because the remaining lists don't need to be checked, if 'absorption' happens
+			if(target_elem_abso!=null) //null should not happen, but this will make it safe.
+			{
+				for (String abso : target_elem_abso)
 				{
-					for (String abso : target_elem_abso)
+					if(source_elem_atck.contains(abso))
 					{
-						if(source_elem_atck.contains(abso))
-						{
-							target.heal(damageAmount);
-							event.setAmount(0.0f);
-							return;
-						}
+						target.heal(damageAmount);
+						event.setAmount(0.0f);
+						return;
 					}
 				}
-				
-				//Check wall list next, because the remaining lists don't need to be checked, if 'wall' happens
-				if(target_elem_wall!=null)
+			}
+			
+			//Check wall list next, because the remaining lists don't need to be checked, if 'wall' happens
+			if(target_elem_wall!=null)
+			{
+				for (String wall : target_elem_wall)
 				{
-					for (String wall : target_elem_wall)
+					if(source_elem_atck.contains(wall))
 					{
-						if(source_elem_atck.contains(wall))
-						{
-							event.setAmount(0.0f);
-							return;
-						}
+						event.setAmount(0.0f);
+						return;
 					}
 				}
-				
-				//Check resistance and weakness list last
-				if(target_elem_resi!=null  && target_elem_weak != null) 
+			}
+			
+			//Check resistance and weakness list last
+			if(target_elem_resi!=null  && target_elem_weak != null) 
+			{
+				for (String atck : source_elem_atck)
 				{
-					for (String atck : source_elem_atck)
+					if(target_elem_resi.contains(atck))
 					{
-						if(target_elem_resi.contains(atck))
-						{
-							damageAmount = damageAmount/2;
-						}
-						else if(target_elem_weak.contains(atck))
-						{
-							damageAmount = damageAmount*2;
-						}
+						damageAmount = damageAmount/2;
+					}
+					else if(target_elem_weak.contains(atck))
+					{
+						damageAmount = damageAmount*2;
 					}
 				}
-				event.setAmount(damageAmount);
-			});
+			}
+			event.setAmount(damageAmount);
 		}
 	}
 }
