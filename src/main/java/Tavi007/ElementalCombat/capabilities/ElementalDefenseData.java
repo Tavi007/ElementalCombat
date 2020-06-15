@@ -3,7 +3,7 @@ package Tavi007.ElementalCombat.capabilities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ElementalDefenceData implements IElementalDefenceData
+public class ElementalDefenseData implements IElementalDefenseData
 {
 	private List<String> weaknessList = new ArrayList<String>();
 	private List<String> resistanceList = new ArrayList<String>();

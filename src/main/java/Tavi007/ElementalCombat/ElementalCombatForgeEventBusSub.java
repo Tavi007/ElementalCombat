@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat;
 
 import Tavi007.ElementalCombat.capabilities.ElementalAttackDataCapability;
-import Tavi007.ElementalCombat.capabilities.ElementalDefenceDataCapability;
+import Tavi007.ElementalCombat.capabilities.ElementalDefenseDataCapability;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -15,13 +15,13 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ElementalCombatForgeEventBusSub 
 {
-	private static final ResourceLocation DEFENCE = new ResourceLocation(ElementalCombat.MOD_ID, "elemental_combat_defence");
+	private static final ResourceLocation Defense = new ResourceLocation(ElementalCombat.MOD_ID, "elemental_combat_Defense");
 	private static final ResourceLocation ATTACK = new ResourceLocation(ElementalCombat.MOD_ID, "elemental_combat_attack");
 	
 	@SubscribeEvent
     public static void onAttachEntity(AttachCapabilitiesEvent<Entity> e)
     {
-        if(e.getObject().getEntity() instanceof LivingEntity) e.addCapability(DEFENCE, new ElementalDefenceDataCapability());
+        if(e.getObject().getEntity() instanceof LivingEntity) e.addCapability(Defense, new ElementalDefenseDataCapability());
         if(e.getObject().getEntity() instanceof MonsterEntity) e.addCapability(ATTACK, new ElementalAttackDataCapability());
         if(e.getObject().getEntity() instanceof PlayerEntity) e.addCapability(ATTACK, new ElementalAttackDataCapability());
         if(e.getObject().getEntity() instanceof ProjectileItemEntity) e.addCapability(ATTACK, new ElementalAttackDataCapability());  

@@ -11,17 +11,17 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class ElementalDefenceDataCapability implements ICapabilitySerializable<CompoundNBT> 
+public class ElementalDefenseDataCapability implements ICapabilitySerializable<CompoundNBT> 
 {
 
-    @CapabilityInject(IElementalDefenceData.class)
-    public static final Capability<IElementalDefenceData> DEF_DATA_CAPABILITY = null;
+    @CapabilityInject(IElementalDefenseData.class)
+    public static final Capability<IElementalDefenseData> DEF_DATA_CAPABILITY = null;
     
-    private LazyOptional<IElementalDefenceData> instance = LazyOptional.of(DEF_DATA_CAPABILITY::getDefaultInstance);
+    private LazyOptional<IElementalDefenseData> instance = LazyOptional.of(DEF_DATA_CAPABILITY::getDefaultInstance);
 
     public static void register()
     {
-        CapabilityManager.INSTANCE.register(IElementalDefenceData.class, new ElementalDefenceDataStorage(), ElementalDefenceData::new);
+        CapabilityManager.INSTANCE.register(IElementalDefenseData.class, new ElementalDefenseDataStorage(), ElementalDefenseData::new);
     }
 
     @Nonnull

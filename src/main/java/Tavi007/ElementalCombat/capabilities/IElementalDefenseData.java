@@ -2,7 +2,7 @@ package Tavi007.ElementalCombat.capabilities;
 
 import java.util.List;
 
-public interface  IElementalDefenceData 
+public interface  IElementalDefenseData 
 {
 	public void setWeaknessList(List<String> elementList);
 	public void setResistanceList(List<String> elementList);

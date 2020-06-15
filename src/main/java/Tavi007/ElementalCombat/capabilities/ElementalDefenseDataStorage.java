@@ -12,11 +12,11 @@ import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 
-public class ElementalDefenceDataStorage implements Capability.IStorage<IElementalDefenceData> 
+public class ElementalDefenseDataStorage implements Capability.IStorage<IElementalDefenseData> 
 {
     @Nullable
     @Override
-    public INBT writeNBT(Capability<IElementalDefenceData> capability, IElementalDefenceData instance, Direction side) 
+    public INBT writeNBT(Capability<IElementalDefenseData> capability, IElementalDefenseData instance, Direction side) 
     {
     	List<String> weakList = instance.getWeaknessList();
     	List<String> resiList = instance.getResistanceList();
@@ -34,9 +34,9 @@ public class ElementalDefenceDataStorage implements Capability.IStorage<IElement
     }
 
     @Override
-    public void readNBT(Capability<IElementalDefenceData> capability, IElementalDefenceData instance, Direction side, INBT nbt) 
+    public void readNBT(Capability<IElementalDefenseData> capability, IElementalDefenseData instance, Direction side, INBT nbt) 
     {
-        if (!(instance instanceof ElementalDefenceData))
+        if (!(instance instanceof ElementalDefenseData))
             throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
         
         //fill lists with nbt data
