@@ -15,13 +15,13 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ElementalCombatForgeEventBusSub 
 {
-	private static final ResourceLocation Defense = new ResourceLocation(ElementalCombat.MOD_ID, "elemental_combat_Defense");
+	private static final ResourceLocation DEFENSE = new ResourceLocation(ElementalCombat.MOD_ID, "elemental_combat_defense");
 	private static final ResourceLocation ATTACK = new ResourceLocation(ElementalCombat.MOD_ID, "elemental_combat_attack");
 	
 	@SubscribeEvent
     public static void onAttachEntity(AttachCapabilitiesEvent<Entity> e)
     {
-        if(e.getObject().getEntity() instanceof LivingEntity) e.addCapability(Defense, new ElementalDefenseDataCapability());
+        if(e.getObject().getEntity() instanceof LivingEntity) e.addCapability(DEFENSE, new ElementalDefenseDataCapability());
         if(e.getObject().getEntity() instanceof MonsterEntity) e.addCapability(ATTACK, new ElementalAttackDataCapability());
         if(e.getObject().getEntity() instanceof PlayerEntity) e.addCapability(ATTACK, new ElementalAttackDataCapability());
         if(e.getObject().getEntity() instanceof ProjectileItemEntity) e.addCapability(ATTACK, new ElementalAttackDataCapability());  

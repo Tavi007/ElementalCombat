@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackDataCapability;
+import Tavi007.ElementalCombat.capabilities.ElementalDefenseData;
 import Tavi007.ElementalCombat.capabilities.ElementalDefenseDataCapability;
 import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
@@ -34,7 +36,7 @@ public class ElementifyLivingHurtEvent
 			// damage source should be either a mob, player or projectile (arrow/trident/witherskull)
 			// get lists from ImmediateSource?
 			Entity source = damageSource.getImmediateSource();
-			IElementalAttackData elem_atck_cap = (IElementalAttackData) source.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null);
+			IElementalAttackData elem_atck_cap = source.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
 			source_elem_atck = elem_atck_cap.getAttackList();
 		}
 		else
@@ -69,12 +71,12 @@ public class ElementifyLivingHurtEvent
 		if( !source_elem_atck.isEmpty())
 		{
 			// Get the elemental combat data from target
-			IElementalDefenseData elem_atck_cap = (IElementalDefenseData) target.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null);
+			IElementalDefenseData elem_def_cap = target.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null).orElse(new ElementalDefenseData());
 
-			List<String> target_elem_abso = elem_atck_cap.getAbsorbList();
-			List<String> target_elem_wall = elem_atck_cap.getWallList();
-			List<String> target_elem_resi = elem_atck_cap.getResistanceList();
-			List<String> target_elem_weak = elem_atck_cap.getWeaknessList();
+			List<String> target_elem_abso = elem_def_cap.getAbsorbList();
+			List<String> target_elem_wall = elem_def_cap.getWallList();
+			List<String> target_elem_resi = elem_def_cap.getResistanceList();
+			List<String> target_elem_weak = elem_def_cap.getWeaknessList();
 			
 			// for testing. To see, if lists are filled with data
 			//System.out.println("weaknessList: " + target_elem_weak);
