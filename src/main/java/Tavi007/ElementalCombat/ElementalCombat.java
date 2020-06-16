@@ -54,7 +54,7 @@ public class ElementalCombat
 		
 	}
 	
-	private void onCommonSetup(FMLCommonSetupEvent e)
+	private void onCommonSetup(FMLCommonSetupEvent event)
     {
         CapabilityManager.INSTANCE.register(IElementalDefenseData.class, new ElementalDefenseDataStorage(), ElementalDefenseData::new);
         CapabilityManager.INSTANCE.register(IElementalAttackData.class, new ElementalAttackDataStorage(), ElementalAttackData::new);

@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.capabilities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -18,17 +18,17 @@ public class ElementalDefenseDataStorage implements Capability.IStorage<IElement
     @Override
     public INBT writeNBT(Capability<IElementalDefenseData> capability, IElementalDefenseData instance, Direction side) 
     {
-    	List<String> weakList = instance.getWeaknessList();
-    	List<String> resiList = instance.getResistanceList();
-    	List<String> wallList = instance.getWallList();
-    	List<String> absoList = instance.getAbsorbList();
+    	Set<String> weakSet = instance.getWeaknessSet();
+    	Set<String> resiSet = instance.getResistanceSet();
+    	Set<String> wallSet = instance.getWallSet();
+    	Set<String> absoSet = instance.getAbsorbSet();
     	
     	//fill nbt with data
     	CompoundNBT nbt = new CompoundNBT();
-    	nbt.put("elem_weak", fromListToNBT(weakList));
-    	nbt.put("elem_resi", fromListToNBT(resiList));
-    	nbt.put("elem_wall", fromListToNBT(wallList));
-    	nbt.put("elem_abso", fromListToNBT(absoList));
+    	nbt.put("elem_weak", fromSetToNBT(weakSet));
+    	nbt.put("elem_resi", fromSetToNBT(resiSet));
+    	nbt.put("elem_wall", fromSetToNBT(wallSet));
+    	nbt.put("elem_abso", fromSetToNBT(absoSet));
     	
     	return nbt;
     }
@@ -41,31 +41,31 @@ public class ElementalDefenseDataStorage implements Capability.IStorage<IElement
         
         //fill lists with nbt data
         CompoundNBT nbtCompound = (CompoundNBT)nbt;
-        instance.setWeaknessList(  fromNBTToList(nbtCompound.getList("elem_weak", nbt.getId())));
-        instance.setResistanceList(fromNBTToList(nbtCompound.getList("elem_resi", nbt.getId())));
-        instance.setWallList(      fromNBTToList(nbtCompound.getList("elem_wall", nbt.getId())));
-        instance.setAbsorbList(    fromNBTToList(nbtCompound.getList("elem_abso", nbt.getId())));
+        instance.setWeaknessSet(  fromNBTToSet(nbtCompound.getList("elem_weak", nbt.getId())));
+        instance.setResistanceSet(fromNBTToSet(nbtCompound.getList("elem_resi", nbt.getId())));
+        instance.setWallSet(      fromNBTToSet(nbtCompound.getList("elem_wall", nbt.getId())));
+        instance.setAbsorbSet(    fromNBTToSet(nbtCompound.getList("elem_abso", nbt.getId())));
     }
     
-    private List<String> fromNBTToList(ListNBT nbt)
+    private Set<String> fromNBTToSet(ListNBT nbt)
     {
-    	List<String> list = new ArrayList<String>();
+    	Set<String> set = new HashSet<String>();
     	if(nbt!=null)
     	{
 	    	for (INBT item : nbt)
 	    	{
-	    		list.add(item.toString());
+	    		set.add(item.toString());
 	    	}
     	}
-    	return list;
+    	return set;
     }
     
-    private ListNBT fromListToNBT(List<String> list)
+    private ListNBT fromSetToNBT(Set<String> set)
     {
     	ListNBT nbt = new ListNBT();
-    	if(list != null)
+    	if(set != null)
     	{
-	    	for (String item : list) 
+	    	for (String item : set) 
 	    	{	
 	    		nbt.add(StringNBT.valueOf(item));
 	    	}

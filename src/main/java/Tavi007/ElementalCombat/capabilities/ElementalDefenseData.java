@@ -1,58 +1,58 @@
 package Tavi007.ElementalCombat.capabilities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ElementalDefenseData implements IElementalDefenseData
 {
-	private List<String> weaknessList = new ArrayList<String>();
-	private List<String> resistanceList = new ArrayList<String>();
-	private List<String> wallList = new ArrayList<String>();
-	private List<String> absorbList = new ArrayList<String>();
+	private Set<String> weaknessSet = new HashSet<String>();
+	private Set<String> resistanceSet = new HashSet<String>();
+	private Set<String> wallSet = new HashSet<String>();
+	private Set<String> absorbSet = new HashSet<String>();
 	
 	
 	// Setter
 	@Override
-	public void setWeaknessList(List<String> elementList)
+	public void setWeaknessSet(Set<String> elementSet)
 	{
-		this.weaknessList = elementList;
+		this.weaknessSet = elementSet;
 	}
 	@Override
-	public void setResistanceList(List<String> elementList)
+	public void setResistanceSet(Set<String> elementSet)
 	{
-		this.resistanceList = elementList;
+		this.resistanceSet = elementSet;
 	}
 	@Override
-	public void setWallList(List<String> elementList)
+	public void setWallSet(Set<String> elementSet)
 	{
-		this.wallList = elementList;
+		this.wallSet = elementSet;
 	}
 	@Override
-	public void setAbsorbList(List<String> elementList)
+	public void setAbsorbSet(Set<String> elementSet)
 	{
-		this.absorbList = elementList;
+		this.absorbSet = elementSet;
 	}
 	
 	
 	//Getter
 	@Override
-	public List<String> getWeaknessList()
+	public Set<String> getWeaknessSet()
 	{
-		return this.weaknessList;
+		return this.weaknessSet;
 	}
 	@Override
-	public List<String> getResistanceList()
+	public Set<String> getResistanceSet()
 	{
-		return this.resistanceList;
+		return this.resistanceSet;
 	}
 	@Override
-	public List<String> getWallList()
+	public Set<String> getWallSet()
 	{
-		return this.wallList;
+		return this.wallSet;
 	}
 	@Override
-	public List<String> getAbsorbList()
+	public Set<String> getAbsorbSet()
 	{
-		return this.absorbList;
+		return this.absorbSet;
 	}
 }

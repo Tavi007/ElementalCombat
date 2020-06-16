@@ -1,22 +1,22 @@
 package Tavi007.ElementalCombat.capabilities;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ElementalAttackData implements IElementalAttackData
 {
-	private List<String> attackList = new ArrayList<String>();
+	private Set<String> attackSet = new HashSet<String>();
 	
 	// Setter
 	@Override
-	public void setAttackList(List<String> elementList)
+	public void setAttackSet(Set<String> elementSet)
 	{
-		this.attackList = elementList;
+		this.attackSet = elementSet;
 	}
 	
 	// Getter
 	@Override
-	public List<String> getAttackList()
+	public Set<String> getAttackSet()
 	{
-		return this.attackList;
+		return this.attackSet;
 	}
 }

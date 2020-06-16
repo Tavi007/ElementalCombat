@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.capabilities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -18,11 +18,11 @@ public class ElementalAttackDataStorage implements Capability.IStorage<IElementa
     @Override
     public INBT writeNBT(Capability<IElementalAttackData> capability, IElementalAttackData instance, Direction side) 
     {
-    	List<String> atckList = instance.getAttackList();
+    	Set<String> atckSet = instance.getAttackSet();
     	
     	//fill nbt with data
     	CompoundNBT nbt = new CompoundNBT();
-    	nbt.put("elem_atck", fromListToNBT(atckList));
+    	nbt.put("elem_atck", fromSetToNBT(atckSet));
     	
     	return nbt;
     }
@@ -35,28 +35,28 @@ public class ElementalAttackDataStorage implements Capability.IStorage<IElementa
         
         //fill lists with nbt data
         CompoundNBT nbtCompound = (CompoundNBT)nbt;
-        instance.setAttackList(  fromNBTToList(nbtCompound.getList("elem_atck", nbt.getId())));
+        instance.setAttackSet(  fromNBTToSet(nbtCompound.getList("elem_atck", nbt.getId())));
     }
     
-    private List<String> fromNBTToList(ListNBT nbt)
+    private Set<String> fromNBTToSet(ListNBT nbt)
     {
-    	List<String> list = new ArrayList<String>();
+    	Set<String> set = new HashSet<String>();
     	if(nbt!=null)
     	{
 	    	for (INBT item : nbt)
 	    	{
-	    		list.add(item.toString());
+	    		set.add(item.toString());
 	    	}
     	}
-    	return list;
+    	return set;
     }
     
-    private ListNBT fromListToNBT(List<String> list)
+    private ListNBT fromSetToNBT(Set<String> set)
     {
     	ListNBT nbt = new ListNBT();
-    	if(list != null)
+    	if(set != null)
     	{
-	    	for (String item : list) 
+	    	for (String item : set) 
 	    	{	
 	    		nbt.add(StringNBT.valueOf(item));
 	    	}

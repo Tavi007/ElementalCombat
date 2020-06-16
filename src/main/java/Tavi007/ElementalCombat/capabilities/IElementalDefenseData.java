@@ -1,16 +1,16 @@
 package Tavi007.ElementalCombat.capabilities;
 
-import java.util.List;
+import java.util.Set;
 
 public interface  IElementalDefenseData 
 {
-	public void setWeaknessList(List<String> elementList);
-	public void setResistanceList(List<String> elementList);
-	public void setWallList(List<String> elementList);
-	public void setAbsorbList(List<String> elementList);
+	public void setWeaknessSet(Set<String> elementSet);
+	public void setResistanceSet(Set<String> elementSet);
+	public void setWallSet(Set<String> elementSet);
+	public void setAbsorbSet(Set<String> elementSet);
 
-	public List<String> getWeaknessList();
-	public List<String> getResistanceList();
-	public List<String> getWallList();
-	public List<String> getAbsorbList();
+	public Set<String> getWeaknessSet();
+	public Set<String> getResistanceSet();
+	public Set<String> getWallSet();
+	public Set<String> getAbsorbSet();
 }

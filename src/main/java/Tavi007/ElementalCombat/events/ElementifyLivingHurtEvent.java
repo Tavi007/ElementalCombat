@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.events;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
@@ -30,14 +30,14 @@ public class ElementifyLivingHurtEvent
 		
 		// Get elemental data from attack
 		// check if source is an entity
-		List<String> source_elem_atck = new ArrayList<String>();
+		Set<String> source_elem_atck = new HashSet<String>();
 		if(damageSource.getImmediateSource()!=null) 
 		{
 			// damage source should be either a mob, player or projectile (arrow/trident/witherskull)
 			// get lists from ImmediateSource?
 			Entity source = damageSource.getImmediateSource();
 			IElementalAttackData elem_atck_cap = source.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
-			source_elem_atck = elem_atck_cap.getAttackList();
+			source_elem_atck = elem_atck_cap.getAttackSet();
 		}
 		else
 		{
@@ -73,10 +73,10 @@ public class ElementifyLivingHurtEvent
 			// Get the elemental combat data from target
 			IElementalDefenseData elem_def_cap = target.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null).orElse(new ElementalDefenseData());
 
-			List<String> target_elem_abso = elem_def_cap.getAbsorbList();
-			List<String> target_elem_wall = elem_def_cap.getWallList();
-			List<String> target_elem_resi = elem_def_cap.getResistanceList();
-			List<String> target_elem_weak = elem_def_cap.getWeaknessList();
+			Set<String> target_elem_abso = elem_def_cap.getAbsorbSet();
+			Set<String> target_elem_wall = elem_def_cap.getWallSet();
+			Set<String> target_elem_resi = elem_def_cap.getResistanceSet();
+			Set<String> target_elem_weak = elem_def_cap.getWeaknessSet();
 			
 			// for testing. To see, if lists are filled with data
 			//System.out.println("weaknessList: " + target_elem_weak);
