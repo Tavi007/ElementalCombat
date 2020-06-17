@@ -1,14 +1,19 @@
 {
+	"attack":[
+		"fire"
+	],
+
 	"weakness": [
+		"ice"
 	],
 	
 	"resistance": [
 	],
 	
 	"absorb": [
+		"fire"
 	],
 	
 	"wall": [
-		"fire"
 	]
 }

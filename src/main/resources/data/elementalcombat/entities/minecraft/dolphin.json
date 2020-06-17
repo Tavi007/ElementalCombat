@@ -1,9 +1,13 @@
 {
+	"attack":[
+	],
+
 	"weakness": [
-		"fire"
+		"thunder"
 	],
 	
 	"resistance": [
+		"water"
 	],
 	
 	"absorb": [

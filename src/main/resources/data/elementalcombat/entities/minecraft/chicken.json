@@ -1,6 +1,9 @@
 {
+	"attack":[
+	],
+
 	"weakness": [
-		"thunder"
+		"fire"
 	],
 	
 	"resistance": [
@@ -10,8 +13,5 @@
 	],
 	
 	"wall": [
-		"water",
-		"fire",
-		"ice"
 	]
 }

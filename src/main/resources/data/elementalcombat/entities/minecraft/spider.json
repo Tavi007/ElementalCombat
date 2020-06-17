@@ -1,6 +1,9 @@
 {
+	"attack":[
+	],
+
 	"weakness": [
-		"thunder"
+		"fire"
 	],
 	
 	"resistance": [

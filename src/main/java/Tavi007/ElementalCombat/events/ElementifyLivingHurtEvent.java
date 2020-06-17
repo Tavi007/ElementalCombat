@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.ElementalEntityData;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackDataCapability;
 import Tavi007.ElementalCombat.capabilities.ElementalDefenseData;
@@ -28,15 +29,40 @@ public class ElementifyLivingHurtEvent
 		DamageSource damageSource = event.getSource();
 		LivingEntity target = event.getEntityLiving();
 		
+		
 		// Get elemental data from attack
 		// check if source is an entity
 		Set<String> source_elem_atck = new HashSet<String>();
 		if(damageSource.getImmediateSource()!=null) 
 		{
 			// damage source should be either a mob, player or projectile (arrow/trident/witherskull)
-			// get lists from ImmediateSource?
 			Entity source = damageSource.getImmediateSource();
-			IElementalAttackData elem_atck_cap = source.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
+			IElementalAttackData elem_atck_cap = new ElementalAttackData();
+			if(source instanceof LivingEntity)
+			{
+				//mob or player
+				LivingEntity livingEntitySource = (LivingEntity) source;
+				if(livingEntitySource.getHeldItemMainhand().isEmpty())
+				{
+					elem_atck_cap = livingEntitySource.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
+					System.out.println(livingEntitySource.getHeldItemMainhand().getDisplayName().getString());
+					System.out.println("Source is " + source.getDisplayName().getString());
+				}
+				else
+				{
+					elem_atck_cap = livingEntitySource.getHeldItemMainhand().getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
+					System.out.println("Source is " + livingEntitySource.getHeldItemMainhand().getDisplayName().getString()+ " hold by " + source.getDisplayName().getString());
+				}
+			}
+			else
+			{
+				//projectile
+				elem_atck_cap = source.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
+				System.out.println("Source is " + source.getDisplayName().getString());
+			}
+			
+			
+			
 			source_elem_atck = elem_atck_cap.getAttackSet();
 		}
 		else

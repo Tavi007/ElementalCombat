@@ -1,15 +1,17 @@
 {
+	"attack":[
+	],
+
 	"weakness": [
-		"water"
 	],
 	
 	"resistance": [
-		"thunder"
 	],
 	
 	"absorb": [
 	],
 	
 	"wall": [
+		"water"
 	]
 }

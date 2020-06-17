@@ -1,12 +1,15 @@
 {
+	"attack":[
+	],
+
 	"weakness": [
-		"wind"
 	],
 	
 	"resistance": [
 	],
 	
 	"absorb": [
+		"thunder"
 	],
 	
 	"wall": [
