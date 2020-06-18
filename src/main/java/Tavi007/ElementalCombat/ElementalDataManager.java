@@ -1,17 +1,22 @@
 package Tavi007.ElementalCombat;
 
+import java.util.Deque;
 import java.util.Map;
 import java.util.Set;
+
+import javax.annotation.Nullable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Queues;
 import com.google.common.collect.ImmutableMap.Builder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 import net.minecraft.client.resources.JsonReloadListener;
 import net.minecraft.profiler.IProfiler;
@@ -24,6 +29,7 @@ public class ElementalDataManager extends JsonReloadListener
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	private static final Logger LOGGER = LogManager.getLogger();
 	private Map<ResourceLocation, ElementalData> registeredElementalData = ImmutableMap.of();
+    private static ThreadLocal<Deque<ElementalDataContext>> elemDataContext = new ThreadLocal<Deque<ElementalDataContext>>();
    
 	public ElementalDataManager() 
 	{
@@ -41,14 +47,15 @@ public class ElementalDataManager extends JsonReloadListener
 	    
 	    objectIn.forEach((rl, json) -> 
 	    {
+	    	System.out.println(rl.getPath().toString());
 	       try (net.minecraft.resources.IResource res = resourceManagerIn.getResource(getPreparedPath(rl));)
 	       {
 	    	   
-	    	   ElementalData entityData = new ElementalData(); //what do I have to do here? Empty for now
+	    	   ElementalData elementalData = loadElementalData(GSON, rl, json, res == null || !res.getPackName().equals("Default"));
 	    	   //copied from LootTableManager:
 	    	   //LootTable loottable = net.minecraftforge.common.ForgeHooks.loadLootTable(GSON_INSTANCE, rl, json, res == null || !res.getPackName().equals("Default"), this);
 	    	   
-	    	   builder.put(rl, entityData);
+	    	   builder.put(rl, elementalData);
 	       }
 	       catch (Exception exception)
 	       {
@@ -83,5 +90,42 @@ public class ElementalDataManager extends JsonReloadListener
 	public Set<ResourceLocation> getElementalDataKeys() 
 	{
 	    return this.registeredElementalData.keySet();
+	}
+	
+	@Nullable
+    private static ElementalData loadElementalData(Gson gson, ResourceLocation name, JsonObject data, boolean custom)
+    {
+        Deque<ElementalDataContext> que = elemDataContext.get();
+        if (que == null)
+        {
+            que = Queues.newArrayDeque();
+            elemDataContext.set(que);
+        }
+
+        ElementalData ret = null;
+        try
+        {
+            que.push(new ElementalDataContext(name, custom));
+            ret = gson.fromJson(data, ElementalData.class);
+            que.pop();
+        }
+        catch (JsonParseException e)
+        {
+            que.pop();
+            throw e;
+        }
+
+        //if (!custom)
+        //    ret = ForgeEventFactory.loadLootTable(name, ret, lootTableManager);
+
+        //if (ret != null)
+        //    ret.freeze();
+
+        return ret;
+    }
+	
+	public Map<ResourceLocation, ElementalData> getRegisteredElementalData()
+	{
+		return this.registeredElementalData;
 	}
 }

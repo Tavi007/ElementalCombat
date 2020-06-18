@@ -9,6 +9,9 @@ import Tavi007.ElementalCombat.capabilities.ElementalDefenseData;
 import Tavi007.ElementalCombat.capabilities.ElementalDefenseDataStorage;
 import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.IFutureReloadListener;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -16,6 +19,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -25,6 +29,7 @@ public class ElementalCombat
 	public static ElementalCombat instance;
 	public static final String MOD_ID = "elementalcombat";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+	public static ElementalDataManager ELEMDATAMANAGER = new ElementalDataManager();
 	
 	public ElementalCombat()
 	{
@@ -32,6 +37,7 @@ public class ElementalCombat
         modEventBus.addListener(this::setup);
 		modEventBus.addListener(this::doClientStuff);
         modEventBus.addListener(this::onCommonSetup);
+        modEventBus.addListener(this::onServerAboutToStart);
 		
 		instance = this;
         MinecraftForge.EVENT_BUS.register(this);
@@ -52,6 +58,13 @@ public class ElementalCombat
 	public void onServerStarting(FMLServerStartingEvent event)
 	{
 		
+	}
+
+	@SubscribeEvent
+	public void onServerAboutToStart(FMLServerAboutToStartEvent event)
+	{
+		event.getServer().getResourceManager().addReloadListener(ELEMDATAMANAGER);
+		LOGGER.info("Elemental data registered.");	
 	}
 	
 	private void onCommonSetup(FMLCommonSetupEvent event)

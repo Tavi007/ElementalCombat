@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.ElementalEntityData;
+import Tavi007.ElementalCombat.ElementalData;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackDataCapability;
 import Tavi007.ElementalCombat.capabilities.ElementalDefenseData;
@@ -41,6 +41,8 @@ public class ElementifyLivingHurtEvent
 			if(source instanceof LivingEntity)
 			{
 				//mob or player
+				// TODO: combine livingEntity attackSet with item attackSet? 
+				// right now a WitherSkeleton won't deal any elemental dmg, since the dmg source is the stone_sword.  
 				LivingEntity livingEntitySource = (LivingEntity) source;
 				if(livingEntitySource.getHeldItemMainhand().isEmpty())
 				{
@@ -60,14 +62,11 @@ public class ElementifyLivingHurtEvent
 				elem_atck_cap = source.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
 				System.out.println("Source is " + source.getDisplayName().getString());
 			}
-			
-			
-			
 			source_elem_atck = elem_atck_cap.getAttackSet();
 		}
 		else
 		{
-			// fill List, if Source is a 'natural occurrence'.
+			// fill List, if Source is not an entity, but a 'natural occurrence'.
 			if(damageSource.isFireDamage())
 			{
 				source_elem_atck.add("fire");
@@ -103,14 +102,6 @@ public class ElementifyLivingHurtEvent
 			Set<String> target_elem_wall = elem_def_cap.getWallSet();
 			Set<String> target_elem_resi = elem_def_cap.getResistanceSet();
 			Set<String> target_elem_weak = elem_def_cap.getWeaknessSet();
-			
-			// for testing. To see, if lists are filled with data
-			//System.out.println("weaknessList: " + target_elem_weak);
-			//System.out.println("wallList: " + target_elem_wall);
-			//System.out.println("absorbList: " + target_elem_abso);
-			//System.out.println("resistanceList: " + target_elem_resi);
-			//System.out.println("attackList: " + source_elem_atck);
-			
 			
 			// I might rewrite this part to be more time efficient. 
 			// TODO: I could change List<String> to the ListNBT. Then I wouldn't have to convert the lists in the capability.
