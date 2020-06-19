@@ -8,7 +8,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class ElementalData
 {
-	   public static final ResourceLocation EMPTY = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
+	   public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
+	   public static final ElementalData EMPTY = new ElementalData();
 	   
 	   private final Set<String> weakness;
 	   private final Set<String> resistance;

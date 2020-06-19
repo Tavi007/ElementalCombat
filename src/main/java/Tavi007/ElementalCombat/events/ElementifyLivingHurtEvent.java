@@ -25,7 +25,6 @@ public class ElementifyLivingHurtEvent
 	@SubscribeEvent
 	public static void elementifyLivingHurtEvent(LivingHurtEvent event)
 	{
-		ElementalCombat.LOGGER.info("Elementify Living Hurt Event fired.");
 		DamageSource damageSource = event.getSource();
 		LivingEntity target = event.getEntityLiving();
 		

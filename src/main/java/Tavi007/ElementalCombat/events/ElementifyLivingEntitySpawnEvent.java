@@ -1,7 +1,5 @@
 package Tavi007.ElementalCombat.events;
 
-import java.util.Map;
-
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalData;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
@@ -38,15 +36,10 @@ public class ElementifyLivingEntitySpawnEvent
 	
 	private static void succesfullSpawnEvent(LivingEvent event)
 	{
-		ElementalCombat.LOGGER.info("Elementify Living Spawn Event fired.");
 		LivingEntity entity = event.getEntityLiving();
-		Map<ResourceLocation, ElementalData> map = ElementalCombat.ELEMDATAMANAGER.getRegisteredElementalData();
 		
-		String mobname = entity.getDisplayName().getString().toLowerCase();
-		System.out.println("mobname: " + mobname);
-		
-		ResourceLocation rl = new ResourceLocation("default", "entities/minecraft/" + mobname);
-		ElementalData elemData = map.get(rl);
+		ResourceLocation rl = new ResourceLocation("minecraft", "elementalproperties/entities/" + entity.getDisplayName().getString().toLowerCase());
+		ElementalData elemData = ElementalCombat.ELEMDATAMANAGER.getElementalDataFromLocation(rl);
 		if(elemData != null)
 		{
 			IElementalAttackData elem_atck_cap = entity.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
