@@ -37,8 +37,7 @@ public class ElementifyLivingEntitySpawnEvent
 	private static void succesfullSpawnEvent(LivingEvent event)
 	{
 		LivingEntity entity = event.getEntityLiving();
-		
-		ResourceLocation rl = new ResourceLocation("minecraft", "elementalproperties/entities/" + entity.getDisplayName().getString().toLowerCase().replace(" ", "_"));
+		ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getDisplayName().getString().toLowerCase().replace(" ", "_"));
 		ElementalData elemData = ElementalCombat.ELEMDATAMANAGER.getElementalDataFromLocation(rl);
 		if(elemData != null)
 		{
@@ -50,9 +49,6 @@ public class ElementifyLivingEntitySpawnEvent
 			elem_def_cap.setResistanceSet(elemData.getResistanceSet());
 			elem_def_cap.setWallSet(elemData.getWallSet());
 			elem_def_cap.setAbsorbSet(elemData.getAbsorbSet());
-			
-			System.out.println("attack: " + elem_atck_cap.getAttackSet());
-			System.out.println("weakness: " + elem_def_cap.getWeaknessSet());
 		}
 		
 	}
