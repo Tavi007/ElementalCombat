@@ -38,7 +38,7 @@ public class ElementifyLivingEntitySpawnEvent
 	{
 		LivingEntity entity = event.getEntityLiving();
 		
-		ResourceLocation rl = new ResourceLocation("minecraft", "elementalproperties/entities/" + entity.getDisplayName().getString().toLowerCase());
+		ResourceLocation rl = new ResourceLocation("minecraft", "elementalproperties/entities/" + entity.getDisplayName().getString().toLowerCase().replace(" ", "_"));
 		ElementalData elemData = ElementalCombat.ELEMDATAMANAGER.getElementalDataFromLocation(rl);
 		if(elemData != null)
 		{

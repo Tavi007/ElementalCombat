@@ -23,10 +23,8 @@ import net.minecraft.client.resources.JsonReloadListener;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.ValidationTracker;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.LootTableLoadEvent;
 
 public class ElementalDataManager extends JsonReloadListener 
 {
@@ -54,9 +52,6 @@ public class ElementalDataManager extends JsonReloadListener
 	       try (net.minecraft.resources.IResource res = resourceManagerIn.getResource(getPreparedPath(rl));)
 	       {
 	    	   ElementalData elementalData = loadElementalData(GSON, rl, json, res == null || !res.getPackName().equals("main"));
-	    	   //copied from LootTableManager:
-	    	   //LootTable loottable = net.minecraftforge.common.ForgeHooks.loadLootTable(GSON_INSTANCE, rl, json, res == null || !res.getPackName().equals("Default"), this);
-	    	   
 	    	   builder.put(rl, elementalData);
 	       }
 	       catch (Exception exception)
