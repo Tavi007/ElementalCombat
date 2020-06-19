@@ -11,8 +11,11 @@ import Tavi007.ElementalCombat.capabilities.ElementalDefenseDataCapability;
 import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
 import net.minecraft.entity.LivingEntity;
+
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent.CheckSpawn;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent.SpecialSpawn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -21,7 +24,19 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 public class ElementifyLivingEntitySpawnEvent 
 {
 	@SubscribeEvent
-	public static void elementifyLivingHurtEvent(LivingSpawnEvent event)
+	public static void elementifyLivingHurtEvent(CheckSpawn event)
+	{
+		succesfullSpawnEvent(event);
+	}
+	
+
+	@SubscribeEvent
+	public static void elementifyLivingHurtEvent(SpecialSpawn event)
+	{
+		succesfullSpawnEvent(event);
+	}
+	
+	private static void succesfullSpawnEvent(LivingEvent event)
 	{
 		ElementalCombat.LOGGER.info("Elementify Living Spawn Event fired.");
 		LivingEntity entity = event.getEntityLiving();
@@ -43,11 +58,9 @@ public class ElementifyLivingEntitySpawnEvent
 			elem_def_cap.setWallSet(elemData.getWallSet());
 			elem_def_cap.setAbsorbSet(elemData.getAbsorbSet());
 			
-			System.out.println("attack: " + elemData.getAttackSet());
-			System.out.println("weakness: " + elemData.getWeaknessSet());
-			System.out.println("resistance: " + elemData.getResistanceSet());
-			System.out.println("wall: " + elemData.getWallSet());
-			System.out.println("absorb: " + elemData.getAbsorbSet());
+			System.out.println("attack: " + elem_atck_cap.getAttackSet());
+			System.out.println("weakness: " + elem_def_cap.getWeaknessSet());
 		}
+		
 	}
 }
