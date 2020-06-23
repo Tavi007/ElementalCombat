@@ -1,8 +1,8 @@
 package Tavi007.ElementalCombat.capabilities;
-import java.util.Set;
+import java.util.Map;
 
 public interface  IElementalAttackData 
 {
-	public void setAttackSet(Set<String> elementSet);
-	public Set<String> getAttackSet();
+	public void setAttackMap(Map<String, Integer> elementMap);
+	public Map<String, Integer> getAttackMap();
 }

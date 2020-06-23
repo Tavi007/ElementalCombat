@@ -1,8 +1,9 @@
 package Tavi007.ElementalCombat;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
-
-import com.google.common.collect.Sets;
 
 import net.minecraft.util.ResourceLocation;
 
@@ -15,9 +16,9 @@ public class ElementalData
 	   private final Set<String> resistance;
 	   private final Set<String> wall;
 	   private final Set<String> absorb;
-	   private final Set<String> attack;
+	   private final Map<String,Integer> attack;
 	   
-	   public ElementalData(Set<String> weak, Set<String> resi, Set<String> wall, Set<String> abso, Set<String> atck)
+	   public ElementalData(Set<String> weak, Set<String> resi, Set<String> wall, Set<String> abso, Map<String,Integer> atck)
 	   {
 		   this.weakness = weak;
 		   this.resistance = resi;
@@ -28,11 +29,11 @@ public class ElementalData
 	   
 	   public ElementalData()
 	   {
-		   this.weakness = Sets.newHashSet();
-		   this.resistance = Sets.newHashSet();
-		   this.wall = Sets.newHashSet();
-		   this.absorb = Sets.newHashSet();
-		   this.attack = Sets.newHashSet();
+		   this.weakness = new HashSet<String>();
+		   this.resistance = new HashSet<String>();
+		   this.wall = new HashSet<String>();
+		   this.absorb = new HashSet<String>();
+		   this.attack = new HashMap<String,Integer>();
 	   }
 	   
 	   public Set<String> getWeaknessSet()
@@ -55,7 +56,7 @@ public class ElementalData
 		   return this.absorb;
 	   }
 	   
-	   public Set<String> getAttackSet()
+	   public Map<String,Integer> getAttackMap()
 	   {
 		   return this.attack;
 	   }

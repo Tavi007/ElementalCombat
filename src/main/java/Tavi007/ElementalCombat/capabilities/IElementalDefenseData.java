@@ -6,11 +6,11 @@ public interface  IElementalDefenseData
 {
 	public void setWeaknessSet(Set<String> elementSet);
 	public void setResistanceSet(Set<String> elementSet);
-	public void setWallSet(Set<String> elementSet);
+	public void setImmunitySet(Set<String> elementSet);
 	public void setAbsorbSet(Set<String> elementSet);
 
 	public Set<String> getWeaknessSet();
 	public Set<String> getResistanceSet();
-	public Set<String> getWallSet();
+	public Set<String> getImmunitySet();
 	public Set<String> getAbsorbSet();
 }

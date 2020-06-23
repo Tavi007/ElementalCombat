@@ -44,11 +44,16 @@ public class ElementifyLivingEntitySpawnEvent
 			IElementalAttackData elem_atck_cap = entity.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
 			IElementalDefenseData elem_def_cap = entity.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null).orElse(new ElementalDefenseData());
 			
-			elem_atck_cap.setAttackSet(elemData.getAttackSet());
+			elem_atck_cap.setAttackMap(elemData.getAttackMap());
 			elem_def_cap.setWeaknessSet(elemData.getWeaknessSet());
 			elem_def_cap.setResistanceSet(elemData.getResistanceSet());
-			elem_def_cap.setWallSet(elemData.getWallSet());
+			elem_def_cap.setImmunitySet(elemData.getWallSet());
 			elem_def_cap.setAbsorbSet(elemData.getAbsorbSet());
+			
+			elemData.getAttackMap().forEach((key, value)->
+			{
+				System.out.println("key '"+ key + "' has value " + value.toString());
+			});
 		}
 		
 	}

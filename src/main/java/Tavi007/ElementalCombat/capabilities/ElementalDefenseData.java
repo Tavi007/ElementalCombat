@@ -7,7 +7,7 @@ public class ElementalDefenseData implements IElementalDefenseData
 {
 	private Set<String> weaknessSet = new HashSet<String>();
 	private Set<String> resistanceSet = new HashSet<String>();
-	private Set<String> wallSet = new HashSet<String>();
+	private Set<String> immunitySet = new HashSet<String>();
 	private Set<String> absorbSet = new HashSet<String>();
 	
 	
@@ -23,9 +23,9 @@ public class ElementalDefenseData implements IElementalDefenseData
 		this.resistanceSet = elementSet;
 	}
 	@Override
-	public void setWallSet(Set<String> elementSet)
+	public void setImmunitySet(Set<String> elementSet)
 	{
-		this.wallSet = elementSet;
+		this.immunitySet = elementSet;
 	}
 	@Override
 	public void setAbsorbSet(Set<String> elementSet)
@@ -46,9 +46,9 @@ public class ElementalDefenseData implements IElementalDefenseData
 		return this.resistanceSet;
 	}
 	@Override
-	public Set<String> getWallSet()
+	public Set<String> getImmunitySet()
 	{
-		return this.wallSet;
+		return this.immunitySet;
 	}
 	@Override
 	public Set<String> getAbsorbSet()

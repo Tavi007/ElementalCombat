@@ -20,14 +20,14 @@ public class ElementalDefenseDataStorage implements Capability.IStorage<IElement
     {
     	Set<String> weakSet = instance.getWeaknessSet();
     	Set<String> resiSet = instance.getResistanceSet();
-    	Set<String> wallSet = instance.getWallSet();
+    	Set<String> immuSet = instance.getImmunitySet();
     	Set<String> absoSet = instance.getAbsorbSet();
     	
     	//fill nbt with data
     	CompoundNBT nbt = new CompoundNBT();
     	nbt.put("elem_weak", fromSetToNBT(weakSet));
     	nbt.put("elem_resi", fromSetToNBT(resiSet));
-    	nbt.put("elem_wall", fromSetToNBT(wallSet));
+    	nbt.put("elem_immu", fromSetToNBT(immuSet));
     	nbt.put("elem_abso", fromSetToNBT(absoSet));
     	
     	return nbt;
@@ -43,7 +43,7 @@ public class ElementalDefenseDataStorage implements Capability.IStorage<IElement
         CompoundNBT nbtCompound = (CompoundNBT)nbt;
         instance.setWeaknessSet(  fromNBTToSet(nbtCompound.getList("elem_weak", nbt.getId())));
         instance.setResistanceSet(fromNBTToSet(nbtCompound.getList("elem_resi", nbt.getId())));
-        instance.setWallSet(      fromNBTToSet(nbtCompound.getList("elem_wall", nbt.getId())));
+        instance.setImmunitySet(  fromNBTToSet(nbtCompound.getList("elem_immu", nbt.getId())));
         instance.setAbsorbSet(    fromNBTToSet(nbtCompound.getList("elem_abso", nbt.getId())));
     }
     

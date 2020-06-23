@@ -1,14 +1,13 @@
 package Tavi007.ElementalCombat.capabilities;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 
@@ -18,11 +17,11 @@ public class ElementalAttackDataStorage implements Capability.IStorage<IElementa
     @Override
     public INBT writeNBT(Capability<IElementalAttackData> capability, IElementalAttackData instance, Direction side) 
     {
-    	Set<String> atckSet = instance.getAttackSet();
+    	Map<String, Integer> atckMap = instance.getAttackMap();
     	
     	//fill nbt with data
     	CompoundNBT nbt = new CompoundNBT();
-    	nbt.put("elem_atck", fromSetToNBT(atckSet));
+    	nbt.put("elem_atck", fromMapToNBT(atckMap));
     	
     	return nbt;
     }
@@ -35,31 +34,33 @@ public class ElementalAttackDataStorage implements Capability.IStorage<IElementa
         
         //fill lists with nbt data
         CompoundNBT nbtCompound = (CompoundNBT)nbt;
-        instance.setAttackSet(  fromNBTToSet(nbtCompound.getList("elem_atck", nbt.getId())));
+        instance.setAttackMap(  fromNBTToMap(nbtCompound.getCompound("elem_atck")));
     }
     
-    private Set<String> fromNBTToSet(ListNBT nbt)
+    private Map<String, Integer> fromNBTToMap(CompoundNBT nbt)
     {
-    	Set<String> set = new HashSet<String>();
+    	Map<String, Integer> map = new HashMap<String,Integer>();
     	if(nbt!=null)
     	{
-	    	for (INBT item : nbt)
-	    	{
-	    		set.add(item.toString());
+    		Set<String> keySet=nbt.keySet();
+	    	for (String key : keySet)
+	    	{ 
+	    		int value=nbt.getInt(key);
+	    		map.put(key, value);
 	    	}
     	}
-    	return set;
+    	return map;
     }
     
-    private ListNBT fromSetToNBT(Set<String> set)
+    private CompoundNBT fromMapToNBT(Map<String, Integer> map)
     {
-    	ListNBT nbt = new ListNBT();
-    	if(set != null)
+    	CompoundNBT nbt = new CompoundNBT();
+    	if(map != null)
     	{
-	    	for (String item : set) 
-	    	{	
-	    		nbt.add(StringNBT.valueOf(item));
-	    	}
+    		map.forEach((elemString, value) ->
+    		{
+    			nbt.putInt(elemString, value);
+    		});
     	}
     	return nbt;
     }

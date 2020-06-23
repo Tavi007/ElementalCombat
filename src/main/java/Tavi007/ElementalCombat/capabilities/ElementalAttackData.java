@@ -1,22 +1,22 @@
 package Tavi007.ElementalCombat.capabilities;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ElementalAttackData implements IElementalAttackData
 {
-	private Set<String> attackSet = new HashSet<String>();
+	private Map<String, Integer> attackMap = new HashMap<String, Integer>();
 	
 	// Setter
 	@Override
-	public void setAttackSet(Set<String> elementSet)
+	public void setAttackMap(Map<String, Integer> elementMap)
 	{
-		this.attackSet = elementSet;
+		this.attackMap = elementMap;
 	}
 	
 	// Getter
 	@Override
-	public Set<String> getAttackSet()
+	public Map<String, Integer> getAttackMap()
 	{
-		return this.attackSet;
+		return this.attackMap;
 	}
 }
