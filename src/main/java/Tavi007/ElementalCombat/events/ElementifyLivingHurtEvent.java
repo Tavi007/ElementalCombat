@@ -112,14 +112,36 @@ public class ElementifyLivingHurtEvent
 			Set<String> target_elem_resistant = elem_def_cap.getResistanceSet();
 			Set<String> target_elem_weakness = elem_def_cap.getWeaknessSet();
 			
-			// I might rewrite this part to be more time efficient. 
-			// TODO: I could change List<String> to the ListNBT. Then I wouldn't have to convert the lists in the capability.
-			// Keep in mind, that target_elem_abso and target_elem_wall are usually empty.
 			float damageAmount = event.getAmount();
+			float newDamageAmount = 0;
+			float valueSum = 0;
 			
-			//Check Absorption list first, because the remaining lists don't need to be checked, if 'absorption' happens
-			
-			event.setAmount(damageAmount);
+			Set<String> keySet = source_elem_atck.keySet();
+			for(String key : keySet)
+			{
+				Integer value = source_elem_atck.get(key);
+				valueSum += value;
+				if (target_elem_absorb.contains(key))
+				{
+					newDamageAmount -= damageAmount*value;
+					//add particle effect
+				}
+				else if (target_elem_immune.contains(key))
+				{
+					//add particle effect
+				}
+				else if (target_elem_resistant.contains(key))
+				{
+					newDamageAmount += damageAmount*value/2;
+					//add particle effect
+				}
+				else if (target_elem_weakness.contains(key))
+				{
+					newDamageAmount += damageAmount*value*2;
+					//add particle effect
+				}
+			}
+			event.setAmount(newDamageAmount/valueSum);
 		}
 	}
 }

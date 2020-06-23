@@ -14,26 +14,29 @@ public class ElementalData
 	   
 	   private final Set<String> weakness;
 	   private final Set<String> resistance;
-	   private final Set<String> wall;
+	   private final Set<String> immunity;
 	   private final Set<String> absorb;
-	   private final Map<String,Integer> attack;
+	   private final Set<AttackFormat> attack;
+	   private final boolean biomeDependency; 
 	   
-	   public ElementalData(Set<String> weak, Set<String> resi, Set<String> wall, Set<String> abso, Map<String,Integer> atck)
+	   public ElementalData(Set<String> weak, Set<String> resi, Set<String> immunity, Set<String> abso, Set<AttackFormat> atck, boolean biomeDependency)
 	   {
 		   this.weakness = weak;
 		   this.resistance = resi;
-		   this.wall = wall;
+		   this.immunity = immunity;
 		   this.absorb = abso;
 		   this.attack = atck;
+		   this.biomeDependency = biomeDependency;
 	   }
 	   
 	   public ElementalData()
 	   {
 		   this.weakness = new HashSet<String>();
 		   this.resistance = new HashSet<String>();
-		   this.wall = new HashSet<String>();
+		   this.immunity = new HashSet<String>();
 		   this.absorb = new HashSet<String>();
-		   this.attack = new HashMap<String,Integer>();
+		   this.attack = new HashSet<AttackFormat>();
+		   this.biomeDependency = false;
 	   }
 	   
 	   public Set<String> getWeaknessSet()
@@ -46,9 +49,9 @@ public class ElementalData
 		   return this.resistance;
 	   }
 	   
-	   public Set<String> getWallSet()
+	   public Set<String> getImmunitySet()
 	   {
-		   return this.wall;
+		   return this.immunity;
 	   }
 	   
 	   public Set<String> getAbsorbSet()
@@ -56,8 +59,41 @@ public class ElementalData
 		   return this.absorb;
 	   }
 	   
-	   public Map<String,Integer> getAttackMap()
+	   public Set<AttackFormat> getAttackSet()
 	   {
 		   return this.attack;
+	   }
+	   
+	   public boolean getBiomeDependency()
+	   {
+		   return this.biomeDependency;
+	   }
+	   
+	   public class AttackFormat
+	   {
+	   	   private final String name;
+	   	   private final Integer value;
+	   	   
+	   	   public AttackFormat()
+	   	   {
+	   		   this.name = "";
+	   		   this.value = 0;
+	   	   }
+	   	   
+	   	   public AttackFormat(String name, Integer value)
+	   	   {
+	   		   this.name = name;
+	   		   this.value = value;
+	   	   }
+	   	   
+	   	   public String getName()
+	   	   {
+	   		   return this.name;
+	   	   }
+	   	   
+	   	   public Integer getValue()
+	   	   {
+	   		   return this.value;
+	   	   }
 	   }
 }
