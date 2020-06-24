@@ -1,12 +1,10 @@
 package Tavi007.ElementalCombat.events;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.ElementalData;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackDataCapability;
 import Tavi007.ElementalCombat.capabilities.ElementalDefenseData;
@@ -15,9 +13,8 @@ import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -44,20 +41,16 @@ public class ElementifyLivingHurtEvent
 			IElementalAttackData elem_atck_cap = new ElementalAttackData();
 			if(source instanceof LivingEntity)
 			{
-				//mob or player
-				// TODO: combine livingEntity attackSet with item attackSet? 
-				// right now a WitherSkeleton won't deal any elemental dmg, since the dmg source is the stone_sword.  
 				LivingEntity livingEntitySource = (LivingEntity) source;
 				if(livingEntitySource.getHeldItemMainhand().isEmpty())
 				{
+					//use data from livingEntity
 					elem_atck_cap = livingEntitySource.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
-					System.out.println(livingEntitySource.getHeldItemMainhand().getDisplayName().getString());
-					System.out.println("Source is " + source.getDisplayName().getString());
 				}
 				else
 				{
+					//use data from item
 					elem_atck_cap = livingEntitySource.getHeldItemMainhand().getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
-					System.out.println("Source is " + livingEntitySource.getHeldItemMainhand().getDisplayName().getString()+ " hold by " + source.getDisplayName().getString());
 				}
 			}
 			else
@@ -69,7 +62,6 @@ public class ElementifyLivingHurtEvent
 				}
 				
 				elem_atck_cap = source.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
-				System.out.println("Source is " + source.getDisplayName().getString());
 			}
 			source_elem_atck = elem_atck_cap.getAttackMap();
 		}
@@ -80,26 +72,29 @@ public class ElementifyLivingHurtEvent
 			{
 				source_elem_atck.put("fire",1);
 			}
-			else if(damageSource.getDamageType() == "drown")
+			else if(damageSource == DamageSource.DROWN)
 			{
 				source_elem_atck.put("water",1);
 			}
-			else if(damageSource.getDamageType() == "lightningBolt")
-			{
-				source_elem_atck.put("thunder",1);
-			}
-			
-			//not sure, if i really want these
-			else if(damageSource.getDamageType() == "cactus" || 
-			   damageSource.getDamageType() == "sweetBerryBush")
-			{
-				source_elem_atck.put("plant",1);
-			}
-			else if(damageSource.getDamageType() == "wither")
+			else if(damageSource == DamageSource.WITHER)
 			{
 				source_elem_atck.put("unholy",1); //maybe element 'death'/'unholy'?
 			}
+			else if(damageSource == DamageSource.IN_WALL)
+			{
+				source_elem_atck.put("earth",1); 
+			}
+			else if(damageSource == DamageSource.CACTUS || 
+			   damageSource == DamageSource.SWEET_BERRY_BUSH)
+			{
+				source_elem_atck.put("plant",1);
+			}
+			else if(damageSource == DamageSource.LIGHTNING_BOLT)
+			{
+				source_elem_atck.put("thunder",1);
+			}
 		}
+		
 		
 		// if attack doesn't have elemental properties, no need to check defense properties
 		if( !source_elem_atck.isEmpty())
@@ -140,6 +135,11 @@ public class ElementifyLivingHurtEvent
 					newDamageAmount += damageAmount*value*2;
 					//add particle effect
 				}
+			}
+			if(valueSum == 0)
+			{
+				ElementalCombat.LOGGER.info("Elemental valueSum should never be 0. Use default damage instead.");
+				return;
 			}
 			event.setAmount(newDamageAmount/valueSum);
 		}

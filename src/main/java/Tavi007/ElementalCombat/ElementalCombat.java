@@ -26,7 +26,7 @@ public class ElementalCombat
 	public static ElementalCombat instance;
 	public static final String MOD_ID = "elementalcombat";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
-	public static ElementalDataManager ELEMDATAMANAGER = new ElementalDataManager();
+	public static DataManager DATAMANAGER = new DataManager();
 	
 	public ElementalCombat()
 	{
@@ -60,7 +60,7 @@ public class ElementalCombat
 	@SubscribeEvent
 	public void onServerAboutToStart(FMLServerAboutToStartEvent event)
 	{
-		event.getServer().getResourceManager().addReloadListener(ELEMDATAMANAGER);
+		event.getServer().getResourceManager().addReloadListener(DATAMANAGER);
 		LOGGER.info("Elemental data registered.");	
 	}
 	

@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.ElementalData;
-import Tavi007.ElementalCombat.ElementalData.AttackFormat;
+import Tavi007.ElementalCombat.EntityData;
+import Tavi007.ElementalCombat.EntityData.AttackFormat;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackDataCapability;
 import Tavi007.ElementalCombat.capabilities.ElementalDefenseData;
@@ -44,25 +44,28 @@ public class ElementifyLivingEntitySpawnEvent
 	{
 		LivingEntity entity = event.getEntityLiving();
 		ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getDisplayName().getString().toLowerCase().replace(" ", "_"));
-		ElementalData elemData = ElementalCombat.ELEMDATAMANAGER.getElementalDataFromLocation(rl);
-		if(elemData != null)
+		EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
+		if(entityData != null)
 		{
-			IElementalAttackData elem_atck_cap = entity.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
-			IElementalDefenseData elem_def_cap = entity.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null).orElse(new ElementalDefenseData());
-			
-			Set<AttackFormat> attackFormatSet = elemData.getAttackSet();
+			Set<AttackFormat> attackFormatSet = entityData.getAttackSet();
 			Map<String, Integer> attackMap = new HashMap<String, Integer>();
 			attackFormatSet.forEach((attack) ->
 			{
-				attackMap.put(attack.getName(), attack.getValue());
+				Integer value = attack.getValue();
+				if (value == 0)
+				{
+					ElementalCombat.LOGGER.info("Elemental damage value of " + attack.getName() + " for " + entity.getName().toString() + " is 0. Using 1 instead.");
+					value = 1;
+				}
+				attackMap.put(attack.getName(), value);
 			});
-			Set<String> weaknessSet = elemData.getWeaknessSet();
-			Set<String> resistanceSet = elemData.getResistanceSet();
-			Set<String> immunitySet = elemData.getImmunitySet();
-			Set<String> absorbSet = elemData.getAbsorbSet();
+			Set<String> weaknessSet = entityData.getWeaknessSet();
+			Set<String> resistanceSet = entityData.getResistanceSet();
+			Set<String> immunitySet = entityData.getImmunitySet();
+			Set<String> absorbSet = entityData.getAbsorbSet();
 			
 			
-			if(elemData.getBiomeDependency())
+			if(entityData.getBiomeDependency())
 			{
 				String biomeProperties = null;
 				TempCategory category = entity.getEntityWorld().getBiome(entity.getPosition()).getTempCategory();
@@ -80,16 +83,21 @@ public class ElementifyLivingEntitySpawnEvent
 				}
 				if(biomeProperties != null)
 				{
-					weaknessSet.remove(biomeProperties);
-					resistanceSet.add(biomeProperties);
+					if(!immunitySet.contains(biomeProperties) && !absorbSet.contains(biomeProperties))
+					{
+						weaknessSet.remove(biomeProperties);
+						resistanceSet.add(biomeProperties);
+					}
 				}
 			}
-			
-			elem_atck_cap.setAttackMap(attackMap);
-			elem_def_cap.setWeaknessSet(weaknessSet);
-			elem_def_cap.setResistanceSet(resistanceSet);
-			elem_def_cap.setImmunitySet(immunitySet);
-			elem_def_cap.setAbsorbSet(absorbSet);
+
+			IElementalAttackData elemAtckCap = entity.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
+			IElementalDefenseData elemDefCap = entity.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null).orElse(new ElementalDefenseData());
+			elemAtckCap.setAttackMap(attackMap);
+			elemDefCap.setWeaknessSet(weaknessSet);
+			elemDefCap.setResistanceSet(resistanceSet);
+			elemDefCap.setImmunitySet(immunitySet);
+			elemDefCap.setAbsorbSet(absorbSet);
 		}
 		
 	}

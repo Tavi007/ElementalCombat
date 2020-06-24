@@ -18,7 +18,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import Tavi007.ElementalCombat.events.ElementalDataLoadEvent;
+import Tavi007.ElementalCombat.events.DataLoadEvent;
 import net.minecraft.client.resources.JsonReloadListener;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
@@ -26,32 +26,33 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.ValidationTracker;
 import net.minecraftforge.common.MinecraftForge;
 
-public class ElementalDataManager extends JsonReloadListener 
+public class DataManager extends JsonReloadListener 
 {
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	private static final Logger LOGGER = LogManager.getLogger();
-	private Map<ResourceLocation, ElementalData> registeredElementalData = ImmutableMap.of();
-    private static ThreadLocal<Deque<ElementalDataContext>> elemDataContext = new ThreadLocal<Deque<ElementalDataContext>>();
+	private Map<ResourceLocation, EntityData> registeredData = ImmutableMap.of();
+    private static ThreadLocal<Deque<DataContext>> dataContext = new ThreadLocal<Deque<DataContext>>();
    
-	public ElementalDataManager() 
+	public DataManager() 
 	{
 		super(GSON, "elementalcombat");
 	}
 	
 	protected void apply(Map<ResourceLocation, JsonObject> objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn) 
 	{
-		Builder<ResourceLocation, ElementalData> builder = ImmutableMap.builder();
-		JsonObject jsonobject = objectIn.remove(ElementalData.EMPTY_RESOURCELOCATION);
+		Builder<ResourceLocation, EntityData> builder = ImmutableMap.builder();
+		JsonObject jsonobject = objectIn.remove(EntityData.EMPTY_RESOURCELOCATION);
 	    if (jsonobject != null) 
 	    {
-	         LOGGER.warn("Datapack tried to redefine {} elemental entity data, ignoring", (Object)ElementalData.EMPTY_RESOURCELOCATION);
+	         LOGGER.warn("Datapack tried to redefine {} elemental entity data, ignoring", (Object)EntityData.EMPTY_RESOURCELOCATION);
 	    }
 	    
 	    objectIn.forEach((rl, json) -> 
 	    {
 	       try (net.minecraft.resources.IResource res = resourceManagerIn.getResource(getPreparedPath(rl));)
 	       {
-	    	   ElementalData elementalData = loadElementalData(GSON, rl, json, res == null || !res.getPackName().equals("main"));
+	    	   //check if entity gets loaded or item
+	    	   EntityData elementalData = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"));
 	    	   builder.put(rl, elementalData);
 	       }
 	       catch (Exception exception)
@@ -60,8 +61,8 @@ public class ElementalDataManager extends JsonReloadListener
 	       }
 	    });
 	    
-	    builder.put(ElementalData.EMPTY_RESOURCELOCATION, new ElementalData());
-	    ImmutableMap<ResourceLocation, ElementalData> immutablemap = builder.build(); //this mapping contains attack and defense data.
+	    builder.put(EntityData.EMPTY_RESOURCELOCATION, new EntityData());
+	    ImmutableMap<ResourceLocation, EntityData> immutablemap = builder.build(); //this mapping contains attack and defense data.
 	    
 	    //validation of immutablemap missing
 	    //copied from LootTable:
@@ -76,34 +77,34 @@ public class ElementalDataManager extends JsonReloadListener
 	    //});
 
 	    
-	    this.registeredElementalData = immutablemap;  
+	    this.registeredData = immutablemap;  
 	}
 	   
-    public static JsonElement toJson(ElementalData elementalData)
+    public static JsonElement toJson(EntityData elementalData)
     {
 	    return GSON.toJsonTree(elementalData);
 	}
 
 	public Set<ResourceLocation> getElementalDataKeys() 
 	{
-	    return this.registeredElementalData.keySet();
+	    return this.registeredData.keySet();
 	}
 	
 	@Nullable
-    private ElementalData loadElementalData(Gson gson, ResourceLocation name, JsonObject data, boolean custom)
+    private EntityData loadData(Gson gson, ResourceLocation name, JsonObject data, boolean custom)
     {
-        Deque<ElementalDataContext> que = elemDataContext.get();
+        Deque<DataContext> que = dataContext.get();
         if (que == null)
         {
             que = Queues.newArrayDeque();
-            elemDataContext.set(que);
+            dataContext.set(que);
         }
 
-        ElementalData ret = null;
+        EntityData ret = null;
         try
         {
-            que.push(new ElementalDataContext(name, custom));
-            ret = gson.fromJson(data, ElementalData.class);
+            que.push(new DataContext(name, custom));
+            ret = gson.fromJson(data, EntityData.class);
             que.pop();
         }
         catch (JsonParseException e)
@@ -114,12 +115,12 @@ public class ElementalDataManager extends JsonReloadListener
 
         if (!custom)
         {
-	        ElementalDataLoadEvent event = new ElementalDataLoadEvent(name, ret, this);
+	        DataLoadEvent event = new DataLoadEvent(name, ret, this);
 	        if (MinecraftForge.EVENT_BUS.post(event))
 	        {
-	            ret = ElementalData.EMPTY;
+	            ret = EntityData.EMPTY;
 	        }
-	        ret = event.getElementalData();
+	        ret = event.getEntityData();
         }
 
         //if (ret != null)
@@ -128,8 +129,8 @@ public class ElementalDataManager extends JsonReloadListener
         return ret;
     }
 	
-	public ElementalData getElementalDataFromLocation(ResourceLocation rl)
+	public EntityData getEntityDataFromLocation(ResourceLocation rl)
 	{
-		return this.registeredElementalData.getOrDefault(rl, ElementalData.EMPTY);
+		return this.registeredData.getOrDefault(rl, EntityData.EMPTY);
 	}
 }

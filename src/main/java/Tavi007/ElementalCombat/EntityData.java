@@ -1,16 +1,14 @@
 package Tavi007.ElementalCombat;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.util.ResourceLocation;
 
-public class ElementalData
+public class EntityData
 {
 	   public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
-	   public static final ElementalData EMPTY = new ElementalData();
+	   public static final EntityData EMPTY = new EntityData();
 	   
 	   private final Set<String> weakness;
 	   private final Set<String> resistance;
@@ -19,7 +17,7 @@ public class ElementalData
 	   private final Set<AttackFormat> attack;
 	   private final boolean biomeDependency; 
 	   
-	   public ElementalData(Set<String> weak, Set<String> resi, Set<String> immunity, Set<String> abso, Set<AttackFormat> atck, boolean biomeDependency)
+	   public EntityData(Set<String> weak, Set<String> resi, Set<String> immunity, Set<String> abso, Set<AttackFormat> atck, boolean biomeDependency)
 	   {
 		   this.weakness = weak;
 		   this.resistance = resi;
@@ -29,7 +27,7 @@ public class ElementalData
 		   this.biomeDependency = biomeDependency;
 	   }
 	   
-	   public ElementalData()
+	   public EntityData()
 	   {
 		   this.weakness = new HashSet<String>();
 		   this.resistance = new HashSet<String>();
