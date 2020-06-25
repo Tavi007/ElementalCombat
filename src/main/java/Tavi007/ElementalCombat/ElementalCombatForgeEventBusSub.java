@@ -29,5 +29,6 @@ public class ElementalCombatForgeEventBusSub
 	public static void onAttachItemStack(AttachCapabilitiesEvent<ItemStack> i)
 	{
         i.addCapability(ATTACK, new ElementalAttackDataCapability());
+        i.addCapability(DEFENSE, new ElementalDefenseDataCapability());
 	}
 }

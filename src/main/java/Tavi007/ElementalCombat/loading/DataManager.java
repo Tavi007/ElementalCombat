@@ -30,7 +30,8 @@ public class DataManager extends JsonReloadListener
 {
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	private static final Logger LOGGER = LogManager.getLogger();
-	private Map<ResourceLocation, EntityData> registeredData = ImmutableMap.of();
+	private Map<ResourceLocation, EntityData> registeredEntityData = ImmutableMap.of();
+	private Map<ResourceLocation, GeneralData> registeredItemData = ImmutableMap.of();
     private static ThreadLocal<Deque<DataContext>> dataContext = new ThreadLocal<Deque<DataContext>>();
    
 	public DataManager() 
@@ -40,7 +41,9 @@ public class DataManager extends JsonReloadListener
 	
 	protected void apply(Map<ResourceLocation, JsonObject> objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn) 
 	{
-		Builder<ResourceLocation, EntityData> builder = ImmutableMap.builder();
+		Builder<ResourceLocation, EntityData> builderEntity = ImmutableMap.builder();
+		Builder<ResourceLocation, GeneralData> builderItem = ImmutableMap.builder();
+		
 		JsonObject jsonobject = objectIn.remove(EntityData.EMPTY_RESOURCELOCATION);
 	    if (jsonobject != null) 
 	    {
@@ -51,9 +54,17 @@ public class DataManager extends JsonReloadListener
 	    {
 	       try (net.minecraft.resources.IResource res = resourceManagerIn.getResource(getPreparedPath(rl));)
 	       {
-	    	   //check if entity gets loaded or item
-	    	   EntityData elementalData = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"));
-	    	   builder.put(rl, elementalData);
+	    	   //check if entity or item gets loaded
+	    	   if(rl.getPath().contains("/entities/"))
+	    	   {
+		    	   EntityData elementalData = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"));
+		    	   builderEntity.put(rl, elementalData);
+	    	   }
+	    	   else if(rl.getPath().contains("/items/"))
+	    	   {
+		    	   GeneralData elementalData = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"));
+		    	   builderItem.put(rl, elementalData);
+	    	   }
 	       }
 	       catch (Exception exception)
 	       {
@@ -61,8 +72,11 @@ public class DataManager extends JsonReloadListener
 	       }
 	    });
 	    
-	    builder.put(EntityData.EMPTY_RESOURCELOCATION, new EntityData());
-	    ImmutableMap<ResourceLocation, EntityData> immutablemap = builder.build(); //this mapping contains attack and defense data.
+	    builderEntity.put(EntityData.EMPTY_RESOURCELOCATION, new EntityData());
+	    ImmutableMap<ResourceLocation, EntityData> immutablemapEntity = builderEntity.build(); //this mapping contains attack and defense data.
+
+	    builderItem.put(GeneralData.EMPTY_RESOURCELOCATION, new GeneralData());
+	    ImmutableMap<ResourceLocation, GeneralData> immutablemapItem = builderItem.build(); //this mapping contains attack and defense data.
 	    
 	    //validation of immutablemap missing
 	    //copied from LootTable:
@@ -77,7 +91,8 @@ public class DataManager extends JsonReloadListener
 	    //});
 
 	    
-	    this.registeredData = immutablemap;  
+	    this.registeredEntityData = immutablemapEntity;  
+	    this.registeredItemData = immutablemapItem;  
 	}
 	   
     public static JsonElement toJson(EntityData elementalData)
@@ -85,9 +100,9 @@ public class DataManager extends JsonReloadListener
 	    return GSON.toJsonTree(elementalData);
 	}
 
-	public Set<ResourceLocation> getElementalDataKeys() 
+	public Set<ResourceLocation> getEntityDataKeys() 
 	{
-	    return this.registeredData.keySet();
+	    return this.registeredEntityData.keySet();
 	}
 	
 	@Nullable
@@ -131,6 +146,11 @@ public class DataManager extends JsonReloadListener
 	
 	public EntityData getEntityDataFromLocation(ResourceLocation rl)
 	{
-		return this.registeredData.getOrDefault(rl, EntityData.EMPTY);
+		return this.registeredEntityData.getOrDefault(rl, EntityData.EMPTY);
+	}
+	
+	public GeneralData getItemDataFromLocation(ResourceLocation rl)
+	{
+		return this.registeredItemData.getOrDefault(rl, GeneralData.EMPTY);
 	}
 }

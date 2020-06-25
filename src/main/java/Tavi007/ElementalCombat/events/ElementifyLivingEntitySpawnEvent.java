@@ -16,6 +16,7 @@ import Tavi007.ElementalCombat.loading.AttackFormat;
 import net.minecraft.entity.LivingEntity;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent.CheckSpawn;
@@ -43,32 +44,36 @@ public class ElementifyLivingEntitySpawnEvent
 	private static void succesfullSpawnEvent(LivingEvent event)
 	{
 		LivingEntity entity = event.getEntityLiving();
-		ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getDisplayName().getString().toLowerCase().replace(" ", "_"));
+		
+		// load default data from dataManager
+		ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
 		EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
-		if(entityData != null)
+		Set<String> weaknessSet = entityData.getWeaknessSet();
+		Set<String> resistanceSet = entityData.getResistanceSet();
+		Set<String> immunitySet = entityData.getImmunitySet();
+		Set<String> absorbSet = entityData.getAbsorbSet();
+		// rewrite set to mapping
+		Set<AttackFormat> attackFormatSet = entityData.getAttackSet();
+		Map<String, Integer> attackMap = new HashMap<String, Integer>();
+		attackFormatSet.forEach((attack) ->
 		{
-			Set<AttackFormat> attackFormatSet = entityData.getAttackSet();
-			Map<String, Integer> attackMap = new HashMap<String, Integer>();
-			attackFormatSet.forEach((attack) ->
+			Integer value = attack.getValue();
+			if (value == 0)
 			{
-				Integer value = attack.getValue();
-				if (value == 0)
-				{
-					ElementalCombat.LOGGER.info("Elemental damage value of " + attack.getName() + " for " + entity.getName().toString() + " is 0. Using 1 instead.");
-					value = 1;
-				}
-				attackMap.put(attack.getName(), value);
-			});
-			Set<String> weaknessSet = entityData.getWeaknessSet();
-			Set<String> resistanceSet = entityData.getResistanceSet();
-			Set<String> immunitySet = entityData.getImmunitySet();
-			Set<String> absorbSet = entityData.getAbsorbSet();
-			
-			
-			if(entityData.getBiomeDependency()) // player spawn should be biome independent
+				ElementalCombat.LOGGER.info("Elemental damage value of " + attack.getName() + " for " + entity.getName().toString() + " is 0. Using 1 instead.");
+				value = 1;
+			}
+			attackMap.put(attack.getName(), value);
+		});
+		
+		// player spawn should be biome independent
+		if(entityData.getBiomeDependency()) 
+		{
+			String biomeProperties = null;
+			World world = entity.getEntityWorld();
+			if (world.getDimension().isSurfaceWorld())
 			{
-				String biomeProperties = null;
-				TempCategory category = entity.getEntityWorld().getBiome(entity.getPosition()).getTempCategory();
+				TempCategory category = world.getBiome(entity.getPosition()).getTempCategory();
 				if(category == TempCategory.COLD)
 				{
 					biomeProperties = "ice";
@@ -81,27 +86,32 @@ public class ElementifyLivingEntitySpawnEvent
 				{
 					biomeProperties = "water";
 				}
+				
 				if(biomeProperties != null)
 				{
-					if(!immunitySet.contains(biomeProperties) && !absorbSet.contains(biomeProperties))
-					{
-						weaknessSet.remove(biomeProperties);
-						resistanceSet.add(biomeProperties);
-					}
+					weaknessSet.remove(biomeProperties);
+					resistanceSet.add(biomeProperties);
 				}
 			}
-
-			IElementalAttackData elemAtckCap = entity.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
-			IElementalDefenseData elemDefCap = entity.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null).orElse(new ElementalDefenseData());
-			elemAtckCap.setAttackMap(attackMap);
-			elemDefCap.setWeaknessSet(weaknessSet);
-			elemDefCap.setResistanceSet(resistanceSet);
-			elemDefCap.setImmunitySet(immunitySet);
-			elemDefCap.setAbsorbSet(absorbSet);
-			
-			System.out.println(attackMap);
-			System.out.println(weaknessSet);
+			else if (world.getDimension().isNether())
+			{
+				immunitySet.add("fire");
+			}
+			else
+			{
+				// End-dimension
+				// might rework this part for 1.16
+				immunitySet.add("ice");
+			}
 		}
-		
+
+		// set capability
+		IElementalAttackData elemAtckCap = entity.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
+		IElementalDefenseData elemDefCap = entity.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null).orElse(new ElementalDefenseData());
+		elemAtckCap.setAttackMap(attackMap);
+		elemDefCap.setWeaknessSet(weaknessSet);
+		elemDefCap.setResistanceSet(resistanceSet);
+		elemDefCap.setImmunitySet(immunitySet);
+		elemDefCap.setAbsorbSet(absorbSet);
 	}
 }

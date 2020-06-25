@@ -33,6 +33,7 @@ public class GeneralData
 		   this.immunity = new HashSet<String>();
 		   this.absorb = new HashSet<String>();
 		   this.attack = new HashSet<AttackFormat>();
+		   
 	   }
 	   
 	   public Set<String> getWeaknessSet()
