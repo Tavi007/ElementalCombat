@@ -5,14 +5,14 @@ import java.util.Map;
 import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.EntityData;
-import Tavi007.ElementalCombat.EntityData.AttackFormat;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackDataCapability;
 import Tavi007.ElementalCombat.capabilities.ElementalDefenseData;
 import Tavi007.ElementalCombat.capabilities.ElementalDefenseDataCapability;
 import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
+import Tavi007.ElementalCombat.loading.EntityData;
+import Tavi007.ElementalCombat.loading.AttackFormat;
 import net.minecraft.entity.LivingEntity;
 
 import net.minecraft.util.ResourceLocation;
@@ -65,7 +65,7 @@ public class ElementifyLivingEntitySpawnEvent
 			Set<String> absorbSet = entityData.getAbsorbSet();
 			
 			
-			if(entityData.getBiomeDependency())
+			if(entityData.getBiomeDependency()) // player spawn should be biome independent
 			{
 				String biomeProperties = null;
 				TempCategory category = entity.getEntityWorld().getBiome(entity.getPosition()).getTempCategory();
@@ -98,6 +98,9 @@ public class ElementifyLivingEntitySpawnEvent
 			elemDefCap.setResistanceSet(resistanceSet);
 			elemDefCap.setImmunitySet(immunitySet);
 			elemDefCap.setAbsorbSet(absorbSet);
+			
+			System.out.println(attackMap);
+			System.out.println(weaknessSet);
 		}
 		
 	}

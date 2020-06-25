@@ -9,6 +9,7 @@ import Tavi007.ElementalCombat.capabilities.ElementalDefenseData;
 import Tavi007.ElementalCombat.capabilities.ElementalDefenseDataStorage;
 import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
+import Tavi007.ElementalCombat.loading.DataManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.IEventBus;
