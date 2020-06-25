@@ -56,7 +56,8 @@ public class ElementifyLivingHurtEvent
 				else
 				{
 					//use data from item
-					elemAtckCap = livingEntitySource.getHeldItemMainhand().getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
+					ItemStack item = livingEntitySource.getHeldItemMainhand();
+					elemAtckCap = item.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
 				}
 			}
 			else

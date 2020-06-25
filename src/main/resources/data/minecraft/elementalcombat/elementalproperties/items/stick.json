@@ -22,7 +22,7 @@
 	"absorb": [
 	],
 	
-	"wall": [
+	"immunity": [
 		"thunder"
 	]
 }
