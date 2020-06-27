@@ -1,0 +1,27 @@
+{
+	"attack":[
+		{
+			"name": "unholy",
+			"value": 1
+		}
+	],
+
+	"weakness": [
+		"holy"
+	],
+	
+	"resistance": [
+		"fire",
+		"ice",
+		"water",
+		"thunder"
+	],
+	
+	"immunity": [
+	],
+	
+	"absorb": [
+	],
+	
+	"biomeDependency":false
+}

@@ -89,7 +89,6 @@ public class ElementifyLivingEntitySpawnEvent
 				
 				if(biomeProperties != null)
 				{
-					weaknessSet.remove(biomeProperties);
 					resistanceSet.add(biomeProperties);
 				}
 			}
