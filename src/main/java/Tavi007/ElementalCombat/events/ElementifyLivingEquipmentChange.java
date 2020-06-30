@@ -1,20 +1,13 @@
 package Tavi007.ElementalCombat.events;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
-import Tavi007.ElementalCombat.capabilities.ElementalAttackDataCapability;
-import Tavi007.ElementalCombat.capabilities.ElementalDefenseData;
-import Tavi007.ElementalCombat.capabilities.ElementalDefenseDataCapability;
-import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
+import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
-import Tavi007.ElementalCombat.loading.AttackFormat;
 import Tavi007.ElementalCombat.loading.EntityData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -51,7 +44,7 @@ public class ElementifyLivingEquipmentChange
 						item = event.getTo();
 					}
 					
-					IElementalDefenseData elemDefCapItem = item.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null).orElse(new ElementalDefenseData());
+					IElementalDefenseData elemDefCapItem = ElementalCombatAPI.getElementalDefenseData(item);
 					Set<String> weaknessSetItem = elemDefCapItem.getWeaknessSet();
 					Set<String> resistanceSetItem = elemDefCapItem.getResistanceSet();
 					Set<String> immunitySetItem = elemDefCapItem.getImmunitySet();
@@ -65,7 +58,7 @@ public class ElementifyLivingEquipmentChange
 			});
 			
 			// set values
-			IElementalDefenseData elemDefCapEntity = entity.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null).orElse(new ElementalDefenseData());
+			IElementalDefenseData elemDefCapEntity = ElementalCombatAPI.getElementalDefenseData(entity);
 			elemDefCapEntity.setWeaknessSet(weaknessSet);
 			elemDefCapEntity.setResistanceSet(resistanceSet);
 			elemDefCapEntity.setImmunitySet(immunitySet);

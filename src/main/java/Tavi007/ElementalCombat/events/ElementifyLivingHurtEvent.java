@@ -5,23 +5,16 @@ import java.util.Map;
 import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackDataCapability;
-import Tavi007.ElementalCombat.capabilities.ElementalDefenseData;
-import Tavi007.ElementalCombat.capabilities.ElementalDefenseDataCapability;
 import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
-import Tavi007.ElementalCombat.loading.AttackFormat;
-import Tavi007.ElementalCombat.loading.EntityData;
-import Tavi007.ElementalCombat.loading.GeneralData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -51,13 +44,13 @@ public class ElementifyLivingHurtEvent
 				if(livingEntitySource.getHeldItemMainhand().isEmpty())
 				{
 					//use data from livingEntity
-					elemAtckCap = livingEntitySource.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
+					elemAtckCap = ElementalCombatAPI.getElementalAttackData(livingEntitySource);
 				}
 				else
 				{
 					//use data from item
 					ItemStack item = livingEntitySource.getHeldItemMainhand();
-					elemAtckCap = item.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
+					elemAtckCap = ElementalCombatAPI.getElementalAttackData(item);
 				}
 			}
 			else
@@ -67,7 +60,7 @@ public class ElementifyLivingHurtEvent
 				{
 					AbstractArrowEntity arrow = (AbstractArrowEntity) source;
 				}
-				
+
 				elemAtckCap = source.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
 			}
 			sourceElemAtck = elemAtckCap.getAttackMap();
@@ -112,7 +105,9 @@ public class ElementifyLivingHurtEvent
 		//System.out.println(sourceElemAtck);
 		
 		// Get the elemental combat data from target
-		IElementalDefenseData elemDefCap = target.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null).orElse(new ElementalDefenseData());
+		//IElementalDefenseData elemDefCap = target.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null).orElse(new ElementalDefenseData());
+		
+		IElementalDefenseData elemDefCap = ElementalCombatAPI.getElementalDefenseData(target);
 		Set<String> targetElemAbsorb = elemDefCap.getAbsorbSet();
 		Set<String> targetElemImmunity = elemDefCap.getImmunitySet();
 		Set<String> targetElemResistance = elemDefCap.getResistanceSet();
