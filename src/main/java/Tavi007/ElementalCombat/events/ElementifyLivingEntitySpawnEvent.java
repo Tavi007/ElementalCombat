@@ -71,6 +71,7 @@ public class ElementifyLivingEntitySpawnEvent
 		{
 			String biomeProperties = null;
 			World world = entity.getEntityWorld();
+			/*
 			if (world.getDimension().isSurfaceWorld())
 			{
 				TempCategory category = world.getBiome(entity.getPosition()).getTempCategory();
@@ -103,6 +104,7 @@ public class ElementifyLivingEntitySpawnEvent
 				// might rework this part for 1.16
 				immunitySet.add("ice");
 			}
+			*/
 		}
 
 		// set capability

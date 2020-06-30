@@ -15,7 +15,6 @@ import com.google.common.collect.ImmutableMap.Builder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import Tavi007.ElementalCombat.events.DataLoadEvent;
@@ -23,7 +22,6 @@ import net.minecraft.client.resources.JsonReloadListener;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.ValidationTracker;
 import net.minecraftforge.common.MinecraftForge;
 
 public class DataManager extends JsonReloadListener 
@@ -39,12 +37,12 @@ public class DataManager extends JsonReloadListener
 		super(GSON, "elementalcombat");
 	}
 	
-	protected void apply(Map<ResourceLocation, JsonObject> objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn) 
+	protected void apply(Map<ResourceLocation, JsonElement> objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn) 
 	{
 		Builder<ResourceLocation, EntityData> builderEntity = ImmutableMap.builder();
 		Builder<ResourceLocation, GeneralData> builderItem = ImmutableMap.builder();
 		
-		JsonObject jsonobject = objectIn.remove(EntityData.EMPTY_RESOURCELOCATION);
+		JsonElement jsonobject = objectIn.remove(EntityData.EMPTY_RESOURCELOCATION);
 	    if (jsonobject != null) 
 	    {
 	         LOGGER.warn("Datapack tried to redefine {} elemental entity data, ignoring", (Object)EntityData.EMPTY_RESOURCELOCATION);
@@ -106,7 +104,7 @@ public class DataManager extends JsonReloadListener
 	}
 	
 	@Nullable
-    private EntityData loadData(Gson gson, ResourceLocation name, JsonObject data, boolean custom)
+    private EntityData loadData(Gson gson, ResourceLocation name, JsonElement data, boolean custom)
     {
         Deque<DataContext> que = dataContext.get();
         if (que == null)

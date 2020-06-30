@@ -61,7 +61,7 @@ public class ElementalCombat
 	@SubscribeEvent
 	public void onServerAboutToStart(FMLServerAboutToStartEvent event)
 	{
-		event.getServer().getResourceManager().addReloadListener(DATAMANAGER);
+		//event.getServer().getResourcePacks().addReloadListener(DATAMANAGER);
 		LOGGER.info("Elemental data registered.");	
 	}
 	
@@ -69,8 +69,6 @@ public class ElementalCombat
     {
         CapabilityManager.INSTANCE.register(IElementalDefenseData.class, new ElementalDefenseDataStorage(), ElementalDefenseData::new);
         CapabilityManager.INSTANCE.register(IElementalAttackData.class, new ElementalAttackDataStorage(), ElementalAttackData::new);
-        
-        //add here a class/function for loading data from .json
     }
 	
 }
