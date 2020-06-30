@@ -16,7 +16,7 @@ import Tavi007.ElementalCombat.loading.AttackFormat;
 import net.minecraft.entity.LivingEntity;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent.CheckSpawn;
@@ -70,41 +70,26 @@ public class ElementifyLivingEntitySpawnEvent
 		if(entityData.getBiomeDependency()) 
 		{
 			String biomeProperties = null;
-			World world = entity.getEntityWorld();
-			/*
-			if (world.getDimension().isSurfaceWorld())
+			BlockPos blockPos = new BlockPos(entity.getPositionVec());
+			
+			TempCategory category = entity.getEntityWorld().getBiome(blockPos).getTempCategory();
+			if(category == TempCategory.COLD)
 			{
-				TempCategory category = world.getBiome(entity.getPosition()).getTempCategory();
-				if(category == TempCategory.COLD)
-				{
-					biomeProperties = "ice";
-				}
-				else if(category == TempCategory.WARM)
-				{
-					biomeProperties = "fire";
-				}
-				else if(category == TempCategory.OCEAN)
-				{
-					biomeProperties = "water";
-				}
-				
-				if(biomeProperties != null)
-				{
-					weaknessSet.remove(biomeProperties);
-					resistanceSet.add(biomeProperties);
-				}
+				biomeProperties = "ice";
 			}
-			else if (world.getDimension().isNether())
+			else if(category == TempCategory.WARM)
 			{
-				immunitySet.add("fire");
+				biomeProperties = "fire";
 			}
-			else
+			else if(category == TempCategory.OCEAN)
 			{
-				// End-dimension
-				// might rework this part for 1.16
-				immunitySet.add("ice");
+				biomeProperties = "water";
 			}
-			*/
+			if(biomeProperties != null)
+			{
+				weaknessSet.remove(biomeProperties);
+				resistanceSet.add(biomeProperties);
+			}
 		}
 
 		// set capability
