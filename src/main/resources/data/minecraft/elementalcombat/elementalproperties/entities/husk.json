@@ -3,20 +3,14 @@
 		{
 			"name": "fire",
 			"value": 1
-		},
-		{
-			"name": "ice",
-			"value": 1
 		}
 	],
 
 	"weakness": [
-		"fire"
 	],
 	
 	"resistance": [
-		"ice",
-		"water"
+		"fire"
 	],
 	
 	"immunity": [
@@ -25,5 +19,5 @@
 	"absorb": [
 	],
 	
-	"biomeDependency":true
+	"biomeDependency":false
 }

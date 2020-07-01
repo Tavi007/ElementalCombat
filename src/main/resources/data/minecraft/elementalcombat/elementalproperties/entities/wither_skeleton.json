@@ -1,22 +1,17 @@
 {
 	"attack":[
 		{
-			"name": "fire",
-			"value": 1
-		},
-		{
-			"name": "ice",
+			"name": "unholy",
 			"value": 1
 		}
 	],
 
 	"weakness": [
-		"fire"
+		"holy"
 	],
 	
 	"resistance": [
-		"ice",
-		"water"
+		"fire"
 	],
 	
 	"immunity": [
@@ -25,5 +20,5 @@
 	"absorb": [
 	],
 	
-	"biomeDependency":true
+	"biomeDependency":false
 }

@@ -1,25 +1,19 @@
 {
 	"attack":[
-		{
-			"name": "fire",
-			"value": 1
-		},
-		{
-			"name": "ice",
-			"value": 1
-		}
 	],
 
 	"weakness": [
-		"fire"
+		"fire",
+		"ice",
+		"water",
+		"thunder"
 	],
 	
 	"resistance": [
-		"ice",
-		"water"
 	],
 	
 	"immunity": [
+		"natural"
 	],
 	
 	"absorb": [

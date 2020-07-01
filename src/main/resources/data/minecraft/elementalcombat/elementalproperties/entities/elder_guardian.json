@@ -1,22 +1,19 @@
 {
 	"attack":[
 		{
-			"name": "fire",
-			"value": 1
-		},
-		{
-			"name": "ice",
+			"name": "water",
 			"value": 1
 		}
 	],
 
 	"weakness": [
-		"fire"
+		"thunder"
 	],
 	
 	"resistance": [
+		"water",
 		"ice",
-		"water"
+		"fire"
 	],
 	
 	"immunity": [
@@ -25,5 +22,5 @@
 	"absorb": [
 	],
 	
-	"biomeDependency":true
+	"biomeDependency":false
 }
