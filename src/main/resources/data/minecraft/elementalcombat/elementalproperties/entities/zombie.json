@@ -19,11 +19,10 @@
 		"water"
 	],
 	
-	"absorb": [
+	"immunity": [
 	],
 	
-	"immunity": [
-		"thunder"
+	"absorb": [
 	],
 	
 	"biomeDependency":true
