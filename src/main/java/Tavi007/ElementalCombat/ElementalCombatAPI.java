@@ -7,6 +7,7 @@ import Tavi007.ElementalCombat.capabilities.ElementalDefenseDataCapability;
 import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 
 public class ElementalCombatAPI 
@@ -30,4 +31,7 @@ public class ElementalCombatAPI
 	}
 	
 	//Projectiles
+	public static IElementalAttackData getElementalAttackData(ProjectileEntity entity){
+		return entity.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
+	}
 }

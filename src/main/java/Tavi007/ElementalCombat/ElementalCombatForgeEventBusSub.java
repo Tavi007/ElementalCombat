@@ -4,7 +4,7 @@ import Tavi007.ElementalCombat.capabilities.ElementalAttackDataCapability;
 import Tavi007.ElementalCombat.capabilities.ElementalDefenseDataCapability;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -22,7 +22,8 @@ public class ElementalCombatForgeEventBusSub
     {
         if(e.getObject().getEntity() instanceof LivingEntity) e.addCapability(DEFENSE, new ElementalDefenseDataCapability());
         if(e.getObject().getEntity() instanceof LivingEntity) e.addCapability(ATTACK, new ElementalAttackDataCapability());
-        if(e.getObject().getEntity() instanceof ProjectileItemEntity) e.addCapability(ATTACK, new ElementalAttackDataCapability());  
+        if(e.getObject().getEntity() instanceof ProjectileEntity) e.addCapability(ATTACK, new ElementalAttackDataCapability());  
+        
     }
 	
 	@SubscribeEvent

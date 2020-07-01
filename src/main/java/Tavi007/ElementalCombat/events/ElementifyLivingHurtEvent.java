@@ -7,13 +7,11 @@ import java.util.Set;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
-import Tavi007.ElementalCombat.capabilities.ElementalAttackDataCapability;
 import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -49,48 +47,36 @@ public class ElementifyLivingHurtEvent
 				else
 				{
 					//use data from item
-					ItemStack item = livingEntitySource.getHeldItemMainhand();
-					elemAtckCap = ElementalCombatAPI.getElementalAttackData(item);
+					elemAtckCap = ElementalCombatAPI.getElementalAttackData(livingEntitySource.getHeldItemMainhand());
 				}
 			}
-			else
+			else if (source instanceof ProjectileEntity)
 			{
 				//projectile
-				if(source instanceof AbstractArrowEntity)
-				{
-					AbstractArrowEntity arrow = (AbstractArrowEntity) source;
-				}
-
-				elemAtckCap = source.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
+				elemAtckCap = ElementalCombatAPI.getElementalAttackData((ProjectileEntity) source);
 			}
 			sourceElemAtck = elemAtckCap.getAttackMap();
 		}
 		else
 		{
 			// fill List, if Source is not an entity, but a 'natural occurrence'.
-			if(damageSource.isFireDamage())
-			{
+			if(damageSource.isFireDamage()){
 				sourceElemAtck.put("fire",1);
 			}
-			else if(damageSource == DamageSource.DROWN)
-			{
+			else if(damageSource == DamageSource.DROWN){
 				sourceElemAtck.put("water",1);
 			}
-			else if(damageSource == DamageSource.WITHER)
-			{
+			else if(damageSource == DamageSource.WITHER){
 				sourceElemAtck.put("unholy",1); //maybe element 'death'/'unholy'?
 			}
-			else if(damageSource == DamageSource.IN_WALL)
-			{
+			else if(damageSource == DamageSource.IN_WALL){
 				sourceElemAtck.put("earth",1); 
 			}
 			else if(damageSource == DamageSource.CACTUS || 
-			   damageSource == DamageSource.SWEET_BERRY_BUSH)
-			{
+			   damageSource == DamageSource.SWEET_BERRY_BUSH){
 				sourceElemAtck.put("plant",1);
 			}
-			else if(damageSource == DamageSource.LIGHTNING_BOLT)
-			{
+			else if(damageSource == DamageSource.LIGHTNING_BOLT){
 				sourceElemAtck.put("thunder",1);
 			}
 		}
@@ -101,12 +87,8 @@ public class ElementifyLivingHurtEvent
 		{
 			sourceElemAtck.put("natural", 1);
 		}
-
-		//System.out.println(sourceElemAtck);
 		
 		// Get the elemental combat data from target
-		//IElementalDefenseData elemDefCap = target.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null).orElse(new ElementalDefenseData());
-		
 		IElementalDefenseData elemDefCap = ElementalCombatAPI.getElementalDefenseData(target);
 		Set<String> targetElemAbsorb = elemDefCap.getAbsorbSet();
 		Set<String> targetElemImmunity = elemDefCap.getImmunitySet();
@@ -152,19 +134,31 @@ public class ElementifyLivingHurtEvent
 			ElementalCombat.LOGGER.info("Elemental valueSum should never be 0. Use default damage instead.");
 			return;
 		}
-		event.setAmount(newDamageAmount/valueSum);
-		
+		newDamageAmount = newDamageAmount/valueSum;
 		
 		// prints for testing
 		boolean doPrint = true;
 		if (doPrint)
 		{
-			System.out.println("Attack: " + sourceElemAtck);
-			System.out.println("Absorb: " + targetElemAbsorb);
-			System.out.println("Immunity: " + targetElemImmunity);
-			System.out.println("Resistance: " + targetElemResistance);
-			System.out.println("Weakness: " + targetElemWeakness);
+			System.out.println("\n" + 
+							   "Target: " + target.getDisplayName().getString() + "\n" +
+							   "Absorb: " + targetElemAbsorb + "\n" +
+							   "Immunity: " + targetElemImmunity + "\n" +
+							   "Resistance: " + targetElemResistance + "\n" +
+							   "Weakness: " + targetElemWeakness + "\n" +
+							   "DamageType: " + sourceElemAtck + "\n" +
+							   "old value: " + damageAmount + "\n" +
+							   "new value: " + newDamageAmount/valueSum);
 		}
 		
+		// stop the 'hurt'-animation from firing, if no damage is dealt.
+		if(newDamageAmount <= 0)
+		{
+			if(newDamageAmount < 0)
+			{
+				target.heal(-newDamageAmount);
+			}
+			event.setCanceled(true);
+		}
 	}
 }
