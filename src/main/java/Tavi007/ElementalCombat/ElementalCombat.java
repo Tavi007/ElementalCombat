@@ -10,6 +10,7 @@ import Tavi007.ElementalCombat.capabilities.ElementalDefenseDataStorage;
 import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
 import Tavi007.ElementalCombat.loading.DataManager;
+import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -61,7 +62,7 @@ public class ElementalCombat
 	@SubscribeEvent
 	public void onServerAboutToStart(FMLServerAboutToStartEvent event)
 	{
-		//event.getServer().getResourcePacks().addReloadListener(DATAMANAGER);
+		((IReloadableResourceManager) event.getServer().getDataPackRegistries().func_240970_h_()).addReloadListener(DATAMANAGER);
 		LOGGER.info("Elemental data registered.");	
 	}
 	

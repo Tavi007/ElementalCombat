@@ -17,6 +17,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
+import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.events.DataLoadEvent;
 import net.minecraft.client.resources.JsonReloadListener;
 import net.minecraft.profiler.IProfiler;
@@ -34,11 +35,12 @@ public class DataManager extends JsonReloadListener
    
 	public DataManager() 
 	{
-		super(GSON, "elementalcombat");
+		super(GSON, ElementalCombat.MOD_ID);
 	}
 	
 	protected void apply(Map<ResourceLocation, JsonElement> objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn) 
 	{
+		System.out.println("\n \n HI \n");
 		Builder<ResourceLocation, EntityData> builderEntity = ImmutableMap.builder();
 		Builder<ResourceLocation, GeneralData> builderItem = ImmutableMap.builder();
 		
