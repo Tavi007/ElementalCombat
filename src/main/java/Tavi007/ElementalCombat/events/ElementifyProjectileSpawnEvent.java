@@ -1,7 +1,5 @@
 package Tavi007.ElementalCombat.events;
 
-import java.util.List;
-
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
@@ -10,8 +8,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -31,18 +27,11 @@ public class ElementifyProjectileSpawnEvent {
 					System.out.println("Newly spawned projectile found");
 					
 					ProjectileEntity projectile = (ProjectileEntity) entity;
-					
-					//find livingEntity source. (aka the nearest LivingEntity, that isn't the spawning projectileEntity? What about dispensers?)
-					Vector3d pos = projectile.getPositionVec();
-					AxisAlignedBB boundingBox = new AxisAlignedBB(pos.x, pos.y, pos.z, pos.x, pos.y, pos.z); 
-					List<Entity> nearbyEntities = event.getWorld().getEntitiesWithinAABBExcludingEntity(projectile, boundingBox);
-					System.out.println("Entity in List: "+ nearbyEntities);
-					
-					//check if only one entity was found. This should be the sourceEntity
-					//if List is empty, then source is a TileEntity (i.e Dispenser). 
-					if(nearbyEntities.size() == 1)
-					{
-						LivingEntity sourceEntity = (LivingEntity) nearbyEntities.get(0);
+					Entity  source = projectile.func_234616_v_();
+					if(source != null && source instanceof LivingEntity){
+						LivingEntity sourceEntity = (LivingEntity) source;
+						
+						System.out.println("Shooter: " +sourceEntity.getDisplayName().getString());
 						
 						// If sourceEntity holds an item, use item data.
 						// If not, use data from sourceEntity as default.
