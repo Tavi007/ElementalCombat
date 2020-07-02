@@ -1,3 +1,45 @@
+Build: 1.16.1-32.0.43 - Thu Jul 02 12:54:03 GMT 2020
+	MartijnvandenBrand:
+		Include model data in getQuads call (#6884)
+		
+		The model data wasn't included when getting quads from specific sides, but was when getting quads for side = null.
+
+	thpetuaudletang:
+		Pass matrixstack in tooltip render events (#6885)
+
+=========
+Build: 1.16.1-32.0.41 - Thu Jul 02 05:54:25 GMT 2020
+	tterrag:
+		Fix improper handling of baked lighting in forge light pipeline
+		
+		Closes #6812
+
+=========
+Build: 1.16.1-32.0.40 - Thu Jul 02 01:59:30 GMT 2020
+	richard:
+		Fix FMLServerAboutToStartEvent being fired too late on the integrated server https://github.com/MinecraftForge/MinecraftForge/issues/6859
+
+=========
+Build: 1.16.1-32.0.39 - Wed Jul 01 18:14:25 GMT 2020
+	ichttt:
+		Fix miss-aligned patch ItemEntity (#6895)
+
+=========
+Build: 1.16.1-32.0.38 - Tue Jun 30 20:19:32 GMT 2020
+	info:
+		Add hoe tool type (#6872)
+
+=========
+Build: 1.16.1-32.0.36 - Tue Jun 30 20:09:21 GMT 2020
+	curle:
+		Allow any armor to have custom knockback resistance (#6877)
+
+=========
+Build: 1.16.1-32.0.35 - Tue Jun 30 19:57:32 GMT 2020
+	diesieben07:
+		Add senderUUID to ClientChatReceivedEvent (#6881)
+
+=========
 Build: 1.16.1-32.0.34 - Tue Jun 30 02:33:58 GMT 2020
 	lex:
 		Re-write checkATs function and automate making Items/Blocks public.
