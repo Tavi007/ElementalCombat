@@ -10,9 +10,13 @@ import Tavi007.ElementalCombat.capabilities.ElementalDefenseDataStorage;
 import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
 import Tavi007.ElementalCombat.loading.DataManager;
+import Tavi007.ElementalCombat.particle.CombatParticleData;
+import Tavi007.ElementalCombat.particle.CombatParticleType;
+import net.minecraft.particles.ParticleType;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -29,6 +33,7 @@ public class ElementalCombat
 	public static final String MOD_ID = "elementalcombat";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	public static DataManager DATAMANAGER = new DataManager();
+	public static ParticleType<CombatParticleData> combatParticleType;
 	
 	public ElementalCombat()
 	{
@@ -65,7 +70,15 @@ public class ElementalCombat
 		((IReloadableResourceManager) event.getServer().getDataPackRegistries().func_240970_h_()).addReloadListener(DATAMANAGER);
 		LOGGER.info("Elemental data registered.");	
 	}
-	
+	  
+	@SubscribeEvent
+	public static void onIParticleTypeRegistration(RegistryEvent.Register<ParticleType<?>> iParticleTypeRegisterEvent) {
+	    combatParticleType = new CombatParticleType();
+	    combatParticleType.setRegistryName("elementalcombat:particles/weakness");
+	    iParticleTypeRegisterEvent.getRegistry().register(combatParticleType);
+	    LOGGER.info("ElementalCombat particles registered.");
+	}
+	  
 	private void onCommonSetup(FMLCommonSetupEvent event)
     {
         CapabilityManager.INSTANCE.register(IElementalDefenseData.class, new ElementalDefenseDataStorage(), ElementalDefenseData::new);
