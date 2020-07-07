@@ -6,10 +6,6 @@ import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
-import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
-import Tavi007.ElementalCombat.capabilities.ElementalAttackDataCapability;
-import Tavi007.ElementalCombat.capabilities.ElementalDefenseData;
-import Tavi007.ElementalCombat.capabilities.ElementalDefenseDataCapability;
 import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
 import Tavi007.ElementalCombat.loading.EntityData;
@@ -30,15 +26,13 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 public class ElementifyLivingEntitySpawnEvent 
 {
 	@SubscribeEvent
-	public static void elementifyLivingHurtEvent(CheckSpawn event)
-	{
+	public static void elementifyNormalSpawnEvent(CheckSpawn event){
 		succesfullSpawnEvent(event);
 	}
 	
 
 	@SubscribeEvent
-	public static void elementifyLivingHurtEvent(SpecialSpawn event)
-	{
+	public static void elementifyForcedSpawnEvent(SpecialSpawn event){
 		succesfullSpawnEvent(event);
 	}
 	
@@ -59,9 +53,8 @@ public class ElementifyLivingEntitySpawnEvent
 		attackFormatSet.forEach((attack) ->
 		{
 			Integer value = attack.getValue();
-			if (value == 0)
-			{
-				ElementalCombat.LOGGER.info("Elemental damage value of " + attack.getName() + " for " + entity.getName().toString() + " is 0. Using 1 instead.");
+			if (value <= 0){
+				ElementalCombat.LOGGER.info("Elemental damage value of " + attack.getName() + " for " + entity.getName().toString() + " is <= 0. Using 1 instead.");
 				value = 1;
 			}
 			attackMap.put(attack.getName(), value);
@@ -74,21 +67,16 @@ public class ElementifyLivingEntitySpawnEvent
 			BlockPos blockPos = new BlockPos(entity.getPositionVec());
 			
 			TempCategory category = entity.getEntityWorld().getBiome(blockPos).getTempCategory();
-			if(category == TempCategory.COLD)
-			{
+			if(category == TempCategory.COLD){
 				biomeProperties = "ice";
 			}
-			else if(category == TempCategory.WARM)
-			{
+			else if(category == TempCategory.WARM){
 				biomeProperties = "fire";
 			}
-			else if(category == TempCategory.OCEAN)
-			{
+			else if(category == TempCategory.OCEAN){
 				biomeProperties = "water";
 			}
-			if(biomeProperties != null)
-			{
-				weaknessSet.remove(biomeProperties);
+			if(biomeProperties != null){
 				resistanceSet.add(biomeProperties);
 			}
 		}
