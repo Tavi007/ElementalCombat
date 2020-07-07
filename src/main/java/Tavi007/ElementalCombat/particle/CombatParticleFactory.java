@@ -29,20 +29,12 @@ public class CombatParticleFactory implements IParticleFactory<CombatParticleDat
 
 	@Nullable
 	//@Override
-	public Particle makeParticle(CombatParticleData combatParticleData, World world, double xPos, double yPos, double zPos, double xVelocity, double yVelocity, double zVelocity) {
+	public Particle makeParticle(CombatParticleData combatParticleData, ClientWorld world, double xPos, double yPos, double zPos, double xVelocity, double yVelocity, double zVelocity) {
 		CombatParticle newParticle = new CombatParticle(world, xPos, yPos, zPos, xVelocity, yVelocity, zVelocity,
 				combatParticleData.getTint(), combatParticleData.getDiameter(),
 				sprites);
 		newParticle.selectSpriteRandomly(sprites);  // choose a random sprite from the available list (in this case there is only one)
 		return newParticle;
-	}
-
-	// was missing from the example? maybe a 1.16 difference?
-	@Override
-	public Particle makeParticle(CombatParticleData typeIn, ClientWorld worldIn, double x, double y, double z,
-			double xSpeed, double ySpeed, double zSpeed) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

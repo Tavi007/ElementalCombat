@@ -1,18 +1,22 @@
 package Tavi007.ElementalCombat.events;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.Random;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
+import Tavi007.ElementalCombat.particle.CombatParticleData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -32,33 +36,30 @@ public class ElementifyLivingHurtEvent
 		// check if source is an entity
 		Map<String,Integer> sourceElemAtck = new HashMap<String,Integer>();
 		Entity source = damageSource.getImmediateSource();
-		if(source!=null) 
-		{
+		if(source!=null) {
 			// damage source should be either a mob, player or projectile (arrow/trident/witherskull)
 			IElementalAttackData elemAtckCap = new ElementalAttackData();
-			if(source instanceof LivingEntity)
-			{
+			if(source instanceof LivingEntity){
 				LivingEntity livingEntitySource = (LivingEntity) source;
-				if(livingEntitySource.getHeldItemMainhand().isEmpty())
-				{
+				if(livingEntitySource.getHeldItemMainhand().isEmpty()){
 					//use data from livingEntity
 					elemAtckCap = ElementalCombatAPI.getElementalAttackData(livingEntitySource);
 				}
-				else
-				{
+				else{
 					//use data from item
 					elemAtckCap = ElementalCombatAPI.getElementalAttackData(livingEntitySource.getHeldItemMainhand());
 				}
 			}
-			else if (source instanceof ProjectileEntity)
-			{
+			else if (source instanceof ProjectileEntity){
 				//projectile
 				elemAtckCap = ElementalCombatAPI.getElementalAttackData((ProjectileEntity) source);
 			}
+			else {
+				ElementalCombat.LOGGER.info("You should not have landed here.");
+			}
 			sourceElemAtck = elemAtckCap.getAttackMap();
 		}
-		else
-		{
+		else{
 			// fill List, if Source is not an entity, but a 'natural occurrence'.
 			if(damageSource.isFireDamage()){
 				sourceElemAtck.put("fire",1);
@@ -83,8 +84,7 @@ public class ElementifyLivingHurtEvent
 		
 		// if attack has no elemental properties, it is of type 'natural'
 		// this can make mobs immune etc. to non-elemental attacks
-		if( sourceElemAtck.isEmpty())
-		{
+		if( sourceElemAtck.isEmpty()){
 			sourceElemAtck.put("natural", 1);
 		}
 		
@@ -99,38 +99,53 @@ public class ElementifyLivingHurtEvent
 		float damageAmount = event.getAmount();
 		float newDamageAmount = 0;
 		float valueSum = 0;
+		
+		Vector3d eyePos = target.getEyePosition(0);
+		final double POSITION_WOBBLE_AMOUNT = 0.01;
+		Random rand = new Random();
+		double xpos = eyePos.x + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
+		double ypos = eyePos.y + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
+		double zpos = eyePos.z + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
+
+	    Color tint = new Color(1.00f, 1.00f, 1.0f);
+	    double diameter = 1;
+	      
 		Set<String> keySet = sourceElemAtck.keySet();
 		for(String key : keySet)
 		{
 			Integer value = sourceElemAtck.get(key);
 			valueSum += value;
-			if (targetElemAbsorb.contains(key)) //highest priority
-			{
+			
+			double xSpeed = 0;
+			double ySpeed = 1;
+			double zSpeed = 0;
+			
+			target.getEntityWorld().addParticle(new CombatParticleData(tint, diameter), xpos, ypos, zpos, xSpeed, ySpeed, zSpeed);
+			
+			
+			if (targetElemAbsorb.contains(key)){ //highest priority
 				newDamageAmount -= damageAmount*value;
 				//add particle effect
-			}
-			else if (targetElemImmunity.contains(key)) // second highest priority
-			{
+				}
+			else if (targetElemImmunity.contains(key)){ // second highest priority
 				//add particle effect
 			}
-			else if (targetElemResistance.contains(key)) // third
-			{
+			else if (targetElemResistance.contains(key)){ // third
 				newDamageAmount += damageAmount*value/2;
 				//add particle effect
 			}
-			else if (targetElemWeakness.contains(key)) // last
-			{
+			else if (targetElemWeakness.contains(key)){ // last
 				newDamageAmount += damageAmount*value*2;
 				//add particle effect
 			}
-			else
-			{
+			else{
 				newDamageAmount += damageAmount*value;
 			}
 		}
 		
-		if(valueSum == 0) // Something has gone wrong, as this can only happen for incorrect data (check datapacks or someone messed up in his mod) 
-		{
+		if(valueSum == 0) {
+			// Something has gone wrong, as this can only happen for incorrect data.
+			// Datapacks should be error proof. Someone probably messed up in his mod. 
 			ElementalCombat.LOGGER.info("Elemental valueSum should never be 0. Use default damage instead.");
 			return;
 		}
@@ -152,6 +167,7 @@ public class ElementifyLivingHurtEvent
 		}
 		
 		// stop the 'hurt'-animation from firing, if no damage is dealt.
+		// not tested yet.
 		if(newDamageAmount <= 0)
 		{
 			if(newDamageAmount < 0)

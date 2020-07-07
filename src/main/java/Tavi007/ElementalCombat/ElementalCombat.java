@@ -11,9 +11,12 @@ import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
 import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
 import Tavi007.ElementalCombat.loading.DataManager;
 import Tavi007.ElementalCombat.particle.CombatParticleData;
+import Tavi007.ElementalCombat.particle.CombatParticleFactory;
 import Tavi007.ElementalCombat.particle.CombatParticleType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.particles.ParticleType;
 import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.RegistryEvent;
@@ -78,7 +81,23 @@ public class ElementalCombat
 	    iParticleTypeRegisterEvent.getRegistry().register(combatParticleType);
 	    LOGGER.info("ElementalCombat particles registered.");
 	}
-	  
+
+	@SubscribeEvent
+	public static void onParticleFactoryRegistration(ParticleFactoryRegisterEvent event) {
+
+		// beware - there are two registerFactory methods with different signatures.
+		// If you use the wrong one it will put Minecraft into an infinite loading loop with no console errors
+		Minecraft.getInstance().particles.registerFactory(combatParticleType, sprite -> new CombatParticleFactory(sprite));
+		//  This lambda may not be obvious: its purpose is:
+		//  the registerFactory method creates an IAnimatedSprite, then passes it to the constructor of FlameParticleFactory
+
+		//  General rule of thumb:
+		// If you are creating a TextureParticle with a corresponding json to specify textures which will be stitched into the
+		//    particle texture sheet, then use the 1-parameter constructor method
+		// If you're supplying the render yourself, or using a texture from the block sheet, use the 0-parameter constructor method
+		//   (examples are MobAppearanceParticle, DiggingParticle).  See ParticleManager::registerFactories for more.
+	}
+
 	private void onCommonSetup(FMLCommonSetupEvent event)
     {
         CapabilityManager.INSTANCE.register(IElementalDefenseData.class, new ElementalDefenseDataStorage(), ElementalDefenseData::new);

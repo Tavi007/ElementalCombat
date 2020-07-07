@@ -19,12 +19,12 @@ public class CombatParticle extends SpriteTexturedParticle{
 	 *   given diameter.
 	 *   We also supply sprites so that you can change the sprite texture in the tick() method (although not needed for this example)
 	 */
-	public CombatParticle(World world, double x, double y, double z,
+	public CombatParticle(ClientWorld world, double x, double y, double z,
 			double velocityX, double velocityY, double velocityZ,
 			Color tint, double diameter,
 			IAnimatedSprite sprites)
 	{
-		super((ClientWorld) world, x, y, z, velocityX, velocityY, velocityZ);
+		super(world, x, y, z, velocityX, velocityY, velocityZ);
 		this.sprites = sprites;
 
 		setColor(tint.getRed()/255.0F, tint.getGreen()/255.0F, tint.getBlue()/255.0F);
