@@ -1,11 +1,9 @@
 package Tavi007.ElementalCombat;
 
-import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
-import Tavi007.ElementalCombat.capabilities.ElementalAttackDataCapability;
-import Tavi007.ElementalCombat.capabilities.ElementalDefenseData;
-import Tavi007.ElementalCombat.capabilities.ElementalDefenseDataCapability;
-import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
-import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
+import Tavi007.ElementalCombat.capabilities.ElementalAttack;
+import Tavi007.ElementalCombat.capabilities.ElementalAttackCapability;
+import Tavi007.ElementalCombat.capabilities.ElementalDefense;
+import Tavi007.ElementalCombat.capabilities.ElementalDefenseCapability;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
@@ -13,25 +11,25 @@ import net.minecraft.item.ItemStack;
 public class ElementalCombatAPI 
 {
 	//LivingEntity
-	public static IElementalAttackData getElementalAttackData(LivingEntity entity){
-		return entity.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
+	public static ElementalAttack getElementalAttackData(LivingEntity entity){
+		return entity.getCapability(ElementalAttackCapability.CAPABILITY_ELEMENTAL_ATTACK, null).orElse(new ElementalAttack());
 	}
 	
-	public static IElementalDefenseData getElementalDefenseData(LivingEntity entity){
-		return entity.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null).orElse(new ElementalDefenseData());
+	public static ElementalDefense getElementalDefenseData(LivingEntity entity){
+		return entity.getCapability(ElementalDefenseCapability.CAPABILITY_ELEMENTAL_DEFENSE, null).orElse(new ElementalDefense());
 	}
 	
 	//ItemStack
-	public static IElementalAttackData getElementalAttackData(ItemStack item){
-		return item.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
+	public static ElementalAttack getElementalAttackData(ItemStack item){
+		return item.getCapability(ElementalAttackCapability.CAPABILITY_ELEMENTAL_ATTACK, null).orElse(new ElementalAttack());
 	}
 	
-	public static IElementalDefenseData getElementalDefenseData(ItemStack item){
-		return item.getCapability(ElementalDefenseDataCapability.DEF_DATA_CAPABILITY, null).orElse(new ElementalDefenseData());
+	public static ElementalDefense getElementalDefenseData(ItemStack item){
+		return item.getCapability(ElementalDefenseCapability.CAPABILITY_ELEMENTAL_DEFENSE, null).orElse(new ElementalDefense());
 	}
 	
 	//Projectiles
-	public static IElementalAttackData getElementalAttackData(ProjectileEntity entity){
-		return entity.getCapability(ElementalAttackDataCapability.ATK_DATA_CAPABILITY, null).orElse(new ElementalAttackData());
+	public static ElementalAttack getElementalAttackData(ProjectileEntity entity){
+		return entity.getCapability(ElementalAttackCapability.CAPABILITY_ELEMENTAL_ATTACK, null).orElse(new ElementalAttack());
 	}
 }

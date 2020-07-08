@@ -12,11 +12,11 @@ import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 
-public class ElementalDefenseDataStorage implements Capability.IStorage<IElementalDefenseData> 
+public class ElementalDefenseStorage implements Capability.IStorage<ElementalDefense> 
 {
     @Nullable
     @Override
-    public INBT writeNBT(Capability<IElementalDefenseData> capability, IElementalDefenseData instance, Direction side) 
+    public INBT writeNBT(Capability<ElementalDefense> capability, ElementalDefense instance, Direction side) 
     {
     	Set<String> weakSet = instance.getWeaknessSet();
     	Set<String> resiSet = instance.getResistanceSet();
@@ -34,13 +34,18 @@ public class ElementalDefenseDataStorage implements Capability.IStorage<IElement
     }
 
     @Override
-    public void readNBT(Capability<IElementalDefenseData> capability, IElementalDefenseData instance, Direction side, INBT nbt) 
+    public void readNBT(Capability<ElementalDefense> capability, ElementalDefense instance, Direction side, INBT nbt) 
     {
-        if (!(instance instanceof ElementalDefenseData))
+        if (!(instance instanceof ElementalDefense))
             throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
         
         //fill lists with nbt data
         CompoundNBT nbtCompound = (CompoundNBT)nbt;
+        
+        //Set<String> test = fromNBTToSet(nbtCompound.getList("elem_weak", nbt.getId()));
+        //System.out.println(test);
+        
+        
         instance.setWeaknessSet(  fromNBTToSet(nbtCompound.getList("elem_weak", nbt.getId())));
         instance.setResistanceSet(fromNBTToSet(nbtCompound.getList("elem_resi", nbt.getId())));
         instance.setImmunitySet(  fromNBTToSet(nbtCompound.getList("elem_immu", nbt.getId())));

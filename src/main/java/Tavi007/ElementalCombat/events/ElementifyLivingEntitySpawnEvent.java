@@ -6,8 +6,8 @@ import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
-import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
-import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
+import Tavi007.ElementalCombat.capabilities.ElementalAttack;
+import Tavi007.ElementalCombat.capabilities.ElementalDefense;
 import Tavi007.ElementalCombat.loading.EntityData;
 import Tavi007.ElementalCombat.loading.AttackFormat;
 import net.minecraft.entity.LivingEntity;
@@ -82,8 +82,8 @@ public class ElementifyLivingEntitySpawnEvent
 		}
 
 		// set capability
-		IElementalAttackData elemAtckCap = ElementalCombatAPI.getElementalAttackData(entity);
-		IElementalDefenseData elemDefCap = ElementalCombatAPI.getElementalDefenseData(entity);
+		ElementalAttack elemAtckCap = ElementalCombatAPI.getElementalAttackData(entity);
+		ElementalDefense elemDefCap = ElementalCombatAPI.getElementalDefenseData(entity);
 		elemAtckCap.setAttackMap(attackMap);
 		elemDefCap.setWeaknessSet(weaknessSet);
 		elemDefCap.setResistanceSet(resistanceSet);

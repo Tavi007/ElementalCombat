@@ -73,7 +73,7 @@ public class DataManager extends JsonReloadListener
 	    });
 	    
 	    builderEntity.put(EntityData.EMPTY_RESOURCELOCATION, new EntityData());
-	    ImmutableMap<ResourceLocation, EntityData> immutablemapEntity = builderEntity.build(); //this mapping contains attack and defense data.
+	    ImmutableMap<ResourceLocation, EntityData> immutablemapEntity = builderEntity.build(); //this mapping contains attack and defense data and biomeDependency.
 
 	    builderItem.put(GeneralData.EMPTY_RESOURCELOCATION, new GeneralData());
 	    ImmutableMap<ResourceLocation, GeneralData> immutablemapItem = builderItem.build(); //this mapping contains attack and defense data.

@@ -8,9 +8,8 @@ import java.util.Random;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
-import Tavi007.ElementalCombat.capabilities.ElementalAttackData;
-import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
-import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
+import Tavi007.ElementalCombat.capabilities.ElementalAttack;
+import Tavi007.ElementalCombat.capabilities.ElementalDefense;
 import Tavi007.ElementalCombat.particle.CombatParticleData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -38,7 +37,7 @@ public class ElementifyLivingHurtEvent
 		Entity source = damageSource.getImmediateSource();
 		if(source!=null) {
 			// damage source should be either a mob, player or projectile (arrow/trident/witherskull)
-			IElementalAttackData elemAtckCap = new ElementalAttackData();
+			ElementalAttack elemAtckCap = new ElementalAttack();
 			if(source instanceof LivingEntity){
 				LivingEntity livingEntitySource = (LivingEntity) source;
 				if(livingEntitySource.getHeldItemMainhand().isEmpty()){
@@ -55,7 +54,7 @@ public class ElementifyLivingHurtEvent
 				elemAtckCap = ElementalCombatAPI.getElementalAttackData((ProjectileEntity) source);
 			}
 			else {
-				ElementalCombat.LOGGER.info("You should not have landed here.");
+				ElementalCombat.LOGGER.info("Uknown damageSource case. How did you land here?");
 			}
 			sourceElemAtck = elemAtckCap.getAttackMap();
 		}
@@ -89,7 +88,7 @@ public class ElementifyLivingHurtEvent
 		}
 		
 		// Get the elemental combat data from target
-		IElementalDefenseData elemDefCap = ElementalCombatAPI.getElementalDefenseData(target);
+		ElementalDefense elemDefCap = ElementalCombatAPI.getElementalDefenseData(target);
 		Set<String> targetElemAbsorb = elemDefCap.getAbsorbSet();
 		Set<String> targetElemImmunity = elemDefCap.getImmunitySet();
 		Set<String> targetElemResistance = elemDefCap.getResistanceSet();

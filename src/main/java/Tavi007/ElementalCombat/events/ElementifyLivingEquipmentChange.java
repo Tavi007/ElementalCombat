@@ -4,7 +4,7 @@ import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
-import Tavi007.ElementalCombat.capabilities.IElementalDefenseData;
+import Tavi007.ElementalCombat.capabilities.ElementalDefense;
 import Tavi007.ElementalCombat.loading.EntityData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -44,7 +44,7 @@ public class ElementifyLivingEquipmentChange
 						item = event.getTo();
 					}
 					
-					IElementalDefenseData elemDefCapItem = ElementalCombatAPI.getElementalDefenseData(item);
+					ElementalDefense elemDefCapItem = ElementalCombatAPI.getElementalDefenseData(item);
 					Set<String> weaknessSetItem = elemDefCapItem.getWeaknessSet();
 					Set<String> resistanceSetItem = elemDefCapItem.getResistanceSet();
 					Set<String> immunitySetItem = elemDefCapItem.getImmunitySet();
@@ -58,7 +58,7 @@ public class ElementifyLivingEquipmentChange
 			});
 			
 			// set values
-			IElementalDefenseData elemDefCapEntity = ElementalCombatAPI.getElementalDefenseData(entity);
+			ElementalDefense elemDefCapEntity = ElementalCombatAPI.getElementalDefenseData(entity);
 			elemDefCapEntity.setWeaknessSet(weaknessSet);
 			elemDefCapEntity.setResistanceSet(resistanceSet);
 			elemDefCapEntity.setImmunitySet(immunitySet);

@@ -2,7 +2,7 @@ package Tavi007.ElementalCombat.events;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
-import Tavi007.ElementalCombat.capabilities.IElementalAttackData;
+import Tavi007.ElementalCombat.capabilities.ElementalAttack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -35,7 +35,7 @@ public class ElementifyProjectileSpawnEvent {
 						
 						// If sourceEntity holds an item, use item data.
 						// If not, use data from sourceEntity as default.
-						IElementalAttackData sourceData;
+						ElementalAttack sourceData;
 						if(sourceEntity.hasItemInSlot(EquipmentSlotType.MAINHAND)){
 							ItemStack item = sourceEntity.getActiveItemStack();
 							sourceData = ElementalCombatAPI.getElementalAttackData(item);
@@ -45,7 +45,7 @@ public class ElementifyProjectileSpawnEvent {
 						}
 						
 						//copy elemental attack capability
-						IElementalAttackData projectileData = ElementalCombatAPI.getElementalAttackData(projectile);
+						ElementalAttack projectileData = ElementalCombatAPI.getElementalAttackData(projectile);
 						projectileData.setAttackMap(sourceData.getAttackMap());
 					}
 				}

@@ -3,7 +3,7 @@ package Tavi007.ElementalCombat.capabilities;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ElementalDefenseData implements IElementalDefenseData
+public class ElementalDefense
 {
 	private Set<String> weaknessSet = new HashSet<String>();
 	private Set<String> resistanceSet = new HashSet<String>();
@@ -12,22 +12,18 @@ public class ElementalDefenseData implements IElementalDefenseData
 	
 	
 	// Setter
-	@Override
 	public void setWeaknessSet(Set<String> elementSet)
 	{
 		this.weaknessSet = elementSet;
 	}
-	@Override
 	public void setResistanceSet(Set<String> elementSet)
 	{
 		this.resistanceSet = elementSet;
 	}
-	@Override
 	public void setImmunitySet(Set<String> elementSet)
 	{
 		this.immunitySet = elementSet;
 	}
-	@Override
 	public void setAbsorbSet(Set<String> elementSet)
 	{
 		this.absorbSet = elementSet;
@@ -35,22 +31,18 @@ public class ElementalDefenseData implements IElementalDefenseData
 	
 	
 	//Getter
-	@Override
 	public Set<String> getWeaknessSet()
 	{
 		return this.weaknessSet;
 	}
-	@Override
 	public Set<String> getResistanceSet()
 	{
 		return this.resistanceSet;
 	}
-	@Override
 	public Set<String> getImmunitySet()
 	{
 		return this.immunitySet;
 	}
-	@Override
 	public Set<String> getAbsorbSet()
 	{
 		return this.absorbSet;

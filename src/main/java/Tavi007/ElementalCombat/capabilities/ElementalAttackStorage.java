@@ -11,11 +11,11 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 
-public class ElementalAttackDataStorage implements Capability.IStorage<IElementalAttackData> 
+public class ElementalAttackStorage implements Capability.IStorage<ElementalAttack> 
 {
     @Nullable
     @Override
-    public INBT writeNBT(Capability<IElementalAttackData> capability, IElementalAttackData instance, Direction side) 
+    public INBT writeNBT(Capability<ElementalAttack> capability, ElementalAttack instance, Direction side) 
     {
     	Map<String, Integer> atckMap = instance.getAttackMap();
     	
@@ -27,9 +27,9 @@ public class ElementalAttackDataStorage implements Capability.IStorage<IElementa
     }
 
     @Override
-    public void readNBT(Capability<IElementalAttackData> capability, IElementalAttackData instance, Direction side, INBT nbt) 
+    public void readNBT(Capability<ElementalAttack> capability, ElementalAttack instance, Direction side, INBT nbt) 
     {
-        if (!(instance instanceof ElementalAttackData))
+        if (!(instance instanceof ElementalAttack))
             throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
         
         //fill lists with nbt data
