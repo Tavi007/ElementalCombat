@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.StartupCommon;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleType;
@@ -53,7 +53,7 @@ public class CombatParticleData implements IParticleData {
 	@Nonnull
 	@Override
 	public ParticleType<CombatParticleData> getType() {
-		return ElementalCombat.combatParticleType;
+		return StartupCommon.combatParticleType;
 	}
 
 	// write the particle information to a PacketBuffer, ready for transmission to a client
