@@ -1,53 +1,36 @@
--------------------------------------------
-Source installation information for modders
--------------------------------------------
-This code follows the Minecraft Forge installation methodology. It will apply
-some small patches to the vanilla MCP source code, giving you and it access 
-to some of the data and functions you need to build a successful mod.
+Welcome to the Elemental Combat repository.
 
-Note also that the patches are built against "unrenamed" MCP source code (aka
-srgnames) - this means that you will not be able to read them directly against
-normal code.
+Goal of this mod is to enhance the combat system by adding elemental attack and defense properties to mobs and players. Upon hitting something, this properties will be checked and a new value will be calculated. 
+While these properties are usually final for mobs, the player can choose his elemental properties by equiping armor or attacking with the right weapon.
+New particles will tell you, how the enemy reacted to your attack.
 
-Source pack installation information:
+The defense properties include 4 sets: Weakness, Resistance, Immunity, Absorb, each can contain strings of element names (I choose sets, so no duplicated entries are possible).  
+Weakness will double the damage, while 'Resistance' will half it. Immunity means no damage will be dealt, and absorb will even heal the target.
+The attack property is a set of maps. The map is used to map the element name to a value. This way a sword can be 2/3 ice and 1/3 fire. The corresponding set will look like this:
+["fire":1, "ice":2]
+On hit, a loop will go through the attack set and check if the key is in any of the defense sets. Highest priority has the absorb set. (then immunity, resistance and last weakness) If the key isn't included in any of these list, the default value will be used.
+The value, which is mapped through the key, is used to scale the corresponding elemental damage. If the mob happens to absorb ice damage, but is weak to fire the new damage vaule will be computed like this:
+scaleFire = 1/3
+sclaeIce = 2/3
+newDmg = oldDmg*scaleFire*2 - oldDmg*scaleIce
+If it still unclear, how the new damage value is calculated, the take a look at 
+https://github.com/Tavi007/ElementalCombat/blob/master/src/main/java/Tavi007/ElementalCombat/events/ElementifyLivingHurtEvent.java
+All in all I'm open to discuss other method to compute a new damage value.
 
-Standalone source installation
-==============================
 
-See the Forge Documentation online for more detailed instructions:
-http://mcforge.readthedocs.io/en/latest/gettingstarted/
+This mod also provides an API for other mods to interact with. Add special behaviour to your own mobs like aura buffs and debuffs or changing attack/defense properties midfight.
+I'm planing to support other peoples mods directly by adding default values for theire mobs just like I did with vanilla mobs. 
 
-Step 1: Open your command-line and browse to the folder where you extracted the zip file.
+These default values can also be set through the help of datapacks. Take a look at 
+https://github.com/Tavi007/ElementalCombat/tree/master/src/main/resources/data/minecraft/elementalcombat/elementalproperties/entities
+for some examples. This way, everyone can change the values to their heart's contents.
 
-Step 2: You're left with a choice.
-If you prefer to use Eclipse:
-1. Run the following command: "gradlew genEclipseRuns" (./gradlew genEclipseRuns if you are on Mac/Linux)
-2. Open Eclipse, Import > Existing Gradle Project > Select Folder 
-   or run "gradlew eclipse" to generate the project.
-(Current Issue)
-4. Open Project > Run/Debug Settings > Edit runClient and runServer > Environment
-5. Edit MOD_CLASSES to show [modid]%%[Path]; 2 times rather then the generated 4.
+It's also planned to add default values for items the same way (minus the biomeDependency), but that's still WIP.
 
-If you prefer to use IntelliJ:
-1. Open IDEA, and import project.
-2. Select your build.gradle file and have it import.
-3. Run the following command: "gradlew genIntellijRuns" (./gradlew genIntellijRuns if you are on Mac/Linux)
-4. Refresh the Gradle Project in IDEA if required.
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can run "gradlew --refresh-dependencies" to refresh the local cache. "gradlew clean" to reset everything {this does not affect your code} and then start the processs again.
+I hope, I can polish this mod, so it can be used as a base mod like baubles. I also hope, that other mods take interest in this mod and use the provided API to change some of their mob behaviour.
 
-Should it still not work, 
-Refer to #ForgeGradle on EsperNet for more information about the gradle environment.
-or the Forge Project Discord discord.gg/UvedJ9m
+Best regards,
+Tavi007
 
-Forge source installation
-=========================
-MinecraftForge ships with this code and installs it as part of the forge
-installation process, no further action is required on your part.
-
-LexManos' Install Video
-=======================
-https://www.youtube.com/watch?v=8VEdtQLuLO0&feature=youtu.be
-
-For more details update more often refer to the Forge Forums:
-http://www.minecraftforge.net/forum/index.php/topic,14048.0.html
+PS: This is first time modding minecraft. So some stuff might be solved in a suboptimal fashion :-D
