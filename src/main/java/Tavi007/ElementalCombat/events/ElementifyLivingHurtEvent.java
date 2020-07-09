@@ -17,6 +17,7 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -69,6 +70,9 @@ public class ElementifyLivingHurtEvent
 			else if(damageSource == DamageSource.WITHER){
 				sourceElemAtck.put("unholy",1); //maybe element 'death'/'unholy'?
 			}
+			else if(damageSource == DamageSource.MAGIC){
+				sourceElemAtck.put("magic",1);
+			}
 			else if(damageSource == DamageSource.IN_WALL){
 				sourceElemAtck.put("earth",1); 
 			}
@@ -99,27 +103,29 @@ public class ElementifyLivingHurtEvent
 		float newDamageAmount = 0;
 		float valueSum = 0;
 		
+		
+		
 		Vector3d eyePos = target.getEyePosition(0);
 		final double POSITION_WOBBLE_AMOUNT = 0.01;
 		Random rand = new Random();
 		double xpos = eyePos.x + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
-		double ypos = eyePos.y + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
+		double ypos = eyePos.y + 0.5 + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
 		double zpos = eyePos.z + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
+		double xSpeed = 0;
+		double ySpeed = 0;
+		double zSpeed = 0;
 
 	    Color tint = new Color(1.00f, 1.00f, 1.0f);
 	    double diameter = 1;
-	      
+		
+		target.getEntityWorld().addParticle(new CombatParticleData(tint, diameter), xpos, ypos, zpos, xSpeed, ySpeed, zSpeed);
+		
+		
 		Set<String> keySet = sourceElemAtck.keySet();
 		for(String key : keySet)
 		{
 			Integer value = sourceElemAtck.get(key);
 			valueSum += value;
-			
-			double xSpeed = 0;
-			double ySpeed = 1;
-			double zSpeed = 0;
-			
-			target.getEntityWorld().addParticle(new CombatParticleData(tint, diameter), xpos, ypos, zpos, xSpeed, ySpeed, zSpeed);
 			
 			
 			if (targetElemAbsorb.contains(key)){ //highest priority
