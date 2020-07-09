@@ -28,13 +28,13 @@ import net.minecraft.util.math.MathHelper;
  * 3) parse it from a command string i.e. the /particle params
  */
 
-public class CombatParticleData implements IParticleData {
+public class ImmunityParticleData implements IParticleData {
 
 	private Color tint;
 	private double diameter;
 
 
-	public CombatParticleData(Color tint, double diameter) {
+	public ImmunityParticleData(Color tint, double diameter) {
 		this.tint = tint;
 		this.diameter = constrainDiameterToValidRange(diameter);
 	}
@@ -52,8 +52,8 @@ public class CombatParticleData implements IParticleData {
 
 	@Nonnull
 	@Override
-	public ParticleType<CombatParticleData> getType() {
-		return StartupCommon.combatParticleType;
+	public ParticleType<ImmunityParticleData> getType() {
+		return StartupCommon.immunityParticleType;
 	}
 
 	// write the particle information to a PacketBuffer, ready for transmission to a client
@@ -81,12 +81,12 @@ public class CombatParticleData implements IParticleData {
 
 	// The DESERIALIZER is used to construct CombatParticleData from either command line parameters or from a network packet
 
-	public static final IDeserializer<CombatParticleData> DESERIALIZER = new IDeserializer<CombatParticleData>() {
+	public static final IDeserializer<ImmunityParticleData> DESERIALIZER = new IDeserializer<ImmunityParticleData>() {
 
 		// parse the parameters for this particle from a /particle command
 		@Nonnull
 		@Override
-		public CombatParticleData deserialize(@Nonnull ParticleType<CombatParticleData> type, @Nonnull StringReader reader) throws CommandSyntaxException {
+		public ImmunityParticleData deserialize(@Nonnull ParticleType<ImmunityParticleData> type, @Nonnull StringReader reader) throws CommandSyntaxException {
 			reader.expect(' ');
 			double diameter = constrainDiameterToValidRange(reader.readDouble());
 
@@ -100,12 +100,12 @@ public class CombatParticleData implements IParticleData {
 			int blue = MathHelper.clamp(reader.readInt(), MIN_COLOUR, MAX_COLOUR);
 			Color color = new Color(red, green, blue);
 
-			return new CombatParticleData(color, diameter);
+			return new ImmunityParticleData(color, diameter);
 		}
 
 		// read the particle information from a PacketBuffer after the client has received it from the server
 		@Override
-		public CombatParticleData read(@Nonnull ParticleType<CombatParticleData> type, PacketBuffer buf) {
+		public ImmunityParticleData read(@Nonnull ParticleType<ImmunityParticleData> type, PacketBuffer buf) {
 			// warning! never trust the data read in from a packet buffer.
 
 			final int MIN_COLOUR = 0;
@@ -117,7 +117,7 @@ public class CombatParticleData implements IParticleData {
 
 			double diameter = constrainDiameterToValidRange(buf.readDouble());
 
-			return new CombatParticleData(color, diameter);
+			return new ImmunityParticleData(color, diameter);
 		}
 	};
 }

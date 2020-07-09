@@ -8,7 +8,7 @@ import net.minecraft.client.particle.SpriteTexturedParticle;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.world.ClientWorld;
 
-public class CombatParticle extends SpriteTexturedParticle{
+public class ImmunityParticle extends SpriteTexturedParticle{
 
 	private final IAnimatedSprite sprites;  // contains a list of textures; choose one using either
 	// newParticle.selectSpriteRandomly(sprites); or newParticle.selectSpriteWithAge(sprites);
@@ -18,7 +18,7 @@ public class CombatParticle extends SpriteTexturedParticle{
 	 *   given diameter.
 	 *   We also supply sprites so that you can change the sprite texture in the tick() method (although not needed for this example)
 	 */
-	public CombatParticle(ClientWorld world, double x, double y, double z,
+	public ImmunityParticle(ClientWorld world, double x, double y, double z,
 			double velocityX, double velocityY, double velocityZ,
 			Color tint, double diameter,
 			IAnimatedSprite sprites)

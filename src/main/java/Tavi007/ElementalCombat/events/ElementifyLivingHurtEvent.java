@@ -10,7 +10,10 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.ElementalAttack;
 import Tavi007.ElementalCombat.capabilities.ElementalDefense;
-import Tavi007.ElementalCombat.particle.CombatParticleData;
+import Tavi007.ElementalCombat.particle.AbsorbParticleData;
+import Tavi007.ElementalCombat.particle.ImmunityParticleData;
+import Tavi007.ElementalCombat.particle.ResistanceParticleData;
+import Tavi007.ElementalCombat.particle.WeaknessParticleData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -112,11 +115,13 @@ public class ElementifyLivingHurtEvent
 		double ypos = eyePos.y + 0.5 + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
 		double zpos = eyePos.z + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
 
-		Color tint = new Color(1.00f, 1.00f, 1.0f);
-		double diameter = 0.5;
-		CombatParticleData data = new CombatParticleData(tint, diameter);
+		double xoff = 1.0; 
+		double yoff = 1.0; 
+		double zoff = 1.0; 
+		double speed = 0.5;
 		
-		((ServerWorld) target.getEntityWorld()).spawnParticle(data, xpos, ypos, zpos, 1, 0.0, 0.0, 0.0, 0.0);
+		Color tint = new Color(1.00f, 1.00f, 1.0f);
+		double diameter = 0.25;
 		
 		
 		Set<String> keySet = sourceElemAtck.keySet();
@@ -124,22 +129,28 @@ public class ElementifyLivingHurtEvent
 		{
 			Integer value = sourceElemAtck.get(key);
 			valueSum += value;
-			
-			
 			if (targetElemAbsorb.contains(key)){ //highest priority
 				newDamageAmount -= damageAmount*value;
 				//add particle effect
+				AbsorbParticleData data = new AbsorbParticleData(tint, diameter);
+				((ServerWorld) target.getEntityWorld()).spawnParticle(data, xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);
 				}
 			else if (targetElemImmunity.contains(key)){ // second highest priority
 				//add particle effect
+				ImmunityParticleData data = new ImmunityParticleData(tint, diameter);
+				((ServerWorld) target.getEntityWorld()).spawnParticle(data, xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);
 			}
 			else if (targetElemResistance.contains(key)){ // third
 				newDamageAmount += damageAmount*value/2;
 				//add particle effect
+				ResistanceParticleData data = new ResistanceParticleData(tint, diameter);
+				((ServerWorld) target.getEntityWorld()).spawnParticle(data, xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);
 			}
 			else if (targetElemWeakness.contains(key)){ // last
 				newDamageAmount += damageAmount*value*2;
 				//add particle effect
+				WeaknessParticleData data = new WeaknessParticleData(tint, diameter);
+				((ServerWorld) target.getEntityWorld()).spawnParticle(data, xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);
 			}
 			else{
 				newDamageAmount += damageAmount*value;

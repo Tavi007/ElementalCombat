@@ -1,6 +1,9 @@
 package Tavi007.ElementalCombat;
 
-import Tavi007.ElementalCombat.particle.CombatParticleFactory;
+import Tavi007.ElementalCombat.particle.AbsorbParticleFactory;
+import Tavi007.ElementalCombat.particle.ImmunityParticleFactory;
+import Tavi007.ElementalCombat.particle.ResistanceParticleFactory;
+import Tavi007.ElementalCombat.particle.WeaknessParticleFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,7 +20,10 @@ public class StartupClientOnly {
 	public static void onParticleFactoryRegistration(ParticleFactoryRegisterEvent event) {
 		// beware - there are two registerFactory methods with different signatures.
 		// If you use the wrong one it will put Minecraft into an infinite loading loop with no console errors
-		Minecraft.getInstance().particles.registerFactory(StartupCommon.combatParticleType, sprite -> new CombatParticleFactory(sprite));
+		Minecraft.getInstance().particles.registerFactory(StartupCommon.weaknessParticleType, sprite -> new WeaknessParticleFactory(sprite));
+		Minecraft.getInstance().particles.registerFactory(StartupCommon.resistanceParticleType, sprite -> new ResistanceParticleFactory(sprite));
+		Minecraft.getInstance().particles.registerFactory(StartupCommon.immunityParticleType, sprite -> new ImmunityParticleFactory(sprite));
+		Minecraft.getInstance().particles.registerFactory(StartupCommon.absorbParticleType, sprite -> new AbsorbParticleFactory(sprite));
 		//  This lambda may not be obvious: its purpose is:
 		//  the registerFactory method creates an IAnimatedSprite, then passes it to the constructor of FlameParticleFactory
 
