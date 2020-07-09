@@ -2,24 +2,15 @@ package Tavi007.ElementalCombat;
 
 import Tavi007.ElementalCombat.particle.CombatParticleFactory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 
 public class StartupClientOnly {
 	
 	private void onClientSetupEvent(final FMLClientSetupEvent event)
 	{
 		ElementalCombat.LOGGER.info("clientRegistries method registered.");	
-	}
-
-	@SubscribeEvent
-	public void onServerAboutToStart(FMLServerAboutToStartEvent event)
-	{
-		((IReloadableResourceManager) event.getServer().getDataPackRegistries().func_240970_h_()).addReloadListener(ElementalCombat.DATAMANAGER);
-		ElementalCombat.LOGGER.info("Elemental data loaded.");	
 	}
 	
 	@SubscribeEvent
