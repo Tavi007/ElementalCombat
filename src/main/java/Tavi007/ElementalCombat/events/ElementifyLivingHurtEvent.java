@@ -16,8 +16,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -111,14 +111,12 @@ public class ElementifyLivingHurtEvent
 		double xpos = eyePos.x + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
 		double ypos = eyePos.y + 0.5 + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
 		double zpos = eyePos.z + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
-		double xSpeed = 0;
-		double ySpeed = 0;
-		double zSpeed = 0;
 
-	    Color tint = new Color(1.00f, 1.00f, 1.0f);
-	    double diameter = 1;
+		Color tint = new Color(1.00f, 1.00f, 1.0f);
+		double diameter = 0.5;
+		CombatParticleData data = new CombatParticleData(tint, diameter);
 		
-		target.getEntityWorld().addParticle(new CombatParticleData(tint, diameter), xpos, ypos, zpos, xSpeed, ySpeed, zSpeed);
+		((ServerWorld) target.getEntityWorld()).spawnParticle(data, xpos, ypos, zpos, 1, 0.0, 0.0, 0.0, 0.0);
 		
 		
 		Set<String> keySet = sourceElemAtck.keySet();

@@ -7,7 +7,6 @@ import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.SpriteTexturedParticle;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.world.World;
 
 public class CombatParticle extends SpriteTexturedParticle{
 
@@ -33,7 +32,7 @@ public class CombatParticle extends SpriteTexturedParticle{
 		final float PARTICLE_SCALE_FOR_ONE_METRE = 0.5F; //  if the particleScale is 0.5, the texture will be rendered as 1 metre high
 		particleScale = PARTICLE_SCALE_FOR_ONE_METRE * (float)diameter; // sets the rendering size of the particle for a TexturedParticle.
 
-		maxAge = 100;  // lifetime in ticks: 100 ticks = 5 seconds
+		maxAge = 10;  // lifetime in ticks: 100 ticks = 5 seconds
 
 		final float ALPHA_VALUE = 1.0F;
 		this.particleAlpha = ALPHA_VALUE;
