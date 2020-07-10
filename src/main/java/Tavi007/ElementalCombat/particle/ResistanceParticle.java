@@ -2,22 +2,20 @@ package Tavi007.ElementalCombat.particle;
 
 import java.awt.Color;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.particle.IAnimatedSprite;
+import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.SpriteTexturedParticle;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.world.ClientWorld;
 
 public class ResistanceParticle extends SpriteTexturedParticle{
 
-	private final IAnimatedSprite sprites;  // contains a list of textures; choose one using either
-	// newParticle.selectSpriteRandomly(sprites); or newParticle.selectSpriteWithAge(sprites);
+	private final IAnimatedSprite sprites;  
 
-	/**
-	 * Construct a new CombatParticle at the given [x,y,z] position, with the given initial velocity, the given color, and the
-	 *   given diameter.
-	 *   We also supply sprites so that you can change the sprite texture in the tick() method (although not needed for this example)
-	 */
 	public ResistanceParticle(ClientWorld world, double x, double y, double z,
 			double velocityX, double velocityY, double velocityZ,
 			Color tint, double diameter,
@@ -42,25 +40,7 @@ public class ResistanceParticle extends SpriteTexturedParticle{
 		motionY = velocityY;
 		motionZ = velocityZ;
 
-		this.canCollide = true;  // the move() method will check for collisions with scenery
-	}
-
-	// ---- methods used by TexturedParticle.renderParticle() method to find out how to render your particle
-	//  the base method just renders a quad, rotated to directly face the player
-
-	// can be used to change the skylight+blocklight brightness of the rendered Particle.
-	@Override
-	protected int getBrightnessForRender(float partialTick)
-	{
-		final int BLOCK_LIGHT = 15;  // maximum brightness
-		final int SKY_LIGHT = 15;    // maximum brightness
-		final int FULL_BRIGHTNESS_VALUE = LightTexture.packLight(BLOCK_LIGHT, SKY_LIGHT);
-		return FULL_BRIGHTNESS_VALUE;
-
-		// if you want the brightness to be the local illumination (from block light and sky light) you can just use
-		//  the Particle.getBrightnessForRender() base method, which contains:
-		//    BlockPos blockPos = new BlockPos(this.posX, this.posY, this.posZ);
-		//    return this.world.isBlockLoaded(blockPos) ? WorldRenderer.getCombinedLight(this.world, blockPos) : 0;
+		this.canCollide = false;  // the move() method will check for collisions with scenery
 	}
 
 	// Choose the appropriate render type for your particles:
@@ -71,7 +51,7 @@ public class ResistanceParticle extends SpriteTexturedParticle{
 	// PARTICLE_SHEET_LIT       appears to be the same as OPAQUE.  Not sure of the difference.  In previous versions of minecraft,
 	//                          "lit" particles changed brightness depending on world lighting i.e. block light + sky light
 	public IParticleRenderType getRenderType() {
-		return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+		return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
 	}
 
 	/**
@@ -105,6 +85,31 @@ public class ResistanceParticle extends SpriteTexturedParticle{
 		if (this.age++ >= this.maxAge) {
 			this.setExpired();
 		}
+	}
+	
+	
+	public static class Factory implements IParticleFactory<ResistanceParticleData> {  //IParticleFactory
+
+		private final IAnimatedSprite sprites;
+
+		public Factory(IAnimatedSprite sprite) {
+			this.sprites = sprite;
+		}
+		
+		private Factory() {
+			throw new UnsupportedOperationException("Use the CombatParticleFactory(IAnimatedSprite sprite) constructor");
+		}
+
+		@Nullable
+		//@Override
+		public Particle makeParticle(ResistanceParticleData combatParticleData, ClientWorld world, double xPos, double yPos, double zPos, double xVelocity, double yVelocity, double zVelocity) {
+			ResistanceParticle newParticle = new ResistanceParticle(world, xPos, yPos, zPos, xVelocity, yVelocity, zVelocity,
+					combatParticleData.getTint(), combatParticleData.getDiameter(),
+					sprites);
+			newParticle.selectSpriteRandomly(sprites);  // choose a random sprite from the available list (in this case there is only one)
+			return newParticle;
+		}
+
 	}
 
 }
