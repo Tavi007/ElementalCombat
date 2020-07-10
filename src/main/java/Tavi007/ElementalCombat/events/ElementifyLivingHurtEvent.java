@@ -128,19 +128,6 @@ public class ElementifyLivingHurtEvent
 		Color tint = new Color(1.0f, 1.0f, 1.0f);
 		double diameter = 0.25;
 		
-		
-		
-		//testing for now
-		sourceElemAtck.put("fire",1);
-		targetElemAbsorb.add("fire");
-		//sourceElemAtck.put("ice",1);
-		targetElemImmunity.add("ice");
-		//sourceElemAtck.put("thunder",1);
-		targetElemResistance.add("thunder");
-		//sourceElemAtck.put("water",1);
-		targetElemWeakness.add("water");
-		
-		
 		Set<String> keySet = sourceElemAtck.keySet();
 		for(String key : keySet)
 		{
@@ -148,24 +135,20 @@ public class ElementifyLivingHurtEvent
 			valueSum += value;
 			if (targetElemAbsorb.contains(key)){ //highest priority
 				newDamageAmount -= damageAmount*value;
-				//add particle effect
 				AbsorbParticleData data = new AbsorbParticleData(tint, diameter);
 				((ServerWorld) target.getEntityWorld()).spawnParticle(data, xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);
 				}
 			else if (targetElemImmunity.contains(key)){ // second highest priority
-				//add particle effect
 				ImmunityParticleData data = new ImmunityParticleData(tint, diameter);
 				((ServerWorld) target.getEntityWorld()).spawnParticle(data, xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);
 			}
 			else if (targetElemResistance.contains(key)){ // third
 				newDamageAmount += damageAmount*value/2;
-				//add particle effect
 				ResistanceParticleData data = new ResistanceParticleData(tint, diameter);
 				((ServerWorld) target.getEntityWorld()).spawnParticle(data, xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);
 			}
 			else if (targetElemWeakness.contains(key)){ // last
 				newDamageAmount += damageAmount*value*2;
-				//add particle effect
 				WeaknessParticleData data = new WeaknessParticleData(tint, diameter);
 				((ServerWorld) target.getEntityWorld()).spawnParticle(data, xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);
 			}

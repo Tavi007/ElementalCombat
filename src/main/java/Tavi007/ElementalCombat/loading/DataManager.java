@@ -37,10 +37,10 @@ public class DataManager extends JsonReloadListener
 	{
 		super(GSON, ElementalCombat.MOD_ID);
 	}
-	
+
 	protected void apply(Map<ResourceLocation, JsonElement> objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn) 
 	{
-		System.out.println("\n \n HI \n");
+		System.out.println("\n \n DataManager apply() \n");
 		Builder<ResourceLocation, EntityData> builderEntity = ImmutableMap.builder();
 		Builder<ResourceLocation, GeneralData> builderItem = ImmutableMap.builder();
 		
