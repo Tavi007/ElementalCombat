@@ -18,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -71,7 +72,7 @@ public class ElementifyLivingHurtEvent
 				sourceElemAtck.put("water",1);
 			}
 			else if(damageSource == DamageSource.WITHER){
-				sourceElemAtck.put("unholy",1); //maybe element 'death'/'unholy'?
+				sourceElemAtck.put("unholy",1);
 			}
 			else if(damageSource == DamageSource.MAGIC){
 				sourceElemAtck.put("magic",1);
@@ -85,6 +86,10 @@ public class ElementifyLivingHurtEvent
 			}
 			else if(damageSource == DamageSource.LIGHTNING_BOLT){
 				sourceElemAtck.put("thunder",1);
+			}
+			else if(damageSource == DamageSource.OUT_OF_WORLD) {
+				// no modification. Entity should take normal damage and die eventually.
+				return;	
 			}
 		}
 		
@@ -103,8 +108,8 @@ public class ElementifyLivingHurtEvent
 		
 		// compute new Damage value and display particle effects
 		float damageAmount = event.getAmount();
-		float newDamageAmount = 0;
-		float valueSum = 0;
+		float newDamageAmount = 0.0f;
+		float valueSum = 0.0f;
 		
 		
 		
@@ -112,16 +117,28 @@ public class ElementifyLivingHurtEvent
 		final double POSITION_WOBBLE_AMOUNT = 0.01;
 		Random rand = new Random();
 		double xpos = eyePos.x + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
-		double ypos = eyePos.y + 0.5 + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
+		double ypos = eyePos.y + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
 		double zpos = eyePos.z + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
 
-		double xoff = 1.0; 
-		double yoff = 1.0; 
-		double zoff = 1.0; 
-		double speed = 0.5;
+		double xoff = 0.0; 
+		double yoff = 0.0; 
+		double zoff = 0.0; 
+		double speed = 0.05;
 		
-		Color tint = new Color(1.00f, 1.00f, 1.0f);
+		Color tint = new Color(1.0f, 1.0f, 1.0f);
 		double diameter = 0.25;
+		
+		
+		
+		//testing for now
+		sourceElemAtck.put("fire",1);
+		targetElemAbsorb.add("fire");
+		//sourceElemAtck.put("ice",1);
+		targetElemImmunity.add("ice");
+		//sourceElemAtck.put("thunder",1);
+		targetElemResistance.add("thunder");
+		//sourceElemAtck.put("water",1);
+		targetElemWeakness.add("water");
 		
 		
 		Set<String> keySet = sourceElemAtck.keySet();
@@ -159,7 +176,7 @@ public class ElementifyLivingHurtEvent
 		
 		if(valueSum == 0) {
 			// Something has gone wrong, as this can only happen for incorrect data.
-			// Datapacks should be error proof. Someone probably messed up in his mod. 
+			// Datapacks should be error proof. Someone probably messed up in his mod and used the API incorrectly. 
 			ElementalCombat.LOGGER.info("Elemental valueSum should never be 0. Use default damage instead.");
 			return;
 		}
@@ -177,17 +194,14 @@ public class ElementifyLivingHurtEvent
 							   "Weakness: " + targetElemWeakness + "\n" +
 							   "DamageType: " + sourceElemAtck + "\n" +
 							   "old value: " + damageAmount + "\n" +
-							   "new value: " + newDamageAmount/valueSum);
+							   "new value: " + newDamageAmount);
 		}
 		
 		// stop the 'hurt'-animation from firing, if no damage is dealt.
 		// not tested yet.
 		if(newDamageAmount <= 0)
 		{
-			if(newDamageAmount < 0)
-			{
-				target.heal(-newDamageAmount);
-			}
+			target.heal(-newDamageAmount);
 			event.setCanceled(true);
 		}
 	}
