@@ -1,0 +1,24 @@
+{
+	"attack":[
+		{
+			"name": "water",
+			"value": 1
+		}
+	],
+
+	"weakness": [
+		"thunder"
+	],
+	
+	"resistance": [
+		"water"
+	],
+	
+	"immunity": [
+	],
+	
+	"absorb": [
+	],
+	
+	"biomeDependency":false
+}

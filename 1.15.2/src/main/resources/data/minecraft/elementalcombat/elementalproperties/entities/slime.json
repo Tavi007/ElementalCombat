@@ -1,0 +1,23 @@
+{
+	"attack":[
+	],
+
+	"weakness": [
+		"fire",
+		"ice",
+		"water",
+		"thunder"
+	],
+	
+	"resistance": [
+	],
+	
+	"immunity": [
+		"natural"
+	],
+	
+	"absorb": [
+	],
+	
+	"biomeDependency":true
+}

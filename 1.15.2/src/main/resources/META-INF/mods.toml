@@ -1,0 +1,33 @@
+modLoader="javafml" #mandatory
+loaderVersion="[31,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+
+#issueTrackerURL="http://my.issue.tracker/" #optional
+[[mods]] #mandatory
+modId = "elementalcombat" #mandatory
+version = "0.1" #mandatory
+
+displayName = "Elemental Combat" #mandatory
+#updateJSONURL = "http://myurl.me/" #optional
+#displayURL = "http://example.com/" #optional
+#logoFile = "elementalCombatLogo.png" #optional. A file name (in the root of the mod JAR) containing a logo for display
+credits = "Thanks goes to Harry Talks and TurtyWurty modding tutorial on YouTube." #optional
+authors = "Tavi007" #optional
+
+description='''
+I have to do this later. lol
+'''
+
+# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
+[[dependencies.elementalcombat]] #optional
+    modId="forge" #mandatory
+    mandatory=true #mandatory
+    versionRange="[31,)" #mandatory
+    ordering="NONE"
+    side="BOTH"
+# Here's another dependency
+[[dependencies.elementalcombat]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15.2]"
+    ordering="NONE"
+    side="BOTH"

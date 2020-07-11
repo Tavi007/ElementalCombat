@@ -1,0 +1,25 @@
+{
+	"attack":[
+		{
+			"name": "fire",
+			"value": 1
+		}
+	],
+
+	"weakness": [
+		"ice"
+	],
+	
+	"resistance": [
+	],
+	
+	"immunity": [
+		"fire",
+		"natural"
+	],
+	
+	"absorb": [
+	],
+	
+	"biomeDependency":false
+}
