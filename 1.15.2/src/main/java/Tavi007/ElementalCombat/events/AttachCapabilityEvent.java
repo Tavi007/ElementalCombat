@@ -13,9 +13,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class AttachCapabilityEvent 
 {
-	private static final ResourceLocation ENTITY = new ResourceLocation(ElementalCombat.MOD_ID, "entity");
-	private static final ResourceLocation PROJECTILE = new ResourceLocation(ElementalCombat.MOD_ID, "projectile");
-	private static final ResourceLocation ITEM = new ResourceLocation(ElementalCombat.MOD_ID, "item");
+	private static final ResourceLocation ENTITY = new ResourceLocation(ElementalCombat.MOD_ID, "entity_cap");
+	private static final ResourceLocation PROJECTILE = new ResourceLocation(ElementalCombat.MOD_ID, "projectile_cap");
+	private static final ResourceLocation ITEM = new ResourceLocation(ElementalCombat.MOD_ID, "item_cap");
 	
 	@SubscribeEvent
     public static void onAttachEntity(AttachCapabilitiesEvent<Entity> e)
