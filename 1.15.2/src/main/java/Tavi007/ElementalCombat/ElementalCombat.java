@@ -7,8 +7,10 @@ import Tavi007.ElementalCombat.loading.DataManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod("elementalcombat")
@@ -34,6 +36,13 @@ public class ElementalCombat
 	
 	public static void registerClientOnlyEvents() {
 		MOD_EVENT_BUS.register(StartupClientOnly.class);
+	}
+
+	@SubscribeEvent
+	public void onServerAboutToStart(FMLServerAboutToStartEvent event)
+	{
+		event.getServer().getResourceManager().addReloadListener(ElementalCombat.DATAMANAGER);
+		ElementalCombat.LOGGER.info("Elemental data loaded.");	
 	}
 	
 }

@@ -41,7 +41,6 @@ public class DataManager extends JsonReloadListener
 
 	protected void apply(Map<ResourceLocation, JsonObject> objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn) 
 	{
-		System.out.println("\n \n DataManager apply() \n");
 		Builder<ResourceLocation, EntityData> builderEntity = ImmutableMap.builder();
 		Builder<ResourceLocation, GeneralData> builderItem = ImmutableMap.builder();
 		

@@ -27,13 +27,6 @@ public class StartupCommon {
 		MinecraftForge.EVENT_BUS.register(AttachCapabilityEvent.class);
         ElementalCombat.LOGGER.info("setup method registered.");
     }
-
-	@SubscribeEvent
-	public void onServerAboutToStart(FMLServerAboutToStartEvent event)
-	{
-		event.getServer().getResourceManager().addReloadListener(ElementalCombat.DATAMANAGER);
-		ElementalCombat.LOGGER.info("Elemental data loaded.");	
-	}
 	
 	@SubscribeEvent
 	public static void onIParticleTypeRegistration(RegistryEvent.Register<ParticleType<?>> iParticleTypeRegisterEvent) {
@@ -52,7 +45,6 @@ public class StartupCommon {
 		absorbParticleType = new AbsorbParticleType();
 		absorbParticleType.setRegistryName("elementalcombat:absorb");
 	    iParticleTypeRegisterEvent.getRegistry().register(absorbParticleType);
-	    
 	    
 	    ElementalCombat.LOGGER.info("ElementalCombat particles registered.");
 	}
