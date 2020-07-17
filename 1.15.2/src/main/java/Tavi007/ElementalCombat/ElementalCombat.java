@@ -38,11 +38,11 @@ public class ElementalCombat
 		MOD_EVENT_BUS.register(StartupClientOnly.class);
 	}
 
+	//can't be in  StartupCommon nor in StartupClientOnly, because this even fires on the Forge Eventbus.
 	@SubscribeEvent
-	public void onServerAboutToStart(FMLServerAboutToStartEvent event)
+	public static void onServerAboutToStart(FMLServerAboutToStartEvent event)
 	{
 		event.getServer().getResourceManager().addReloadListener(ElementalCombat.DATAMANAGER);
 		ElementalCombat.LOGGER.info("Elemental data loaded.");	
 	}
-	
 }

@@ -13,6 +13,8 @@ import net.minecraft.particles.ParticleType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 
@@ -23,7 +25,8 @@ public class StartupCommon {
 	public static ParticleType<ImmunityParticleData> immunityParticleType;
 	public static ParticleType<AbsorbParticleData> absorbParticleType;
 
-	private void onCommonSetup(FMLCommonSetupEvent event){
+	@SubscribeEvent
+	public static void onCommonSetup(FMLCommonSetupEvent event){
 		MinecraftForge.EVENT_BUS.register(AttachCapabilityEvent.class);
         ElementalCombat.LOGGER.info("setup method registered.");
     }

@@ -7,11 +7,14 @@ import Tavi007.ElementalCombat.particle.WeaknessParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class StartupClientOnly {
 	
-	private void onClientSetupEvent(final FMLClientSetupEvent event)
+	@SubscribeEvent
+	public static void onClientSetupEvent(final FMLClientSetupEvent event)
 	{
 		ElementalCombat.LOGGER.info("clientRegistries method registered.");	
 	}
