@@ -1,5 +1,9 @@
 package Tavi007.ElementalCombat;
 
+import Tavi007.ElementalCombat.capabilities.ElementalAttack;
+import Tavi007.ElementalCombat.capabilities.ElementalAttackStorage;
+import Tavi007.ElementalCombat.capabilities.ElementalDefense;
+import Tavi007.ElementalCombat.capabilities.ElementalDefenseStorage;
 import Tavi007.ElementalCombat.events.AttachCapabilityEvent;
 import Tavi007.ElementalCombat.particle.AbsorbParticleData;
 import Tavi007.ElementalCombat.particle.AbsorbParticleType;
@@ -11,12 +15,10 @@ import Tavi007.ElementalCombat.particle.WeaknessParticleData;
 import Tavi007.ElementalCombat.particle.WeaknessParticleType;
 import net.minecraft.particles.ParticleType;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 
 public class StartupCommon {
 
@@ -27,6 +29,8 @@ public class StartupCommon {
 
 	@SubscribeEvent
 	public static void onCommonSetup(FMLCommonSetupEvent event){
+		CapabilityManager.INSTANCE.register(ElementalAttack.class, new ElementalAttackStorage(), ElementalAttack::new);
+		CapabilityManager.INSTANCE.register(ElementalDefense.class, new ElementalDefenseStorage(), ElementalDefense::new);
 		MinecraftForge.EVENT_BUS.register(AttachCapabilityEvent.class);
         ElementalCombat.LOGGER.info("setup method registered.");
     }
