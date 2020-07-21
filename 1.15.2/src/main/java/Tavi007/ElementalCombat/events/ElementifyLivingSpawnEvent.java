@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Bus.FORGE)
-public class ElementifyLivingEntitySpawnEvent 
+public class ElementifyLivingSpawnEvent 
 {
 	@SubscribeEvent
 	public static void elementifyNormalSpawnEvent(CheckSpawn event){
