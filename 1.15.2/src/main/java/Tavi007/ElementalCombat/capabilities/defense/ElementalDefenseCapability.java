@@ -64,9 +64,9 @@ public class ElementalDefenseCapability {
 
 				//fill list with data
 				instance.setElementalWeakness((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_weak", nbt.getId() )));
-				instance.setElementalWeakness((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_resi", nbt.getId() )));
-				instance.setElementalWeakness((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_immu", nbt.getId() )));
-				instance.setElementalWeakness((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_abso", nbt.getId() )));
+				instance.setElementalResistance((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_resi", nbt.getId() )));
+				instance.setElementalImmunity((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_immu", nbt.getId() )));
+				instance.setElementalAbsorption((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_abso", nbt.getId() )));
 			}
 			
 
@@ -165,9 +165,6 @@ public class ElementalDefenseCapability {
 				final ElementalDefense elemDef = new ElementalDefense(weaknessSet, resistanceSet, immunitySet, absorbSet);
 				event.addCapability(ID, createProvider(elemDef));
 			}
-			//			else if(event.getObject() instanceof ProjectileEntity) {
-			//				
-			//			}
 		}
 
 		@SubscribeEvent
