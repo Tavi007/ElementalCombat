@@ -8,15 +8,15 @@ import java.util.Random;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
-import Tavi007.ElementalCombat.capabilities.ElementalAttack;
-import Tavi007.ElementalCombat.capabilities.ElementalDefense;
+import Tavi007.ElementalCombat.capabilities.attack.ElementalAttack;
+import Tavi007.ElementalCombat.capabilities.defense.ElementalDefense;
 import Tavi007.ElementalCombat.particle.AbsorbParticleData;
 import Tavi007.ElementalCombat.particle.ImmunityParticleData;
 import Tavi007.ElementalCombat.particle.ResistanceParticleData;
 import Tavi007.ElementalCombat.particle.WeaknessParticleData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
+import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.server.ServerWorld;
@@ -53,14 +53,14 @@ public class ElementifyLivingHurtEvent
 					elemAtckCap = ElementalCombatAPI.getElementalAttackData(livingEntitySource.getHeldItemMainhand());
 				}
 			}
-			else if (source instanceof ProjectileItemEntity){
+			else if (source instanceof DamagingProjectileEntity){
 				//projectile
-				elemAtckCap = ElementalCombatAPI.getElementalAttackData((ProjectileItemEntity) source);
+//				elemAtckCap = ElementalCombatAPI.getElementalAttackData((DamagingProjectileEntity) source);
 			}
 			else {
 				ElementalCombat.LOGGER.info("Uknown damageSource case. How did you land here?");
 			}
-			sourceElemAtck = elemAtckCap.getAttackMap();
+			sourceElemAtck = elemAtckCap.getElementalAttack();
 		}
 		else{
 			// fill List, if Source is not an entity, but a 'natural occurrence'.
@@ -100,10 +100,10 @@ public class ElementifyLivingHurtEvent
 		
 		// Get the elemental combat data from target
 		ElementalDefense elemDefCap = ElementalCombatAPI.getElementalDefenseData(target);
-		Set<String> targetElemAbsorb = elemDefCap.getAbsorbSet();
-		Set<String> targetElemImmunity = elemDefCap.getImmunitySet();
-		Set<String> targetElemResistance = elemDefCap.getResistanceSet();
-		Set<String> targetElemWeakness = elemDefCap.getWeaknessSet();
+		Set<String> targetElemAbsorbtion = elemDefCap.getElementalAbsorption();
+		Set<String> targetElemImmunity = elemDefCap.getElementalImmunity();
+		Set<String> targetElemResistance = elemDefCap.getElementalResistance();
+		Set<String> targetElemWeakness = elemDefCap.getElementalWeakness();
 		
 		// compute new Damage value and display particle effects
 		float damageAmount = event.getAmount();
@@ -132,7 +132,7 @@ public class ElementifyLivingHurtEvent
 		{
 			Integer value = sourceElemAtck.get(key);
 			valueSum += value;
-			if (targetElemAbsorb.contains(key)){ //highest priority
+			if (targetElemAbsorbtion.contains(key)){ //highest priority
 				newDamageAmount -= damageAmount*value;
 				AbsorbParticleData data = new AbsorbParticleData(tint, diameter);
 				((ServerWorld) target.getEntityWorld()).spawnParticle(data, xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);
@@ -170,7 +170,7 @@ public class ElementifyLivingHurtEvent
 		{
 			System.out.println("\n" + 
 							   "Target: " + target.getDisplayName().getString() + "\n" +
-							   "Absorb: " + targetElemAbsorb + "\n" +
+							   "Absorb: " + targetElemAbsorbtion + "\n" +
 							   "Immunity: " + targetElemImmunity + "\n" +
 							   "Resistance: " + targetElemResistance + "\n" +
 							   "Weakness: " + targetElemWeakness + "\n" +
