@@ -63,10 +63,10 @@ public class ElementalDefenseCapability {
 				CompoundNBT nbtCompound = (CompoundNBT)nbt;
 
 				//fill list with data
-				instance.setElementalWeakness((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_weak", nbt.getId() )));
-				instance.setElementalResistance((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_resi", nbt.getId() )));
-				instance.setElementalImmunity((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_immu", nbt.getId() )));
-				instance.setElementalAbsorption((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_abso", nbt.getId() )));
+				instance.setElementalWeakness((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_weak", nbtCompound.getTagId("elem_weak") )));
+				instance.setElementalResistance((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_resi", nbtCompound.getTagId("elem_resi") )));
+				instance.setElementalImmunity((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_immu", nbtCompound.getTagId("elem_immu") )));
+				instance.setElementalAbsorption((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_abso", nbtCompound.getTagId("elem_abso") )));
 			}
 			
 

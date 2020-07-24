@@ -53,10 +53,10 @@ public class ElementifyLivingHurtEvent
 					elemAtckCap = ElementalCombatAPI.getElementalAttackData(livingEntitySource.getHeldItemMainhand());
 				}
 			}
-			else if (source instanceof DamagingProjectileEntity){
-				//projectile
+//			else if (source instanceof DamagingProjectileEntity){
+//				//projectile
 //				elemAtckCap = ElementalCombatAPI.getElementalAttackData((DamagingProjectileEntity) source);
-			}
+//			}
 			else {
 				ElementalCombat.LOGGER.info("Uknown damageSource case. How did you land here?");
 			}
@@ -94,6 +94,7 @@ public class ElementifyLivingHurtEvent
 		
 		// if attack has no elemental properties, it is of type 'natural'
 		// this can make mobs immune etc. to non-elemental attacks
+		// this check might me redundant, but is left here just to be sure.
 		if( sourceElemAtck.isEmpty()){
 			sourceElemAtck.put("natural", 1);
 		}
@@ -111,7 +112,6 @@ public class ElementifyLivingHurtEvent
 		float valueSum = 0.0f;
 		
 		
-		
 		Vec3d eyePos = target.getEyePosition(0);
 		final double POSITION_WOBBLE_AMOUNT = 0.01;
 		Random rand = new Random();
@@ -126,6 +126,7 @@ public class ElementifyLivingHurtEvent
 		
 		Color tint = new Color(1.0f, 1.0f, 1.0f);
 		double diameter = 0.25;
+		
 		
 		Set<String> keySet = sourceElemAtck.keySet();
 		for(String key : keySet)

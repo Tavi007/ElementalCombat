@@ -120,48 +120,47 @@ public class ElementalAttackCapability {
 				ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
 				EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
 
-				// rewrite set to mapping
-				Set<AttackFormat> attackFormatSet = entityData.getAttackSet();
-				HashMap<String, Integer> attackMap = new HashMap<String, Integer>();
-				attackFormatSet.forEach((attack) ->
-				{
-					Integer value = attack.getValue();
-					if (value <= 0){
-						ElementalCombat.LOGGER.info("Elemental damage value of " + attack.getName() + " for " + entity.getName().toString() + " is <= 0. Using 1 instead.");
-						value = 1;
-					}
-					attackMap.put(attack.getName(), value);
-				});
+				HashMap<String, Integer> attackMap = getAttackMapFromData(entityData);
 
 				final ElementalAttack elemAtck = new ElementalAttack(attackMap);
 				event.addCapability(ID, createProvider(elemAtck));
 			}
-			//			else if(event.getObject() instanceof ProjectileEntity) {
-			//				
-			//			}
 		}
+		//			else if(event.getObject() instanceof ProjectileEntity) {
+		//				
+		//			}
+	}
 
-		@SubscribeEvent
-		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-			ItemStack item = event.getObject();
-			ResourceLocation rl = new ResourceLocation(item.getItem().getRegistryName().getNamespace(), "elementalproperties/items/" + item.getItem().getRegistryName().getPath());
-			GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
+	@SubscribeEvent
+	public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
+		ItemStack item = event.getObject();
+		ResourceLocation rl = new ResourceLocation(item.getItem().getRegistryName().getNamespace(), "elementalproperties/items/" + item.getItem().getRegistryName().getPath());
+		GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
 
-			// rewrite set to mapping
-			Set<AttackFormat> attackFormatSet = itemData.getAttackSet();
-			HashMap<String, Integer> attackMap = new HashMap<String, Integer>();
+		HashMap<String, Integer> attackMap = getAttackMapFromData(itemData);
+
+		final ElementalAttack elemAtck = new ElementalAttack(attackMap);
+		event.addCapability(ID, createProvider(elemAtck));
+	}
+
+	private static HashMap<String, Integer> getAttackMapFromData(final GeneralData data){
+		// rewrite set to mapping
+		HashMap<String, Integer> attackMap = new HashMap<String, Integer>();
+		Set<AttackFormat> attackFormatSet = data.getAttackSet();
+		if (attackFormatSet.isEmpty()) {
+			attackMap.put("natural", 1);
+		}
+		else {
 			attackFormatSet.forEach((attack) ->
 			{
 				Integer value = attack.getValue();
 				if (value <= 0){
-					ElementalCombat.LOGGER.info("Elemental damage value of " + attack.getName() + " for " + item.getItem().getName().toString() + " is <= 0. Using 1 instead.");
+					ElementalCombat.LOGGER.info("Warning: a key of ElementalAttack has the value 0. Using 1 instead"); 
 					value = 1;
 				}
 				attackMap.put(attack.getName(), value);
 			});
-
-			final ElementalAttack elemAtck = new ElementalAttack(attackMap);
-			event.addCapability(ID, createProvider(elemAtck));
 		}
+		return attackMap;
 	}
 }
