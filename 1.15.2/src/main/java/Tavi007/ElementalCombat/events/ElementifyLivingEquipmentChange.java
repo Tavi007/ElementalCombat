@@ -24,7 +24,7 @@ public class ElementifyLivingEquipmentChange
 		LivingEntity entity = event.getEntityLiving();
 		if(event.getSlot().getSlotType() == EquipmentSlotType.Group.ARMOR)
 		{
-			
+
 			// get default values
 			ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
 			EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
@@ -32,31 +32,34 @@ public class ElementifyLivingEquipmentChange
 			HashSet<String> resistanceSet = entityData.getResistanceSet();
 			HashSet<String> immunitySet = entityData.getImmunitySet();
 			HashSet<String> absorbSet = entityData.getAbsorbSet();
-			
+
 			// get values from armor
 			// I should add cross-mod interaction with baubles later
 			entity.getArmorInventoryList().forEach((item) ->
 			{
-				if(item.getEquipmentSlot().getSlotType() == EquipmentSlotType.Group.ARMOR)
+				if(item.getEquipmentSlot() != null)
 				{
-					if(item.getEquipmentSlot() == event.getSlot())
+					if(item.getEquipmentSlot().getSlotType() == EquipmentSlotType.Group.ARMOR)
 					{
-						item = event.getTo();
+						if(item.getEquipmentSlot() == event.getSlot())
+						{
+							item = event.getTo();
+						}
+
+						ElementalDefense elemDefCapItem = ElementalCombatAPI.getElementalDefenseData(item);
+						HashSet<String> weaknessSetItem = elemDefCapItem.getElementalWeakness();
+						HashSet<String> resistanceSetItem = elemDefCapItem.getElementalResistance();
+						HashSet<String> immunitySetItem = elemDefCapItem.getElementalImmunity();
+						HashSet<String> absorbSetItem = elemDefCapItem.getElementalAbsorption();
+
+						weaknessSet.addAll(weaknessSetItem);
+						resistanceSet.addAll(resistanceSetItem);
+						immunitySet.addAll(immunitySetItem);
+						absorbSet.addAll(absorbSetItem);
 					}
-					
-					ElementalDefense elemDefCapItem = ElementalCombatAPI.getElementalDefenseData(item);
-					HashSet<String> weaknessSetItem = elemDefCapItem.getElementalWeakness();
-					HashSet<String> resistanceSetItem = elemDefCapItem.getElementalResistance();
-					HashSet<String> immunitySetItem = elemDefCapItem.getElementalImmunity();
-					HashSet<String> absorbSetItem = elemDefCapItem.getElementalAbsorption();
-					
-					weaknessSet.addAll(weaknessSetItem);
-					resistanceSet.addAll(resistanceSetItem);
-					immunitySet.addAll(immunitySetItem);
-					absorbSet.addAll(absorbSetItem);
 				}
 			});
-			
+
 			// set values
 			ElementalDefense elemDefCapEntity = ElementalCombatAPI.getElementalDefenseData(entity);
 			elemDefCapEntity.setElementalWeakness(weaknessSet);

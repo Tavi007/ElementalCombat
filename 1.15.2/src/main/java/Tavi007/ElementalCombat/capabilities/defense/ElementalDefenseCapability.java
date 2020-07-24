@@ -1,12 +1,16 @@
 package Tavi007.ElementalCombat.capabilities.defense;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
+import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.loading.EntityData;
 import Tavi007.ElementalCombat.loading.GeneralData;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -172,13 +176,20 @@ public class ElementalDefenseCapability {
 			ItemStack item = event.getObject();
 			ResourceLocation rl = new ResourceLocation(item.getItem().getRegistryName().getNamespace(), "elementalproperties/items/" + item.getItem().getRegistryName().getPath());
 			GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
-
+			
+			//default values
 			HashSet<String> weaknessSet = itemData.getWeaknessSet();
 			HashSet<String> resistanceSet = itemData.getResistanceSet();
 			HashSet<String> immunitySet = itemData.getImmunitySet();
 			HashSet<String> absorbSet = itemData.getAbsorbSet();
 			
-
+			//apply enchantments
+			Map<Enchantment, Integer> ench =EnchantmentHelper.getEnchantments(item);
+			if(ench.containsKey(new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.FIRE))) {resistanceSet.add("fire");}
+			if(ench.containsKey(new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.ICE))) {resistanceSet.add("ice");}
+			if(ench.containsKey(new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.WATER))) {resistanceSet.add("water");}
+			if(ench.containsKey(new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.THUNDER))) {resistanceSet.add("thunder");}
+			
 			final ElementalDefense elemDef = new ElementalDefense(weaknessSet, resistanceSet, immunitySet, absorbSet);
 			event.addCapability(ID, createProvider(elemDef));
 		}

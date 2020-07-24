@@ -1,8 +1,8 @@
 package Tavi007.ElementalCombat;
 
 import Tavi007.ElementalCombat.capabilities.defense.ElementalDefenseCapability;
-import Tavi007.ElementalCombat.enchantments.EnchantmentElementalResistance;
-import Tavi007.ElementalCombat.enchantments.EnchantmentElementalWeapon;
+import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
+import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.capabilities.attack.ElementalAttackCapability;
 import Tavi007.ElementalCombat.particle.AbsorbParticleData;
 import Tavi007.ElementalCombat.particle.AbsorbParticleType;
@@ -27,15 +27,15 @@ public class StartupCommon {
 	public static ParticleType<AbsorbParticleData> absorbParticleType;
 	
 
-	public static final Enchantment FIRE_PROTECTION = new EnchantmentElementalResistance(EnchantmentElementalResistance.Type.FIRE);
-	public static final Enchantment ICE_PROTECTION = new EnchantmentElementalResistance(EnchantmentElementalResistance.Type.ICE);
-	public static final Enchantment WATER_PROTECTION = new EnchantmentElementalResistance(EnchantmentElementalResistance.Type.WATER);
-	public static final Enchantment THUNDER_PROTECTION = new EnchantmentElementalResistance(EnchantmentElementalResistance.Type.THUNDER);
+	public static final Enchantment FIRE_PROTECTION = new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.FIRE);
+	public static final Enchantment ICE_PROTECTION = new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.ICE);
+	public static final Enchantment WATER_PROTECTION = new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.WATER);
+	public static final Enchantment THUNDER_PROTECTION = new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.THUNDER);
 
 
-	public static final Enchantment ICE_ATTACK = new EnchantmentElementalWeapon(EnchantmentElementalWeapon.Type.ICE);
-	public static final Enchantment WATER_ATTACK = new EnchantmentElementalWeapon(EnchantmentElementalWeapon.Type.WATER);
-	public static final Enchantment THUNDER_ATTACK = new EnchantmentElementalWeapon(EnchantmentElementalWeapon.Type.THUNDER);
+	public static final Enchantment ICE_ATTACK = new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.ICE);
+	public static final Enchantment WATER_ATTACK = new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.WATER);
+	public static final Enchantment THUNDER_ATTACK = new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.THUNDER);
 	
 	@SubscribeEvent
 	public static void onCommonSetup(FMLCommonSetupEvent event){

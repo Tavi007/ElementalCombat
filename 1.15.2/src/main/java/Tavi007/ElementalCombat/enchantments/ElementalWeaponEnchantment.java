@@ -4,13 +4,13 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
 
-public class EnchantmentElementalWeapon extends Enchantment{
+public class ElementalWeaponEnchantment extends Enchantment{
 
 	private static final EquipmentSlotType[] WEAPON_SLOTS = new EquipmentSlotType[]{EquipmentSlotType.MAINHAND};
 
-	public final EnchantmentElementalWeapon.Type protectionType;
+	public final ElementalWeaponEnchantment.Type protectionType;
 	   
-	public EnchantmentElementalWeapon(EnchantmentElementalWeapon.Type typeIn) {
+	public ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type typeIn) {
 		super(Rarity.UNCOMMON, EnchantmentType.WEAPON, WEAPON_SLOTS);
 		this.protectionType = typeIn;
 		this.setRegistryName("elemental_attack_" + typeIn.typeName);
