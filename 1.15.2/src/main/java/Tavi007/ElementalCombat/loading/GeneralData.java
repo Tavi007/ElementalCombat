@@ -1,5 +1,6 @@
 package Tavi007.ElementalCombat.loading;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import Tavi007.ElementalCombat.ElementalCombat;
@@ -14,9 +15,9 @@ public class GeneralData
 	   private final HashSet<String> resistance;
 	   private final HashSet<String> immunity;
 	   private final HashSet<String> absorb;
-	   private final HashSet<AttackFormat> attack;
+	   private final HashMap<String, Integer> attack;
 	   
-	   public GeneralData(HashSet<String> weak, HashSet<String> resi, HashSet<String> immunity, HashSet<String> abso, HashSet<AttackFormat> atck)
+	   public GeneralData(HashSet<String> weak, HashSet<String> resi, HashSet<String> immunity, HashSet<String> abso, HashMap<String, Integer> atck)
 	   {
 		   this.weakness = weak;
 		   this.resistance = resi;
@@ -31,7 +32,7 @@ public class GeneralData
 		   this.resistance = new HashSet<String>();
 		   this.immunity = new HashSet<String>();
 		   this.absorb = new HashSet<String>();
-		   this.attack = new HashSet<AttackFormat>();
+		   this.attack = new HashMap<String, Integer>();
 		   
 	   }
 	   
@@ -55,7 +56,7 @@ public class GeneralData
 		   return this.absorb;
 	   }
 	   
-	   public HashSet<AttackFormat> getAttackSet()
+	   public HashMap<String, Integer> getAttackMap()
 	   {
 		   return this.attack;
 	   }

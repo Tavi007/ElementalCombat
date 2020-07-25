@@ -32,8 +32,8 @@ public class DataManager extends JsonReloadListener
 	private static final Logger LOGGER = LogManager.getLogger();
 	private Map<ResourceLocation, EntityData> registeredEntityData = ImmutableMap.of();
 	private Map<ResourceLocation, GeneralData> registeredItemData = ImmutableMap.of();
-    private static ThreadLocal<Deque<DataContext>> dataContext = new ThreadLocal<Deque<DataContext>>();
-   
+	private static ThreadLocal<Deque<DataContext>> dataContext = new ThreadLocal<Deque<DataContext>>();
+
 	public DataManager() 
 	{
 		super(GSON, ElementalCombat.MOD_ID);
@@ -43,112 +43,116 @@ public class DataManager extends JsonReloadListener
 	{
 		Builder<ResourceLocation, EntityData> builderEntity = ImmutableMap.builder();
 		Builder<ResourceLocation, GeneralData> builderItem = ImmutableMap.builder();
-		
+
 		JsonObject jsonobject = objectIn.remove(EntityData.EMPTY_RESOURCELOCATION);
-	    if (jsonobject != null) 
-	    {
-	         LOGGER.warn("Datapack tried to redefine {} elemental entity data, ignoring", (Object)EntityData.EMPTY_RESOURCELOCATION);
-	    }
-	    
-	    objectIn.forEach((rl, json) -> 
-	    {
-	       try (net.minecraft.resources.IResource res = resourceManagerIn.getResource(getPreparedPath(rl));)
-	       {
-	    	   //check if entity or item gets loaded
-	    	   if(rl.getPath().contains("/entities/"))
-	    	   {
-		    	   EntityData elementalData = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"));
-		    	   builderEntity.put(rl, elementalData);
-	    	   }
-	    	   else if(rl.getPath().contains("/items/"))
-	    	   {
-		    	   GeneralData elementalData = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"));
-		    	   builderItem.put(rl, elementalData);
-	    	   }
-	       }
-	       catch (Exception exception)
-	       {
-	           LOGGER.error("Couldn't parse elemental entity data {}", rl, exception);
-	       }
-	    });
-	    
-	    builderEntity.put(EntityData.EMPTY_RESOURCELOCATION, new EntityData());
-	    ImmutableMap<ResourceLocation, EntityData> immutablemapEntity = builderEntity.build(); //this mapping contains attack and defense data and biomeDependency.
+		if (jsonobject != null) 
+		{
+			LOGGER.warn("Datapack tried to redefine {} elemental entity data, ignoring", (Object)EntityData.EMPTY_RESOURCELOCATION);
+		}
 
-	    builderItem.put(GeneralData.EMPTY_RESOURCELOCATION, new GeneralData());
-	    ImmutableMap<ResourceLocation, GeneralData> immutablemapItem = builderItem.build(); //this mapping contains attack and defense data.
-	    
-	    //validation of immutablemap missing
-	    //copied from LootTable:
-	    //ValidationTracker validationtracker = new ValidationTracker(LootParameterSets.GENERIC, this.field_227507_d_::func_227517_a_, immutablemap::get);
-	    //immutablemap.forEach((rl, json) -> 
-	    //{
-	    //   func_227508_a_(validationtracker, rl, json);
-	    //});
-	    //validationtracker.getProblems().forEach((rl, json) -> 
-	    //{
-	    //   LOGGER.warn("Found validation problem in " + rl + ": " + json);
-	    //});
+		objectIn.forEach((rl, json) -> 
+		{
+			try (net.minecraft.resources.IResource res = resourceManagerIn.getResource(getPreparedPath(rl));)
+			{
+				//check if entity or item gets loaded
+				if(rl.getPath().contains("/entities/"))
+				{
+					EntityData elementalData = (EntityData) loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), true);
+					builderEntity.put(rl, elementalData);
+				}
+				else if(rl.getPath().contains("/items/"))
+				{
+					GeneralData elementalData = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), false);
+					builderItem.put(rl, elementalData);
+				}
+			}
+			catch (Exception exception)
+			{
+				LOGGER.error("Couldn't parse elemental data {}", rl, exception);
+			}
+		});
 
-	    
-	    this.registeredEntityData = immutablemapEntity;  
-	    this.registeredItemData = immutablemapItem;  
+		builderEntity.put(EntityData.EMPTY_RESOURCELOCATION, new EntityData());
+		ImmutableMap<ResourceLocation, EntityData> immutablemapEntity = builderEntity.build(); //this mapping contains attack and defense data and biomeDependency.
+
+		builderItem.put(GeneralData.EMPTY_RESOURCELOCATION, new GeneralData());
+		ImmutableMap<ResourceLocation, GeneralData> immutablemapItem = builderItem.build(); //this mapping contains attack and defense data.
+
+		//validation of immutablemap missing
+		//copied from LootTable:
+		//ValidationTracker validationtracker = new ValidationTracker(LootParameterSets.GENERIC, this.field_227507_d_::func_227517_a_, immutablemap::get);
+		//immutablemap.forEach((rl, json) -> 
+		//{
+		//   func_227508_a_(validationtracker, rl, json);
+		//});
+		//validationtracker.getProblems().forEach((rl, json) -> 
+		//{
+		//   LOGGER.warn("Found validation problem in " + rl + ": " + json);
+		//});
+
+
+		this.registeredEntityData = immutablemapEntity;  
+		this.registeredItemData = immutablemapItem;  
 	}
-	   
-    public static JsonElement toJson(EntityData elementalData)
-    {
-	    return GSON.toJsonTree(elementalData);
+
+	public static JsonElement toJson(EntityData elementalData)
+	{
+		return GSON.toJsonTree(elementalData);
 	}
 
 	public Set<ResourceLocation> getEntityDataKeys() 
 	{
-	    return this.registeredEntityData.keySet();
+		return this.registeredEntityData.keySet();
 	}
-	
+
 	@Nullable
-    private EntityData loadData(Gson gson, ResourceLocation name, JsonObject data, boolean custom)
-    {
-        Deque<DataContext> que = dataContext.get();
-        if (que == null)
-        {
-            que = Queues.newArrayDeque();
-            dataContext.set(que);
-        }
+	private GeneralData loadData(Gson gson, ResourceLocation name, JsonObject data, boolean custom, boolean isEntity)
+	{
+		Deque<DataContext> que = dataContext.get();
+		if (que == null)
+		{
+			que = Queues.newArrayDeque();
+			dataContext.set(que);
+		}
 
-        EntityData ret = null;
-        try
-        {
-            que.push(new DataContext(name, custom));
-            ret = gson.fromJson(data, EntityData.class);
-            que.pop();
-        }
-        catch (JsonParseException e)
-        {
-            que.pop();
-            throw e;
-        }
+		GeneralData ret = null;
+		try
+		{
+			que.push(new DataContext(name, custom));
+			if (isEntity) {
+				ret = gson.fromJson(data, EntityData.class);
+			} else {
+				ret = gson.fromJson(data, GeneralData.class); 
+			}
+			que.pop();
+		}
+		catch (JsonParseException e)
+		{
+			que.pop();
+			throw e;
+		}
 
-        if (!custom)
-        {
-	        DataLoadEvent event = new DataLoadEvent(name, ret, this);
-	        if (MinecraftForge.EVENT_BUS.post(event))
-	        {
-	            ret = EntityData.EMPTY;
-	        }
-	        ret = event.getEntityData();
-        }
+		if (!custom)
+		{
+			DataLoadEvent event = new DataLoadEvent(name, ret, this);
+			if (MinecraftForge.EVENT_BUS.post(event))
+			{
+				ret = EntityData.EMPTY;
+			}
+			ret = event.getEntityData();
+		}
 
-        //if (ret != null)
-        //    ret.freeze();
+		//if (ret != null)
+		//    ret.freeze();
 
-        return ret;
-    }
-	
+		return ret;
+	}
+
 	public EntityData getEntityDataFromLocation(ResourceLocation rl)
 	{
 		return this.registeredEntityData.getOrDefault(rl, EntityData.EMPTY);
 	}
-	
+
 	public GeneralData getItemDataFromLocation(ResourceLocation rl)
 	{
 		return this.registeredItemData.getOrDefault(rl, GeneralData.EMPTY);

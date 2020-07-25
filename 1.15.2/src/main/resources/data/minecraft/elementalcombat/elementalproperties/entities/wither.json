@@ -1,10 +1,8 @@
 {
-	"attack":[
-		{
-			"name": "unholy",
-			"value": 1
-		}
-	],
+	"attack":
+	{
+		"unholy": 1
+	},
 
 	"weakness": [
 		"holy"

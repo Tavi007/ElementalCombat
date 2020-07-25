@@ -2,19 +2,20 @@ package Tavi007.ElementalCombat.events;
 
 import Tavi007.ElementalCombat.loading.DataManager;
 import Tavi007.ElementalCombat.loading.EntityData;
+import Tavi007.ElementalCombat.loading.GeneralData;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.Event;
 
 public class DataLoadEvent extends Event
 {
     private final ResourceLocation name;
-    private EntityData entityData;
+    private GeneralData data;
     private DataManager dataManager;
 
-    public DataLoadEvent(ResourceLocation name, EntityData entityData,DataManager dataManager)
+    public DataLoadEvent(ResourceLocation name, GeneralData data,DataManager dataManager)
     {
         this.name = name;
-        this.entityData = entityData;
+        this.data = data;
         this.dataManager = dataManager;
     }
 
@@ -23,9 +24,9 @@ public class DataLoadEvent extends Event
         return this.name;
     }
 
-    public EntityData getEntityData()
+    public GeneralData getEntityData()
     {
-        return this.entityData;
+        return this.data;
     }
 
     public DataManager getDataManager()
@@ -33,8 +34,8 @@ public class DataLoadEvent extends Event
         return this.dataManager;
     }
 
-    public void setElementalEntityData(EntityData entityData)
+    public void setElementalEntityData(GeneralData data)
     {
-        this.entityData = entityData;
+        this.data = data;
     }
 }

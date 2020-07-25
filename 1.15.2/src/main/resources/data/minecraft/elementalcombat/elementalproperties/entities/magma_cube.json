@@ -1,10 +1,8 @@
 {
-	"attack":[
-		{
-			"name": "fire",
-			"value": 1
-		}
-	],
+	"attack":
+	{
+		"fire": 1
+	},
 
 	"weakness": [
 		"ice"

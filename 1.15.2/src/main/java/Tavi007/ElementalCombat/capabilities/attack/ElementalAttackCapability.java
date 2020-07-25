@@ -120,9 +120,8 @@ public class ElementalAttackCapability {
 				ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
 				EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
 
-				HashMap<String, Integer> attackMap = getAttackMapFromData(entityData);
-
-				final ElementalAttack elemAtck = new ElementalAttack(attackMap);
+				System.out.println("Entity: " + entity.getType().getRegistryName().getPath() + "| data: " + entityData.getAttackMap());
+				final ElementalAttack elemAtck = new ElementalAttack(entityData.getAttackMap());
 				event.addCapability(ID, createProvider(elemAtck));
 			}
 		}
@@ -136,31 +135,9 @@ public class ElementalAttackCapability {
 		ItemStack item = event.getObject();
 		ResourceLocation rl = new ResourceLocation(item.getItem().getRegistryName().getNamespace(), "elementalproperties/items/" + item.getItem().getRegistryName().getPath());
 		GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
-
-		HashMap<String, Integer> attackMap = getAttackMapFromData(itemData);
-
-		final ElementalAttack elemAtck = new ElementalAttack(attackMap);
+		
+		System.out.println("Item: " + item.getItem().getRegistryName().getPath() + "| data: " + itemData.getAttackMap());
+		final ElementalAttack elemAtck = new ElementalAttack(itemData.getAttackMap());
 		event.addCapability(ID, createProvider(elemAtck));
-	}
-
-	private static HashMap<String, Integer> getAttackMapFromData(final GeneralData data){
-		// rewrite set to mapping
-		HashMap<String, Integer> attackMap = new HashMap<String, Integer>();
-		Set<AttackFormat> attackFormatSet = data.getAttackSet();
-		if (attackFormatSet.isEmpty()) {
-			attackMap.put("natural", 1);
-		}
-		else {
-			attackFormatSet.forEach((attack) ->
-			{
-				Integer value = attack.getValue();
-				if (value <= 0){
-					ElementalCombat.LOGGER.info("Warning: a key of ElementalAttack has the value 0. Using 1 instead"); 
-					value = 1;
-				}
-				attackMap.put(attack.getName(), value);
-			});
-		}
-		return attackMap;
 	}
 }
