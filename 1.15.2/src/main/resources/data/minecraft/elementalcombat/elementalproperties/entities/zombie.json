@@ -5,14 +5,14 @@
 		"ice": 1
 	},
 
-	"weakness": [
-		"fire"
-	],
+	"weakness": {
+		"fire":1
+	},
 	
-	"resistance": [
-		"ice",
-		"water"
-	],
+	"resistance": {
+		"ice":1,
+		"water":1
+	},
 	
 	"immunity": [
 	],

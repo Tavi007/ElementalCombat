@@ -5,11 +5,9 @@
 		"water": 1
 	},
 
-	"weakness": [
-	],
+	"weakness": {},
 	
-	"resistance": [
-	],
+	"resistance": {},
 	
 	"absorb": [
 	],

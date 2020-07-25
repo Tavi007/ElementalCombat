@@ -4,12 +4,12 @@
 		"fire": 1
 	},
 
-	"weakness": [
-		"ice"
-	],
+	"weakness": 
+	{
+		"ice":1
+	},
 	
-	"resistance": [
-	],
+	"resistance": {},
 	
 	"immunity": [
 		"fire"

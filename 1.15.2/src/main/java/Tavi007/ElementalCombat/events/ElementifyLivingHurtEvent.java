@@ -103,8 +103,8 @@ public class ElementifyLivingHurtEvent
 		ElementalDefense elemDefCap = ElementalCombatAPI.getElementalDefenseData(target);
 		Set<String> targetElemAbsorbtion = elemDefCap.getElementalAbsorption();
 		Set<String> targetElemImmunity = elemDefCap.getElementalImmunity();
-		Set<String> targetElemResistance = elemDefCap.getElementalResistance();
-		Set<String> targetElemWeakness = elemDefCap.getElementalWeakness();
+		HashMap<String, Integer> targetElemResistance = elemDefCap.getElementalResistance();
+		HashMap<String, Integer> targetElemWeakness = elemDefCap.getElementalWeakness();
 		
 		// compute new Damage value and display particle effects
 		float damageAmount = event.getAmount();
@@ -142,13 +142,13 @@ public class ElementifyLivingHurtEvent
 				ImmunityParticleData data = new ImmunityParticleData(tint, diameter);
 				((ServerWorld) target.getEntityWorld()).spawnParticle(data, xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);
 			}
-			else if (targetElemResistance.contains(key)){ // third
-				newDamageAmount += damageAmount*value/2;
+			else if (targetElemResistance.containsKey(key)){ // third
+				newDamageAmount += damageAmount*value/(targetElemResistance.get(key)+1);
 				ResistanceParticleData data = new ResistanceParticleData(tint, diameter);
 				((ServerWorld) target.getEntityWorld()).spawnParticle(data, xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);
 			}
-			else if (targetElemWeakness.contains(key)){ // last
-				newDamageAmount += damageAmount*value*2;
+			else if (targetElemWeakness.containsKey(key)){ // last
+				newDamageAmount += damageAmount*value*(targetElemWeakness.get(key)+1);
 				WeaknessParticleData data = new WeaknessParticleData(tint, diameter);
 				((ServerWorld) target.getEntityWorld()).spawnParticle(data, xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);
 			}

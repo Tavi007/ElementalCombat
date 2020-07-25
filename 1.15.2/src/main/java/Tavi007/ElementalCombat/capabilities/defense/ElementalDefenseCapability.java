@@ -1,10 +1,11 @@
 package Tavi007.ElementalCombat.capabilities.defense;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.capabilities.NBTHelper;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
 import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.loading.EntityData;
@@ -16,8 +17,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -35,6 +34,11 @@ public class ElementalDefenseCapability {
 
 	@CapabilityInject(IElementalDefense.class)
 	public static final Capability<IElementalDefense> ELEMENTAL_DEFENSE_CAPABILITY = null;
+	
+	private static final ElementalResistanceEnchantment FIRE_ENCHANTMENT = new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.FIRE);
+	private static final ElementalResistanceEnchantment ICE_ENCHANTMENT = new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.ICE);
+	private static final ElementalResistanceEnchantment WATER_ENCHANTMENT = new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.WATER);
+	private static final ElementalResistanceEnchantment THUNDER_ENCHANTMENT = new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.THUNDER);
 
 	/**
 	 * The default {@link Direction} to use for this capability.
@@ -54,10 +58,10 @@ public class ElementalDefenseCapability {
 
 				//fill nbt with data
 				CompoundNBT nbt = new CompoundNBT();
-				nbt.put("elem_weak", fromSetToNBT(instance.getElementalWeakness()));
-				nbt.put("elem_resi", fromSetToNBT(instance.getElementalResistance()));
-				nbt.put("elem_immu", fromSetToNBT(instance.getElementalImmunity()));
-				nbt.put("elem_abso", fromSetToNBT(instance.getElementalAbsorption()));
+				nbt.put("elem_weak", NBTHelper.fromMapToNBT(instance.getElementalWeakness()));
+				nbt.put("elem_resi", NBTHelper.fromMapToNBT(instance.getElementalResistance()));
+				nbt.put("elem_immu", NBTHelper.fromSetToNBT(instance.getElementalImmunity()));
+				nbt.put("elem_abso", NBTHelper.fromSetToNBT(instance.getElementalAbsorption()));
 				return nbt;
 			}
 
@@ -67,37 +71,10 @@ public class ElementalDefenseCapability {
 				CompoundNBT nbtCompound = (CompoundNBT)nbt;
 
 				//fill list with data
-				instance.setElementalWeakness((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_weak", nbtCompound.getTagId("elem_weak") )));
-				instance.setElementalResistance((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_resi", nbtCompound.getTagId("elem_resi") )));
-				instance.setElementalImmunity((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_immu", nbtCompound.getTagId("elem_immu") )));
-				instance.setElementalAbsorption((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_abso", nbtCompound.getTagId("elem_abso") )));
-			}
-
-
-			private Set<String> fromNBTToSet(ListNBT nbt)
-			{
-				Set<String> set = new HashSet<String>();
-				if(nbt!=null)
-				{
-					for (INBT item : nbt)
-					{
-						set.add(item.toString());
-					}
-				}
-				return set;
-			}
-
-			private ListNBT fromSetToNBT(Set<String> set)
-			{
-				ListNBT nbt = new ListNBT();
-				if(set != null)
-				{
-					for (String item : set) 
-					{	
-						nbt.add(StringNBT.valueOf(item));
-					}
-				}
-				return nbt;
+				instance.setElementalWeakness(NBTHelper.fromNBTToMap(nbtCompound.getCompound("elem_weak")));
+				instance.setElementalResistance(NBTHelper.fromNBTToMap(nbtCompound.getCompound("elem_resi")));
+				instance.setElementalImmunity(NBTHelper.fromNBTToSet(nbtCompound.getList("elem_immu", nbtCompound.getTagId("elem_immu") )));
+				instance.setElementalAbsorption(NBTHelper.fromNBTToSet(nbtCompound.getList("elem_abso", nbtCompound.getTagId("elem_abso") )));
 			}
 
 
@@ -141,8 +118,8 @@ public class ElementalDefenseCapability {
 					ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
 					EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
 
-					HashSet<String> weaknessSet = entityData.getWeaknessSet();
-					HashSet<String> resistanceSet = entityData.getResistanceSet();
+					HashMap<String, Integer> weaknessMap = entityData.getWeaknessMap();
+					HashMap<String, Integer> resistanceMap = entityData.getResistanceMap();
 					HashSet<String> immunitySet = entityData.getImmunitySet();
 					HashSet<String> absorbSet = entityData.getAbsorbSet();
 
@@ -163,11 +140,11 @@ public class ElementalDefenseCapability {
 							biomeProperties = "water";
 						}
 						if(biomeProperties != null){
-							resistanceSet.add(biomeProperties);
+							resistanceMap.put(biomeProperties,1);
 						}
 					}
 
-					final ElementalDefense elemDef = new ElementalDefense(weaknessSet, resistanceSet, immunitySet, absorbSet);
+					final ElementalDefense elemDef = new ElementalDefense(weaknessMap, resistanceMap, immunitySet, absorbSet);
 					event.addCapability(ID, createProvider(elemDef));
 				}
 			}
@@ -180,17 +157,17 @@ public class ElementalDefenseCapability {
 			GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
 
 			//default values
-			HashSet<String> weaknessSet = itemData.getWeaknessSet();
-			HashSet<String> resistanceSet = itemData.getResistanceSet();
+			HashMap<String, Integer> weaknessSet = itemData.getWeaknessMap();
+			HashMap<String, Integer> resistanceSet = itemData.getResistanceMap();
 			HashSet<String> immunitySet = itemData.getImmunitySet();
 			HashSet<String> absorbSet = itemData.getAbsorbSet();
 
 			//apply enchantments
 			Map<Enchantment, Integer> ench =EnchantmentHelper.getEnchantments(item);
-			if(ench.containsKey(new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.FIRE))) {resistanceSet.add("fire");}
-			if(ench.containsKey(new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.ICE))) {resistanceSet.add("ice");}
-			if(ench.containsKey(new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.WATER))) {resistanceSet.add("water");}
-			if(ench.containsKey(new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.THUNDER))) {resistanceSet.add("thunder");}
+			if(ench.containsKey(FIRE_ENCHANTMENT)) {resistanceSet.put("fire", ench.get(FIRE_ENCHANTMENT));}
+			if(ench.containsKey(ICE_ENCHANTMENT)) {resistanceSet.put("ice", ench.get(ICE_ENCHANTMENT));}
+			if(ench.containsKey(WATER_ENCHANTMENT)) {resistanceSet.put("water", ench.get(WATER_ENCHANTMENT));}
+			if(ench.containsKey(THUNDER_ENCHANTMENT)) {resistanceSet.put("thunder", ench.get(THUNDER_ENCHANTMENT));}
 
 			final ElementalDefense elemDef = new ElementalDefense(weaknessSet, resistanceSet, immunitySet, absorbSet);
 			event.addCapability(ID, createProvider(elemDef));

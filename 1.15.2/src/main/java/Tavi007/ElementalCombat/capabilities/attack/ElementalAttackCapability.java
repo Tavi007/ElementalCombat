@@ -1,9 +1,9 @@
 package Tavi007.ElementalCombat.capabilities.attack;
 
 import java.util.HashMap;
-import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.capabilities.NBTHelper;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
 import Tavi007.ElementalCombat.loading.EntityData;
 import Tavi007.ElementalCombat.loading.GeneralData;
@@ -48,37 +48,16 @@ public class ElementalAttackCapability {
 
 				//fill nbt with data
 				CompoundNBT nbt = new CompoundNBT();
-				CompoundNBT nbt_inner = new CompoundNBT();
-
-				if(atckMap != null)
-				{
-					atckMap.forEach((elemString, value) ->
-					{
-						nbt_inner.putInt(elemString, value);
-					});
-				}
-				nbt.put("elem_atck", nbt_inner);
+				nbt.put("elem_atck", NBTHelper.fromMapToNBT(atckMap));
 				return nbt;
 			}
 
 			@Override
 			public void readNBT(final Capability<IElementalAttack> capability, final IElementalAttack instance, final Direction side, final INBT nbt) {
 
-				CompoundNBT nbtCompound = (CompoundNBT)nbt;
-
+				CompoundNBT nbtCompound = ((CompoundNBT)nbt).getCompound("elem_atck");
 				//fill list with data
-				HashMap<String, Integer> atckMap = new HashMap<String, Integer>();
-				CompoundNBT nbtCompound_inner = nbtCompound.getCompound("elem_atck");
-				if(nbtCompound_inner!=null)
-				{
-					Set<String> keySet = nbtCompound_inner.keySet();
-					for (String key : keySet)
-					{ 
-						int value = nbtCompound_inner.getInt(key);
-						atckMap.put(key, value);
-					}
-				}
-				instance.setElementalAttack(atckMap);
+				instance.setElementalAttack(NBTHelper.fromNBTToMap(nbtCompound));
 			}
 		}, () -> new ElementalAttack());
 	}

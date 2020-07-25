@@ -1,14 +1,15 @@
 package Tavi007.ElementalCombat.capabilities.defense;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public interface IElementalDefense {
-	HashSet<String> getElementalWeakness();
-	void setElementalWeakness(HashSet<String> set);
+	HashMap<String, Integer> getElementalWeakness();
+	void setElementalWeakness(HashMap<String, Integer> set);
 	boolean isElementalWeakness(String key);
 	
-	HashSet<String> getElementalResistance();
-	void setElementalResistance(HashSet<String> set);
+	HashMap<String, Integer> getElementalResistance();
+	void setElementalResistance(HashMap<String, Integer> set);
 	boolean isElementalResistance(String key);
 	
 	HashSet<String> getElementalImmunity();

@@ -13,7 +13,7 @@ public class EntityData extends GeneralData
 
 	   private final boolean biomeDependency; 
 	   
-	   public EntityData(HashSet<String> weak, HashSet<String> resi, HashSet<String> immunity, HashSet<String> abso, HashMap<String, Integer> atck, boolean biomeDependency)
+	   public EntityData(HashMap<String, Integer> weak, HashMap<String, Integer> resi, HashSet<String> immunity, HashSet<String> abso, HashMap<String, Integer> atck, boolean biomeDependency)
 	   {
 		   super(weak, resi, immunity, abso, atck);
 		   this.biomeDependency = biomeDependency;

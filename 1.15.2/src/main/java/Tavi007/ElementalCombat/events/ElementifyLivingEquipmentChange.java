@@ -1,5 +1,6 @@
 package Tavi007.ElementalCombat.events;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import Tavi007.ElementalCombat.ElementalCombat;
@@ -28,8 +29,8 @@ public class ElementifyLivingEquipmentChange
 			// get default values
 			ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
 			EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
-			HashSet<String> weaknessSet = entityData.getWeaknessSet();
-			HashSet<String> resistanceSet = entityData.getResistanceSet();
+			HashMap<String, Integer> weaknessMap = entityData.getWeaknessMap();
+			HashMap<String, Integer> resistanceMap = entityData.getResistanceMap();
 			HashSet<String> immunitySet = entityData.getImmunitySet();
 			HashSet<String> absorbSet = entityData.getAbsorbSet();
 
@@ -47,13 +48,13 @@ public class ElementifyLivingEquipmentChange
 						}
 
 						ElementalDefense elemDefCapItem = ElementalCombatAPI.getElementalDefenseData(item);
-						HashSet<String> weaknessSetItem = elemDefCapItem.getElementalWeakness();
-						HashSet<String> resistanceSetItem = elemDefCapItem.getElementalResistance();
+						HashMap<String, Integer> weaknessSetItem = elemDefCapItem.getElementalWeakness();
+						HashMap<String, Integer> resistanceSetItem = elemDefCapItem.getElementalResistance();
 						HashSet<String> immunitySetItem = elemDefCapItem.getElementalImmunity();
 						HashSet<String> absorbSetItem = elemDefCapItem.getElementalAbsorption();
 
-						weaknessSet.addAll(weaknessSetItem);
-						resistanceSet.addAll(resistanceSetItem);
+						weaknessMap.putAll(weaknessSetItem);
+						resistanceMap.putAll(resistanceSetItem);
 						immunitySet.addAll(immunitySetItem);
 						absorbSet.addAll(absorbSetItem);
 					}
@@ -62,8 +63,8 @@ public class ElementifyLivingEquipmentChange
 
 			// set values
 			ElementalDefense elemDefCapEntity = ElementalCombatAPI.getElementalDefenseData(entity);
-			elemDefCapEntity.setElementalWeakness(weaknessSet);
-			elemDefCapEntity.setElementalResistance(resistanceSet);
+			elemDefCapEntity.setElementalWeakness(weaknessMap);
+			elemDefCapEntity.setElementalResistance(resistanceMap);
 			elemDefCapEntity.setElementalImmunity(immunitySet);
 			elemDefCapEntity.setElementalAbsorption(absorbSet);
 		}

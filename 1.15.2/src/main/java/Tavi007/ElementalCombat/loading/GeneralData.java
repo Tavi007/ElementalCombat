@@ -11,13 +11,13 @@ public class GeneralData
 	   public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
 	   public static final GeneralData EMPTY = new GeneralData();
 	   
-	   private final HashSet<String> weakness;
-	   private final HashSet<String> resistance;
+	   private final HashMap<String, Integer> weakness;
+	   private final HashMap<String, Integer> resistance;
 	   private final HashSet<String> immunity;
 	   private final HashSet<String> absorb;
 	   private final HashMap<String, Integer> attack;
 	   
-	   public GeneralData(HashSet<String> weak, HashSet<String> resi, HashSet<String> immunity, HashSet<String> abso, HashMap<String, Integer> atck)
+	   public GeneralData(HashMap<String, Integer> weak, HashMap<String, Integer> resi, HashSet<String> immunity, HashSet<String> abso, HashMap<String, Integer> atck)
 	   {
 		   this.weakness = weak;
 		   this.resistance = resi;
@@ -28,20 +28,20 @@ public class GeneralData
 	   
 	   public GeneralData()
 	   {
-		   this.weakness = new HashSet<String>();
-		   this.resistance = new HashSet<String>();
+		   this.weakness = new HashMap<String, Integer>();
+		   this.resistance = new HashMap<String, Integer>();
 		   this.immunity = new HashSet<String>();
 		   this.absorb = new HashSet<String>();
 		   this.attack = new HashMap<String, Integer>();
 		   
 	   }
 	   
-	   public HashSet<String> getWeaknessSet()
+	   public HashMap<String, Integer> getWeaknessMap()
 	   {
 		   return this.weakness;
 	   }
 	   
-	   public HashSet<String> getResistanceSet()
+	   public HashMap<String, Integer> getResistanceMap()
 	   {
 		   return this.resistance;
 	   }

@@ -1,22 +1,23 @@
 package Tavi007.ElementalCombat.capabilities.defense;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class ElementalDefense implements IElementalDefense{
 
-	private HashSet<String> weakness;
-	private HashSet<String> resistance;
+	private HashMap<String, Integer> weakness;
+	private HashMap<String, Integer> resistance;
 	private HashSet<String> immunity;
 	private HashSet<String> absorption;
 	
 	public ElementalDefense() {
-		this.weakness = new HashSet<String>();
-		this.resistance = new HashSet<String>();
+		this.weakness = new HashMap<String, Integer>();
+		this.resistance = new HashMap<String, Integer>();
 		this.immunity = new HashSet<String>();
 		this.absorption = new HashSet<String>();
 	}
 	
-	public ElementalDefense(HashSet<String> weakness, HashSet<String> resistance, HashSet<String> immunity, HashSet<String> absorption) {
+	public ElementalDefense(HashMap<String, Integer> weakness, HashMap<String, Integer> resistance, HashSet<String> immunity, HashSet<String> absorption) {
 		this.weakness = weakness;
 		this.resistance = resistance;
 		this.immunity = immunity;
@@ -24,24 +25,24 @@ public class ElementalDefense implements IElementalDefense{
 	}
 	
 	@Override
-	public HashSet<String> getElementalWeakness() {return this.weakness;}
+	public HashMap<String, Integer> getElementalWeakness() {return this.weakness;}
 
 	@Override
-	public void setElementalWeakness(HashSet<String> set) {this.weakness = set;}
+	public void setElementalWeakness(HashMap<String, Integer> map) {this.weakness = map;}
 
 	@Override
-	public boolean isElementalWeakness(String key) {return this.weakness.contains(key);}
+	public boolean isElementalWeakness(String key) {return this.weakness.containsKey(key);}
 
 	
 	
 	@Override
-	public HashSet<String> getElementalResistance() {return this.resistance;}
+	public HashMap<String, Integer> getElementalResistance() {return this.resistance;}
 
 	@Override
-	public void setElementalResistance(HashSet<String> set) {this.resistance = set;}
+	public void setElementalResistance(HashMap<String, Integer> map) {this.resistance = map;}
 
 	@Override
-	public boolean isElementalResistance(String key) {return this.resistance.contains(key);}
+	public boolean isElementalResistance(String key) {return this.resistance.containsKey(key);}
 
 	
 	
