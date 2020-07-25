@@ -5,7 +5,6 @@ import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
-import Tavi007.ElementalCombat.loading.AttackFormat;
 import Tavi007.ElementalCombat.loading.EntityData;
 import Tavi007.ElementalCombat.loading.GeneralData;
 import net.minecraft.entity.Entity;
@@ -117,12 +116,15 @@ public class ElementalAttackCapability {
 			if (event.getObject() instanceof LivingEntity) {
 
 				LivingEntity entity = (LivingEntity) event.getObject();
-				ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
-				EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
 
-				System.out.println("Entity: " + entity.getType().getRegistryName().getPath() + "| data: " + entityData.getAttackMap());
-				final ElementalAttack elemAtck = new ElementalAttack(entityData.getAttackMap());
-				event.addCapability(ID, createProvider(elemAtck));
+				if(!entity.getEntityWorld().isRemote()) {
+					ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
+					EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
+
+					System.out.println("Entity: " + entity.getType().getRegistryName().getPath() + "| data: " + entityData.getAttackMap());
+					final ElementalAttack elemAtck = new ElementalAttack(entityData.getAttackMap());
+					event.addCapability(ID, createProvider(elemAtck));
+				}
 			}
 		}
 		//			else if(event.getObject() instanceof ProjectileEntity) {
@@ -135,7 +137,7 @@ public class ElementalAttackCapability {
 		ItemStack item = event.getObject();
 		ResourceLocation rl = new ResourceLocation(item.getItem().getRegistryName().getNamespace(), "elementalproperties/items/" + item.getItem().getRegistryName().getPath());
 		GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
-		
+
 		System.out.println("Item: " + item.getItem().getRegistryName().getPath() + "| data: " + itemData.getAttackMap());
 		final ElementalAttack elemAtck = new ElementalAttack(itemData.getAttackMap());
 		event.addCapability(ID, createProvider(elemAtck));

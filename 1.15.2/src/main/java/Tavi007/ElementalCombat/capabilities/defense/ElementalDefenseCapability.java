@@ -72,35 +72,35 @@ public class ElementalDefenseCapability {
 				instance.setElementalImmunity((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_immu", nbtCompound.getTagId("elem_immu") )));
 				instance.setElementalAbsorption((HashSet<String>) fromNBTToSet(nbtCompound.getList("elem_abso", nbtCompound.getTagId("elem_abso") )));
 			}
-			
+
 
 			private Set<String> fromNBTToSet(ListNBT nbt)
-		    {
-		    	Set<String> set = new HashSet<String>();
-		    	if(nbt!=null)
-		    	{
-			    	for (INBT item : nbt)
-			    	{
-			    		set.add(item.toString());
-			    	}
-		    	}
-		    	return set;
-		    }
-		    
-		    private ListNBT fromSetToNBT(Set<String> set)
-		    {
-		    	ListNBT nbt = new ListNBT();
-		    	if(set != null)
-		    	{
-			    	for (String item : set) 
-			    	{	
-			    		nbt.add(StringNBT.valueOf(item));
-			    	}
-		    	}
-		    	return nbt;
-		    }
-			
-			
+			{
+				Set<String> set = new HashSet<String>();
+				if(nbt!=null)
+				{
+					for (INBT item : nbt)
+					{
+						set.add(item.toString());
+					}
+				}
+				return set;
+			}
+
+			private ListNBT fromSetToNBT(Set<String> set)
+			{
+				ListNBT nbt = new ListNBT();
+				if(set != null)
+				{
+					for (String item : set) 
+					{	
+						nbt.add(StringNBT.valueOf(item));
+					}
+				}
+				return nbt;
+			}
+
+
 		}, () -> new ElementalDefense());
 	}
 
@@ -137,37 +137,39 @@ public class ElementalDefenseCapability {
 			if (event.getObject() instanceof LivingEntity) {
 
 				LivingEntity entity = (LivingEntity) event.getObject();
-				ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
-				EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
+				if(!entity.getEntityWorld().isRemote()) {
+					ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
+					EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
 
-				HashSet<String> weaknessSet = entityData.getWeaknessSet();
-				HashSet<String> resistanceSet = entityData.getResistanceSet();
-				HashSet<String> immunitySet = entityData.getImmunitySet();
-				HashSet<String> absorbSet = entityData.getAbsorbSet();
-				
-				// player spawn should be biome independent
-				if(entityData.getBiomeDependency()) 
-				{
-					String biomeProperties = null;
-					BlockPos blockPos = new BlockPos(entity.getPositionVec());
+					HashSet<String> weaknessSet = entityData.getWeaknessSet();
+					HashSet<String> resistanceSet = entityData.getResistanceSet();
+					HashSet<String> immunitySet = entityData.getImmunitySet();
+					HashSet<String> absorbSet = entityData.getAbsorbSet();
 
-					TempCategory category = entity.getEntityWorld().getBiome(blockPos).getTempCategory();
-					if(category == TempCategory.COLD){
-						biomeProperties = "ice";
+					// player spawn should be biome independent
+					if(entityData.getBiomeDependency()) 
+					{
+						String biomeProperties = null;
+						BlockPos blockPos = new BlockPos(entity.getPositionVec());
+
+						TempCategory category = entity.getEntityWorld().getBiome(blockPos).getTempCategory();
+						if(category == TempCategory.COLD){
+							biomeProperties = "ice";
+						}
+						else if(category == TempCategory.WARM){
+							biomeProperties = "fire";
+						}
+						else if(category == TempCategory.OCEAN){
+							biomeProperties = "water";
+						}
+						if(biomeProperties != null){
+							resistanceSet.add(biomeProperties);
+						}
 					}
-					else if(category == TempCategory.WARM){
-						biomeProperties = "fire";
-					}
-					else if(category == TempCategory.OCEAN){
-						biomeProperties = "water";
-					}
-					if(biomeProperties != null){
-						resistanceSet.add(biomeProperties);
-					}
+
+					final ElementalDefense elemDef = new ElementalDefense(weaknessSet, resistanceSet, immunitySet, absorbSet);
+					event.addCapability(ID, createProvider(elemDef));
 				}
-				
-				final ElementalDefense elemDef = new ElementalDefense(weaknessSet, resistanceSet, immunitySet, absorbSet);
-				event.addCapability(ID, createProvider(elemDef));
 			}
 		}
 
@@ -176,20 +178,20 @@ public class ElementalDefenseCapability {
 			ItemStack item = event.getObject();
 			ResourceLocation rl = new ResourceLocation(item.getItem().getRegistryName().getNamespace(), "elementalproperties/items/" + item.getItem().getRegistryName().getPath());
 			GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
-			
+
 			//default values
 			HashSet<String> weaknessSet = itemData.getWeaknessSet();
 			HashSet<String> resistanceSet = itemData.getResistanceSet();
 			HashSet<String> immunitySet = itemData.getImmunitySet();
 			HashSet<String> absorbSet = itemData.getAbsorbSet();
-			
+
 			//apply enchantments
 			Map<Enchantment, Integer> ench =EnchantmentHelper.getEnchantments(item);
 			if(ench.containsKey(new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.FIRE))) {resistanceSet.add("fire");}
 			if(ench.containsKey(new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.ICE))) {resistanceSet.add("ice");}
 			if(ench.containsKey(new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.WATER))) {resistanceSet.add("water");}
 			if(ench.containsKey(new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.THUNDER))) {resistanceSet.add("thunder");}
-			
+
 			final ElementalDefense elemDef = new ElementalDefense(weaknessSet, resistanceSet, immunitySet, absorbSet);
 			event.addCapability(ID, createProvider(elemDef));
 		}
