@@ -14,6 +14,20 @@ public class ElementalResistanceEnchantment extends Enchantment{
 		super(Rarity.UNCOMMON, EnchantmentType.ARMOR, ARMOR_SLOTS);
 		this.protectionType = typeIn;
 		this.setRegistryName("elemental_resistance_" + typeIn.typeName);
+		switch(typeIn.typeName) {
+		case("fire"): 
+			super.name = "Fire Resistance";
+	    	break;
+		case("ice"): 
+			super.name = "Ice Resistance";
+	    	break;
+		case("water"): 
+			super.name = "Water Resistance";
+	    	break;
+		case("thunder"): 
+			super.name = "Thunder Resistance";
+	    	break;
+		}
 	}
 
 	/**
@@ -21,6 +35,13 @@ public class ElementalResistanceEnchantment extends Enchantment{
 	 */
 	protected boolean canApplyTogether(Enchantment ench) {
 		return !(ench instanceof ElementalResistanceEnchantment);
+	}
+
+	/**
+	 * Returns the maximum level that the enchantment can have.
+	 */
+	public int getMaxLevel() {
+		return 5;
 	}
 
 	public static enum Type {
