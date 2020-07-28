@@ -109,16 +109,16 @@ public class ElementalAttackCapability {
 		//			else if(event.getObject() instanceof ProjectileEntity) {
 		//				
 		//			}
-	}
 
-	@SubscribeEvent
-	public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-		ItemStack item = event.getObject();
-		ResourceLocation rl = new ResourceLocation(item.getItem().getRegistryName().getNamespace(), "elementalproperties/items/" + item.getItem().getRegistryName().getPath());
-		GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
+		@SubscribeEvent
+		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
+			ItemStack item = event.getObject();
+			ResourceLocation rl = new ResourceLocation(item.getItem().getRegistryName().getNamespace(), "elementalproperties/items/" + item.getItem().getRegistryName().getPath());
+			GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
 
-		System.out.println("Item: " + item.getItem().getRegistryName().getPath() + "| data: " + itemData.getAttackMap());
-		final ElementalAttack elemAtck = new ElementalAttack(itemData.getAttackMap());
-		event.addCapability(ID, createProvider(elemAtck));
+			System.out.println("Item: " + item.getItem().getRegistryName().getPath() + "| data: " + itemData.getAttackMap());
+			final ElementalAttack elemAtck = new ElementalAttack(itemData.getAttackMap());
+			event.addCapability(ID, createProvider(elemAtck));
+		}
 	}
 }
