@@ -38,27 +38,16 @@ public class ElementifyLivingEquipmentChange
 			// I should add cross-mod interaction with baubles later
 			entity.getArmorInventoryList().forEach((item) ->
 			{
-				if(item.getEquipmentSlot() != null)
-				{
-					if(item.getEquipmentSlot().getSlotType() == EquipmentSlotType.Group.ARMOR)
-					{
-						if(item.getEquipmentSlot() == event.getSlot())
-						{
-							item = event.getTo();
-						}
+				ElementalDefense elemDefCapItem = ElementalCombatAPI.getElementalDefenseData(item);
+				HashMap<String, Integer> weaknessSetItem = elemDefCapItem.getElementalWeakness();
+				HashMap<String, Integer> resistanceSetItem = elemDefCapItem.getElementalResistance();
+				HashSet<String> immunitySetItem = elemDefCapItem.getElementalImmunity();
+				HashSet<String> absorbSetItem = elemDefCapItem.getElementalAbsorption();
 
-						ElementalDefense elemDefCapItem = ElementalCombatAPI.getElementalDefenseData(item);
-						HashMap<String, Integer> weaknessSetItem = elemDefCapItem.getElementalWeakness();
-						HashMap<String, Integer> resistanceSetItem = elemDefCapItem.getElementalResistance();
-						HashSet<String> immunitySetItem = elemDefCapItem.getElementalImmunity();
-						HashSet<String> absorbSetItem = elemDefCapItem.getElementalAbsorption();
-
-						weaknessMap.putAll(weaknessSetItem);
-						resistanceMap.putAll(resistanceSetItem);
-						immunitySet.addAll(immunitySetItem);
-						absorbSet.addAll(absorbSetItem);
-					}
-				}
+				weaknessMap.putAll(weaknessSetItem);
+				resistanceMap.putAll(resistanceSetItem);
+				immunitySet.addAll(immunitySetItem);
+				absorbSet.addAll(absorbSetItem);
 			});
 
 			// set values
