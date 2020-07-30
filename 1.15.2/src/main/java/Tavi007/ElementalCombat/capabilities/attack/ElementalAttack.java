@@ -32,6 +32,9 @@ public class ElementalAttack implements IElementalAttack{
 	@Override
 	public void applyEnchantments(Map<Enchantment, Integer> enchantments) {
 		enchantments.forEach((key, value) -> {
+			
+			//currently only comparing strings.
+			//maybe change to resourceLocation later, so other mods can interact with this as well.
 			if(key.getName() == ElementalEnchantments.ICE_ASPECT.getName()) {putHighestValueIntoMap("ice", value);}
 			if(key.getName() == Enchantments.FIRE_ASPECT.getName()) {putHighestValueIntoMap("fire", value);}
 			if(key.getName() == ElementalEnchantments.WATER_ASPECT.getName()) {putHighestValueIntoMap("water", value);}

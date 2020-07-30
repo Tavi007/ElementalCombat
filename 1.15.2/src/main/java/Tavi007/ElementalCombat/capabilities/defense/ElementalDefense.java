@@ -36,6 +36,9 @@ public class ElementalDefense implements IElementalDefense{
 	@Override
 	public void applyEnchantments(Map<Enchantment, Integer> enchantments) {
 		enchantments.forEach((key, value) -> {
+			
+			//currently only comparing strings.
+			//maybe change to resourceLocation later, so other mods can interact with this as well.
 			if(key.getName() == ElementalEnchantments.ICE_RESISTANCE.getName()) {putHighestValueIntoResistance("ice", value);}
 			if(key.getName() == ElementalEnchantments.FIRE_RESISTANCE.getName()) {putHighestValueIntoResistance("fire", value);}
 			if(key.getName() == ElementalEnchantments.WATER_RESISTANCE.getName()) {putHighestValueIntoResistance("water", value);}

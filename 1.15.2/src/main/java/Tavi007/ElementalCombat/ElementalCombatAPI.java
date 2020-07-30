@@ -6,7 +6,6 @@ import Tavi007.ElementalCombat.capabilities.defense.ElementalDefense;
 import Tavi007.ElementalCombat.capabilities.defense.ElementalDefenseCapability;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.item.ItemStack;
 
 public class ElementalCombatAPI 
@@ -35,7 +34,8 @@ public class ElementalCombatAPI
 	}
 
 	//Projectiles
-	//	public static ElementalAttack getElementalAttackData(DamagingProjectileEntity entity){
+	//implement with minecraft 1.16
+	//	public static ElementalAttack getElementalAttackData(ProjectileEntity entity){
 	//		return entity.getCapability(ElementalAttackCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new ElementalAttack());
 	//	}
 }
