@@ -18,7 +18,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -60,18 +59,6 @@ public class ElementalAttackCapability {
 				instance.setElementalAttack(NBTHelper.fromNBTToMap(nbtCompound));
 			}
 		}, () -> new ElementalAttack());
-	}
-
-	public static LazyOptional<IElementalAttack> getElementalAttack(final LivingEntity entity) {
-		return entity.getCapability(ELEMENTAL_ATTACK_CAPABILITY, DEFAULT_FACING);
-	}
-
-	//	public static LazyOptional<IElementalAttack> getElementalAttack(final ProjectileEntity entity) {
-	//		return entity.getCapability(ELEMENTAL_ATTACK_CAPABILITY, DEFAULT_FACING);
-	//	}
-
-	public static LazyOptional<IElementalAttack> getElementalAttack(final ItemStack item) {
-		return item.getCapability(ELEMENTAL_ATTACK_CAPABILITY, DEFAULT_FACING);
 	}
 
 	public static ICapabilityProvider createProvider(final IElementalAttack atck) {
@@ -116,7 +103,6 @@ public class ElementalAttackCapability {
 			ResourceLocation rl = new ResourceLocation(item.getItem().getRegistryName().getNamespace(), "elementalproperties/items/" + item.getItem().getRegistryName().getPath());
 			GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
 
-			System.out.println("Item: " + item.getItem().getRegistryName().getPath() + "| data: " + itemData.getAttackMap());
 			final ElementalAttack elemAtck = new ElementalAttack(itemData.getAttackMap());
 			event.addCapability(ID, createProvider(elemAtck));
 		}

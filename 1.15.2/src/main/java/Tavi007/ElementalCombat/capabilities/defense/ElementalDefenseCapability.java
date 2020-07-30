@@ -2,16 +2,12 @@ package Tavi007.ElementalCombat.capabilities.defense;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.NBTHelper;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
-import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.loading.EntityData;
 import Tavi007.ElementalCombat.loading.GeneralData;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -25,8 +21,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -34,11 +31,6 @@ public class ElementalDefenseCapability {
 
 	@CapabilityInject(IElementalDefense.class)
 	public static final Capability<IElementalDefense> ELEMENTAL_DEFENSE_CAPABILITY = null;
-	
-	private static final ElementalResistanceEnchantment FIRE_ENCHANTMENT = new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.FIRE);
-	private static final ElementalResistanceEnchantment ICE_ENCHANTMENT = new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.ICE);
-	private static final ElementalResistanceEnchantment WATER_ENCHANTMENT = new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.WATER);
-	private static final ElementalResistanceEnchantment THUNDER_ENCHANTMENT = new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.THUNDER);
 
 	/**
 	 * The default {@link Direction} to use for this capability.
@@ -73,24 +65,12 @@ public class ElementalDefenseCapability {
 				//fill list with data
 				instance.setElementalWeakness(NBTHelper.fromNBTToMap(nbtCompound.getCompound("elem_weak")));
 				instance.setElementalResistance(NBTHelper.fromNBTToMap(nbtCompound.getCompound("elem_resi")));
-				instance.setElementalImmunity(NBTHelper.fromNBTToSet(nbtCompound.getList("elem_immu", nbtCompound.getTagId("elem_immu") )));
-				instance.setElementalAbsorption(NBTHelper.fromNBTToSet(nbtCompound.getList("elem_abso", nbtCompound.getTagId("elem_abso") )));
+				instance.setElementalImmunity(NBTHelper.fromNBTToSet(nbtCompound.getList("elem_immu", Constants.NBT.TAG_STRING ))); //List of strings
+				instance.setElementalAbsorption(NBTHelper.fromNBTToSet(nbtCompound.getList("elem_abso", Constants.NBT.TAG_STRING )));
 			}
 
 
 		}, () -> new ElementalDefense());
-	}
-
-	public static LazyOptional<IElementalDefense> getElementalDefense(final LivingEntity entity) {
-		return entity.getCapability(ELEMENTAL_DEFENSE_CAPABILITY, DEFAULT_FACING);
-	}
-
-	//	public static LazyOptional<IElementalDefense> getElementalDefense(final ProjectileEntity entity) {
-	//		return entity.getCapability(ELEMENTAL_DEFENSE_CAPABILITY, DEFAULT_FACING);
-	//	}
-
-	public static LazyOptional<IElementalDefense> getElementalDefense(final ItemStack item) {
-		return item.getCapability(ELEMENTAL_DEFENSE_CAPABILITY, DEFAULT_FACING);
 	}
 
 	public static ICapabilityProvider createProvider(final IElementalDefense atck) {
@@ -150,24 +130,17 @@ public class ElementalDefenseCapability {
 			}
 		}
 
-		@SubscribeEvent
+		@SubscribeEvent(priority = EventPriority.LOWEST)
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
 			ItemStack item = event.getObject();
 			ResourceLocation rl = new ResourceLocation(item.getItem().getRegistryName().getNamespace(), "elementalproperties/items/" + item.getItem().getRegistryName().getPath());
 			GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
-
+			
 			//default values
 			HashMap<String, Integer> weaknessSet = itemData.getWeaknessMap();
 			HashMap<String, Integer> resistanceSet = itemData.getResistanceMap();
 			HashSet<String> immunitySet = itemData.getImmunitySet();
 			HashSet<String> absorbSet = itemData.getAbsorbSet();
-
-			//apply enchantments
-			Map<Enchantment, Integer> ench =EnchantmentHelper.getEnchantments(item);
-			if(ench.containsKey(FIRE_ENCHANTMENT)) {resistanceSet.put("fire", ench.get(FIRE_ENCHANTMENT));}
-			if(ench.containsKey(ICE_ENCHANTMENT)) {resistanceSet.put("ice", ench.get(ICE_ENCHANTMENT));}
-			if(ench.containsKey(WATER_ENCHANTMENT)) {resistanceSet.put("water", ench.get(WATER_ENCHANTMENT));}
-			if(ench.containsKey(THUNDER_ENCHANTMENT)) {resistanceSet.put("thunder", ench.get(THUNDER_ENCHANTMENT));}
 
 			final ElementalDefense elemDef = new ElementalDefense(weaknessSet, resistanceSet, immunitySet, absorbSet);
 			event.addCapability(ID, createProvider(elemDef));
