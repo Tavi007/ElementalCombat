@@ -186,6 +186,10 @@ public class ElementifyLivingHurtEvent
 		{
 			target.heal(-newDamageAmount);
 			event.setCanceled(true);
+			
+			newDamageAmount = 0;
 		}
+		
+		event.setAmount(newDamageAmount);
 	}
 }
