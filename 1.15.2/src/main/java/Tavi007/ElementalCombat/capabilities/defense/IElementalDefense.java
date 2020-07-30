@@ -2,6 +2,9 @@ package Tavi007.ElementalCombat.capabilities.defense;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+
+import net.minecraft.enchantment.Enchantment;
 
 public interface IElementalDefense {
 	HashMap<String, Integer> getElementalWeakness();
@@ -20,4 +23,6 @@ public interface IElementalDefense {
 	void setElementalAbsorption(HashSet<String> set);
 	boolean isElementalAbsorption(String key);
 
+	public boolean areEnchantmentsApplied();
+	public void applyEnchantments(Map<Enchantment, Integer> enchantments);
 }

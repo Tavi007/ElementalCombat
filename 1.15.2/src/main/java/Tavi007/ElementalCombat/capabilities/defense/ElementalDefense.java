@@ -2,6 +2,10 @@ package Tavi007.ElementalCombat.capabilities.defense;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+
+import Tavi007.ElementalCombat.enchantments.ElementalEnchantments;
+import net.minecraft.enchantment.Enchantment;
 
 public class ElementalDefense implements IElementalDefense{
 
@@ -9,6 +13,7 @@ public class ElementalDefense implements IElementalDefense{
 	private HashMap<String, Integer> resistance;
 	private HashSet<String> immunity;
 	private HashSet<String> absorption;
+	private boolean areEnchantmentsApplied = false;
 	
 	public ElementalDefense() {
 		this.weakness = new HashMap<String, Integer>();
@@ -23,6 +28,28 @@ public class ElementalDefense implements IElementalDefense{
 		this.immunity = immunity;
 		this.absorption = absorption;
 	}
+	
+
+	@Override
+	public boolean areEnchantmentsApplied() {return this.areEnchantmentsApplied;}
+
+	@Override
+	public void applyEnchantments(Map<Enchantment, Integer> enchantments) {
+		enchantments.forEach((key, value) -> {
+			if(key.getName() == ElementalEnchantments.ICE_RESISTANCE.getName()) {putHighestValueIntoResistance("ice", value);}
+			if(key.getName() == ElementalEnchantments.FIRE_RESISTANCE.getName()) {putHighestValueIntoResistance("fire", value);}
+			if(key.getName() == ElementalEnchantments.WATER_RESISTANCE.getName()) {putHighestValueIntoResistance("water", value);}
+			if(key.getName() == ElementalEnchantments.THUNDER_RESISTANCE.getName()) {putHighestValueIntoResistance("thunder", value);}
+		});
+		this.areEnchantmentsApplied = true;
+		}
+	
+	private void putHighestValueIntoResistance(String key, Integer newValue) {
+		if(this.resistance.get(key) == null) {resistance.put(key, newValue);}
+		else if(this.resistance.get(key) < newValue) {resistance.put(key, newValue);}
+	}
+	
+	
 	
 	@Override
 	public HashMap<String, Integer> getElementalWeakness() {return this.weakness;}
