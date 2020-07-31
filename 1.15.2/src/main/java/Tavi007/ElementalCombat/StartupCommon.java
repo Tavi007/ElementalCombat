@@ -22,10 +22,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class StartupCommon {
 
-	public static ParticleType<WeaknessParticleData> weaknessParticleType;
-	public static ParticleType<ResistanceParticleData> resistanceParticleType;
-	public static ParticleType<ImmunityParticleData> immunityParticleType;
-	public static ParticleType<AbsorbParticleData> absorbParticleType;
+	public static ParticleType<WeaknessParticleData> weaknessParticleType = new WeaknessParticleType();
+	public static ParticleType<ResistanceParticleData> resistanceParticleType = new ResistanceParticleType();
+	public static ParticleType<ImmunityParticleData> immunityParticleType = new ImmunityParticleType();
+	public static ParticleType<AbsorbParticleData> absorbParticleType = new AbsorbParticleType();
 	
 	@SubscribeEvent
 	public static void onCommonSetup(FMLCommonSetupEvent event){
@@ -36,21 +36,10 @@ public class StartupCommon {
 	
 	@SubscribeEvent
 	public static void onIParticleTypeRegistration(RegistryEvent.Register<ParticleType<?>> iParticleTypeRegisterEvent) {
-		weaknessParticleType = new WeaknessParticleType();
-		weaknessParticleType.setRegistryName("elementalcombat:weakness");
-	    iParticleTypeRegisterEvent.getRegistry().register(weaknessParticleType);
-
-		resistanceParticleType = new ResistanceParticleType();
-		resistanceParticleType.setRegistryName("elementalcombat:resistance");
-	    iParticleTypeRegisterEvent.getRegistry().register(resistanceParticleType);
-
-		immunityParticleType = new ImmunityParticleType();
-		immunityParticleType.setRegistryName("elementalcombat:immunity");
-	    iParticleTypeRegisterEvent.getRegistry().register(immunityParticleType);
-
-		absorbParticleType = new AbsorbParticleType();
-		absorbParticleType.setRegistryName("elementalcombat:absorb");
-	    iParticleTypeRegisterEvent.getRegistry().register(absorbParticleType);
+	    iParticleTypeRegisterEvent.getRegistry().register(weaknessParticleType.setRegistryName("elementalcombat:weakness"));
+	    iParticleTypeRegisterEvent.getRegistry().register(resistanceParticleType.setRegistryName("elementalcombat:resistance"));
+	    iParticleTypeRegisterEvent.getRegistry().register(immunityParticleType.setRegistryName("elementalcombat:immunity"));
+	    iParticleTypeRegisterEvent.getRegistry().register(absorbParticleType.setRegistryName("elementalcombat:absorb"));
 	    
 	    ElementalCombat.LOGGER.info("ElementalCombat particles registered.");
 	}
@@ -65,5 +54,7 @@ public class StartupCommon {
 		event.getRegistry().register(new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.ICE).setRegistryName("ice_aspect"));
 		event.getRegistry().register(new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.WATER).setRegistryName("water_aspect"));
 		event.getRegistry().register(new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.THUNDER).setRegistryName("thunder_aspect"));
+
+	    ElementalCombat.LOGGER.info("ElementalCombat enchantments registered.");
 	}
 }
