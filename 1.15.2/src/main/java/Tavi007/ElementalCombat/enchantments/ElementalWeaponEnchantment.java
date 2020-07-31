@@ -13,7 +13,6 @@ public class ElementalWeaponEnchantment extends Enchantment{
 	public ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type typeIn) {
 		super(Rarity.UNCOMMON, EnchantmentType.WEAPON, WEAPON_SLOTS);
 		this.protectionType = typeIn;
-		this.setRegistryName("elemental_attack_" + typeIn.typeName);
 		switch(typeIn.typeName) {
 		case("ice"): 
 			super.name = "Ice Aspect";

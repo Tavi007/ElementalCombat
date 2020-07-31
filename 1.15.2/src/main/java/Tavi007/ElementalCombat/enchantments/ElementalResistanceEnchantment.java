@@ -13,7 +13,6 @@ public class ElementalResistanceEnchantment extends Enchantment{
 	public ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type typeIn) {
 		super(Rarity.UNCOMMON, EnchantmentType.ARMOR, ARMOR_SLOTS);
 		this.protectionType = typeIn;
-		this.setRegistryName("elemental_resistance_" + typeIn.typeName);
 		switch(typeIn.typeName) {
 		case("fire"): 
 			super.name = "Fire Resistance";
@@ -41,7 +40,7 @@ public class ElementalResistanceEnchantment extends Enchantment{
 	 * Returns the maximum level that the enchantment can have.
 	 */
 	public int getMaxLevel() {
-		return 5;
+		return 3;
 	}
 
 	public static enum Type {

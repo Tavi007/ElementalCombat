@@ -1,7 +1,6 @@
 package Tavi007.ElementalCombat.enchantments;
 
 public class ElementalEnchantments {
-	
 	public static final ElementalWeaponEnchantment WATER_ASPECT = new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.WATER);
 	public static final ElementalWeaponEnchantment THUNDER_ASPECT = new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.THUNDER);
 	public static final ElementalWeaponEnchantment ICE_ASPECT = new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.ICE);

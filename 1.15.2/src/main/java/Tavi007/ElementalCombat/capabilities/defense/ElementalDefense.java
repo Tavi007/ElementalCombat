@@ -45,7 +45,7 @@ public class ElementalDefense implements IElementalDefense{
 			if(key.getName() == ElementalEnchantments.THUNDER_RESISTANCE.getName()) {putHighestValueIntoResistance("thunder", value);}
 		});
 		this.areEnchantmentsApplied = true;
-		}
+	}
 	
 	private void putHighestValueIntoResistance(String key, Integer newValue) {
 		if(this.resistance.get(key) == null) {resistance.put(key, newValue);}
