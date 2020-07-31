@@ -36,10 +36,10 @@ public class StartupCommon {
 	
 	@SubscribeEvent
 	public static void onIParticleTypeRegistration(RegistryEvent.Register<ParticleType<?>> iParticleTypeRegisterEvent) {
-	    iParticleTypeRegisterEvent.getRegistry().register(weaknessParticleType.setRegistryName("elementalcombat:weakness"));
-	    iParticleTypeRegisterEvent.getRegistry().register(resistanceParticleType.setRegistryName("elementalcombat:resistance"));
-	    iParticleTypeRegisterEvent.getRegistry().register(immunityParticleType.setRegistryName("elementalcombat:immunity"));
-	    iParticleTypeRegisterEvent.getRegistry().register(absorbParticleType.setRegistryName("elementalcombat:absorb"));
+	    iParticleTypeRegisterEvent.getRegistry().register(weaknessParticleType.setRegistryName("weakness"));
+	    iParticleTypeRegisterEvent.getRegistry().register(resistanceParticleType.setRegistryName("resistance"));
+	    iParticleTypeRegisterEvent.getRegistry().register(immunityParticleType.setRegistryName("immunity"));
+	    iParticleTypeRegisterEvent.getRegistry().register(absorbParticleType.setRegistryName("absorption"));
 	    
 	    ElementalCombat.LOGGER.info("ElementalCombat particles registered.");
 	}
