@@ -11,11 +11,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class StartupClientOnly {
 	
-	private void onClientSetupEvent(final FMLClientSetupEvent event)
+	@SubscribeEvent
+	public static void onClientSetupEvent(final FMLClientSetupEvent event)
 	{
 		ElementalCombat.LOGGER.info("clientRegistries method registered.");	
 	}
 	
+	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onParticleFactoryRegistration(ParticleFactoryRegisterEvent event) {
 		// beware - there are two registerFactory methods with different signatures.

@@ -1,18 +1,15 @@
 {
-	"attack":[
-		{
-			"name": "water",
-			"value": 1
-		}
-	],
+	"attack":
+	{
+		"water": 1
+	},
 
-	"weakness": [
-	],
+	"weakness": {},
 	
-	"resistance": [
-		"ice",
-		"water"
-	],
+	"resistance": {
+		"ice":1,
+		"water":1
+	},
 	
 	"immunity": [
 	],

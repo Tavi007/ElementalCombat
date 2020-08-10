@@ -9,7 +9,6 @@ import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.world.ClientWorld;
 
 public class ResistanceParticle extends SpriteTexturedParticle{

@@ -9,13 +9,12 @@ version = "0.1" #mandatory
 displayName = "Elemental Combat" #mandatory
 #updateJSONURL = "http://myurl.me/" #optional
 #displayURL = "http://example.com/" #optional
-#logoFile = "elementalCombatLogo.png" #optional. A file name (in the root of the mod JAR) containing a logo for display
-credits = "Thanks goes to Harry Talks and TurtyWurty modding tutorial on YouTube." #optional
+issueTrackerURL="https://github.com/Tavi007/ElementalCombat/issues" #optional
+logoFile = "Icon.png" #optional. A file name (in the root of the mod JAR) containing a logo for display
+credits = "Thanks goes to the Forge Forum" #optional
 authors = "Tavi007" #optional
 
-description='''
-I have to do this later. lol
-'''
+description= "This mod enhances the combat system by adding elemental attack and defense properties to mobs and players. While these properties are usually final for mobs, the player can choose his elemental properties by equipping armor and attacking with the right weapon. This mod also provides an API for other mods to interact with. "
 
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.elementalcombat]] #optional

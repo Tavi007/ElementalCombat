@@ -1,21 +1,19 @@
 {
-	"attack":[
-		{
-			"name": "unholy",
-			"value": 1
-		}
-	],
+	"attack":
+	{
+		"unholy": 1
+	},
 
-	"weakness": [
-		"holy"
-	],
+	"weakness": {
+		"holy":1
+	},
 	
-	"resistance": [
-		"fire",
-		"ice",
-		"water",
-		"thunder"
-	],
+	"resistance": {
+		"fire":1,
+		"ice":1,
+		"water":1,
+		"thunder":1
+	},
 	
 	"immunity": [
 	],

@@ -12,7 +12,6 @@ public class ResistanceParticleType extends ParticleType<ResistanceParticleData>
 		super(ALWAYS_SHOW_REGARDLESS_OF_DISTANCE_FROM_PLAYER, ResistanceParticleData.DESERIALIZER);
 	}
 
-	// was missing from the example? maybe a 1.16 difference?
 	@Override
 	public Codec<ResistanceParticleData> func_230522_e_() {
 		// TODO Auto-generated method stub

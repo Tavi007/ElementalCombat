@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.loading;
 
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.util.ResourceLocation;
@@ -11,13 +11,13 @@ public class GeneralData
 	   public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
 	   public static final GeneralData EMPTY = new GeneralData();
 	   
-	   private final Set<String> weakness;
-	   private final Set<String> resistance;
-	   private final Set<String> immunity;
-	   private final Set<String> absorb;
-	   private final Set<AttackFormat> attack;
+	   private final HashMap<String, Integer> weakness;
+	   private final HashMap<String, Integer> resistance;
+	   private final HashSet<String> immunity;
+	   private final HashSet<String> absorb;
+	   private final HashMap<String, Integer> attack;
 	   
-	   public GeneralData(Set<String> weak, Set<String> resi, Set<String> immunity, Set<String> abso, Set<AttackFormat> atck)
+	   public GeneralData(HashMap<String, Integer> weak, HashMap<String, Integer> resi, HashSet<String> immunity, HashSet<String> abso, HashMap<String, Integer> atck)
 	   {
 		   this.weakness = weak;
 		   this.resistance = resi;
@@ -28,35 +28,35 @@ public class GeneralData
 	   
 	   public GeneralData()
 	   {
-		   this.weakness = new HashSet<String>();
-		   this.resistance = new HashSet<String>();
+		   this.weakness = new HashMap<String, Integer>();
+		   this.resistance = new HashMap<String, Integer>();
 		   this.immunity = new HashSet<String>();
 		   this.absorb = new HashSet<String>();
-		   this.attack = new HashSet<AttackFormat>();
+		   this.attack = new HashMap<String, Integer>();
 		   
 	   }
 	   
-	   public Set<String> getWeaknessSet()
+	   public HashMap<String, Integer> getWeaknessMap()
 	   {
 		   return this.weakness;
 	   }
 	   
-	   public Set<String> getResistanceSet()
+	   public HashMap<String, Integer> getResistanceMap()
 	   {
 		   return this.resistance;
 	   }
 	   
-	   public Set<String> getImmunitySet()
+	   public HashSet<String> getImmunitySet()
 	   {
 		   return this.immunity;
 	   }
 	   
-	   public Set<String> getAbsorbSet()
+	   public HashSet<String> getAbsorbSet()
 	   {
 		   return this.absorb;
 	   }
 	   
-	   public Set<AttackFormat> getAttackSet()
+	   public HashMap<String, Integer> getAttackMap()
 	   {
 		   return this.attack;
 	   }

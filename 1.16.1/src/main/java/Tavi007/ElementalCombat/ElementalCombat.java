@@ -27,7 +27,7 @@ public class ElementalCombat
 		//register everything
 		MOD_EVENT_BUS.register(StartupCommon.class);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> ElementalCombat::registerClientOnlyEvents);
-		
+        
 		instance = this;
         MinecraftForge.EVENT_BUS.register(this);
 	}
@@ -35,5 +35,4 @@ public class ElementalCombat
 	public static void registerClientOnlyEvents() {
 		MOD_EVENT_BUS.register(StartupClientOnly.class);
 	}
-	
 }

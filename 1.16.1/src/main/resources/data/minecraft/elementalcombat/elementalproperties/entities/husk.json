@@ -1,17 +1,14 @@
 {
-	"attack":[
-		{
-			"name": "fire",
-			"value": 1
-		}
-	],
+	"attack":
+	{
+		"fire": 1
+	},
 
-	"weakness": [
-	],
+	"weakness": {},
 	
-	"resistance": [
-		"fire"
-	],
+	"resistance": {
+		"fire":1
+	},
 	
 	"immunity": [
 	],

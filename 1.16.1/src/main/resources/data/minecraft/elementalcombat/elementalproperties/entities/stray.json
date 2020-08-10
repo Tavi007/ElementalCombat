@@ -1,18 +1,16 @@
 {
-	"attack":[
-		{
-			"name": "ice",
-			"value": 1
-		}
-	],
+	"attack":
+	{
+		"ice": 1
+	},
 
-	"weakness": [
-		"fire"
-	],
+	"weakness": {
+		"fire":1
+	},
 	
-	"resistance": [
-		"ice"
-	],
+	"resistance": {
+		"ice":1
+	},
 	
 	"immunity": [
 	],

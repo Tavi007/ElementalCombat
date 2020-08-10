@@ -1,16 +1,16 @@
 {
-	"attack":[
-	],
+	"attack":{
+	},
 
-	"weakness": [
-		"fire",
-		"ice",
-		"water",
-		"thunder"
-	],
+	"weakness": {
+		"fire":1,
+		"ice":1,
+		"water":1,
+		"thunder":1
+	},
 	
-	"resistance": [
-	],
+	"resistance": {
+	},
 	
 	"immunity": [
 		"natural"
