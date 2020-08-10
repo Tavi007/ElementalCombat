@@ -3,12 +3,15 @@ package Tavi007.ElementalCombat.capabilities.attack;
 import java.util.HashMap;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.NBTHelper;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
 import Tavi007.ElementalCombat.loading.EntityData;
 import Tavi007.ElementalCombat.loading.GeneralData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -92,10 +95,25 @@ public class ElementalAttackCapability {
 					event.addCapability(ID, createProvider(elemAtck));
 				}
 			}
+			else if(event.getObject() instanceof ProjectileEntity) {
+				ProjectileEntity entity = (ProjectileEntity) event.getObject();
+
+				if(!entity.getEntityWorld().isRemote()) {
+					Entity source = entity.func_234616_v_();
+					if(source != null && source instanceof LivingEntity) {
+						LivingEntity sourceEntity = (LivingEntity) source;
+						ElementalAttack sourceData;
+						if(sourceEntity.hasItemInSlot(EquipmentSlotType.MAINHAND)) {
+							sourceData = ElementalCombatAPI.getElementalAttackData(sourceEntity.getActiveItemStack());
+						}
+						else {
+							sourceData = ElementalCombatAPI.getElementalAttackData(sourceEntity);
+						}
+						event.addCapability(ID, createProvider(sourceData));
+					}
+				}
+			}
 		}
-		//			else if(event.getObject() instanceof ProjectileEntity) {
-		//				
-		//			}
 
 		@SubscribeEvent
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {

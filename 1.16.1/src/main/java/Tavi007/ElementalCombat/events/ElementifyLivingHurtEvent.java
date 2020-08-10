@@ -53,10 +53,10 @@ public class ElementifyLivingHurtEvent
 					elemAtckCap = ElementalCombatAPI.getElementalAttackData(livingEntitySource.getHeldItemMainhand());
 				}
 			}
-//			else if (source instanceof DamagingProjectileEntity){
-//				//projectile
-//				elemAtckCap = ElementalCombatAPI.getElementalAttackData((DamagingProjectileEntity) source);
-//			}
+			else if (source instanceof DamagingProjectileEntity){
+				//projectile
+				elemAtckCap = ElementalCombatAPI.getElementalAttackData((DamagingProjectileEntity) source);
+			}
 			else {
 				ElementalCombat.LOGGER.info("Uknown damageSource case. How did you land here?");
 			}
