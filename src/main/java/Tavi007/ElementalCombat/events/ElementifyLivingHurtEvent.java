@@ -64,6 +64,7 @@ public class ElementifyLivingHurtEvent
 		}
 		else{
 			// fill List, if Source is not an entity, but a 'natural occurrence'.
+			// maybe set data through json files? more customization this way
 			if(damageSource.isFireDamage()){
 				sourceElemAtck.put("fire",1);
 			}

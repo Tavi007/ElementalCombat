@@ -82,25 +82,22 @@ public class ElementalAttackCapability {
 		 */
 		@SubscribeEvent
 		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
-			if (event.getObject() instanceof LivingEntity) {
+			if(!event.getObject().getEntityWorld().isRemote()) {
+				if (event.getObject() instanceof LivingEntity) {
+					LivingEntity entity = (LivingEntity) event.getObject();
 
-				LivingEntity entity = (LivingEntity) event.getObject();
-
-				if(!entity.getEntityWorld().isRemote()) {
 					ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
 					EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
-
-					System.out.println("Entity: " + entity.getType().getRegistryName().getPath() + "| data: " + entityData.getAttackMap());
 					final ElementalAttack elemAtck = new ElementalAttack(entityData.getAttackMap());
 					event.addCapability(ID, createProvider(elemAtck));
 				}
-			}
-			else if(event.getObject() instanceof ProjectileEntity) {
-				ProjectileEntity entity = (ProjectileEntity) event.getObject();
+				else if(event.getObject() instanceof ProjectileEntity) {
+					ProjectileEntity entity = (ProjectileEntity) event.getObject();
 
-				if(!entity.getEntityWorld().isRemote()) {
+					//currently source is always null, cause it hasn't been set yet...
+					//maybe do it differently?
 					Entity source = entity.func_234616_v_();
-					if(source != null && source instanceof LivingEntity) {
+					if(source != null && source instanceof LivingEntity) { 
 						LivingEntity sourceEntity = (LivingEntity) source;
 						ElementalAttack sourceData;
 						if(sourceEntity.hasItemInSlot(EquipmentSlotType.MAINHAND)) {
