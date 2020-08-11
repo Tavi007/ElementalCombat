@@ -19,7 +19,8 @@ public class ElementalCombat
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	public static DataManager DATAMANAGER = new DataManager();
     public static IEventBus MOD_EVENT_BUS;
-	
+	public static final LoggerHelper LOGGERHELPER = new LoggerHelper();
+    
 	public ElementalCombat()
 	{
 		MOD_EVENT_BUS = FMLJavaModLoadingContext.get().getModEventBus();

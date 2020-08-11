@@ -73,8 +73,8 @@ public class ElementalDefenseCapability {
 		}, () -> new ElementalDefense());
 	}
 
-	public static ICapabilityProvider createProvider(final IElementalDefense atck) {
-		return new SerializableCapabilityProvider<>(ELEMENTAL_DEFENSE_CAPABILITY, DEFAULT_FACING, atck);
+	public static ICapabilityProvider createProvider(final IElementalDefense def) {
+		return new SerializableCapabilityProvider<>(ELEMENTAL_DEFENSE_CAPABILITY, DEFAULT_FACING, def);
 	}
 
 
