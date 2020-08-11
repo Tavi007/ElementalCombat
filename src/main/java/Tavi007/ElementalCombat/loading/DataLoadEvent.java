@@ -1,8 +1,5 @@
-package Tavi007.ElementalCombat.events;
+package Tavi007.ElementalCombat.loading;
 
-import Tavi007.ElementalCombat.loading.DataManager;
-import Tavi007.ElementalCombat.loading.EntityData;
-import Tavi007.ElementalCombat.loading.GeneralData;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.Event;
 

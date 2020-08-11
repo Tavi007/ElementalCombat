@@ -18,7 +18,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.events.DataLoadEvent;
 import net.minecraft.client.resources.JsonReloadListener;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
