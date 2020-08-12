@@ -91,23 +91,9 @@ public class ElementalAttackCapability {
 					final ElementalAttack elemAtck = new ElementalAttack(entityData.getAttackMap());
 					event.addCapability(ID, createProvider(elemAtck));
 				}
-				else if(event.getObject() instanceof ProjectileEntity) {
-					ProjectileEntity entity = (ProjectileEntity) event.getObject();
-
-					//currently source is always null, cause it hasn't been set yet...
-					//maybe do it differently?
-					Entity source = entity.func_234616_v_();
-					if(source != null && source instanceof LivingEntity) { 
-						LivingEntity sourceEntity = (LivingEntity) source;
-						ElementalAttack sourceData;
-						if(sourceEntity.hasItemInSlot(EquipmentSlotType.MAINHAND)) {
-							sourceData = ElementalCombatAPI.getElementalAttackData(sourceEntity.getActiveItemStack());
-						}
-						else {
-							sourceData = ElementalCombatAPI.getElementalAttackData(sourceEntity);
-						}
-						event.addCapability(ID, createProvider(sourceData));
-					}
+				else if (event.getObject() instanceof ProjectileEntity) {
+					final ElementalAttack elemAtck = new ElementalAttack();
+					event.addCapability(ID, createProvider(elemAtck));
 				}
 			}
 		}

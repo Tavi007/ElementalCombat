@@ -16,7 +16,7 @@ import Tavi007.ElementalCombat.particle.ResistanceParticleData;
 import Tavi007.ElementalCombat.particle.WeaknessParticleData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.DamagingProjectileEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
@@ -53,9 +53,9 @@ public class ElementifyLivingHurtEvent
 					elemAtckCap = ElementalCombatAPI.getElementalAttackData(livingEntitySource.getHeldItemMainhand());
 				}
 			}
-			else if (source instanceof DamagingProjectileEntity){
-				//projectile
-				elemAtckCap = ElementalCombatAPI.getElementalAttackData((DamagingProjectileEntity) source);
+			else if (source instanceof ProjectileEntity){
+				//use data from projectile
+				elemAtckCap = ElementalCombatAPI.getElementalAttackData((ProjectileEntity) source);
 			}
 			else {
 				ElementalCombat.LOGGER.info("Uknown damageSource case. How did you land here?");
