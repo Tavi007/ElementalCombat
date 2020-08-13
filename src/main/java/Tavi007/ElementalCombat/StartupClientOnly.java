@@ -1,9 +1,7 @@
 package Tavi007.ElementalCombat;
 
-import Tavi007.ElementalCombat.particle.AbsorbParticle;
-import Tavi007.ElementalCombat.particle.ImmunityParticle;
-import Tavi007.ElementalCombat.particle.ResistanceParticle;
-import Tavi007.ElementalCombat.particle.WeaknessParticle;
+import Tavi007.ElementalCombat.particle.CombatParticle;
+import Tavi007.ElementalCombat.particle.ParticleList;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,20 +18,10 @@ public class StartupClientOnly {
 	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onParticleFactoryRegistration(ParticleFactoryRegisterEvent event) {
-		// beware - there are two registerFactory methods with different signatures.
-		// If you use the wrong one it will put Minecraft into an infinite loading loop with no console errors
-		Minecraft.getInstance().particles.registerFactory(StartupCommon.weaknessParticleType, sprite -> new WeaknessParticle.Factory(sprite));
-		Minecraft.getInstance().particles.registerFactory(StartupCommon.resistanceParticleType, sprite -> new ResistanceParticle.Factory(sprite));
-		Minecraft.getInstance().particles.registerFactory(StartupCommon.immunityParticleType, sprite -> new ImmunityParticle.Factory(sprite));
-		Minecraft.getInstance().particles.registerFactory(StartupCommon.absorbParticleType, sprite -> new AbsorbParticle.Factory(sprite));
-		//  This lambda may not be obvious: its purpose is:
-		//  the registerFactory method creates an IAnimatedSprite, then passes it to the constructor of FlameParticleFactory
-
-		//  General rule of thumb:
-		// If you are creating a TextureParticle with a corresponding json to specify textures which will be stitched into the
-		//    particle texture sheet, then use the 1-parameter constructor method
-		// If you're supplying the render yourself, or using a texture from the block sheet, use the 0-parameter constructor method
-		//   (examples are MobAppearanceParticle, DiggingParticle).  See ParticleManager::registerFactories for more.
+		Minecraft.getInstance().particles.registerFactory(ParticleList.WEAKNESS_PARTICLE.get(), CombatParticle.Factory::new);
+		Minecraft.getInstance().particles.registerFactory(ParticleList.RESISTANCE_PARTICLE.get(), CombatParticle.Factory::new);
+		Minecraft.getInstance().particles.registerFactory(ParticleList.IMMUNITY_PARTICLE.get(), CombatParticle.Factory::new);
+		Minecraft.getInstance().particles.registerFactory(ParticleList.ABSORPTION_PARTICLE.get(), CombatParticle.Factory::new);
 		
 	    ElementalCombat.LOGGER.info("ElementalCombat particles factory registered.");
 	}

@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import Tavi007.ElementalCombat.loading.DataManager;
+import Tavi007.ElementalCombat.particle.ParticleList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -26,6 +27,8 @@ public class ElementalCombat
 		MOD_EVENT_BUS = FMLJavaModLoadingContext.get().getModEventBus();
 		
 		//register everything
+		ParticleList.PARTICLES.register(ElementalCombat.MOD_EVENT_BUS);
+		
 		MOD_EVENT_BUS.register(StartupCommon.class);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> ElementalCombat::registerClientOnlyEvents);
         
