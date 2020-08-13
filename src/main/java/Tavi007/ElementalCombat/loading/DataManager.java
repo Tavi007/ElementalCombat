@@ -50,7 +50,6 @@ public class DataManager extends JsonReloadListener
 
 		objectIn.forEach((rl, json) -> 
 		{
-			ElementalCombat.LOGGERHELPER.printResourceLocation(rl);
 			try (net.minecraft.resources.IResource res = resourceManagerIn.getResource(getPreparedPath(rl));)
 			{
 				//check if entity or item gets loaded
@@ -76,19 +75,6 @@ public class DataManager extends JsonReloadListener
 
 		builderItem.put(GeneralData.EMPTY_RESOURCELOCATION, new GeneralData());
 		ImmutableMap<ResourceLocation, GeneralData> immutablemapItem = builderItem.build(); //this mapping contains attack and defense data.
-
-		//validation of immutablemap missing
-		//copied from LootTable:
-		//ValidationTracker validationtracker = new ValidationTracker(LootParameterSets.GENERIC, this.field_227507_d_::func_227517_a_, immutablemap::get);
-		//immutablemap.forEach((rl, json) -> 
-		//{
-		//   func_227508_a_(validationtracker, rl, json);
-		//});
-		//validationtracker.getProblems().forEach((rl, json) -> 
-		//{
-		//   LOGGER.warn("Found validation problem in " + rl + ": " + json);
-		//});
-
 
 		this.registeredEntityData = immutablemapEntity;  
 		this.registeredItemData = immutablemapItem;  

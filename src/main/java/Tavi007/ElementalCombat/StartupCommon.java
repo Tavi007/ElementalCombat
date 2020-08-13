@@ -4,7 +4,6 @@ import Tavi007.ElementalCombat.capabilities.defense.ElementalDefenseCapability;
 import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.capabilities.attack.ElementalAttackCapability;
-import Tavi007.ElementalCombat.particle.ParticleList;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraftforge.event.RegistryEvent.Register;

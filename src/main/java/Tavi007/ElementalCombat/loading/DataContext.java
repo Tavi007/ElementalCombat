@@ -25,12 +25,6 @@ public class DataContext
         this.vanilla = "minecraft".equals(this.name.getNamespace());
     }
 
-    private void resetPoolCtx()
-    {
-        this.entryCount = 0;
-        this.entryNames.clear();
-    }
-
     public String validateEntryName(@Nullable String name)
     {
         if (name != null && !this.entryNames.contains(name))

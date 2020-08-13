@@ -154,21 +154,6 @@ public class ElementifyLivingHurtEvent
 		}
 		newDamageAmount = newDamageAmount/valueSum;
 		
-		// prints for testing
-		boolean doPrint = true;
-		if (doPrint)
-		{
-			System.out.println("\n" + 
-							   "Target: " + target.getDisplayName().getString() + "\n" +
-							   "Absorb: " + targetElemAbsorbtion + "\n" +
-							   "Immunity: " + targetElemImmunity + "\n" +
-							   "Resistance: " + targetElemResistance + "\n" +
-							   "Weakness: " + targetElemWeakness + "\n" +
-							   "DamageType: " + sourceElemAtck + "\n" +
-							   "old value: " + damageAmount + "\n" +
-							   "new value: " + newDamageAmount);
-		}
-		
 		// stop the 'hurt'-animation from firing, if no damage is dealt.
 		// not tested yet.
 		if(newDamageAmount <= 0)
