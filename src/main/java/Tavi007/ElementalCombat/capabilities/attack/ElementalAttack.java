@@ -35,10 +35,15 @@ public class ElementalAttack implements IElementalAttack{
 			
 			//currently only comparing strings.
 			//maybe change to resourceLocation later, so other mods can interact with this as well.
+			//sword
 			if(key.getName() == ElementalEnchantments.ICE_ASPECT.getName()) {putHighestValueIntoMap("ice", value);}
 			if(key.getName() == Enchantments.FIRE_ASPECT.getName()) {putHighestValueIntoMap("fire", value);}
 			if(key.getName() == ElementalEnchantments.WATER_ASPECT.getName()) {putHighestValueIntoMap("water", value);}
 			if(key.getName() == ElementalEnchantments.THUNDER_ASPECT.getName()) {putHighestValueIntoMap("thunder", value);}
+			//bow
+			if(key.getName() == Enchantments.FLAME.getName()) {putHighestValueIntoMap("fire", value);}
+			//trident
+			if(key.getName() == Enchantments.CHANNELING.getName()) {putHighestValueIntoMap("thunder", value);}
 		});
 		this.areEnchantmentsApplied = true;
 		}
