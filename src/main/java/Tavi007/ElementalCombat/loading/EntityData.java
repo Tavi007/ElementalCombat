@@ -1,7 +1,6 @@
 package Tavi007.ElementalCombat.loading;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.util.ResourceLocation;
@@ -13,9 +12,9 @@ public class EntityData extends GeneralData
 
 	   private final boolean biomeDependency; 
 	   
-	   public EntityData(HashMap<String, Integer> weak, HashMap<String, Integer> resi, HashSet<String> immunity, HashSet<String> abso, HashMap<String, Integer> atck, boolean biomeDependency)
+	   public EntityData(HashMap<String, Double> defenseStyle, HashMap<String, Double> defenseElement, String attackStyle, String attackElement, boolean biomeDependency)
 	   {
-		   super(weak, resi, immunity, abso, atck);
+		   super(defenseStyle, defenseElement, attackStyle, attackElement);
 		   this.biomeDependency = biomeDependency;
 	   }
 	   

@@ -15,6 +15,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
@@ -25,10 +26,10 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-public class ElementalAttackCapability {
+public class AttackDataCapability {
 
-	@CapabilityInject(IElementalAttack.class)
-	public static final Capability<IElementalAttack> ELEMENTAL_ATTACK_CAPABILITY = null;
+	@CapabilityInject(IAttackData.class)
+	public static final Capability<IAttackData> ELEMENTAL_ATTACK_CAPABILITY = null;
 
 	/**
 	 * The default {@link Direction} to use for this capability.
@@ -38,33 +39,37 @@ public class ElementalAttackCapability {
 	/**
 	 * The ID of this capability.
 	 */
-	public static final ResourceLocation ID = new ResourceLocation(ElementalCombat.MOD_ID, "elemental_attack");
+	public static final ResourceLocation ID = new ResourceLocation(ElementalCombat.MOD_ID, "attack_data");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IElementalAttack.class, new Capability.IStorage<IElementalAttack>() {
+		CapabilityManager.INSTANCE.register(IAttackData.class, new Capability.IStorage<IAttackData>() {
 
 			@Override
-			public INBT writeNBT(final Capability<IElementalAttack> capability, final IElementalAttack instance, final Direction side) {
+			public INBT writeNBT(final Capability<IAttackData> capability, final IAttackData instance, final Direction side) {
 
-				HashMap<String, Integer> atckMap = instance.getElementalAttack();
+				String style = instance.getStyle();
+				String element = instance.getElement();
 
 				//fill nbt with data
 				CompoundNBT nbt = new CompoundNBT();
-				nbt.put("elem_atck", NBTHelper.fromMapToNBT(atckMap));
+				nbt.put("attack_element", StringNBT.valueOf(element));
+				nbt.put("attack_style", StringNBT.valueOf(style));
 				return nbt;
 			}
 
 			@Override
-			public void readNBT(final Capability<IElementalAttack> capability, final IElementalAttack instance, final Direction side, final INBT nbt) {
+			public void readNBT(final Capability<IAttackData> capability, final IAttackData instance, final Direction side, final INBT nbt) {
 
-				CompoundNBT nbtCompound = ((CompoundNBT)nbt).getCompound("elem_atck");
+				StringNBT styleNBT = (StringNBT) ((CompoundNBT) nbt).get("attack_style");
+				StringNBT elementNBT = (StringNBT) ((CompoundNBT) nbt).get("attack_element");
 				//fill list with data
-				instance.setElementalAttack(NBTHelper.fromNBTToMap(nbtCompound));
+				instance.setStyle(styleNBT.getString());
+				instance.setElement(elementNBT.getString());
 			}
-		}, () -> new ElementalAttack());
+		}, () -> new AttackData());
 	}
 
-	public static ICapabilityProvider createProvider(final IElementalAttack atck) {
+	public static ICapabilityProvider createProvider(final IAttackData atck) {
 		return new SerializableCapabilityProvider<>(ELEMENTAL_ATTACK_CAPABILITY, DEFAULT_FACING, atck);
 	}
 
@@ -88,12 +93,12 @@ public class ElementalAttackCapability {
 
 					ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
 					EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
-					final ElementalAttack elemAtck = new ElementalAttack(entityData.getAttackMap());
-					event.addCapability(ID, createProvider(elemAtck));
+					final AttackData atck = new AttackData(entityData.getAttackStyle(), entityData.getAttackElement());
+					event.addCapability(ID, createProvider(atck));
 				}
 				else if (event.getObject() instanceof ProjectileEntity) {
-					final ElementalAttack elemAtck = new ElementalAttack();
-					event.addCapability(ID, createProvider(elemAtck));
+					final AttackData atck = new AttackData();
+					event.addCapability(ID, createProvider(atck));
 				}
 			}
 		}
@@ -104,8 +109,8 @@ public class ElementalAttackCapability {
 			ResourceLocation rl = new ResourceLocation(item.getItem().getRegistryName().getNamespace(), "elementalproperties/items/" + item.getItem().getRegistryName().getPath());
 			GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
 
-			final ElementalAttack elemAtck = new ElementalAttack(itemData.getAttackMap());
-			event.addCapability(ID, createProvider(elemAtck));
+			final AttackData atck = new AttackData(itemData.getAttackStyle(), itemData.getAttackElement());
+			event.addCapability(ID, createProvider(atck));
 		}
 	}
 }

@@ -1,9 +1,9 @@
 package Tavi007.ElementalCombat;
 
-import Tavi007.ElementalCombat.capabilities.defense.ElementalDefenseCapability;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
 import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
-import Tavi007.ElementalCombat.capabilities.attack.ElementalAttackCapability;
+import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraftforge.event.RegistryEvent.Register;
@@ -14,8 +14,8 @@ public class StartupCommon {
 	
 	@SubscribeEvent
 	public static void onCommonSetup(FMLCommonSetupEvent event){
-		ElementalAttackCapability.register();
-		ElementalDefenseCapability.register();
+		AttackDataCapability.register();
+		DefenseDataCapability.register();
 		ElementalCombat.LOGGER.info("setup method registered.");
     }
 	

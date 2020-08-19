@@ -1,7 +1,6 @@
 package Tavi007.ElementalCombat.loading;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.util.ResourceLocation;
@@ -10,54 +9,46 @@ public class GeneralData
 {
 	   public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
 	   public static final GeneralData EMPTY = new GeneralData();
+
+	   private final HashMap<String, Double> defense_style;
+	   private final HashMap<String, Double> defense_element;
+
+	   private final String attack_style;
+	   private final String attack_element;
 	   
-	   private final HashMap<String, Integer> weakness;
-	   private final HashMap<String, Integer> resistance;
-	   private final HashSet<String> immunity;
-	   private final HashSet<String> absorb;
-	   private final HashMap<String, Integer> attack;
-	   
-	   public GeneralData(HashMap<String, Integer> weak, HashMap<String, Integer> resi, HashSet<String> immunity, HashSet<String> abso, HashMap<String, Integer> atck)
+	   public GeneralData(HashMap<String, Double> defenseStyle, HashMap<String, Double> defenseElement, String attackStyle, String attackElement)
 	   {
-		   this.weakness = weak;
-		   this.resistance = resi;
-		   this.immunity = immunity;
-		   this.absorb = abso;
-		   this.attack = atck;
+		   this.defense_style = defenseStyle;
+		   this.defense_element = defenseElement;
+		   this.attack_style = attackStyle;
+		   this.attack_element = attackElement;
 	   }
 	   
 	   public GeneralData()
 	   {
-		   this.weakness = new HashMap<String, Integer>();
-		   this.resistance = new HashMap<String, Integer>();
-		   this.immunity = new HashSet<String>();
-		   this.absorb = new HashSet<String>();
-		   this.attack = new HashMap<String, Integer>();
-		   
+		   this.defense_style = new HashMap<String, Double>();
+		   this.defense_element = new HashMap<String, Double>();
+		   this.attack_style = "";
+		   this.attack_element = "";
 	   }
 	   
-	   public HashMap<String, Integer> getWeaknessMap()
+	   public HashMap<String, Double> getDefenseStyle()
 	   {
-		   return this.weakness;
+		   return this.defense_style;
 	   }
 	   
-	   public HashMap<String, Integer> getResistanceMap()
+	   public HashMap<String, Double> getDefenseElement()
 	   {
-		   return this.resistance;
+		   return this.defense_element;
 	   }
 	   
-	   public HashSet<String> getImmunitySet()
+	   public String getAttackStyle()
 	   {
-		   return this.immunity;
+		   return this.attack_style;
 	   }
 	   
-	   public HashSet<String> getAbsorbSet()
+	   public String getAttackElement()
 	   {
-		   return this.absorb;
-	   }
-	   
-	   public HashMap<String, Integer> getAttackMap()
-	   {
-		   return this.attack;
+		   return this.attack_element;
 	   }
 }

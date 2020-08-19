@@ -1,24 +1,16 @@
 {
-	"attack":
-	{
-		"fire": 1,
-		"ice": 1
-	},
-
-	"weakness": {
-		"fire":1
+	"attack_style":"punch",
+	"attack_element":"fire",
+	
+	"defense_stlye":{
+		"punch":0.9,
+		"slash":1.5
 	},
 	
-	"resistance": {
-		"ice":1,
-		"water":1
+	"defense_element":{
+		"fire":1.2,
+		"ice":0.3
 	},
-	
-	"immunity": [
-	],
-	
-	"absorb": [
-	],
 	
 	"biomeDependency":true
 }

@@ -50,6 +50,9 @@ public class DataManager extends JsonReloadListener
 
 		objectIn.forEach((rl, json) -> 
 		{
+			System.out.println(rl.getPath().toString());
+			
+			
 			try (net.minecraft.resources.IResource res = resourceManagerIn.getResource(getPreparedPath(rl));)
 			{
 				//check if entity or item gets loaded

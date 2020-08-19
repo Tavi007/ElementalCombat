@@ -27,10 +27,10 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-public class ElementalDefenseCapability {
+public class DefenseDataCapability {
 
-	@CapabilityInject(IElementalDefense.class)
-	public static final Capability<IElementalDefense> ELEMENTAL_DEFENSE_CAPABILITY = null;
+	@CapabilityInject(IDefenseData.class)
+	public static final Capability<IDefenseData> ELEMENTAL_DEFENSE_CAPABILITY = null;
 
 	/**
 	 * The default {@link Direction} to use for this capability.
@@ -43,37 +43,33 @@ public class ElementalDefenseCapability {
 	public static final ResourceLocation ID = new ResourceLocation(ElementalCombat.MOD_ID, "elemental_defense");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IElementalDefense.class, new Capability.IStorage<IElementalDefense>() {
+		CapabilityManager.INSTANCE.register(IDefenseData.class, new Capability.IStorage<IDefenseData>() {
 
 			@Override
-			public INBT writeNBT(final Capability<IElementalDefense> capability, final IElementalDefense instance, final Direction side) {
+			public INBT writeNBT(final Capability<IDefenseData> capability, final IDefenseData instance, final Direction side) {
 
 				//fill nbt with data
 				CompoundNBT nbt = new CompoundNBT();
-				nbt.put("elem_weak", NBTHelper.fromMapToNBT(instance.getElementalWeakness()));
-				nbt.put("elem_resi", NBTHelper.fromMapToNBT(instance.getElementalResistance()));
-				nbt.put("elem_immu", NBTHelper.fromSetToNBT(instance.getElementalImmunity()));
-				nbt.put("elem_abso", NBTHelper.fromSetToNBT(instance.getElementalAbsorption()));
+				nbt.put("defense_style", NBTHelper.fromMapToNBT(instance.getStyleScaling()));
+				nbt.put("defense_element", NBTHelper.fromMapToNBT(instance.getElementScaling()));
 				return nbt;
 			}
 
 			@Override
-			public void readNBT(final Capability<IElementalDefense> capability, final IElementalDefense instance, final Direction side, final INBT nbt) {
+			public void readNBT(final Capability<IDefenseData> capability, final IDefenseData instance, final Direction side, final INBT nbt) {
 
 				CompoundNBT nbtCompound = (CompoundNBT)nbt;
 
 				//fill list with data
-				instance.setElementalWeakness(NBTHelper.fromNBTToMap(nbtCompound.getCompound("elem_weak")));
-				instance.setElementalResistance(NBTHelper.fromNBTToMap(nbtCompound.getCompound("elem_resi")));
-				instance.setElementalImmunity(NBTHelper.fromNBTToSet(nbtCompound.getList("elem_immu", Constants.NBT.TAG_STRING ))); //List of strings
-				instance.setElementalAbsorption(NBTHelper.fromNBTToSet(nbtCompound.getList("elem_abso", Constants.NBT.TAG_STRING )));
+				instance.setStyleScaling(NBTHelper.fromNBTToMap(nbtCompound.getCompound("defense_style")));
+				instance.setElementScaling(NBTHelper.fromNBTToMap(nbtCompound.getCompound("defense_element")));
 			}
 
 
-		}, () -> new ElementalDefense());
+		}, () -> new DefenseData());
 	}
 
-	public static ICapabilityProvider createProvider(final IElementalDefense def) {
+	public static ICapabilityProvider createProvider(final IDefenseData def) {
 		return new SerializableCapabilityProvider<>(ELEMENTAL_DEFENSE_CAPABILITY, DEFAULT_FACING, def);
 	}
 
@@ -98,11 +94,8 @@ public class ElementalDefenseCapability {
 					ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
 					EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
 
-					HashMap<String, Integer> weaknessMap = entityData.getWeaknessMap();
-					HashMap<String, Integer> resistanceMap = entityData.getResistanceMap();
-					HashSet<String> immunitySet = entityData.getImmunitySet();
-					HashSet<String> absorbSet = entityData.getAbsorbSet();
-
+					HashMap<String, Double> styleMap = entityData.getDefenseStyle();
+					HashMap<String, Double> elementMap = entityData.getDefenseElement();
 					// player spawn should be biome independent
 					if(entityData.getBiomeDependency()) 
 					{
@@ -120,12 +113,12 @@ public class ElementalDefenseCapability {
 							biomeProperties = "water";
 						}
 						if(biomeProperties != null){
-							resistanceMap.put(biomeProperties,1);
+							elementMap.put(biomeProperties, 0.5);
 						}
 					}
 
-					final ElementalDefense elemDef = new ElementalDefense(weaknessMap, resistanceMap, immunitySet, absorbSet);
-					event.addCapability(ID, createProvider(elemDef));
+					final DefenseData defData = new DefenseData(styleMap, elementMap);
+					event.addCapability(ID, createProvider(defData));
 				}
 			}
 		}
@@ -137,13 +130,11 @@ public class ElementalDefenseCapability {
 			GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
 			
 			//default values
-			HashMap<String, Integer> weaknessSet = itemData.getWeaknessMap();
-			HashMap<String, Integer> resistanceSet = itemData.getResistanceMap();
-			HashSet<String> immunitySet = itemData.getImmunitySet();
-			HashSet<String> absorbSet = itemData.getAbsorbSet();
+			HashMap<String, Double> styleMap = itemData.getDefenseStyle();
+			HashMap<String, Double> elementMap = itemData.getDefenseElement();
 
-			final ElementalDefense elemDef = new ElementalDefense(weaknessSet, resistanceSet, immunitySet, absorbSet);
-			event.addCapability(ID, createProvider(elemDef));
+			final DefenseData defData = new DefenseData(styleMap, elementMap);
+			event.addCapability(ID, createProvider(defData));
 		}
 	}
 }

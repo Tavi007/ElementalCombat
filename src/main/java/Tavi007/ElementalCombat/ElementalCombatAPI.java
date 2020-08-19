@@ -1,9 +1,9 @@
 package Tavi007.ElementalCombat;
 
-import Tavi007.ElementalCombat.capabilities.attack.ElementalAttack;
-import Tavi007.ElementalCombat.capabilities.attack.ElementalAttackCapability;
-import Tavi007.ElementalCombat.capabilities.defense.ElementalDefense;
-import Tavi007.ElementalCombat.capabilities.defense.ElementalDefenseCapability;
+import Tavi007.ElementalCombat.capabilities.attack.AttackData;
+import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -13,30 +13,30 @@ public class ElementalCombatAPI
 {
 
 	//LivingEntity
-	public static ElementalAttack getElementalAttackData(LivingEntity entity){
-		return (ElementalAttack) entity.getCapability(ElementalAttackCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new ElementalAttack());
+	public static AttackData getElementalAttackData(LivingEntity entity){
+		return (AttackData) entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
 	}
 
-	public static ElementalDefense getElementalDefenseData(LivingEntity entity){
-		return (ElementalDefense) entity.getCapability(ElementalDefenseCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new ElementalDefense());
+	public static DefenseData getElementalDefenseData(LivingEntity entity){
+		return (DefenseData) entity.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
 	}
 
 	//ItemStack
-	public static ElementalAttack getElementalAttackData(ItemStack item){
-		ElementalAttack elemAttack = (ElementalAttack) item.getCapability(ElementalAttackCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new ElementalAttack());
-		if(!elemAttack.areEnchantmentsApplied()) {elemAttack.applyEnchantments(EnchantmentHelper.getEnchantments(item));}
-		return elemAttack;
+	public static AttackData getElementalAttackData(ItemStack item){
+		AttackData attackData = (AttackData) item.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+		if(!attackData.areEnchantmentsApplied()) {attackData.applyEnchantments(EnchantmentHelper.getEnchantments(item));}
+		return attackData;
 	}
 
-	public static ElementalDefense getElementalDefenseData(ItemStack item){
-		ElementalDefense elemDefense = (ElementalDefense) item.getCapability(ElementalDefenseCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new ElementalDefense());
-		if(!elemDefense.areEnchantmentsApplied()) {elemDefense.applyEnchantments(EnchantmentHelper.getEnchantments(item));}
-		return elemDefense;
+	public static DefenseData getElementalDefenseData(ItemStack item){
+		DefenseData defenseData = (DefenseData) item.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
+		if(!defenseData.areEnchantmentsApplied()) {defenseData.applyEnchantments(EnchantmentHelper.getEnchantments(item));}
+		return defenseData;
 	}
 
 	//Projectiles
 	//implement with minecraft 1.16
-	public static ElementalAttack getElementalAttackData(ProjectileEntity entity){
-		return (ElementalAttack) entity.getCapability(ElementalAttackCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new ElementalAttack());
+	public static AttackData getElementalAttackData(ProjectileEntity entity){
+		return (AttackData) entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
 	}
 }

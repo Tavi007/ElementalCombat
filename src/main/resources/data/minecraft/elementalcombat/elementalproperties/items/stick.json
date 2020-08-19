@@ -1,17 +1,10 @@
 {
-	"attack":
-	{
-		"fire": 1,
-		"water": 1
+	"attack_style":"slash",
+	"attack_element":"wood",
+	
+	"defense_stlye":{
 	},
-
-	"weakness": {},
 	
-	"resistance": {},
-	
-	"absorb": [
-	],
-	
-	"immunity": [
-	]
+	"defense_element":{
+	},
 }

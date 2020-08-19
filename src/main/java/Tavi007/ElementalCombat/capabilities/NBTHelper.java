@@ -11,6 +11,7 @@ import net.minecraft.nbt.StringNBT;
 
 public class NBTHelper {
 
+	/*
 	public static HashSet<String> fromNBTToSet(ListNBT nbt)
 	{
 		HashSet<String> set = new HashSet<String>();
@@ -36,29 +37,30 @@ public class NBTHelper {
 		}
 		return nbt;
 	}
+	*/
 	
-	public static HashMap<String, Integer> fromNBTToMap(CompoundNBT nbtCompound) {
+	public static HashMap<String, Double> fromNBTToMap(CompoundNBT nbtCompound) {
 
-		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		HashMap<String, Double> map = new HashMap<String, Double>();
 		if(nbtCompound!=null)
 		{
 			Set<String> keySet = nbtCompound.keySet();
 			for (String key : keySet)
 			{ 
-				int value = nbtCompound.getInt(key);
+				Double value = nbtCompound.getDouble(key);
 				map.put(key, value);
 			}
 		}
 		return map;
 	}
 	
-	public static CompoundNBT fromMapToNBT(HashMap<String, Integer> map) {
+	public static CompoundNBT fromMapToNBT(HashMap<String, Double> map) {
 		CompoundNBT nbt = new CompoundNBT();
 		if(map != null)
 		{
 			map.forEach((elemString, value) ->
 			{
-				nbt.putInt(elemString, value);
+				nbt.putDouble(elemString, value);
 			});
 		}
 		return nbt; 
