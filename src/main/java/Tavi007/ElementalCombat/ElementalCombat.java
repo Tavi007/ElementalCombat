@@ -3,7 +3,7 @@ package Tavi007.ElementalCombat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import Tavi007.ElementalCombat.loading.DataManager;
+import Tavi007.ElementalCombat.loading.CombatPropertiesManager;
 import Tavi007.ElementalCombat.particle.ParticleList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -18,7 +18,7 @@ public class ElementalCombat
 	public static ElementalCombat instance;
 	public static final String MOD_ID = "elementalcombat";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
-	public static DataManager DATAMANAGER = new DataManager();
+	public static CombatPropertiesManager COMBAT_PROPERTIES_MANGER = new CombatPropertiesManager();
     public static IEventBus MOD_EVENT_BUS;
     
 	@SuppressWarnings("deprecation")

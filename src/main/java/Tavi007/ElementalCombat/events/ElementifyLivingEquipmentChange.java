@@ -6,7 +6,7 @@ import java.util.HashSet;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import Tavi007.ElementalCombat.loading.EntityData;
+import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
@@ -28,14 +28,14 @@ public class ElementifyLivingEquipmentChange
 
 			// get default values
 			ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
-			EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
+			EntityCombatProperties entityData = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rl);
 			HashMap<String, Double> defenseStyle = entityData.getDefenseStyle();
 			HashMap<String, Double> defenseElement = entityData.getDefenseElement();
 			// get values from armor
 			// I should add cross-mod interaction with baubles later
 			entity.getArmorInventoryList().forEach((item) ->
 			{
-				DefenseData defCapItem = ElementalCombatAPI.getElementalDefenseData(item);
+				DefenseData defCapItem = ElementalCombatAPI.getDefenseData(item);
 				HashMap<String, Double> defenseStyleItem = defCapItem.getStyleScaling();
 				HashMap<String, Double> defenseElementItem = defCapItem.getElementScaling();
 
@@ -44,7 +44,7 @@ public class ElementifyLivingEquipmentChange
 			});
 
 			// set values
-			DefenseData defCapEntity = ElementalCombatAPI.getElementalDefenseData(entity);
+			DefenseData defCapEntity = ElementalCombatAPI.getDefenseData(entity);
 			defCapEntity.setStyleScaling(defenseStyle);
 			defCapEntity.setElementScaling(defenseElement);
 		}

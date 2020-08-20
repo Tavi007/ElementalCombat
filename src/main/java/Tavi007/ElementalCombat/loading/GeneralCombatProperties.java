@@ -5,10 +5,10 @@ import java.util.HashMap;
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.util.ResourceLocation;
 
-public class GeneralData 
+public class GeneralCombatProperties 
 {
 	   public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
-	   public static final GeneralData EMPTY = new GeneralData();
+	   public static final GeneralCombatProperties EMPTY = new GeneralCombatProperties();
 
 	   private final HashMap<String, Double> defense_style;
 	   private final HashMap<String, Double> defense_element;
@@ -16,7 +16,7 @@ public class GeneralData
 	   private final String attack_style;
 	   private final String attack_element;
 	   
-	   public GeneralData(HashMap<String, Double> defenseStyle, HashMap<String, Double> defenseElement, String attackStyle, String attackElement)
+	   public GeneralCombatProperties(HashMap<String, Double> defenseStyle, HashMap<String, Double> defenseElement, String attackStyle, String attackElement)
 	   {
 		   this.defense_style = defenseStyle;
 		   this.defense_element = defenseElement;
@@ -24,7 +24,7 @@ public class GeneralData
 		   this.attack_element = attackElement;
 	   }
 	   
-	   public GeneralData()
+	   public GeneralCombatProperties()
 	   {
 		   this.defense_style = new HashMap<String, Double>();
 		   this.defense_element = new HashMap<String, Double>();

@@ -1,17 +1,12 @@
 package Tavi007.ElementalCombat.capabilities.attack;
 
-import java.util.HashMap;
-
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.ElementalCombatAPI;
-import Tavi007.ElementalCombat.capabilities.NBTHelper;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
-import Tavi007.ElementalCombat.loading.EntityData;
-import Tavi007.ElementalCombat.loading.GeneralData;
+import Tavi007.ElementalCombat.loading.EntityCombatProperties;
+import Tavi007.ElementalCombat.loading.GeneralCombatProperties;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -91,9 +86,9 @@ public class AttackDataCapability {
 				if (event.getObject() instanceof LivingEntity) {
 					LivingEntity entity = (LivingEntity) event.getObject();
 
-					ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
-					EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
-					final AttackData atck = new AttackData(entityData.getAttackStyle(), entityData.getAttackElement());
+					ResourceLocation rl = new ResourceLocation(ElementalCombat.MOD_ID, entity.getType().getRegistryName().getNamespace() + "/entities/" + entity.getType().getRegistryName().getPath());
+					EntityCombatProperties entityProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rl);
+					final AttackData atck = new AttackData(entityProperties.getAttackStyle(), entityProperties.getAttackElement());
 					event.addCapability(ID, createProvider(atck));
 				}
 				else if (event.getObject() instanceof ProjectileEntity) {
@@ -106,10 +101,10 @@ public class AttackDataCapability {
 		@SubscribeEvent
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
 			ItemStack item = event.getObject();
-			ResourceLocation rl = new ResourceLocation(item.getItem().getRegistryName().getNamespace(), "elementalproperties/items/" + item.getItem().getRegistryName().getPath());
-			GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
+			ResourceLocation rl = new ResourceLocation(ElementalCombat.MOD_ID, item.getItem().getRegistryName().getNamespace() + "/items/" + item.getItem().getRegistryName().getPath());
+			GeneralCombatProperties itemProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rl);
 
-			final AttackData atck = new AttackData(itemData.getAttackStyle(), itemData.getAttackElement());
+			final AttackData atck = new AttackData(itemProperties.getAttackStyle(), itemProperties.getAttackElement());
 			event.addCapability(ID, createProvider(atck));
 		}
 	}

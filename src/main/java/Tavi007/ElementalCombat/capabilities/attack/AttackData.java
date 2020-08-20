@@ -8,8 +8,8 @@ import net.minecraft.enchantment.Enchantments;
 
 public class AttackData implements IAttackData{
 
-	private String style = "";
-	private String element = "";
+	private String style = "basic";
+	private String element = "natural";
 	private boolean areEnchantmentsApplied = false;
 	
 	public AttackData() {

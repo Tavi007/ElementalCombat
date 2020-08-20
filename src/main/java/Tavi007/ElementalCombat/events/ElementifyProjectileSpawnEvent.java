@@ -33,14 +33,14 @@ public class ElementifyProjectileSpawnEvent {
 						AttackData sourceData;
 						if(sourceEntity.hasItemInSlot(EquipmentSlotType.MAINHAND)){
 							ItemStack item = sourceEntity.getActiveItemStack();
-							sourceData = ElementalCombatAPI.getElementalAttackData(item);
+							sourceData = ElementalCombatAPI.getAttackData(item);
 						}
 						else{
-							sourceData = ElementalCombatAPI.getElementalAttackData(sourceEntity);
+							sourceData = ElementalCombatAPI.getAttackData(sourceEntity);
 						}
 						
 						//copy elemental attack capability
-						AttackData projectileData = ElementalCombatAPI.getElementalAttackData(projectile);
+						AttackData projectileData = ElementalCombatAPI.getAttackData(projectile);
 						projectileData.setElement(sourceData.getElement());
 						projectileData.setStyle("projectile");
 					}

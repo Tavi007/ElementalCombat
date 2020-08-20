@@ -5,20 +5,20 @@ import java.util.HashMap;
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.util.ResourceLocation;
 
-public class EntityData extends GeneralData
+public class EntityCombatProperties extends GeneralCombatProperties
 {
 	   public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
-	   public static final EntityData EMPTY = new EntityData();
+	   public static final EntityCombatProperties EMPTY = new EntityCombatProperties();
 
 	   private final boolean biomeDependency; 
 	   
-	   public EntityData(HashMap<String, Double> defenseStyle, HashMap<String, Double> defenseElement, String attackStyle, String attackElement, boolean biomeDependency)
+	   public EntityCombatProperties(HashMap<String, Double> defenseStyle, HashMap<String, Double> defenseElement, String attackStyle, String attackElement, boolean biomeDependency)
 	   {
 		   super(defenseStyle, defenseElement, attackStyle, attackElement);
 		   this.biomeDependency = biomeDependency;
 	   }
 	   
-	   public EntityData()
+	   public EntityCombatProperties()
 	   {
 		   super();
 		   this.biomeDependency = false;

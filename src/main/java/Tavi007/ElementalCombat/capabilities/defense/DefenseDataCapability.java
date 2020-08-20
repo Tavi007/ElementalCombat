@@ -1,13 +1,12 @@
 package Tavi007.ElementalCombat.capabilities.defense;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.NBTHelper;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
-import Tavi007.ElementalCombat.loading.EntityData;
-import Tavi007.ElementalCombat.loading.GeneralData;
+import Tavi007.ElementalCombat.loading.EntityCombatProperties;
+import Tavi007.ElementalCombat.loading.GeneralCombatProperties;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -21,7 +20,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -91,13 +89,13 @@ public class DefenseDataCapability {
 
 				LivingEntity entity = (LivingEntity) event.getObject();
 				if(!entity.getEntityWorld().isRemote()) {
-					ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
-					EntityData entityData = ElementalCombat.DATAMANAGER.getEntityDataFromLocation(rl);
+					ResourceLocation rl = new ResourceLocation(ElementalCombat.MOD_ID, entity.getType().getRegistryName().getNamespace() + "/entities/" + entity.getType().getRegistryName().getPath());
+					EntityCombatProperties entityProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rl);
 
-					HashMap<String, Double> styleMap = entityData.getDefenseStyle();
-					HashMap<String, Double> elementMap = entityData.getDefenseElement();
+					HashMap<String, Double> styleMap = entityProperties.getDefenseStyle();
+					HashMap<String, Double> elementMap = entityProperties.getDefenseElement();
 					// player spawn should be biome independent
-					if(entityData.getBiomeDependency()) 
+					if(entityProperties.getBiomeDependency()) 
 					{
 						String biomeProperties = null;
 						BlockPos blockPos = new BlockPos(entity.getPositionVec());
@@ -126,12 +124,12 @@ public class DefenseDataCapability {
 		@SubscribeEvent(priority = EventPriority.LOWEST)
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
 			ItemStack item = event.getObject();
-			ResourceLocation rl = new ResourceLocation(item.getItem().getRegistryName().getNamespace(), "elementalproperties/items/" + item.getItem().getRegistryName().getPath());
-			GeneralData itemData = ElementalCombat.DATAMANAGER.getItemDataFromLocation(rl);
+			ResourceLocation rl = new ResourceLocation(ElementalCombat.MOD_ID, item.getItem().getRegistryName().getNamespace() + "/items/" + item.getItem().getRegistryName().getPath());
+			GeneralCombatProperties itemProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rl);
 			
 			//default values
-			HashMap<String, Double> styleMap = itemData.getDefenseStyle();
-			HashMap<String, Double> elementMap = itemData.getDefenseElement();
+			HashMap<String, Double> styleMap = itemProperties.getDefenseStyle();
+			HashMap<String, Double> elementMap = itemProperties.getDefenseElement();
 
 			final DefenseData defData = new DefenseData(styleMap, elementMap);
 			event.addCapability(ID, createProvider(defData));

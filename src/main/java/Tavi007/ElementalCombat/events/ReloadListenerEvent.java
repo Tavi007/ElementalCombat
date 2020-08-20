@@ -12,7 +12,7 @@ public class ReloadListenerEvent {
 	@SubscribeEvent
 	public static void addReloadListenerEvent(AddReloadListenerEvent event)
 	{
-		event.addListener(ElementalCombat.DATAMANAGER);
+		event.addListener(ElementalCombat.COMBAT_PROPERTIES_MANGER);
 		ElementalCombat.LOGGER.info("Elemental data loaded.");	
 	}
 }

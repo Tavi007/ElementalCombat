@@ -36,8 +36,8 @@ public class ElementifyLivingHurtEvent
 		
 		// Get elemental data from attack
 		// check if source is an entity
-		String sourceElement = "natural";
-		String sourceStyle = "basic";
+		String sourceElement = "";
+		String sourceStyle = "";
 		
 		Entity source = damageSource.getImmediateSource();
 		if(source!=null) {
@@ -47,16 +47,16 @@ public class ElementifyLivingHurtEvent
 				LivingEntity livingEntitySource = (LivingEntity) source;
 				if(livingEntitySource.getHeldItemMainhand().isEmpty()){
 					//use data from livingEntity
-					atckCap = ElementalCombatAPI.getElementalAttackData(livingEntitySource);
+					atckCap = ElementalCombatAPI.getAttackData(livingEntitySource);
 				}
 				else{
 					//use data from item
-					atckCap = ElementalCombatAPI.getElementalAttackData(livingEntitySource.getHeldItemMainhand());
+					atckCap = ElementalCombatAPI.getAttackData(livingEntitySource.getHeldItemMainhand());
 				}
 			}
 			else if (source instanceof ProjectileEntity){
 				//use data from projectile
-				atckCap = ElementalCombatAPI.getElementalAttackData((ProjectileEntity) source);
+				atckCap = ElementalCombatAPI.getAttackData((ProjectileEntity) source);
 			}
 			else {
 				ElementalCombat.LOGGER.info("Uknown damageSource case. How did you land here?");
@@ -95,7 +95,7 @@ public class ElementifyLivingHurtEvent
 		// compute new Damage value  
 		float damageAmount = event.getAmount();
 		// Get the elemental combat data from target
-		DefenseData defCap = ElementalCombatAPI.getElementalDefenseData(target);
+		DefenseData defCap = ElementalCombatAPI.getDefenseData(target);
 		Double defenseStyleScaling = defCap.getStyleScaling().get(sourceStyle);
 		Double defenseElementScaling = defCap.getElementScaling().get(sourceElement);
 		

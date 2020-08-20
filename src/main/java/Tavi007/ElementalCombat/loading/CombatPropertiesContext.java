@@ -9,7 +9,7 @@ import com.google.gson.JsonParseException;
 
 import net.minecraft.util.ResourceLocation;
 
-public class DataContext 
+public class CombatPropertiesContext 
 {
     public final ResourceLocation name;
     private final boolean vanilla;
@@ -18,7 +18,7 @@ public class DataContext
     public int entryCount = 0;
     private HashSet<String> entryNames = Sets.newHashSet();
 
-    public DataContext(ResourceLocation name, boolean custom)
+    public CombatPropertiesContext(ResourceLocation name, boolean custom)
     {
         this.name = name;
         this.custom = custom;
