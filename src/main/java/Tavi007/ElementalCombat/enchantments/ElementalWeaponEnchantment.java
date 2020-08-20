@@ -16,13 +16,13 @@ public class ElementalWeaponEnchantment extends Enchantment{
 		switch(typeIn.typeName) {
 		case("ice"): 
 			super.name = "Ice Aspect";
-			break;
+		break;
 		case("water"): 
 			super.name = "Water Aspect";
-			break;
+		break;
 		case("thunder"):
 			super.name = "Thunder Aspect";
-			break;
+		break;
 		}
 	}
 
@@ -31,6 +31,14 @@ public class ElementalWeaponEnchantment extends Enchantment{
 	 */
 	public int getMaxLevel() {
 		return 2;
+	}
+
+	protected boolean canApplyTogether(Enchantment ench) {
+		if(ench instanceof ElementalWeaponEnchantment) {
+			return ((ElementalWeaponEnchantment) ench).protectionType == this.protectionType;
+		}
+		return false;
+	
 	}
 
 	public static enum Type {

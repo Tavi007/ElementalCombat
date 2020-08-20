@@ -1,7 +1,6 @@
 package Tavi007.ElementalCombat.events;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
