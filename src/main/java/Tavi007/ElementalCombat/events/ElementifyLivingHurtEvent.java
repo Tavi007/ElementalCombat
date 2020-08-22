@@ -104,8 +104,7 @@ public class ElementifyLivingHurtEvent
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
 		
 		// display particles
-		displayParticle(defenseStyleScaling, target.getEyePosition(0), (ServerWorld) target.getEntityWorld());
-		displayParticle(defenseElementScaling, target.getEyePosition(0), (ServerWorld) target.getEntityWorld());
+		displayParticle(defenseStyleScaling, defenseElementScaling, target.getEyePosition(0), (ServerWorld) target.getEntityWorld());
 		
 		// stop the 'hurt'-animation from firing, if no damage is dealt.
 		// not tested yet.
@@ -119,7 +118,7 @@ public class ElementifyLivingHurtEvent
 		event.setAmount(damageAmount);
 	}
 
-	private static void displayParticle(Double scaling, Vector3d position, ServerWorld world) {
+	private static void displayParticle(Double scalingStyle, Double scalingElement, Vector3d position, ServerWorld world) {
 		final double POSITION_WOBBLE_AMOUNT = 0.01;
 		Random rand = new Random();
 		double xpos = position.x + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
@@ -131,10 +130,15 @@ public class ElementifyLivingHurtEvent
 		double zoff = 0.0; 
 		double speed = 0.2D;
 		
-		if (scaling < 0) {world.spawnParticle(ParticleList.ABSORPTION_PARTICLE.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
-		else if(scaling == 0) {world.spawnParticle(ParticleList.IMMUNITY_PARTICLE.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
-		else if(scaling > 0 && scaling < 1) {world.spawnParticle(ParticleList.RESISTANCE_PARTICLE.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
-		else if(scaling > 1) {world.spawnParticle(ParticleList.WEAKNESS_PARTICLE.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
+		if (scalingStyle < 0) {world.spawnParticle(ParticleList.STYLE_ABSORPTION.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
+		else if(scalingStyle == 0) {world.spawnParticle(ParticleList.STYLE_IMMUNITY.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
+		else if(scalingStyle > 0 && scalingStyle < 1) {world.spawnParticle(ParticleList.STYLE_RESISTANCE.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
+		else if(scalingStyle > 1) {world.spawnParticle(ParticleList.STYLE_WEAKNESS.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
+
+		if (scalingElement < 0) {world.spawnParticle(ParticleList.ELEMENT_ABSORPTION.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
+		else if(scalingElement == 0) {world.spawnParticle(ParticleList.ELEMENT_IMMUNITY.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
+		else if(scalingElement > 0 && scalingElement < 1) {world.spawnParticle(ParticleList.ELEMENT_RESISTANCE.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
+		else if(scalingElement > 1) {world.spawnParticle(ParticleList.ELEMENT_WEAKNESS.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
 	}
 
 }
