@@ -29,6 +29,8 @@ public class CombatPropertiesManager extends JsonReloadListener
 	private static final Logger LOGGER = LogManager.getLogger();
 	private Map<ResourceLocation, EntityCombatProperties> registeredEntityData = ImmutableMap.of();
 	private Map<ResourceLocation, GeneralCombatProperties> registeredItemData = ImmutableMap.of();
+	private Map<ResourceLocation, BiomeCombatProperties> registeredBiomeData = ImmutableMap.of();
+	private Map<ResourceLocation, DamageSourceCombatProperties> registeredDamageSourceData = ImmutableMap.of();
 	private static ThreadLocal<Deque<CombatPropertiesContext>> dataContext = new ThreadLocal<Deque<CombatPropertiesContext>>();
 
 	public CombatPropertiesManager() 
@@ -40,6 +42,8 @@ public class CombatPropertiesManager extends JsonReloadListener
 	{
 		Builder<ResourceLocation, EntityCombatProperties> builderEntity = ImmutableMap.builder();
 		Builder<ResourceLocation, GeneralCombatProperties> builderItem = ImmutableMap.builder();
+		Builder<ResourceLocation, BiomeCombatProperties> builderBiome = ImmutableMap.builder();
+		Builder<ResourceLocation, DamageSourceCombatProperties> builderDamageSource = ImmutableMap.builder();
 
 		JsonElement jsonobject = objectIn.remove(EntityCombatProperties.EMPTY_RESOURCELOCATION);
 		if (jsonobject != null) 
@@ -70,13 +74,16 @@ public class CombatPropertiesManager extends JsonReloadListener
 		});
 
 		builderEntity.put(EntityCombatProperties.EMPTY_RESOURCELOCATION, new EntityCombatProperties());
-		ImmutableMap<ResourceLocation, EntityCombatProperties> immutablemapEntity = builderEntity.build(); //this mapping contains attack and defense data and biomeDependency.
+		this.registeredEntityData = builderEntity.build();
 
 		builderItem.put(GeneralCombatProperties.EMPTY_RESOURCELOCATION, new GeneralCombatProperties());
-		ImmutableMap<ResourceLocation, GeneralCombatProperties> immutablemapItem = builderItem.build(); //this mapping contains attack and defense data.
+		this.registeredItemData = builderItem.build();
 
-		this.registeredEntityData = immutablemapEntity;  
-		this.registeredItemData = immutablemapItem;  
+		builderBiome.put(BiomeCombatProperties.EMPTY_RESOURCELOCATION, new BiomeCombatProperties());
+		this.registeredBiomeData = builderBiome.build();
+
+		builderDamageSource.put(DamageSourceCombatProperties.EMPTY_RESOURCELOCATION, new DamageSourceCombatProperties());
+		this.registeredDamageSourceData = builderDamageSource.build();
 	}
 
 	public static JsonElement toJson(EntityCombatProperties elementalData)
@@ -140,5 +147,15 @@ public class CombatPropertiesManager extends JsonReloadListener
 	public GeneralCombatProperties getItemDataFromLocation(ResourceLocation rl)
 	{
 		return this.registeredItemData.getOrDefault(rl, GeneralCombatProperties.EMPTY);
+	}
+
+	public BiomeCombatProperties getBeiomeDataFromLocation(ResourceLocation rl)
+	{
+		return this.registeredBiomeData.getOrDefault(rl, BiomeCombatProperties.EMPTY);
+	}
+
+	public DamageSourceCombatProperties getDamageSourceDataFromLocation(ResourceLocation rl)
+	{
+		return this.registeredDamageSourceData.getOrDefault(rl, DamageSourceCombatProperties.EMPTY);
 	}
 }
