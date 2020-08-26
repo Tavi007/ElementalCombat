@@ -6,10 +6,10 @@ import net.minecraftforge.eventbus.api.Event;
 public class CombatPropertiesLoadEvent extends Event
 {
     private final ResourceLocation name;
-    private GeneralCombatProperties data;
+    private ItemCombatProperties data;
     private CombatPropertiesManager combatPropertiesManager;
 
-    public CombatPropertiesLoadEvent(ResourceLocation name, GeneralCombatProperties data, CombatPropertiesManager combatPropertiesManager)
+    public CombatPropertiesLoadEvent(ResourceLocation name, ItemCombatProperties data, CombatPropertiesManager combatPropertiesManager)
     {
         this.name = name;
         this.data = data;
@@ -21,7 +21,7 @@ public class CombatPropertiesLoadEvent extends Event
         return this.name;
     }
 
-    public GeneralCombatProperties getEntityData()
+    public ItemCombatProperties getEntityData()
     {
         return this.data;
     }
@@ -31,7 +31,7 @@ public class CombatPropertiesLoadEvent extends Event
         return this.combatPropertiesManager;
     }
 
-    public void setElementalEntityData(GeneralCombatProperties data)
+    public void setElementalEntityData(ItemCombatProperties data)
     {
         this.data = data;
     }

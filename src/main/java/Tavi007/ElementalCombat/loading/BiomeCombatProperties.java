@@ -2,12 +2,8 @@ package Tavi007.ElementalCombat.loading;
 
 import java.util.HashMap;
 
-import Tavi007.ElementalCombat.ElementalCombat;
-import net.minecraft.util.ResourceLocation;
-
 public class BiomeCombatProperties {
-	   public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
-	   public static final BiomeCombatProperties EMPTY = new BiomeCombatProperties();
+	public static final BiomeCombatProperties EMPTY = new BiomeCombatProperties();
 	
 	private final HashMap<String, Double> defense_element;
 	

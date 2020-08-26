@@ -1,7 +1,6 @@
 package Tavi007.ElementalCombat.capabilities.defense;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import Tavi007.ElementalCombat.enchantments.ElementalEnchantments;

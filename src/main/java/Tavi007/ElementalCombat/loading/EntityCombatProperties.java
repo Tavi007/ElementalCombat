@@ -2,12 +2,8 @@ package Tavi007.ElementalCombat.loading;
 
 import java.util.HashMap;
 
-import Tavi007.ElementalCombat.ElementalCombat;
-import net.minecraft.util.ResourceLocation;
-
-public class EntityCombatProperties extends GeneralCombatProperties
+public class EntityCombatProperties extends ItemCombatProperties
 {
-	   public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
 	   public static final EntityCombatProperties EMPTY = new EntityCombatProperties();
 
 	   private final boolean biomeDependency; 

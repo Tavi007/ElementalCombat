@@ -6,11 +6,13 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.particle.ParticleList;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -29,16 +31,16 @@ public class ElementifyLivingHurtEvent
 			// no modification. Entity should take normal damage and die eventually.
 			return;	
 		}
-		
-		
+
+
 		LivingEntity target = event.getEntityLiving();
-		
-		
+
+
 		// Get elemental data from attack
 		// check if source is an entity
 		String sourceElement = "";
 		String sourceStyle = "";
-		
+
 		Entity source = damageSource.getImmediateSource();
 		if(source!=null) {
 			// damage source should be either a mob, player or projectile (arrow/trident/witherskull)
@@ -61,51 +63,31 @@ public class ElementifyLivingHurtEvent
 			else {
 				ElementalCombat.LOGGER.info("Uknown damageSource case. How did you land here?");
 			}
-			
+
 			sourceStyle = atckCap.getStyle();
 			sourceElement = atckCap.getElement();
 		}
 		else{
-			// fill List, if Source is not an entity, but a 'natural occurrence'.
-			// maybe set data through json files? more customization this way
-			if(damageSource.isFireDamage()){
-				sourceElement = "fire";
-			}
-			else if(damageSource == DamageSource.DROWN){
-				sourceElement = "water";
-			}
-			else if(damageSource == DamageSource.WITHER){
-				sourceElement = "unholy";
-			}
-			else if(damageSource == DamageSource.MAGIC){
-				sourceStyle = "magic";
-			}
-			else if(damageSource == DamageSource.IN_WALL){
-				sourceElement = "earth";
-			}
-			else if(damageSource == DamageSource.CACTUS || 
-			   damageSource == DamageSource.SWEET_BERRY_BUSH){
-				sourceElement = "plant";
-			}
-			else if(damageSource == DamageSource.LIGHTNING_BOLT){
-				sourceElement = "thunder";
-			}
+			ResourceLocation rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "combat_properties/" + "minecraft" + "/damage_sources/" + damageSource.getDamageType().toLowerCase());
+			DamageSourceCombatProperties damageSourceProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource);
+			sourceStyle = damageSourceProperties.getAttackStyle();
+			sourceElement = damageSourceProperties.getAttackElement();
 		}
-		
+
 		// compute new Damage value  
 		float damageAmount = event.getAmount();
 		// Get the elemental combat data from target
 		DefenseData defCap = ElementalCombatAPI.getDefenseData(target);
 		Double defenseStyleScaling = defCap.getStyleScaling().get(sourceStyle);
 		Double defenseElementScaling = defCap.getElementScaling().get(sourceElement);
-		
+
 		if (defenseStyleScaling == null) {defenseStyleScaling = 1.0;}
 		if (defenseElementScaling == null) {defenseElementScaling = 1.0;}
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
-		
+
 		// display particles
 		displayParticle(defenseStyleScaling, defenseElementScaling, target.getEyePosition(0), (ServerWorld) target.getEntityWorld());
-		
+
 		// stop the 'hurt'-animation from firing, if no damage is dealt.
 		// not tested yet.
 		if(damageAmount <= 0)
@@ -114,7 +96,7 @@ public class ElementifyLivingHurtEvent
 			event.setCanceled(true);
 			damageAmount = 0;
 		}
-		
+
 		event.setAmount(damageAmount);
 	}
 
@@ -129,7 +111,7 @@ public class ElementifyLivingHurtEvent
 		double yoff = 0.0; 
 		double zoff = 0.0; 
 		double speed = 0.2D;
-		
+
 		if (scalingStyle < 0) {world.spawnParticle(ParticleList.STYLE_ABSORPTION.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
 		else if(scalingStyle == 0) {world.spawnParticle(ParticleList.STYLE_IMMUNITY.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
 		else if(scalingStyle > 0 && scalingStyle < 1) {world.spawnParticle(ParticleList.STYLE_RESISTANCE.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}

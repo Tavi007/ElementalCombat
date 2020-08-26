@@ -1,13 +1,16 @@
 package Tavi007.ElementalCombat.capabilities;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.nbt.CompoundNBT;
+
+/*
+import java.util.HashSet;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
+*/
 
 public class NBTHelper {
 

@@ -1,11 +1,7 @@
 package Tavi007.ElementalCombat.loading;
 
-import Tavi007.ElementalCombat.ElementalCombat;
-import net.minecraft.util.ResourceLocation;
-
 public class DamageSourceCombatProperties {
-	   public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
-	   public static final DamageSourceCombatProperties EMPTY = new DamageSourceCombatProperties();
+	public static final DamageSourceCombatProperties EMPTY = new DamageSourceCombatProperties();
 
 	private final String attack_style;
 	private final String attack_element;

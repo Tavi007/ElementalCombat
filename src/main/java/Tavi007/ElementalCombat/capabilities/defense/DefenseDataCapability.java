@@ -5,8 +5,9 @@ import java.util.HashMap;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.NBTHelper;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
+import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
-import Tavi007.ElementalCombat.loading.GeneralCombatProperties;
+import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,6 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -97,26 +97,17 @@ public class DefenseDataCapability {
 					// player spawn should be biome independent
 					if(entityProperties.getBiomeDependency()) 
 					{
-						String biomeProperties = null;
 						BlockPos blockPos = new BlockPos(entity.getPositionVec());
-
-						TempCategory category = entity.getEntityWorld().getBiome(blockPos).getTempCategory();
-						if(category == TempCategory.COLD){
-							biomeProperties = "ice";
-						}
-						else if(category == TempCategory.WARM){
-							biomeProperties = "fire";
-						}
-						else if(category == TempCategory.OCEAN){
-							biomeProperties = "water";
-						}
-						if(biomeProperties != null){
-							elementMap.put(biomeProperties, 0.5);
-						}
+						ResourceLocation rlBiome = entity.getEntityWorld().getBiome(blockPos).getRegistryName();
+						BiomeCombatProperties biomeProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlBiome);
+						biomeProperties.getDefenseElement().forEach((key, value)->{
+							if(!elementMap.containsKey(key)) {elementMap.put(key, value);}
+							else if(elementMap.get(key) > value) {elementMap.put(key, value);}
+						});						
 					}
-
 					final DefenseData defData = new DefenseData(styleMap, elementMap);
 					event.addCapability(ID, createProvider(defData));
+
 				}
 			}
 		}
@@ -125,8 +116,8 @@ public class DefenseDataCapability {
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
 			ItemStack item = event.getObject();
 			ResourceLocation rl = new ResourceLocation(ElementalCombat.MOD_ID, item.getItem().getRegistryName().getNamespace() + "/items/" + item.getItem().getRegistryName().getPath());
-			GeneralCombatProperties itemProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rl);
-			
+			ItemCombatProperties itemProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rl);
+
 			//default values
 			HashMap<String, Double> styleMap = itemProperties.getDefenseStyle();
 			HashMap<String, Double> elementMap = itemProperties.getDefenseElement();

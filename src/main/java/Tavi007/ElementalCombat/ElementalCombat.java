@@ -20,6 +20,7 @@ public class ElementalCombat
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	public static CombatPropertiesManager COMBAT_PROPERTIES_MANGER = new CombatPropertiesManager();
     public static IEventBus MOD_EVENT_BUS;
+       
     
 	@SuppressWarnings("deprecation")
 	public ElementalCombat()

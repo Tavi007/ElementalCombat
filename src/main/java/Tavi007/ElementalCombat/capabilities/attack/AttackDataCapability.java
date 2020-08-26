@@ -3,7 +3,7 @@ package Tavi007.ElementalCombat.capabilities.attack;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
-import Tavi007.ElementalCombat.loading.GeneralCombatProperties;
+import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -102,7 +102,7 @@ public class AttackDataCapability {
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
 			ItemStack item = event.getObject();
 			ResourceLocation rl = new ResourceLocation(ElementalCombat.MOD_ID, item.getItem().getRegistryName().getNamespace() + "/items/" + item.getItem().getRegistryName().getPath());
-			GeneralCombatProperties itemProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rl);
+			ItemCombatProperties itemProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rl);
 
 			final AttackData atck = new AttackData(itemProperties.getAttackStyle(), itemProperties.getAttackElement());
 			event.addCapability(ID, createProvider(atck));
