@@ -27,23 +27,19 @@ public class ElementifyLivingHurtEvent
 	public static void elementifyLivingHurtEvent(LivingHurtEvent event)
 	{
 		DamageSource damageSource = event.getSource();
+		// no modification. Entity should take normal damage and die eventually.
 		if(damageSource == DamageSource.OUT_OF_WORLD) {
-			// no modification. Entity should take normal damage and die eventually.
 			return;	
 		}
 
-
-		LivingEntity target = event.getEntityLiving();
-
-
 		// Get elemental data from attack
 		// check if source is an entity
-		String sourceElement = "";
-		String sourceStyle = "";
+		String sourceElement;
+		String sourceStyle;
 
+		LivingEntity target = event.getEntityLiving();
 		Entity source = damageSource.getImmediateSource();
-		if(source!=null) {
-			// damage source should be either a mob, player or projectile (arrow/trident/witherskull)
+		if(source != null) {
 			AttackData atckCap = new AttackData();
 			if(source instanceof LivingEntity){
 				LivingEntity livingEntitySource = (LivingEntity) source;
@@ -51,7 +47,7 @@ public class ElementifyLivingHurtEvent
 					//use data from livingEntity
 					atckCap = ElementalCombatAPI.getAttackData(livingEntitySource);
 				}
-				else{
+				else {
 					//use data from item
 					atckCap = ElementalCombatAPI.getAttackData(livingEntitySource.getHeldItemMainhand());
 				}
@@ -61,14 +57,15 @@ public class ElementifyLivingHurtEvent
 				atckCap = ElementalCombatAPI.getAttackData((ProjectileEntity) source);
 			}
 			else {
-				ElementalCombat.LOGGER.info("Uknown damageSource case. How did you land here?");
+				ElementalCombat.LOGGER.info("Unknown DamageSource case. How did you land here?");
 			}
 
 			sourceStyle = atckCap.getStyle();
 			sourceElement = atckCap.getElement();
 		}
-		else{
-			ResourceLocation rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "combat_properties/" + "minecraft" + "/damage_sources/" + damageSource.getDamageType().toLowerCase());
+		else {
+			// do other mods implement their own damageSource? If so, how could I get the mod id from it?
+			ResourceLocation rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "minecraft" + "/damage_sources/" + damageSource.getDamageType().toLowerCase());
 			DamageSourceCombatProperties damageSourceProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource);
 			sourceStyle = damageSourceProperties.getAttackStyle();
 			sourceElement = damageSourceProperties.getAttackElement();
@@ -89,7 +86,7 @@ public class ElementifyLivingHurtEvent
 		displayParticle(defenseStyleScaling, defenseElementScaling, target.getEyePosition(0), (ServerWorld) target.getEntityWorld());
 
 		// stop the 'hurt'-animation from firing, if no damage is dealt.
-		// not tested yet.
+		// not working yet.
 		if(damageAmount <= 0)
 		{
 			target.heal(-damageAmount);

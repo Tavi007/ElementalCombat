@@ -53,25 +53,20 @@ public class CombatPropertiesManager extends JsonReloadListener
 		{
 			try (net.minecraft.resources.IResource res = resourceManagerIn.getResource(getPreparedPath(rl));)
 			{
-				//check if entity or item gets loaded
-				if(rl.getPath().contains("/entities/"))
-				{
+				//check if entity/item/biome/damageSource gets loaded
+				if(rl.getPath().contains("/entities/")){
 					EntityCombatProperties combatProperties = (EntityCombatProperties) loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), EntityCombatProperties.class);
 					builderEntity.put(rl, combatProperties);
 				}
-				else if(rl.getPath().contains("/items/"))
-				{
+				else if(rl.getPath().contains("/items/")){
 					ItemCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), ItemCombatProperties.class);
 					builderItem.put(rl, combatProperties);
 				}
-				else if(rl.getPath().contains("/biomes/"))
-				{
+				else if(rl.getPath().contains("/biomes/")){
 					BiomeCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), BiomeCombatProperties.class);
 					builderBiome.put(rl, combatProperties);
-					
 				}
-				else if(rl.getPath().contains("/damage_sources/"))
-				{
+				else if(rl.getPath().contains("/damage_sources/")){
 					DamageSourceCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), DamageSourceCombatProperties.class);
 					builderDamageSource.put(rl, combatProperties);
 				}
