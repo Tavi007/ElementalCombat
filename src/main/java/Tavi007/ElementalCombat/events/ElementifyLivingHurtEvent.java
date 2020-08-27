@@ -48,8 +48,10 @@ public class ElementifyLivingHurtEvent
 					atckCap = ElementalCombatAPI.getAttackData(livingEntitySource);
 				}
 				else {
-					//use data from item
+					//use data from held item
 					atckCap = ElementalCombatAPI.getAttackData(livingEntitySource.getHeldItemMainhand());
+					
+					//maybe mix and match with entity data? a wither skeleton will only use data from the stone sword...
 				}
 			}
 			else if (source instanceof ProjectileEntity){
@@ -58,6 +60,7 @@ public class ElementifyLivingHurtEvent
 			}
 			else {
 				ElementalCombat.LOGGER.info("Unknown DamageSource case. How did you land here?");
+				return;
 			}
 
 			sourceStyle = atckCap.getStyle();
@@ -75,11 +78,8 @@ public class ElementifyLivingHurtEvent
 		float damageAmount = event.getAmount();
 		// Get the elemental combat data from target
 		DefenseData defCap = ElementalCombatAPI.getDefenseData(target);
-		Double defenseStyleScaling = defCap.getStyleScaling().get(sourceStyle);
-		Double defenseElementScaling = defCap.getElementScaling().get(sourceElement);
-
-		if (defenseStyleScaling == null) {defenseStyleScaling = 1.0;}
-		if (defenseElementScaling == null) {defenseElementScaling = 1.0;}
+		Double defenseStyleScaling = defCap.getStyleScaling().getOrDefault(sourceStyle, 1.0);
+		Double defenseElementScaling = defCap.getElementScaling().getOrDefault(sourceElement, 1.0);
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
 
 		// display particles

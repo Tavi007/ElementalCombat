@@ -2,7 +2,6 @@ package Tavi007.ElementalCombat.loading;
 
 import java.util.Deque;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -29,6 +28,7 @@ public class CombatPropertiesManager extends JsonReloadListener
 	private Map<ResourceLocation, ItemCombatProperties> registeredItemData = ImmutableMap.of();
 	private Map<ResourceLocation, BiomeCombatProperties> registeredBiomeData = ImmutableMap.of();
 	private Map<ResourceLocation, DamageSourceCombatProperties> registeredDamageSourceData = ImmutableMap.of();
+	
 	private static ThreadLocal<Deque<CombatPropertiesContext>> dataContext = new ThreadLocal<Deque<CombatPropertiesContext>>();
 
 	public CombatPropertiesManager() 
@@ -43,10 +43,9 @@ public class CombatPropertiesManager extends JsonReloadListener
 		Builder<ResourceLocation, BiomeCombatProperties> builderBiome = ImmutableMap.builder();
 		Builder<ResourceLocation, DamageSourceCombatProperties> builderDamageSource = ImmutableMap.builder();
 
-		JsonElement jsonobject = objectIn.remove(EntityCombatProperties.EMPTY_RESOURCELOCATION);
-		if (jsonobject != null) 
+		if (objectIn.remove(EMPTY_RESOURCELOCATION) != null) 
 		{
-			ElementalCombat.LOGGER.warn("Datapack tried to redefine {} elemental entity data, ignoring", (Object)EntityCombatProperties.EMPTY_RESOURCELOCATION);
+			ElementalCombat.LOGGER.warn("Datapack tried to redefine {} elemental entity data, ignoring", (Object)EMPTY_RESOURCELOCATION);
 		}
 
 		objectIn.forEach((rl, json) -> 
@@ -54,26 +53,26 @@ public class CombatPropertiesManager extends JsonReloadListener
 			try (net.minecraft.resources.IResource res = resourceManagerIn.getResource(getPreparedPath(rl));)
 			{
 				//check if entity/item/biome/damageSource gets loaded
-				if(rl.getPath().contains("/entities/")){
-					EntityCombatProperties combatProperties = (EntityCombatProperties) loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), EntityCombatProperties.class);
+				if(rl.getPath().contains("entities/")){
+					EntityCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), EntityCombatProperties.class);
 					builderEntity.put(rl, combatProperties);
 				}
-				else if(rl.getPath().contains("/items/")){
+				else if(rl.getPath().contains("items/")){
 					ItemCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), ItemCombatProperties.class);
 					builderItem.put(rl, combatProperties);
 				}
-				else if(rl.getPath().contains("/biomes/")){
+				else if(rl.getPath().contains("biomes/")){
 					BiomeCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), BiomeCombatProperties.class);
 					builderBiome.put(rl, combatProperties);
 				}
-				else if(rl.getPath().contains("/damage_sources/")){
+				else if(rl.getPath().contains("damage_sources/")){
 					DamageSourceCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), DamageSourceCombatProperties.class);
 					builderDamageSource.put(rl, combatProperties);
 				}
 			}
 			catch (Exception exception)
 			{
-				ElementalCombat.LOGGER.error("Couldn't parse elemental data {}", rl, exception);
+				ElementalCombat.LOGGER.error("Couldn't parse combat properties {}", rl, exception);
 			}
 		});
 
@@ -89,16 +88,6 @@ public class CombatPropertiesManager extends JsonReloadListener
 
 		builderDamageSource.put(EMPTY_RESOURCELOCATION, new DamageSourceCombatProperties());
 		this.registeredDamageSourceData = builderDamageSource.build();
-	}
-
-	public static JsonElement toJson(EntityCombatProperties elementalData)
-	{
-		return GSON.toJsonTree(elementalData);
-	}
-
-	public Set<ResourceLocation> getEntityDataKeys() 
-	{
-		return this.registeredEntityData.keySet();
 	}
 
 	@Nullable
@@ -125,6 +114,7 @@ public class CombatPropertiesManager extends JsonReloadListener
 		}
 
 		/*
+		 * I don't know, what this part does
 		if (!custom)
 		{
 			CombatPropertiesLoadEvent event = new CombatPropertiesLoadEvent(name, ret, this);
@@ -135,9 +125,9 @@ public class CombatPropertiesManager extends JsonReloadListener
 			ret = event.getEntityData();
 		}
 
+		if (ret != null)
+		    ret.freeze();
 		*/
-		//if (ret != null)
-		//    ret.freeze();
 
 		return ret;
 	}

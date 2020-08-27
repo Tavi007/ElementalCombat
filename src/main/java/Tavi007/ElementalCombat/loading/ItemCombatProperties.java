@@ -2,12 +2,8 @@ package Tavi007.ElementalCombat.loading;
 
 import java.util.HashMap;
 
-import Tavi007.ElementalCombat.ElementalCombat;
-import net.minecraft.util.ResourceLocation;
-
 public class ItemCombatProperties 
 {
-	   public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
 	   public static final ItemCombatProperties EMPTY = new ItemCombatProperties();
 
 	   private final HashMap<String, Double> defense_style;
