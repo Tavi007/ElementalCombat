@@ -6,22 +6,22 @@ public class EntityCombatProperties extends ItemCombatProperties
 {
 	   public static final EntityCombatProperties EMPTY = new EntityCombatProperties();
 
-	   private final boolean biomeDependency; 
+	   private final boolean biome_dependency; 
 	   
 	   public EntityCombatProperties(HashMap<String, Double> defenseStyle, HashMap<String, Double> defenseElement, String attackStyle, String attackElement, boolean biomeDependency)
 	   {
 		   super(defenseStyle, defenseElement, attackStyle, attackElement);
-		   this.biomeDependency = biomeDependency;
+		   this.biome_dependency = biomeDependency;
 	   }
 	   
 	   public EntityCombatProperties()
 	   {
 		   super();
-		   this.biomeDependency = false;
+		   this.biome_dependency = false;
 	   }
 	   
 	   public boolean getBiomeDependency()
 	   {
-		   return this.biomeDependency;
+		   return this.biome_dependency;
 	   }
 }

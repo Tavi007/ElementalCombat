@@ -89,8 +89,9 @@ public class DefenseDataCapability {
 
 				LivingEntity entity = (LivingEntity) event.getObject();
 				if(!entity.getEntityWorld().isRemote()) {
-					ResourceLocation rl = new ResourceLocation(ElementalCombat.MOD_ID, entity.getType().getRegistryName().getNamespace() + "/entities/" + entity.getType().getRegistryName().getPath());
-					EntityCombatProperties entityProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rl);
+					ResourceLocation rlEntity = entity.getType().getRegistryName();
+					ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "entities/" + rlEntity.getNamespace() + "/" + rlEntity.getPath());
+					EntityCombatProperties entityProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties);
 
 					HashMap<String, Double> styleMap = entityProperties.getDefenseStyle();
 					HashMap<String, Double> elementMap = entityProperties.getDefenseElement();
@@ -99,6 +100,7 @@ public class DefenseDataCapability {
 					{
 						BlockPos blockPos = new BlockPos(entity.getPositionVec());
 						ResourceLocation rlBiome = entity.getEntityWorld().getBiome(blockPos).getRegistryName();
+						rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "biomes/" + rlBiome.getNamespace() + "/" + rlBiome.getPath()); ;
 						BiomeCombatProperties biomeProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlBiome);
 						biomeProperties.getDefenseElement().forEach((key, value)->{
 							if(!elementMap.containsKey(key)) {elementMap.put(key, value);}
@@ -114,9 +116,9 @@ public class DefenseDataCapability {
 
 		@SubscribeEvent(priority = EventPriority.LOWEST)
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-			ItemStack item = event.getObject();
-			ResourceLocation rl = new ResourceLocation(ElementalCombat.MOD_ID, item.getItem().getRegistryName().getNamespace() + "/items/" + item.getItem().getRegistryName().getPath());
-			ItemCombatProperties itemProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rl);
+			ResourceLocation rlItem = event.getObject().getItem().getRegistryName();
+			ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "items/" + rlItem.getNamespace() + "/" + rlItem.getPath());
+			ItemCombatProperties itemProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties);
 
 			//default values
 			HashMap<String, Double> styleMap = itemProperties.getDefenseStyle();

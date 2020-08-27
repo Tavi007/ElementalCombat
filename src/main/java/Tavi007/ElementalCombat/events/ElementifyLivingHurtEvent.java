@@ -68,7 +68,7 @@ public class ElementifyLivingHurtEvent
 		}
 		else {
 			// do other mods implement their own damageSource? If so, how could I get the mod id from it?
-			ResourceLocation rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "minecraft" + "/damage_sources/" + damageSource.getDamageType().toLowerCase());
+			ResourceLocation rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/" + damageSource.getDamageType().toLowerCase());
 			DamageSourceCombatProperties damageSourceProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource);
 			sourceStyle = damageSourceProperties.getAttackStyle();
 			sourceElement = damageSourceProperties.getAttackElement();

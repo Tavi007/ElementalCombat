@@ -84,10 +84,9 @@ public class AttackDataCapability {
 		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
 			if(!event.getObject().getEntityWorld().isRemote()) {
 				if (event.getObject() instanceof LivingEntity) {
-					LivingEntity entity = (LivingEntity) event.getObject();
-
-					ResourceLocation rl = new ResourceLocation(ElementalCombat.MOD_ID, entity.getType().getRegistryName().getNamespace() + "/entities/" + entity.getType().getRegistryName().getPath());
-					EntityCombatProperties entityProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rl);
+					ResourceLocation rlEntity = ((LivingEntity) event.getObject()).getType().getRegistryName();
+					ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "entities/" + rlEntity.getNamespace() + "/" + rlEntity.getPath());
+					EntityCombatProperties entityProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties);
 					final AttackData atck = new AttackData(entityProperties.getAttackStyle(), entityProperties.getAttackElement());
 					event.addCapability(ID, createProvider(atck));
 				}
@@ -100,10 +99,9 @@ public class AttackDataCapability {
 
 		@SubscribeEvent
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-			ItemStack item = event.getObject();
-			ResourceLocation rl = new ResourceLocation(ElementalCombat.MOD_ID, item.getItem().getRegistryName().getNamespace() + "/items/" + item.getItem().getRegistryName().getPath());
-			ItemCombatProperties itemProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rl);
-
+			ResourceLocation rlItem = event.getObject().getItem().getRegistryName();
+			ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, rlItem.getNamespace() + "/items/" + rlItem.getPath());
+			ItemCombatProperties itemProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties);
 			final AttackData atck = new AttackData(itemProperties.getAttackStyle(), itemProperties.getAttackElement());
 			event.addCapability(ID, createProvider(atck));
 		}
