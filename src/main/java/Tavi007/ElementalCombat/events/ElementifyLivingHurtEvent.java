@@ -31,7 +31,7 @@ public class ElementifyLivingHurtEvent
 		if(damageSource == DamageSource.OUT_OF_WORLD) {
 			return;	
 		}
-
+		
 		// Get elemental data from attack
 		// check if source is an entity
 		String sourceElement;

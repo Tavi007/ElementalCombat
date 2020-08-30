@@ -1,5 +1,6 @@
 {	
 	"defense_element":{
-		"fire":1.1
+		"water":0.5,
+		"ice":0.5
 	}
 }
