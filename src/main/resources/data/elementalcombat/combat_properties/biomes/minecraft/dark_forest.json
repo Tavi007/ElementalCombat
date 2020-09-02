@@ -1,6 +1,6 @@
 {	
 	"defense_element":{
 		"plant":0.5,
-		"ice":0.75
+		"darkness":0.75
 	}
 }

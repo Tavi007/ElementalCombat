@@ -1,6 +1,5 @@
 {	
 	"defense_element":{
-		"ice":0.0,
-		"air":0.5
+		"plant":0.5
 	}
 }

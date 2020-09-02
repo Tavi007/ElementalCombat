@@ -101,7 +101,7 @@ public class DefenseDataCapability {
 						BlockPos blockPos = new BlockPos(entity.getPositionVec());
 						ResourceLocation rlBiome = entity.getEntityWorld().getBiome(blockPos).getRegistryName();
 						rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "biomes/" + rlBiome.getNamespace() + "/" + rlBiome.getPath()); ;
-						BiomeCombatProperties biomeProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlBiome);
+						BiomeCombatProperties biomeProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties);
 						biomeProperties.getDefenseElement().forEach((key, value)->{
 							if(!elementMap.containsKey(key)) {elementMap.put(key, value);}
 							else if(elementMap.get(key) > value) {elementMap.put(key, value);}
@@ -109,7 +109,6 @@ public class DefenseDataCapability {
 					}
 					final DefenseData defData = new DefenseData(styleMap, elementMap);
 					event.addCapability(ID, createProvider(defData));
-
 				}
 			}
 		}
