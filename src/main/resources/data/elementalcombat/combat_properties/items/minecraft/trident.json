@@ -1,6 +1,6 @@
 {
-	"attack_style":"slash",
-	"attack_element":"wood",
+	"attack_style":"stab",
+	"attack_element":"water",
 	
 	"defense_stlye":{
 	},
