@@ -12,8 +12,18 @@ public class DamageSourceCombatProperties {
 	}
 	
 	public DamageSourceCombatProperties(String attack_style, String attack_element) {
-		this.attack_style = attack_style;
-		this.attack_element = attack_element;
+		   if (attack_style.isEmpty()) {
+			   this.attack_style = "basic";
+		   }
+		   else {
+			   this.attack_style = attack_style;
+		   }
+		   if (attack_element.isEmpty()) {
+			   this.attack_element = "natural";
+		   }
+		   else {
+			   this.attack_element = attack_element;
+		   }
 	}
 
 	public String getAttackStyle() {return this.attack_style;}

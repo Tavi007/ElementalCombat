@@ -31,7 +31,7 @@ public class ElementifyLivingHurtEvent
 		if(damageSource == DamageSource.OUT_OF_WORLD) {
 			return;	
 		}
-		
+
 		// Get elemental data from attack
 		// check if source is an entity
 		String sourceElement;
@@ -50,7 +50,7 @@ public class ElementifyLivingHurtEvent
 				else {
 					//use data from held item
 					atckCap = ElementalCombatAPI.getAttackData(livingEntitySource.getHeldItemMainhand());
-					
+
 					//maybe mix and match with entity data? a wither skeleton will only use data from the stone sword...
 				}
 			}
@@ -72,6 +72,14 @@ public class ElementifyLivingHurtEvent
 			DamageSourceCombatProperties damageSourceProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource);
 			sourceStyle = damageSourceProperties.getAttackStyle();
 			sourceElement = damageSourceProperties.getAttackElement();
+		}
+
+		//defaul values in case style or element is empty
+		if (sourceStyle.isEmpty()) {
+			sourceStyle = "basic";
+		}
+		if (sourceElement.isEmpty()) {
+			sourceElement = "natural";
 		}
 
 		// compute new Damage value  

@@ -16,16 +16,26 @@ public class ItemCombatProperties
 	   {
 		   this.defense_style = defenseStyle;
 		   this.defense_element = defenseElement;
-		   this.attack_style = attackStyle;
-		   this.attack_element = attackElement;
+		   if (attackStyle.isEmpty()) {
+			   this.attack_style = "basic";
+		   }
+		   else {
+			   this.attack_style = attackStyle;
+		   }
+		   if (attackElement.isEmpty()) {
+			   this.attack_element = "natural";
+		   }
+		   else {
+			   this.attack_element = attackElement;
+		   }
 	   }
 	   
 	   public ItemCombatProperties()
 	   {
 		   this.defense_style = new HashMap<String, Double>();
 		   this.defense_element = new HashMap<String, Double>();
-		   this.attack_style = "";
-		   this.attack_element = "";
+		   this.attack_style = "basic";
+		   this.attack_element = "natural";
 	   }
 	   
 	   public HashMap<String, Double> getDefenseStyle()
