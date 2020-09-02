@@ -6,7 +6,6 @@
 	},
 	
 	"defense_element":{
-		"light":1.5
 	},
 	
 	"biome_dependency":true

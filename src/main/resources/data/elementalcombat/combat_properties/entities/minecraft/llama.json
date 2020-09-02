@@ -1,13 +1,12 @@
 {
 	"attack_style":"",
-	"attack_element":"",
+	"attack_element":"water",
 	
 	"defense_stlye":{
 	},
 	
 	"defense_element":{
-		"light":1.5
 	},
 	
-	"biome_dependency":true
+	"biome_dependency":false
 }

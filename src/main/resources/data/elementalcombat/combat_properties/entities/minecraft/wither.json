@@ -1,0 +1,16 @@
+{
+	"attack_style":"magic",
+	"attack_element":"darkness",
+	
+	"defense_stlye":{
+	},
+	
+	"defense_element":{
+		"darkness":0.0,
+		"fire":0.5,
+		"ice":0.5
+		"light":2.0
+	},
+	
+	"biome_dependency":false
+}

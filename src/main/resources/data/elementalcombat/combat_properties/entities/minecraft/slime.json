@@ -3,10 +3,11 @@
 	"attack_element":"",
 	
 	"defense_stlye":{
+		"magic":2.0
 	},
 	
 	"defense_element":{
-		"light":1.5
+		"natural":0.5
 	},
 	
 	"biome_dependency":true

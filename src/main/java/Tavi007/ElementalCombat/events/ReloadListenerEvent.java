@@ -13,6 +13,6 @@ public class ReloadListenerEvent {
 	public static void addReloadListenerEvent(AddReloadListenerEvent event)
 	{
 		event.addListener(ElementalCombat.COMBAT_PROPERTIES_MANGER);
-		ElementalCombat.LOGGER.info("Elemental data loaded.");	
+		ElementalCombat.LOGGER.info("ReloadListener for combat data registered.");	
 	}
 }
