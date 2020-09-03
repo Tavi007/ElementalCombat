@@ -8,7 +8,7 @@ public class EntityCombatProperties extends ItemCombatProperties
 
 	   private final boolean biome_dependency; 
 	   
-	   public EntityCombatProperties(HashMap<String, Double> defenseStyle, HashMap<String, Double> defenseElement, String attackStyle, String attackElement, boolean biomeDependency)
+	   public EntityCombatProperties(HashMap<String, Integer> defenseStyle, HashMap<String, Integer> defenseElement, String attackStyle, String attackElement, boolean biomeDependency)
 	   {
 		   super(defenseStyle, defenseElement, attackStyle, attackElement);
 		   this.biome_dependency = biomeDependency;

@@ -42,28 +42,28 @@ public class NBTHelper {
 	}
 	*/
 	
-	public static HashMap<String, Double> fromNBTToMap(CompoundNBT nbtCompound) {
+	public static HashMap<String, Integer> fromNBTToMap(CompoundNBT nbtCompound) {
 
-		HashMap<String, Double> map = new HashMap<String, Double>();
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		if(nbtCompound!=null)
 		{
 			Set<String> keySet = nbtCompound.keySet();
 			for (String key : keySet)
 			{ 
-				Double value = nbtCompound.getDouble(key);
+				Integer value = nbtCompound.getInt(key);
 				map.put(key, value);
 			}
 		}
 		return map;
 	}
 	
-	public static CompoundNBT fromMapToNBT(HashMap<String, Double> map) {
+	public static CompoundNBT fromMapToNBT(HashMap<String, Integer> map) {
 		CompoundNBT nbt = new CompoundNBT();
 		if(map != null)
 		{
 			map.forEach((elemString, value) ->
 			{
-				nbt.putDouble(elemString, value);
+				nbt.putInt(elemString, value);
 			});
 		}
 		return nbt; 

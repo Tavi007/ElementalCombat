@@ -48,8 +48,8 @@ public class DefenseDataCapability {
 
 				//fill nbt with data
 				CompoundNBT nbt = new CompoundNBT();
-				nbt.put("defense_style", NBTHelper.fromMapToNBT(instance.getStyleScaling()));
-				nbt.put("defense_element", NBTHelper.fromMapToNBT(instance.getElementScaling()));
+				nbt.put("defense_style", NBTHelper.fromMapToNBT(instance.getStyleFactor()));
+				nbt.put("defense_element", NBTHelper.fromMapToNBT(instance.getElementFactor()));
 				return nbt;
 			}
 
@@ -59,8 +59,8 @@ public class DefenseDataCapability {
 				CompoundNBT nbtCompound = (CompoundNBT)nbt;
 
 				//fill list with data
-				instance.setStyleScaling(NBTHelper.fromNBTToMap(nbtCompound.getCompound("defense_style")));
-				instance.setElementScaling(NBTHelper.fromNBTToMap(nbtCompound.getCompound("defense_element")));
+				instance.setStyleFactor(NBTHelper.fromNBTToMap(nbtCompound.getCompound("defense_style")));
+				instance.setElementFactor(NBTHelper.fromNBTToMap(nbtCompound.getCompound("defense_element")));
 			}
 
 
@@ -93,8 +93,8 @@ public class DefenseDataCapability {
 					ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "entities/" + rlEntity.getNamespace() + "/" + rlEntity.getPath());
 					EntityCombatProperties entityProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties);
 
-					HashMap<String, Double> styleMap = entityProperties.getDefenseStyle();
-					HashMap<String, Double> elementMap = entityProperties.getDefenseElement();
+					HashMap<String, Integer> styleMap = entityProperties.getDefenseStyle();
+					HashMap<String, Integer> elementMap = entityProperties.getDefenseElement();
 					// player spawn should be biome independent
 					if(entityProperties.getBiomeDependency()) 
 					{
@@ -120,8 +120,8 @@ public class DefenseDataCapability {
 			ItemCombatProperties itemProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties);
 
 			//default values
-			HashMap<String, Double> styleMap = itemProperties.getDefenseStyle();
-			HashMap<String, Double> elementMap = itemProperties.getDefenseElement();
+			HashMap<String, Integer> styleMap = itemProperties.getDefenseStyle();
+			HashMap<String, Integer> elementMap = itemProperties.getDefenseElement();
 
 			final DefenseData defData = new DefenseData(styleMap, elementMap);
 			event.addCapability(ID, createProvider(defData));

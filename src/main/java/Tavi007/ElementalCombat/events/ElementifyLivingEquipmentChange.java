@@ -28,15 +28,15 @@ public class ElementifyLivingEquipmentChange
 			// get default values
 			ResourceLocation rl = new ResourceLocation(entity.getType().getRegistryName().getNamespace(), "elementalproperties/entities/" + entity.getType().getRegistryName().getPath());
 			EntityCombatProperties entityData = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rl);
-			HashMap<String, Double> defenseStyle = entityData.getDefenseStyle();
-			HashMap<String, Double> defenseElement = entityData.getDefenseElement();
+			HashMap<String, Integer> defenseStyle = entityData.getDefenseStyle();
+			HashMap<String, Integer> defenseElement = entityData.getDefenseElement();
 			// get values from armor
 			// I should add cross-mod interaction with baubles later
 			entity.getArmorInventoryList().forEach((item) ->
 			{
 				DefenseData defCapItem = ElementalCombatAPI.getDefenseData(item);
-				HashMap<String, Double> defenseStyleItem = defCapItem.getStyleScaling();
-				HashMap<String, Double> defenseElementItem = defCapItem.getElementScaling();
+				HashMap<String, Integer> defenseStyleItem = defCapItem.getStyleFactor();
+				HashMap<String, Integer> defenseElementItem = defCapItem.getElementFactor();
 
 				defenseStyle.putAll(defenseStyleItem);
 				defenseElement.putAll(defenseElementItem);
@@ -44,8 +44,8 @@ public class ElementifyLivingEquipmentChange
 
 			// set values
 			DefenseData defCapEntity = ElementalCombatAPI.getDefenseData(entity);
-			defCapEntity.setStyleScaling(defenseStyle);
-			defCapEntity.setElementScaling(defenseElement);
+			defCapEntity.setStyleFactor(defenseStyle);
+			defCapEntity.setElementFactor(defenseElement);
 		}
 	}
 }

@@ -86,8 +86,13 @@ public class ElementifyLivingHurtEvent
 		float damageAmount = event.getAmount();
 		// Get the elemental combat data from target
 		DefenseData defCap = ElementalCombatAPI.getDefenseData(target);
-		Double defenseStyleScaling = defCap.getStyleScaling().getOrDefault(sourceStyle, 1.0);
-		Double defenseElementScaling = defCap.getElementScaling().getOrDefault(sourceElement, 1.0);
+		Integer defenseStyleFactor = defCap.getStyleFactor().getOrDefault(sourceStyle, 0);
+		Double defenseStyleScaling = 1.0 - defenseStyleFactor/25;
+		
+		Integer defenseElementFactor = defCap.getElementFactor().getOrDefault(sourceElement, 0);
+		Double defenseElementScaling = 1.0 - defenseElementFactor/25;
+		
+		
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
 
 		// display particles

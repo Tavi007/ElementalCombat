@@ -6,13 +6,13 @@ public class ItemCombatProperties
 {
 	   public static final ItemCombatProperties EMPTY = new ItemCombatProperties();
 
-	   private final HashMap<String, Double> defense_style;
-	   private final HashMap<String, Double> defense_element;
+	   private final HashMap<String, Integer> defense_style;
+	   private final HashMap<String, Integer> defense_element;
 
 	   private final String attack_style;
 	   private final String attack_element;
 	   
-	   public ItemCombatProperties(HashMap<String, Double> defenseStyle, HashMap<String, Double> defenseElement, String attackStyle, String attackElement)
+	   public ItemCombatProperties(HashMap<String, Integer> defenseStyle, HashMap<String, Integer> defenseElement, String attackStyle, String attackElement)
 	   {
 		   this.defense_style = defenseStyle;
 		   this.defense_element = defenseElement;
@@ -32,18 +32,18 @@ public class ItemCombatProperties
 	   
 	   public ItemCombatProperties()
 	   {
-		   this.defense_style = new HashMap<String, Double>();
-		   this.defense_element = new HashMap<String, Double>();
+		   this.defense_style = new HashMap<String, Integer>();
+		   this.defense_element = new HashMap<String, Integer>();
 		   this.attack_style = "basic";
 		   this.attack_element = "natural";
 	   }
 	   
-	   public HashMap<String, Double> getDefenseStyle()
+	   public HashMap<String, Integer> getDefenseStyle()
 	   {
 		   return this.defense_style;
 	   }
 	   
-	   public HashMap<String, Double> getDefenseElement()
+	   public HashMap<String, Integer> getDefenseElement()
 	   {
 		   return this.defense_element;
 	   }

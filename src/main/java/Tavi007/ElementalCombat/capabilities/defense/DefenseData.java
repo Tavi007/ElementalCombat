@@ -8,30 +8,30 @@ import net.minecraft.enchantment.Enchantment;
 
 public class DefenseData implements IDefenseData{
 
-	private HashMap<String, Double> styleScaling = new HashMap<String, Double>();
-	private HashMap<String, Double> elementScaling = new HashMap<String, Double>();
+	private HashMap<String, Integer> styleFactor = new HashMap<String, Integer>();
+	private HashMap<String, Integer> elementFactor = new HashMap<String, Integer>();
 	
 	private boolean areEnchantmentsApplied = false;
 	
 	public DefenseData() {
 	}
 	
-	public DefenseData(HashMap<String, Double> styleScaling, HashMap<String, Double> elementScaling) {
-		this.styleScaling = styleScaling;
-		this.elementScaling = elementScaling;
+	public DefenseData(HashMap<String, Integer> styleFactor, HashMap<String, Integer> elementFactor) {
+		this.styleFactor = styleFactor;
+		this.elementFactor = elementFactor;
 	}
 
 	@Override
-	public HashMap<String, Double> getStyleScaling() {return this.styleScaling;}
+	public HashMap<String, Integer> getStyleFactor() {return this.styleFactor;}
 
 	@Override
-	public void setStyleScaling(HashMap<String, Double> set) {this.styleScaling = set;}
+	public void setStyleFactor(HashMap<String, Integer> set) {this.styleFactor = set;}
 
 	@Override
-	public HashMap<String, Double> getElementScaling() {return this.elementScaling;}
+	public HashMap<String, Integer> getElementFactor() {return this.elementFactor;}
 
 	@Override
-	public void setElementScaling(HashMap<String, Double> set) {this.elementScaling = set;}
+	public void setElementFactor(HashMap<String, Integer> set) {this.elementFactor = set;}
 	
 
 	@Override
@@ -40,15 +40,12 @@ public class DefenseData implements IDefenseData{
 	@Override
 	public void applyEnchantments(Map<Enchantment, Integer> enchantments) {
 		enchantments.forEach((key, value) -> {
-			
-			Double scaling = 1.0 - value*0.2;
-			
 			//currently only comparing strings.
 			//maybe change to resourceLocation later, so other mods can interact with this as well.
-			if(key.getName() == ElementalEnchantments.ICE_RESISTANCE.getName()) {this.elementScaling.put("ice", scaling);}
-			if(key.getName() == ElementalEnchantments.FIRE_RESISTANCE.getName()) {this.elementScaling.put("fire", scaling);}
-			if(key.getName() == ElementalEnchantments.WATER_RESISTANCE.getName()) {this.elementScaling.put("water", scaling);}
-			if(key.getName() == ElementalEnchantments.THUNDER_RESISTANCE.getName()) {this.elementScaling.put("thunder", scaling);}
+			if(key.getName() == ElementalEnchantments.ICE_RESISTANCE.getName()) {this.elementFactor.put("ice", value);}
+			if(key.getName() == ElementalEnchantments.FIRE_RESISTANCE.getName()) {this.elementFactor.put("fire", value);}
+			if(key.getName() == ElementalEnchantments.WATER_RESISTANCE.getName()) {this.elementFactor.put("water", value);}
+			if(key.getName() == ElementalEnchantments.THUNDER_RESISTANCE.getName()) {this.elementFactor.put("thunder", value);}
 		});
 		this.areEnchantmentsApplied = true;
 	}

@@ -6,11 +6,11 @@ import java.util.Map;
 import net.minecraft.enchantment.Enchantment;
 
 public interface IDefenseData {
-	HashMap<String, Double> getStyleScaling();
-	void setStyleScaling(HashMap<String, Double> set);
+	HashMap<String, Integer> getStyleFactor();
+	void setStyleFactor(HashMap<String, Integer> set);
 	
-	HashMap<String, Double> getElementScaling();
-	void setElementScaling(HashMap<String, Double> set);
+	HashMap<String, Integer> getElementFactor();
+	void setElementFactor(HashMap<String, Integer> set);
 
 	public boolean areEnchantmentsApplied();
 	public void applyEnchantments(Map<Enchantment, Integer> enchantments);
