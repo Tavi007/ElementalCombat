@@ -100,7 +100,7 @@ public class AttackDataCapability {
 		@SubscribeEvent
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
 			ResourceLocation rlItem = event.getObject().getItem().getRegistryName();
-			ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "items/" + rlItem.getNamespace() +"/" + rlItem.getPath());
+			ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "items/" + rlItem.getNamespace() + "/" + rlItem.getPath());
 			ItemCombatProperties itemProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties);
 			final AttackData atck = new AttackData(itemProperties.getAttackStyle(), itemProperties.getAttackElement());
 			event.addCapability(ID, createProvider(atck));
