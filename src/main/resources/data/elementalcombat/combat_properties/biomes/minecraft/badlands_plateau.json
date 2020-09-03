@@ -1,6 +1,6 @@
 {	
 	"defense_element":{
-		"fire":0.75
-		"earth":0.5
+		"fire":4,
+		"earth":12
 	}
 }

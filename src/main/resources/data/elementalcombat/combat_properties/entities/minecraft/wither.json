@@ -6,10 +6,10 @@
 	},
 	
 	"defense_element":{
-		"darkness":0.0,
-		"fire":0.5,
-		"ice":0.5
-		"light":2.0
+		"darkness":25,
+		"fire":12,
+		"ice":12,
+		"light":-25
 	},
 	
 	"biome_dependency":false

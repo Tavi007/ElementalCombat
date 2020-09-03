@@ -1,7 +1,7 @@
 {	
 	"defense_element":{
-		"water":0.75,
-		"plant":0.5,
-		"earth":0.75
+		"water":4,
+		"plant":12,
+		"earth":4
 	}
 }

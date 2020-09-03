@@ -6,7 +6,7 @@
 	},
 	
 	"defense_element":{
-		"fire":0.75
+		"fire":4
 	},
 	
 	"biome_dependency":true

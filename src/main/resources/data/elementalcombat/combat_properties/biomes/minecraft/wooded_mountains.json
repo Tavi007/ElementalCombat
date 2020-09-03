@@ -1,6 +1,6 @@
 {	
 	"defense_element":{
-		"plant":0.75,
-		"earth":0.5
+		"plant":4,
+		"earth":12
 	}
 }

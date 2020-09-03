@@ -6,11 +6,11 @@
 	},
 	
 	"defense_element":{
-		"air":2.0,
-		"fire":0.5,
-		"ice":0.5,
-		"thunder":0.5,
-		"water":0.5
+		"air":-25,
+		"fire":12,
+		"ice":12,
+		"thunder":12,
+		"water":12
 	},
 	
 	"biome_dependency":false

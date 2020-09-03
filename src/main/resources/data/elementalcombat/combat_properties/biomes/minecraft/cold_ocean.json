@@ -1,6 +1,6 @@
 {	
 	"defense_element":{
-		"water":0.5,
-		"ice":0.75
+		"water":12,
+		"ice":4
 	}
 }

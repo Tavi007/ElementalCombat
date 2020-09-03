@@ -3,11 +3,11 @@
 	"attack_element":"",
 	
 	"defense_stlye":{
-		"magic":0.5
+		"magic":12
 	},
 	
 	"defense_element":{
-		"plant":0.5
+		"plant":12
 	},
 	
 	"biome_dependency":false
