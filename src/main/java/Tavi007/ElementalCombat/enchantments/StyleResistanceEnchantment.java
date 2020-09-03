@@ -4,27 +4,21 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
 
-public class ElementalResistanceEnchantment extends Enchantment{
+public class StyleResistanceEnchantment extends Enchantment{
 
 	private static final EquipmentSlotType[] ARMOR_SLOTS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
 
-	public final ElementalResistanceEnchantment.Type protectionType;
+	public final StyleResistanceEnchantment.Type protectionType;
 
-	public ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type typeIn) {
+	public StyleResistanceEnchantment(StyleResistanceEnchantment.Type typeIn) {
 		super(Rarity.UNCOMMON, EnchantmentType.ARMOR, ARMOR_SLOTS);
 		this.protectionType = typeIn;
 		switch(typeIn.typeName) {
-		case("fire"): 
-			super.name = "Fire Resistance";
+		case("projectile"): 
+			super.name = "Projectile Protection";
 	    	break;
-		case("ice"): 
-			super.name = "Ice Resistance";
-	    	break;
-		case("water"): 
-			super.name = "Water Resistance";
-	    	break;
-		case("thunder"): 
-			super.name = "Thunder Resistance";
+		case("explosion"): 
+			super.name = "Blast Protection";
 	    	break;
 		}
 	}
@@ -33,7 +27,7 @@ public class ElementalResistanceEnchantment extends Enchantment{
 	 * Determines if the enchantment passed can be applyied together with this enchantment.
 	 */
 	protected boolean canApplyTogether(Enchantment ench) {
-		return !(ench instanceof ElementalResistanceEnchantment);
+		return !(ench instanceof StyleResistanceEnchantment);
 	}
 
 	/**
@@ -44,10 +38,8 @@ public class ElementalResistanceEnchantment extends Enchantment{
 	}
 
 	public static enum Type {
-		FIRE("fire", 10, 8),
-		ICE("ice", 10, 8),
-		WATER("water", 10, 8),
-		THUNDER("thunder", 10, 8);
+		PROJECTILE("projectile", 10, 8),
+		EXPLOSION("explosion", 10, 8);
 
 		private final String typeName;
 		private final int minEnchantability;

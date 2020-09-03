@@ -3,7 +3,7 @@ package Tavi007.ElementalCombat.capabilities.defense;
 import java.util.HashMap;
 import java.util.Map;
 
-import Tavi007.ElementalCombat.enchantments.ElementalEnchantments;
+import Tavi007.ElementalCombat.enchantments.CombatEnchantments;
 import net.minecraft.enchantment.Enchantment;
 
 public class DefenseData implements IDefenseData{
@@ -39,13 +39,35 @@ public class DefenseData implements IDefenseData{
 
 	@Override
 	public void applyEnchantments(Map<Enchantment, Integer> enchantments) {
-		enchantments.forEach((key, value) -> {
+		enchantments.forEach((key, level) -> {
 			//currently only comparing strings.
 			//maybe change to resourceLocation later, so other mods can interact with this as well.
-			if(key.getName() == ElementalEnchantments.ICE_RESISTANCE.getName()) {this.elementFactor.put("ice", value);}
-			if(key.getName() == ElementalEnchantments.FIRE_RESISTANCE.getName()) {this.elementFactor.put("fire", value);}
-			if(key.getName() == ElementalEnchantments.WATER_RESISTANCE.getName()) {this.elementFactor.put("water", value);}
-			if(key.getName() == ElementalEnchantments.THUNDER_RESISTANCE.getName()) {this.elementFactor.put("thunder", value);}
+			
+			// elemental enchantments
+			if(key.getName() == CombatEnchantments.ICE_RESISTANCE.getName()) {
+				this.elementFactor.put("ice", level*2);
+				this.elementFactor.put("fire", -level*2);
+			}
+			else if(key.getName() == CombatEnchantments.FIRE_RESISTANCE.getName()) {
+				this.elementFactor.put("fire", level*2);
+				this.elementFactor.put("ice", -level*2);
+			}
+			else if(key.getName() == CombatEnchantments.WATER_RESISTANCE.getName()) {
+				this.elementFactor.put("water", level*2);
+				this.elementFactor.put("thunder", -level*2);
+			}
+			else if(key.getName() == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
+				this.elementFactor.put("thunder", level*2);
+				this.elementFactor.put("water", -level*2);
+			}
+
+			// style enchantments
+			if(key.getName() == CombatEnchantments.BLAST_PROTECTION.getName()) {
+				this.styleFactor.put("explosion", level*2);
+			}
+			else if(key.getName() == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
+				this.styleFactor.put("projectile", level*2);
+			}
 		});
 		this.areEnchantmentsApplied = true;
 	}

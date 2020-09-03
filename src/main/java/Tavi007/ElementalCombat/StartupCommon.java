@@ -3,6 +3,7 @@ package Tavi007.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
 import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
+import Tavi007.ElementalCombat.enchantments.StyleResistanceEnchantment;
 import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
@@ -30,6 +31,9 @@ public class StartupCommon {
 		event.getRegistry().register(new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.WATER).setRegistryName("water_aspect"));
 		event.getRegistry().register(new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.THUNDER).setRegistryName("thunder_aspect"));
 
-	    ElementalCombat.LOGGER.info("ElementalCombat enchantments registered.");
+		event.getRegistry().register(new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.PROJECTILE).setRegistryName(Enchantments.PROJECTILE_PROTECTION.getRegistryName()));
+		event.getRegistry().register(new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.EXPLOSION).setRegistryName(Enchantments.BLAST_PROTECTION.getRegistryName()));
+
+	    ElementalCombat.LOGGER.info("Elemental Combat enchantments registered.");
 	}
 }

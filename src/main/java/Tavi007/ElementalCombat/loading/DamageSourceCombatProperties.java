@@ -1,5 +1,7 @@
 package Tavi007.ElementalCombat.loading;
 
+import Tavi007.ElementalCombat.ElementalCombat;
+
 public class DamageSourceCombatProperties {
 	public static final DamageSourceCombatProperties EMPTY = new DamageSourceCombatProperties();
 
@@ -13,13 +15,13 @@ public class DamageSourceCombatProperties {
 	
 	public DamageSourceCombatProperties(String attack_style, String attack_element) {
 		   if (attack_style.isEmpty()) {
-			   this.attack_style = "basic";
+			   this.attack_style = ElementalCombat.DEFAULT_STYLE;
 		   }
 		   else {
 			   this.attack_style = attack_style;
 		   }
 		   if (attack_element.isEmpty()) {
-			   this.attack_element = "natural";
+			   this.attack_element = ElementalCombat.DEFAULT_ELEMENT;
 		   }
 		   else {
 			   this.attack_element = attack_element;

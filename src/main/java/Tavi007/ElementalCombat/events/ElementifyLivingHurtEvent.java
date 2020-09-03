@@ -27,21 +27,70 @@ public class ElementifyLivingHurtEvent
 	public static void elementifyLivingHurtEvent(LivingHurtEvent event)
 	{
 		DamageSource damageSource = event.getSource();
+		String damageType = damageSource.getDamageType();
+		System.out.println("Damage: " + damageSource.getDamageType());
+
 		// no modification. Entity should take normal damage and die eventually.
 		if(damageSource == DamageSource.OUT_OF_WORLD) {
 			return;	
 		}
 
-		// Get elemental data from attack
-		// check if source is an entity
+		// Get combat data from attack
 		String sourceElement;
 		String sourceStyle;
+
+		// check damageType
+		if (damageType == "player" || damageType == "mob") {
+			LivingEntity livingEntitySource = (LivingEntity) damageSource.getImmediateSource();
+			if(livingEntitySource.getHeldItemMainhand().isEmpty()){
+				//use data from livingEntity
+				AttackData atckCap = ElementalCombatAPI.getAttackData(livingEntitySource);
+				sourceStyle = atckCap.getStyle();
+				sourceElement = atckCap.getElement();
+			}
+			else {
+				//use data from held item
+				AttackData atckCap = ElementalCombatAPI.getAttackData(livingEntitySource.getHeldItemMainhand());
+				sourceStyle = atckCap.getStyle();
+				sourceElement = atckCap.getElement();
+
+				//maybe mix and match with entity data? a wither skeleton will only use data from the stone sword...
+				AttackData atckCapEntity = ElementalCombatAPI.getAttackData(livingEntitySource);
+				if (sourceStyle == ElementalCombat.DEFAULT_STYLE) {sourceStyle = atckCapEntity.getStyle();}
+				if (sourceElement == ElementalCombat.DEFAULT_ELEMENT) {sourceElement = atckCapEntity.getElement();}
+			}
+		}
+		else if(damageSource.isProjectile()) {
+			AttackData atckCap = ElementalCombatAPI.getAttackData((ProjectileEntity) damageSource.getImmediateSource());
+			sourceStyle = atckCap.getStyle();
+			sourceElement = atckCap.getElement();
+		}
+		else if(damageSource.isExplosion()) {
+			// maybe check for the source of explosion?
+			// tnt/creeper/wither might all have different elemental properties
+
+			ResourceLocation rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/explosion");
+			DamageSourceCombatProperties damageSourceProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource);
+			sourceStyle = damageSourceProperties.getAttackStyle();
+			sourceElement = damageSourceProperties.getAttackElement();
+		}
+		else {
+			// do other mods implement their own natural damageSource? If so, how could I get the mod id from it?
+			// for now do not use Namespace.
+			ResourceLocation rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/" + damageSource.getDamageType().toLowerCase());
+			DamageSourceCombatProperties damageSourceProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource);
+			sourceStyle = damageSourceProperties.getAttackStyle();
+			sourceElement = damageSourceProperties.getAttackElement();
+		}
+
+
+		/*
 
 		LivingEntity target = event.getEntityLiving();
 		Entity source = damageSource.getImmediateSource();
 		if(source != null) {
 			AttackData atckCap = new AttackData();
-			if(source instanceof LivingEntity){
+			if(source instanceof LivingEntity) {
 				LivingEntity livingEntitySource = (LivingEntity) source;
 				if(livingEntitySource.getHeldItemMainhand().isEmpty()){
 					//use data from livingEntity
@@ -67,39 +116,33 @@ public class ElementifyLivingHurtEvent
 			sourceElement = atckCap.getElement();
 		}
 		else {
-			// do other mods implement their own damageSource? If so, how could I get the mod id from it?
+			// do other mods implement their own natural damageSource? If so, how could I get the mod id from it?
+			// for now do not use Namespace.
 			ResourceLocation rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/" + damageSource.getDamageType().toLowerCase());
 			DamageSourceCombatProperties damageSourceProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource);
 			sourceStyle = damageSourceProperties.getAttackStyle();
 			sourceElement = damageSourceProperties.getAttackElement();
 		}
+		
+		*/
 
 		//defaul values in case style or element is empty
-		if (sourceStyle.isEmpty()) {
-			sourceStyle = "basic";
-		}
-		if (sourceElement.isEmpty()) {
-			sourceElement = "natural";
-		}
+		if (sourceStyle.isEmpty()) {sourceStyle = "basic";}
+		if (sourceElement.isEmpty()) {sourceElement = "natural";}
 
 		// compute new Damage value  
+		LivingEntity target = event.getEntityLiving();
 		float damageAmount = event.getAmount();
-		// Get the elemental combat data from target
+		// Get the protection data from target
 		DefenseData defCap = ElementalCombatAPI.getDefenseData(target);
-		Integer defenseStyleFactor = defCap.getStyleFactor().getOrDefault(sourceStyle, 0);
-		float defenseStyleScaling = 1.0f - ((float) defenseStyleFactor)/25;
-		
-		Integer defenseElementFactor = defCap.getElementFactor().getOrDefault(sourceElement, 0);
-		float defenseElementScaling = 1.0f - ((float) defenseElementFactor)/25;
-		
-		
+		float defenseStyleScaling = 1.0f - ((float) defCap.getStyleFactor().getOrDefault(sourceStyle, 0))/25;
+		float defenseElementScaling = 1.0f - ((float) defCap.getElementFactor().getOrDefault(sourceElement, 0))/25;
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
 
 		// display particles
 		displayParticle(defenseStyleScaling, defenseElementScaling, target.getEyePosition(0), (ServerWorld) target.getEntityWorld());
 
-		// stop the 'hurt'-animation from firing, if no damage is dealt.
-		// not working yet.
+		// heals the target, if damage is lower than 0
 		if(damageAmount <= 0)
 		{
 			target.heal(-damageAmount);

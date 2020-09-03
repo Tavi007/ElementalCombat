@@ -2,7 +2,7 @@ package Tavi007.ElementalCombat.capabilities.attack;
 
 import java.util.Map;
 
-import Tavi007.ElementalCombat.enchantments.ElementalEnchantments;
+import Tavi007.ElementalCombat.enchantments.CombatEnchantments;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 
@@ -51,9 +51,9 @@ public class AttackData implements IAttackData{
 			//maybe change to resourceLocation later, so other mods can interact with this as well.
 			//sword
 			if(key.getName() == Enchantments.FIRE_ASPECT.getName()) {this.element = "fire";}
-			if(key.getName() == ElementalEnchantments.ICE_ASPECT.getName()) {this.element = "ice";}
-			if(key.getName() == ElementalEnchantments.WATER_ASPECT.getName()) {this.element = "water";}
-			if(key.getName() == ElementalEnchantments.THUNDER_ASPECT.getName()) {this.element = "thunder";}
+			if(key.getName() == CombatEnchantments.ICE_ASPECT.getName()) {this.element = "ice";}
+			if(key.getName() == CombatEnchantments.WATER_ASPECT.getName()) {this.element = "water";}
+			if(key.getName() == CombatEnchantments.THUNDER_ASPECT.getName()) {this.element = "thunder";}
 			//bow
 			if(key.getName() == Enchantments.FLAME.getName()) {this.element = "fire";}
 			//trident
