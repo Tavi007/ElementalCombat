@@ -1,6 +1,6 @@
 {
-	"attack_style":"",
-	"attack_element":"",
+	"attack_style":"basic",
+	"attack_element":"natural",
 	
 	"defense_stlye":{
 	},

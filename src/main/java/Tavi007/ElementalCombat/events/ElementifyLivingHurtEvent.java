@@ -135,8 +135,8 @@ public class ElementifyLivingHurtEvent
 		float damageAmount = event.getAmount();
 		// Get the protection data from target
 		DefenseData defCap = ElementalCombatAPI.getDefenseData(target);
-		float defenseStyleScaling = 1.0f - ((float) defCap.getStyleFactor().getOrDefault(sourceStyle, 0))/25;
-		float defenseElementScaling = 1.0f - ((float) defCap.getElementFactor().getOrDefault(sourceElement, 0))/25;
+		float defenseStyleScaling = getScaling(defCap.getStyleFactor().getOrDefault(sourceStyle, 0));
+		float defenseElementScaling = getScaling(defCap.getElementFactor().getOrDefault(sourceElement, 0));
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
 
 		// display particles
@@ -174,6 +174,10 @@ public class ElementifyLivingHurtEvent
 		else if(scalingElement == 0) {world.spawnParticle(ParticleList.ELEMENT_IMMUNITY.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
 		else if(scalingElement > 0 && scalingElement < 1) {world.spawnParticle(ParticleList.ELEMENT_RESISTANCE.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
 		else if(scalingElement > 1) {world.spawnParticle(ParticleList.ELEMENT_WEAKNESS.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
+	}
+	
+	public static float getScaling(Integer factor) {
+		return 1.0f - ((float) factor)/25;
 	}
 
 }
