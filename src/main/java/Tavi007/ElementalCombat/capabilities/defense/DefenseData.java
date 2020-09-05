@@ -45,31 +45,41 @@ public class DefenseData implements IDefenseData{
 			
 			// elemental enchantments
 			if(key.getName() == CombatEnchantments.ICE_RESISTANCE.getName()) {
-				this.elementFactor.put("ice", level*2);
-				this.elementFactor.put("fire", -level*2);
+				addFactor(this.elementFactor, "ice", level*2);
+				addFactor(this.elementFactor, "fire", -level*2);
 			}
 			else if(key.getName() == CombatEnchantments.FIRE_RESISTANCE.getName()) {
-				this.elementFactor.put("fire", level*2);
-				this.elementFactor.put("ice", -level*2);
+				addFactor(this.elementFactor, "fire", level*2);
+				addFactor(this.elementFactor, "ice", -level*2);
 			}
 			else if(key.getName() == CombatEnchantments.WATER_RESISTANCE.getName()) {
-				this.elementFactor.put("water", level*2);
-				this.elementFactor.put("thunder", -level*2);
+				addFactor(this.elementFactor, "water", level*2);
+				addFactor(this.elementFactor, "thunder", -level*2);
 			}
 			else if(key.getName() == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
-				this.elementFactor.put("thunder", level*2);
-				this.elementFactor.put("water", -level*2);
+				addFactor(this.elementFactor, "thunder", level*2);
+				addFactor(this.elementFactor, "water", -level*2);
 			}
 
 			// style enchantments
 			if(key.getName() == CombatEnchantments.BLAST_PROTECTION.getName()) {
-				this.styleFactor.put("explosion", level*2);
+				addFactor(this.styleFactor, "explosion", level*2);
 			}
 			else if(key.getName() == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
-				this.styleFactor.put("projectile", level*2);
+				addFactor(this.styleFactor, "projectile", level*2);
 			}
 		});
 		this.areEnchantmentsApplied = true;
+	}
+	
+	private void addFactor(HashMap<String,Integer> map, String key, Integer adder) {
+		Integer factor = map.get(key);
+		if (factor == null) {
+			map.put(key, adder);
+		}
+		else {
+			map.put(key, factor + adder);
+		}
 	}
 
 }

@@ -34,7 +34,7 @@ public class AddTooltipInformation {
 				toolTip.add(new StringTextComponent(textAttackStyle));
 			}
 			if (!atckCap.getElement().equals(ElementalCombat.DEFAULT_ELEMENT)) {
-				String textAttackElement = "" + TextFormatting.GRAY + "Attack Element: " + WordUtils.capitalize(atckCap.getElement()) + TextFormatting.RESET;
+				String textAttackElement = "" + TextFormatting.GRAY + "Elemental Attack: " + WordUtils.capitalize(atckCap.getElement()) + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textAttackElement));
 			}
 
@@ -42,7 +42,7 @@ public class AddTooltipInformation {
 			DefenseData defCap = ElementalCombatAPI.getDefenseData(item);
 			HashMap<String, Integer> defStyle = defCap.getStyleFactor();
 			if(!defStyle.isEmpty()) {
-				String textDefenseStyle = "" + TextFormatting.GRAY + "Defense Style: " + TextFormatting.RESET;
+				String textDefenseStyle = "" + TextFormatting.GRAY + "Style Resistance: " + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textDefenseStyle));
 				defStyle.forEach((key, factor) -> {
 					toolTip.add(new StringTextComponent(toPercentageString(key, factor)));
@@ -50,7 +50,7 @@ public class AddTooltipInformation {
 			}
 			HashMap<String, Integer> defElement = defCap.getElementFactor();
 			if(!defElement.isEmpty()) {
-				String textDefenseElement = "" + TextFormatting.GRAY + "Defense Element:" + TextFormatting.RESET;
+				String textDefenseElement = "" + TextFormatting.GRAY + "Elemental Resistance:" + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textDefenseElement));
 				defElement.forEach((key, factor) -> {
 					toolTip.add(new StringTextComponent(toPercentageString(key, factor)));
@@ -69,6 +69,6 @@ public class AddTooltipInformation {
 		if (percentage > 100) {textFormatting = TextFormatting.GREEN;}
 		
 		//make string
-		return " - " + TextFormatting.GRAY + WordUtils.capitalize(key) + " " + textFormatting + String.valueOf(percentage)+ "%" + TextFormatting.RESET;
+		return "" + TextFormatting.GRAY + " - " + WordUtils.capitalize(key) + " " + textFormatting + String.valueOf(percentage)+ "%" + TextFormatting.RESET;
 	}
 }
