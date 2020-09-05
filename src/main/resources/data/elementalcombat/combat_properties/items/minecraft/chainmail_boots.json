@@ -1,0 +1,11 @@
+{
+	"attack_style":"basic",
+	"attack_element":"natural",
+	
+	"defense_stlye":{
+		"slash":4
+	},
+	
+	"defense_element":{
+	}
+}
