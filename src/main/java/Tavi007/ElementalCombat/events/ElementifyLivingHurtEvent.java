@@ -8,6 +8,7 @@ import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.particle.ParticleList;
+import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -135,8 +136,8 @@ public class ElementifyLivingHurtEvent
 		float damageAmount = event.getAmount();
 		// Get the protection data from target
 		DefenseData defCap = ElementalCombatAPI.getDefenseData(target);
-		float defenseStyleScaling = getScaling(defCap.getStyleFactor().getOrDefault(sourceStyle, 0));
-		float defenseElementScaling = getScaling(defCap.getElementFactor().getOrDefault(sourceElement, 0));
+		float defenseStyleScaling = DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceStyle);
+		float defenseElementScaling = DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceElement);
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
 
 		// display particles
@@ -175,9 +176,4 @@ public class ElementifyLivingHurtEvent
 		else if(scalingElement > 0 && scalingElement < 1) {world.spawnParticle(ParticleList.ELEMENT_RESISTANCE.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
 		else if(scalingElement > 1) {world.spawnParticle(ParticleList.ELEMENT_WEAKNESS.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
 	}
-	
-	public static float getScaling(Integer factor) {
-		return 1.0f - ((float) factor)/25;
-	}
-
 }
