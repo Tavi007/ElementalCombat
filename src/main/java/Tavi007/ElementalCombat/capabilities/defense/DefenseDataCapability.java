@@ -94,16 +94,16 @@ public class DefenseDataCapability {
 					ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "entities/" + rlEntity.getNamespace() + "/" + rlEntity.getPath());
 					EntityCombatProperties entityProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties);
 
-					HashMap<String, Integer> styleMap = entityProperties.getDefenseStyle();
-					HashMap<String, Integer> elementMap = entityProperties.getDefenseElement();
-					// player spawn should be biome independent
+					HashMap<String, Integer> styleMap = new HashMap<String, Integer>(entityProperties.getDefenseStyle());
+					HashMap<String, Integer> elementMap = new HashMap<String, Integer>(entityProperties.getDefenseElement());
+					// player spawn is usually biome independent
 					if(entityProperties.getBiomeDependency()) 
 					{
 						BlockPos blockPos = new BlockPos(entity.getPositionVec());
 						ResourceLocation rlBiome = entity.getEntityWorld().getBiome(blockPos).getRegistryName();
 						rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "biomes/" + rlBiome.getNamespace() + "/" + rlBiome.getPath()); ;
 						BiomeCombatProperties biomeProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties);
-						elementMap = DefenseDataHelper.mergeMaps(elementMap, biomeProperties.getDefenseElement());					
+						DefenseDataHelper.mergeMaps(elementMap, biomeProperties.getDefenseElement());					
 					}
 					final DefenseData defData = new DefenseData(styleMap, elementMap);
 					event.addCapability(ID, createProvider(defData));

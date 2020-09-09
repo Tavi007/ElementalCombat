@@ -31,21 +31,23 @@ public class ElementifyLivingEquipmentChange
 			ResourceLocation rlEntity = entity.getType().getRegistryName();
 			ResourceLocation rlData = new ResourceLocation(ElementalCombat.MOD_ID, "entities/" + rlEntity.getNamespace() + "/" + rlEntity.getPath());
 			EntityCombatProperties entityData = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlData);
-			HashMap<String, Integer> defenseStyle = entityData.getDefenseStyle();
-			HashMap<String, Integer> defenseElement = entityData.getDefenseElement();
-			
+			HashMap<String, Integer> defenseStyle = new HashMap<String, Integer>(entityData.getDefenseStyle());
+			HashMap<String, Integer> defenseElement = new HashMap<String, Integer>(entityData.getDefenseElement());
+
 			// get values from armor
 			entity.getArmorInventoryList().forEach(item -> {
-				DefenseData defCapItem = ElementalCombatAPI.getDefenseData(item);
-				HashMap<String, Integer> defenseStyleItem = defCapItem.getStyleFactor();
-				HashMap<String, Integer> defenseElementItem = defCapItem.getElementFactor();
-				
-				defenseStyle.putAll(DefenseDataHelper.sumMaps(defenseStyle, defenseStyleItem));
-				defenseElement.putAll(DefenseDataHelper.sumMaps(defenseElement, defenseElementItem));
+				if (!item.isEmpty()) {
+					DefenseData defCapItem = ElementalCombatAPI.getDefenseData(item);
+					HashMap<String, Integer> defenseStyleItem = defCapItem.getStyleFactor();
+					HashMap<String, Integer> defenseElementItem = defCapItem.getElementFactor();
+
+					DefenseDataHelper.sumMaps(defenseStyle, defenseStyleItem);
+					DefenseDataHelper.sumMaps(defenseElement, defenseElementItem);
+				}
 			});
 			// cross-mod interaction with curios
 			if (ModList.get().isLoaded("curios")) {
-				
+
 			}
 
 			// set values
@@ -53,9 +55,5 @@ public class ElementifyLivingEquipmentChange
 			defCapEntity.setStyleFactor(defenseStyle);
 			defCapEntity.setElementFactor(defenseElement);
 		}
-	}
-	
-	public static HashMap<String, Integer> mergeDefenseMapping(HashMap<String, Integer> baseMap, HashMap<String, Integer> additionalMap){
-		return additionalMap;
 	}
 }

@@ -7,8 +7,8 @@ public class DefenseDataHelper {
 	public static Integer scaleEnchantment = (int) Math.round(maxFactor/12.5);
 	
 	
-	//merge the two maps, so the highest value will persist.
-	public static HashMap<String, Integer> mergeMaps(HashMap<String, Integer> baseMap, HashMap<String, Integer> additionalMap){
+	//merge the @param additionalMap into the @param baseMap, so the highest value persists.
+	public static void mergeMaps(HashMap<String, Integer> baseMap, HashMap<String, Integer> additionalMap){
 		additionalMap.forEach((key, value)->{
 			if(!baseMap.containsKey(key)) {
 				baseMap.put(key, value);
@@ -17,11 +17,10 @@ public class DefenseDataHelper {
 				baseMap.put(key, value);
 			}
 		});	
-		return baseMap;
 	}
 
-	//merge the two maps, so the values of the same key get summed up.
-	public static HashMap<String, Integer> sumMaps(HashMap<String, Integer> baseMap, HashMap<String, Integer> additionalMap){
+	//merge the @param additionalMap into the @param baseMap, so the values of the same key get summed up.
+	public static void sumMaps(HashMap<String, Integer> baseMap, HashMap<String, Integer> additionalMap){
 		additionalMap.forEach((key, value)->{
 			if(!baseMap.containsKey(key)) {
 				baseMap.put(key, value);
@@ -30,7 +29,6 @@ public class DefenseDataHelper {
 				baseMap.put(key, value + baseMap.get(key));
 			}
 		});	
-		return baseMap;
 	}
 	
 	public static float getScaling(HashMap<String, Integer> map, String key) {
