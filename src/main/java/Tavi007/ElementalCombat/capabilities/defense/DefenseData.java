@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import Tavi007.ElementalCombat.enchantments.CombatEnchantments;
+import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.enchantment.Enchantment;
 
 public class DefenseData implements IDefenseData{
@@ -45,28 +46,28 @@ public class DefenseData implements IDefenseData{
 			
 			// elemental enchantments
 			if(key.getName() == CombatEnchantments.ICE_RESISTANCE.getName()) {
-				addFactor(this.elementFactor, "ice", level*2);
-				addFactor(this.elementFactor, "fire", -level*2);
+				addFactor(this.elementFactor, "ice", level*DefenseDataHelper.scaleEnchantment);
+				addFactor(this.elementFactor, "fire", -level*DefenseDataHelper.scaleEnchantment);
 			}
 			else if(key.getName() == CombatEnchantments.FIRE_RESISTANCE.getName()) {
-				addFactor(this.elementFactor, "fire", level*2);
-				addFactor(this.elementFactor, "ice", -level*2);
+				addFactor(this.elementFactor, "fire", level*DefenseDataHelper.scaleEnchantment);
+				addFactor(this.elementFactor, "ice", -level*DefenseDataHelper.scaleEnchantment);
 			}
 			else if(key.getName() == CombatEnchantments.WATER_RESISTANCE.getName()) {
-				addFactor(this.elementFactor, "water", level*2);
-				addFactor(this.elementFactor, "thunder", -level*2);
+				addFactor(this.elementFactor, "water", level*DefenseDataHelper.scaleEnchantment);
+				addFactor(this.elementFactor, "thunder", -level*DefenseDataHelper.scaleEnchantment);
 			}
 			else if(key.getName() == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
-				addFactor(this.elementFactor, "thunder", level*2);
-				addFactor(this.elementFactor, "water", -level*2);
+				addFactor(this.elementFactor, "thunder", level*DefenseDataHelper.scaleEnchantment);
+				addFactor(this.elementFactor, "water", -level*DefenseDataHelper.scaleEnchantment);
 			}
 
 			// style enchantments
 			if(key.getName() == CombatEnchantments.BLAST_PROTECTION.getName()) {
-				addFactor(this.styleFactor, "explosion", level*2);
+				addFactor(this.styleFactor, "explosion", level*DefenseDataHelper.scaleEnchantment);
 			}
 			else if(key.getName() == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
-				addFactor(this.styleFactor, "projectile", level*2);
+				addFactor(this.styleFactor, "projectile", level*DefenseDataHelper.scaleEnchantment);
 			}
 		});
 		this.areEnchantmentsApplied = true;

@@ -9,6 +9,7 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -61,7 +62,7 @@ public class AddTooltipInformation {
 	
 	private static String toPercentageString(String key, Integer factor) {
 		//get color
-		Integer percentage = Math.round((1.0f - ElementifyLivingHurtEvent.getScaling(factor))*100);
+		Integer percentage = Math.round(DefenseDataHelper.getPercentage(factor)*100);
 		TextFormatting textFormatting = TextFormatting.GRAY;
 		if (percentage < 0) {textFormatting = TextFormatting.RED;}
 		if (percentage > 0 && percentage < 100) {textFormatting = TextFormatting.BLUE;}

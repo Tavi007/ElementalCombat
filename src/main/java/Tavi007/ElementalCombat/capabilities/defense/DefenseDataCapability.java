@@ -8,6 +8,7 @@ import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
+import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -102,10 +103,7 @@ public class DefenseDataCapability {
 						ResourceLocation rlBiome = entity.getEntityWorld().getBiome(blockPos).getRegistryName();
 						rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "biomes/" + rlBiome.getNamespace() + "/" + rlBiome.getPath()); ;
 						BiomeCombatProperties biomeProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties);
-						biomeProperties.getDefenseElement().forEach((key, value)->{
-							if(!elementMap.containsKey(key)) {elementMap.put(key, value);}
-							else if(elementMap.get(key) > value) {elementMap.put(key, value);}
-						});						
+						elementMap = DefenseDataHelper.mergeMaps(elementMap, biomeProperties.getDefenseElement());					
 					}
 					final DefenseData defData = new DefenseData(styleMap, elementMap);
 					event.addCapability(ID, createProvider(defData));
