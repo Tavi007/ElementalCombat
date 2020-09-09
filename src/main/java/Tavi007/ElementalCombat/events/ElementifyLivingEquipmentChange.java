@@ -5,6 +5,7 @@ import java.util.HashMap;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.curios.HandleCuriosInventory;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.entity.LivingEntity;
@@ -47,7 +48,12 @@ public class ElementifyLivingEquipmentChange
 			});
 			// cross-mod interaction with curios
 			if (ModList.get().isLoaded("curios")) {
+				DefenseData defCapItem = HandleCuriosInventory.getDefenseData(entity);
+				HashMap<String, Integer> defenseStyleItem = defCapItem.getStyleFactor();
+				HashMap<String, Integer> defenseElementItem = defCapItem.getElementFactor();
 
+				DefenseDataHelper.sumMaps(defenseStyle, defenseStyleItem);
+				DefenseDataHelper.sumMaps(defenseElement, defenseElementItem);
 			}
 
 			// set values
