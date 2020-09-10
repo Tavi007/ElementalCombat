@@ -1,10 +1,11 @@
 modLoader="javafml" #mandatory
-loaderVersion="[32,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+loaderVersion="[33,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+license="All rights reserved"
 
 #issueTrackerURL="http://my.issue.tracker/" #optional
 [[mods]] #mandatory
 modId = "elementalcombat" #mandatory
-version = "0.1" #mandatory
+version = "1" #mandatory
 
 displayName = "Elemental Combat" #mandatory
 #updateJSONURL = "http://myurl.me/" #optional
@@ -14,19 +15,19 @@ logoFile = "Icon.png" #optional. A file name (in the root of the mod JAR) contai
 credits = "Thanks goes to the Forge Forum" #optional
 authors = "Tavi007" #optional
 
-description= "This mod enhances the combat system by adding elemental attack and defense properties to mobs and players. While these properties are usually final for mobs, the player can choose his elemental properties by equipping armor and attacking with the right weapon. This mod also provides an API for other mods to interact with. "
+description= "This mod enhances the combat system by adding elemental and style properties to items, mobs and players. This mod also provides an API for other mods to interact with. "
 
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.elementalcombat]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[32,)" #mandatory
+    versionRange="[33,)" #mandatory
     ordering="NONE"
     side="BOTH"
 # Here's another dependency
 [[dependencies.elementalcombat]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.1]"
+    versionRange="[1.16.2]"
     ordering="NONE"
     side="BOTH"
