@@ -27,6 +27,11 @@ public class DamageSourceCombatProperties {
 			   this.attack_element = attack_element;
 		   }
 	}
+	
+	public DamageSourceCombatProperties(DamageSourceCombatProperties properties) {
+		this.attack_element = properties.getAttackElement();
+		this.attack_style = properties.getAttackStyle();
+	}
 
 	public String getAttackStyle() {return this.attack_style;}
 	public String getAttackElement() {return this.attack_element;}

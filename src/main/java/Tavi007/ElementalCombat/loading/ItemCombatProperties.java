@@ -39,6 +39,14 @@ public class ItemCombatProperties
 		   this.attack_style = ElementalCombat.DEFAULT_STYLE;
 		   this.attack_element = ElementalCombat.DEFAULT_ELEMENT;
 	   }
+
+	   public ItemCombatProperties(ItemCombatProperties properties)
+	   {
+		   this.defense_style = properties.getDefenseStyle();
+		   this.defense_element = properties.getDefenseElement();
+		   this.attack_style = properties.getAttackStyle();
+		   this.attack_element = properties.getAttackElement();
+	   }
 	   
 	   public HashMap<String, Integer> getDefenseStyle()
 	   {

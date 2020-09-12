@@ -15,5 +15,9 @@ public class BiomeCombatProperties {
 		this.defense_element = defense_element;
 	}
 	
+	public BiomeCombatProperties(BiomeCombatProperties biomeData) {
+		this.defense_element = biomeData.getDefenseElement();
+	}
+
 	public HashMap<String, Integer> getDefenseElement() {return this.defense_element;}
 }

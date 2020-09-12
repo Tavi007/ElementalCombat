@@ -1,6 +1,7 @@
 package Tavi007.ElementalCombat.capabilities.attack;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
@@ -84,9 +85,7 @@ public class AttackDataCapability {
 		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
 			if(!event.getObject().getEntityWorld().isRemote()) {
 				if (event.getObject() instanceof LivingEntity) {
-					ResourceLocation rlEntity = ((LivingEntity) event.getObject()).getType().getRegistryName();
-					ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "entities/" + rlEntity.getNamespace() + "/" + rlEntity.getPath());
-					EntityCombatProperties entityProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties);
+					EntityCombatProperties entityProperties = ElementalCombatAPI.getDefaultProperties((LivingEntity) event.getObject());
 					final AttackData atck = new AttackData(entityProperties.getAttackStyle(), entityProperties.getAttackElement());
 					event.addCapability(ID, createProvider(atck));
 				}
@@ -99,9 +98,7 @@ public class AttackDataCapability {
 
 		@SubscribeEvent
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-			ResourceLocation rlItem = event.getObject().getItem().getRegistryName();
-			ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "items/" + rlItem.getNamespace() + "/" + rlItem.getPath());
-			ItemCombatProperties itemProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties);
+			ItemCombatProperties itemProperties = ElementalCombatAPI.getDefaultProperties(event.getObject());
 			final AttackData atck = new AttackData(itemProperties.getAttackStyle(), itemProperties.getAttackElement());
 			event.addCapability(ID, createProvider(atck));
 		}

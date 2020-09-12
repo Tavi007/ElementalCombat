@@ -9,11 +9,9 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.particle.ParticleList;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -66,20 +64,8 @@ public class ElementifyLivingHurtEvent
 			sourceStyle = atckCap.getStyle();
 			sourceElement = atckCap.getElement();
 		}
-		else if(damageSource.isExplosion()) {
-			// maybe check for the source of explosion?
-			// tnt/creeper/wither might all have different elemental properties
-
-			ResourceLocation rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/explosion");
-			DamageSourceCombatProperties damageSourceProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource);
-			sourceStyle = damageSourceProperties.getAttackStyle();
-			sourceElement = damageSourceProperties.getAttackElement();
-		}
 		else {
-			// do other mods implement their own natural damageSource? If so, how could I get the mod id from it?
-			// for now do not use Namespace.
-			ResourceLocation rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/" + damageSource.getDamageType().toLowerCase());
-			DamageSourceCombatProperties damageSourceProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource);
+			DamageSourceCombatProperties damageSourceProperties = ElementalCombatAPI.getDefaultProperties(damageSource);
 			sourceStyle = damageSourceProperties.getAttackStyle();
 			sourceElement = damageSourceProperties.getAttackElement();
 		}
