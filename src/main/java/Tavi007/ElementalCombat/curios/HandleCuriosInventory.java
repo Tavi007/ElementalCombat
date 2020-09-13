@@ -25,7 +25,7 @@ public class HandleCuriosInventory {
 				if (!item.isEmpty())
 				{
 					// get defense data and add them up
-					DefenseData defDataItem = ElementalCombatAPI.getDefenseData(item);
+					DefenseData defDataItem = ElementalCombatAPI.getDefenseDataWithEnchantment(item);
 					DefenseDataHelper.sumMaps(styleFactor, defDataItem.getStyleFactor());
 					DefenseDataHelper.sumMaps(elementFactor, defDataItem.getElementFactor());
 				}

@@ -38,7 +38,7 @@ public class ElementifyLivingEquipmentChange
 			// get values from armor
 			entity.getArmorInventoryList().forEach(item -> {
 				if (!item.isEmpty()) {
-					DefenseData defCapItem = ElementalCombatAPI.getDefenseData(item);
+					DefenseData defCapItem = ElementalCombatAPI.getDefenseDataWithEnchantment(item);
 					HashMap<String, Integer> defenseStyleItem = defCapItem.getStyleFactor();
 					HashMap<String, Integer> defenseElementItem = defCapItem.getElementFactor();
 

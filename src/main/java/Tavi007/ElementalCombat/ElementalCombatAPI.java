@@ -1,14 +1,20 @@
 package Tavi007.ElementalCombat;
 
+import java.util.Map;
+
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
+import Tavi007.ElementalCombat.enchantments.CombatEnchantments;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
+import Tavi007.ElementalCombat.util.DefenseDataHelper;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.EnchantedBookItem;
@@ -32,25 +38,49 @@ public class ElementalCombatAPI
 	//ItemStack
 	public static AttackData getAttackData(ItemStack item){
 		AttackData attackData = (AttackData) item.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
-		if(!attackData.areEnchantmentsApplied() && !(item.getItem() instanceof EnchantedBookItem)) {
-			attackData.applyEnchantments(EnchantmentHelper.getEnchantments(item));
-		}
 		return attackData;
 	}
 
 	public static DefenseData getDefenseData(ItemStack item){
 		DefenseData defenseData = (DefenseData) item.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
-		if(!defenseData.areEnchantmentsApplied() && !(item.getItem() instanceof EnchantedBookItem)) {
-			defenseData.applyEnchantments(EnchantmentHelper.getEnchantments(item));
-			}
 		return defenseData;
+	}
+
+	public static AttackData getAttackDataWithEnchantment(ItemStack item){
+		AttackData attackData = new AttackData((AttackData) item.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData()));
+		Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(item);
+		enchantments.forEach((key, value) -> {
+
+			//currently only comparing strings.
+			//maybe change to resourceLocation later, so other mods can interact with this as well.
+			//sword
+			if(key.getName() == Enchantments.FIRE_ASPECT.getName()) {attackData.setElement("fire");}
+			if(key.getName() == CombatEnchantments.ICE_ASPECT.getName()) {attackData.setElement("ice");}
+			if(key.getName() == CombatEnchantments.WATER_ASPECT.getName()) {attackData.setElement("water");}
+			if(key.getName() == CombatEnchantments.THUNDER_ASPECT.getName()) {attackData.setElement("thunder");}
+			//bow
+			if(key.getName() == Enchantments.FLAME.getName()) {attackData.setElement("fire");}
+			//trident
+			if(key.getName() == Enchantments.CHANNELING.getName()) {attackData.setElement("thunder");}
+		});
+
+		return attackData;
+	}
+
+	public static DefenseData getDefenseDataWithEnchantment(ItemStack item){
+		DefenseData defenseData = new DefenseData((DefenseData) item.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData()));
+		DefenseData defenseDataEnchantment = DefenseDataHelper.getEnchantmentData(EnchantmentHelper.getEnchantments(item));
+		
+		defenseDataEnchantment.sum(defenseData);
+		
+		return defenseDataEnchantment;
 	}
 
 	//Projectiles
 	public static AttackData getAttackData(ProjectileEntity entity){
 		return (AttackData) entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
 	}
-	
+
 	//get default values
 	public static BiomeCombatProperties getDefaultProperties(Biome biome) {
 		ResourceLocation rlBiome = biome.getRegistryName();
@@ -72,7 +102,7 @@ public class ElementalCombatAPI
 			rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/" + source.getDamageType().toLowerCase());
 		}
 		return new DamageSourceCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource));
-		
+
 	}
 
 	public static EntityCombatProperties getDefaultProperties(LivingEntity entity) {

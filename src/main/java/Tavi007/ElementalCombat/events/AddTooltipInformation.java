@@ -29,7 +29,7 @@ public class AddTooltipInformation {
 		List<ITextComponent> toolTip = event.getToolTip();
 		if (item != null) {
 			//attack
-			AttackData atckCap = ElementalCombatAPI.getAttackData(item);
+			AttackData atckCap = ElementalCombatAPI.getAttackDataWithEnchantment(item);
 			if (!atckCap.getStyle().equals(ElementalCombat.DEFAULT_STYLE)) {
 				String textAttackStyle = "" + TextFormatting.GRAY + "Attack Style: " + WordUtils.capitalize(atckCap.getStyle()) + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textAttackStyle));
@@ -40,7 +40,7 @@ public class AddTooltipInformation {
 			}
 
 			//defense
-			DefenseData defCap = ElementalCombatAPI.getDefenseData(item);
+			DefenseData defCap = ElementalCombatAPI.getDefenseDataWithEnchantment(item);
 			HashMap<String, Integer> defStyle = defCap.getStyleFactor();
 			if(!defStyle.isEmpty()) {
 				String textDefenseStyle = "" + TextFormatting.GRAY + "Style Resistance: " + TextFormatting.RESET;

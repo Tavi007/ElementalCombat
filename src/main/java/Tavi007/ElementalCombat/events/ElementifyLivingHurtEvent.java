@@ -49,7 +49,7 @@ public class ElementifyLivingHurtEvent
 			}
 			else {
 				//use data from held item
-				AttackData atckCap = ElementalCombatAPI.getAttackData(livingEntitySource.getHeldItemMainhand());
+				AttackData atckCap = ElementalCombatAPI.getAttackDataWithEnchantment(livingEntitySource.getHeldItemMainhand());
 				sourceStyle = atckCap.getStyle();
 				sourceElement = atckCap.getElement();
 
@@ -69,49 +69,6 @@ public class ElementifyLivingHurtEvent
 			sourceStyle = damageSourceProperties.getAttackStyle();
 			sourceElement = damageSourceProperties.getAttackElement();
 		}
-
-
-		/*
-
-		LivingEntity target = event.getEntityLiving();
-		Entity source = damageSource.getImmediateSource();
-		if(source != null) {
-			AttackData atckCap = new AttackData();
-			if(source instanceof LivingEntity) {
-				LivingEntity livingEntitySource = (LivingEntity) source;
-				if(livingEntitySource.getHeldItemMainhand().isEmpty()){
-					//use data from livingEntity
-					atckCap = ElementalCombatAPI.getAttackData(livingEntitySource);
-				}
-				else {
-					//use data from held item
-					atckCap = ElementalCombatAPI.getAttackData(livingEntitySource.getHeldItemMainhand());
-
-					//maybe mix and match with entity data? a wither skeleton will only use data from the stone sword...
-				}
-			}
-			else if (source instanceof ProjectileEntity){
-				//use data from projectile
-				atckCap = ElementalCombatAPI.getAttackData((ProjectileEntity) source);
-			}
-			else {
-				ElementalCombat.LOGGER.info("Unknown DamageSource case. How did you land here?");
-				return;
-			}
-
-			sourceStyle = atckCap.getStyle();
-			sourceElement = atckCap.getElement();
-		}
-		else {
-			// do other mods implement their own natural damageSource? If so, how could I get the mod id from it?
-			// for now do not use Namespace.
-			ResourceLocation rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/" + damageSource.getDamageType().toLowerCase());
-			DamageSourceCombatProperties damageSourceProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource);
-			sourceStyle = damageSourceProperties.getAttackStyle();
-			sourceElement = damageSourceProperties.getAttackElement();
-		}
-		
-		*/
 
 		//defaul values in case style or element is empty
 		if (sourceStyle.isEmpty()) {sourceStyle = "basic";}
