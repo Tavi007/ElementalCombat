@@ -48,32 +48,36 @@ public class ElementalCombatAPI
 
 	public static AttackData getAttackDataWithEnchantment(ItemStack item){
 		AttackData attackData = new AttackData((AttackData) item.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData()));
-		Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(item);
-		enchantments.forEach((key, value) -> {
 
-			//currently only comparing strings.
-			//maybe change to resourceLocation later, so other mods can interact with this as well.
-			//sword
-			if(key.getName() == Enchantments.FIRE_ASPECT.getName()) {attackData.setElement("fire");}
-			if(key.getName() == CombatEnchantments.ICE_ASPECT.getName()) {attackData.setElement("ice");}
-			if(key.getName() == CombatEnchantments.WATER_ASPECT.getName()) {attackData.setElement("water");}
-			if(key.getName() == CombatEnchantments.THUNDER_ASPECT.getName()) {attackData.setElement("thunder");}
-			//bow
-			if(key.getName() == Enchantments.FLAME.getName()) {attackData.setElement("fire");}
-			//trident
-			if(key.getName() == Enchantments.CHANNELING.getName()) {attackData.setElement("thunder");}
-		});
+		if (!(item.getItem() instanceof EnchantedBookItem)) {
+			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(item);
+			enchantments.forEach((key, value) -> {
 
+				//currently only comparing strings.
+				//maybe change to resourceLocation later, so other mods can interact with this as well.
+				//sword
+				if(key.getName() == Enchantments.FIRE_ASPECT.getName()) {attackData.setElement("fire");}
+				if(key.getName() == CombatEnchantments.ICE_ASPECT.getName()) {attackData.setElement("ice");}
+				if(key.getName() == CombatEnchantments.WATER_ASPECT.getName()) {attackData.setElement("water");}
+				if(key.getName() == CombatEnchantments.THUNDER_ASPECT.getName()) {attackData.setElement("thunder");}
+				//bow
+				if(key.getName() == Enchantments.FLAME.getName()) {attackData.setElement("fire");}
+				//trident
+				if(key.getName() == Enchantments.CHANNELING.getName()) {attackData.setElement("thunder");}
+			});
+		}
 		return attackData;
 	}
 
 	public static DefenseData getDefenseDataWithEnchantment(ItemStack item){
 		DefenseData defenseData = new DefenseData((DefenseData) item.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData()));
-		DefenseData defenseDataEnchantment = DefenseDataHelper.getEnchantmentData(EnchantmentHelper.getEnchantments(item));
-		
-		defenseDataEnchantment.sum(defenseData);
-		
-		return defenseDataEnchantment;
+
+		if (!(item.getItem() instanceof EnchantedBookItem)) {
+			DefenseData defenseDataEnchantment = DefenseDataHelper.getEnchantmentData(EnchantmentHelper.getEnchantments(item));
+			defenseDataEnchantment.sum(defenseData);
+			return defenseDataEnchantment;
+		}
+		return defenseData;
 	}
 
 	//Projectiles
