@@ -5,6 +5,8 @@ import Tavi007.ElementalCombat.particle.ParticleList;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class StartupClientOnly {
@@ -12,6 +14,7 @@ public class StartupClientOnly {
 	@SubscribeEvent
 	public static void onClientSetupEvent(final FMLClientSetupEvent event)
 	{
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Configuration.CONFIG_SPEC);
 		ElementalCombat.LOGGER.info("clientRegistries method registered.");	
 	}
 	

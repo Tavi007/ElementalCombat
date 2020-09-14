@@ -46,7 +46,7 @@ public class AddTooltipInformation {
 				String textDefenseStyle = "" + TextFormatting.GRAY + "Style Resistance: " + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textDefenseStyle));
 				defStyle.forEach((key, factor) -> {
-					toolTip.add(new StringTextComponent(toPercentageString(key, factor)));
+					toolTip.add(new StringTextComponent(DefenseDataHelper.toPercentageString(key, factor)));
 				});
 			}
 			HashMap<String, Integer> defElement = defCap.getElementFactor();
@@ -54,22 +54,9 @@ public class AddTooltipInformation {
 				String textDefenseElement = "" + TextFormatting.GRAY + "Elemental Resistance:" + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textDefenseElement));
 				defElement.forEach((key, factor) -> {
-					toolTip.add(new StringTextComponent(toPercentageString(key, factor)));
+					toolTip.add(new StringTextComponent(DefenseDataHelper.toPercentageString(key, factor)));
 				});
 			}
 		}
-	}
-	
-	private static String toPercentageString(String key, Integer factor) {
-		//get color
-		Integer percentage = Math.round(DefenseDataHelper.getPercentage(factor)*100);
-		TextFormatting textFormatting = TextFormatting.GRAY;
-		if (percentage < 0) {textFormatting = TextFormatting.RED;}
-		if (percentage > 0 && percentage < 100) {textFormatting = TextFormatting.BLUE;}
-		if (percentage == 100) {textFormatting = TextFormatting.YELLOW;}
-		if (percentage > 100) {textFormatting = TextFormatting.GREEN;}
-		
-		//make string
-		return "" + TextFormatting.GRAY + " - " + WordUtils.capitalize(key) + " " + textFormatting + String.valueOf(percentage)+ "%" + TextFormatting.RESET;
 	}
 }

@@ -2,7 +2,10 @@ package Tavi007.ElementalCombat.util;
 
 import java.util.HashMap;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import Tavi007.ElementalCombat.ElementalCombat;
+import net.minecraft.util.text.TextFormatting;
 
 public class DefenseDataHelper {
 	
@@ -37,5 +40,19 @@ public class DefenseDataHelper {
 	
 	public static float getPercentage(Integer factor) {
 		return ((float) factor)/ElementalCombat.MAX_FACTOR;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static String toPercentageString(String key, Integer factor) {
+		//get color
+		Integer percentage = Math.round(DefenseDataHelper.getPercentage(factor)*100);
+		TextFormatting textFormatting = TextFormatting.GRAY;
+		if (percentage < 0) {textFormatting = TextFormatting.RED;}
+		if (percentage > 0 && percentage < 100) {textFormatting = TextFormatting.BLUE;}
+		if (percentage == 100) {textFormatting = TextFormatting.YELLOW;}
+		if (percentage > 100) {textFormatting = TextFormatting.GREEN;}
+		
+		//make string
+		return "" + TextFormatting.GRAY + " - " + WordUtils.capitalize(key) + " " + textFormatting + String.valueOf(percentage)+ "%" + TextFormatting.RESET;
 	}
 }
