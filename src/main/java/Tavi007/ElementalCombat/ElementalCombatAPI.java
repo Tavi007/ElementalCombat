@@ -1,5 +1,6 @@
 package Tavi007.ElementalCombat;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
@@ -73,7 +74,41 @@ public class ElementalCombatAPI
 		DefenseData defenseData = new DefenseData((DefenseData) item.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData()));
 
 		if (!(item.getItem() instanceof EnchantedBookItem)) {
-			DefenseData defenseDataEnchantment = DefenseDataHelper.getEnchantmentData(EnchantmentHelper.getEnchantments(item));
+			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(item);
+			HashMap<String, Integer> defStyle = new HashMap<String, Integer>();
+			HashMap<String, Integer> defElement = new HashMap<String, Integer>();
+			enchantments.forEach((key, level) -> {
+				//currently only comparing strings.
+				//maybe change to resourceLocation later, so other mods can interact with this as well.
+				
+				// elemental enchantments
+				if(key.getName() == CombatEnchantments.ICE_RESISTANCE.getName()) {
+					defElement.put("ice", level*ElementalCombat.SCALE_ENCHANTMENT);
+					defElement.put("fire", -level*ElementalCombat.SCALE_ENCHANTMENT);
+				}
+				else if(key.getName() == CombatEnchantments.FIRE_RESISTANCE.getName()) {
+					defElement.put( "fire", level*ElementalCombat.SCALE_ENCHANTMENT);
+					defElement.put( "ice", -level*ElementalCombat.SCALE_ENCHANTMENT);
+				}
+				else if(key.getName() == CombatEnchantments.WATER_RESISTANCE.getName()) {
+					defElement.put( "water", level*ElementalCombat.SCALE_ENCHANTMENT);
+					defElement.put( "thunder", -level*ElementalCombat.SCALE_ENCHANTMENT);
+				}
+				else if(key.getName() == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
+					defElement.put( "thunder", level*ElementalCombat.SCALE_ENCHANTMENT);
+					defElement.put( "water", -level*ElementalCombat.SCALE_ENCHANTMENT);
+				}
+
+				// style enchantments
+				if(key.getName() == CombatEnchantments.BLAST_PROTECTION.getName()) {
+					defStyle.put("explosion", level*ElementalCombat.SCALE_ENCHANTMENT);
+				}
+				else if(key.getName() == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
+					defStyle.put("projectile", level*ElementalCombat.SCALE_ENCHANTMENT);
+				}
+			});
+			
+			DefenseData defenseDataEnchantment = new DefenseData(defStyle, defElement);
 			defenseDataEnchantment.sum(defenseData);
 			return defenseDataEnchantment;
 		}
