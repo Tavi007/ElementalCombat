@@ -12,7 +12,6 @@ import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
-import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;

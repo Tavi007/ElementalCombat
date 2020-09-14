@@ -23,8 +23,8 @@ public class ElementalCombat
     
     public static final String DEFAULT_ELEMENT = "natural";
     public static final String DEFAULT_STYLE = "basic";
-    public static Integer MAX_FACTOR = 25;
-	public static Integer SCALE_ENCHANTMENT = 2;
+    public static final Integer MAX_FACTOR = 25;
+	public static final Integer SCALE_ENCHANTMENT = 2;
        
     
 	@SuppressWarnings("deprecation")
