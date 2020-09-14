@@ -7,6 +7,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.util.text.TextFormatting;
 
+@SuppressWarnings("deprecation")
 public class DefenseDataHelper {
 	
 	//merge the @param additionalMap into the @param baseMap, so the highest value persists.
@@ -42,7 +43,6 @@ public class DefenseDataHelper {
 		return ((float) factor)/ElementalCombat.MAX_FACTOR;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static String toPercentageString(String key, Integer factor) {
 		//get color
 		Integer percentage = Math.round(DefenseDataHelper.getPercentage(factor)*100);
