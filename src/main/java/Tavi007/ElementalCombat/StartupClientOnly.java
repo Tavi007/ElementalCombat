@@ -29,7 +29,6 @@ public class StartupClientOnly {
 		Minecraft.getInstance().particles.registerFactory(ParticleList.STYLE_WEAKNESS.get(), CombatParticle.Factory::new);
 		Minecraft.getInstance().particles.registerFactory(ParticleList.STYLE_RESISTANCE.get(), CombatParticle.Factory::new);
 		Minecraft.getInstance().particles.registerFactory(ParticleList.STYLE_IMMUNITY.get(), CombatParticle.Factory::new);
-		Minecraft.getInstance().particles.registerFactory(ParticleList.STYLE_ABSORPTION.get(), CombatParticle.Factory::new);
 		
 	    ElementalCombat.LOGGER.info("ElementalCombat particles factory registered.");
 	}

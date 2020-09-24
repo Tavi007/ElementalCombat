@@ -18,5 +18,4 @@ public class ParticleList {
 	public static final RegistryObject<BasicParticleType> STYLE_WEAKNESS = PARTICLES.register("style_weakness", () -> new BasicParticleType(true));
 	public static final RegistryObject<BasicParticleType> STYLE_RESISTANCE = PARTICLES.register("style_resistance", () -> new BasicParticleType(true));
 	public static final RegistryObject<BasicParticleType> STYLE_IMMUNITY = PARTICLES.register("style_immunity", () -> new BasicParticleType(true));
-	public static final RegistryObject<BasicParticleType> STYLE_ABSORPTION = PARTICLES.register("style_absorption", () -> new BasicParticleType(true));
 }
