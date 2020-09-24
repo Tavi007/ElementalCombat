@@ -32,9 +32,21 @@ public class DefenseData implements IDefenseData{
 
 	@Override
 	public void setElementFactor(HashMap<String, Integer> set) {this.elementFactor = set;}
-	
-	public void sum(DefenseData data) {
+
+	@Override
+	public void add(DefenseData data) {
 		DefenseDataHelper.sumMaps(this.styleFactor, data.getStyleFactor());
 		DefenseDataHelper.sumMaps(this.elementFactor, data.getElementFactor());
+	}
+
+	@Override
+	public void substract(DefenseData data) {
+		DefenseDataHelper.substractMaps(this.styleFactor, data.getStyleFactor());
+		DefenseDataHelper.substractMaps(this.elementFactor, data.getElementFactor());
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		return (this.styleFactor.isEmpty() && this.elementFactor.isEmpty());
 	}
 }

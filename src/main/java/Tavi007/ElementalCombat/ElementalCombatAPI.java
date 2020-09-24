@@ -108,7 +108,7 @@ public class ElementalCombatAPI
 			});
 			
 			DefenseData defenseDataEnchantment = new DefenseData(defStyle, defElement);
-			defenseDataEnchantment.sum(defenseData);
+			defenseDataEnchantment.add(defenseData);
 			return defenseDataEnchantment;
 		}
 		return defenseData;
