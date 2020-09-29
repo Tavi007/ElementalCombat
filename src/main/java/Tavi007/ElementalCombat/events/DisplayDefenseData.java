@@ -26,16 +26,9 @@ public class DisplayDefenseData {
 	{
 		Minecraft mc = Minecraft.getInstance();
 		if(mc.player != null) {
-			//currently the ClientPlayerEntity doesn't have data, cause it isn't in sync with the ServerPlayerEntity
 			DefenseData defData = ElementalCombatAPI.getDefenseData(mc.player);
 			HashMap<String, Integer> styleMap = defData.getStyleFactor();
 			HashMap<String, Integer> elementMap = defData.getElementFactor();
-
-			// Testing
-			ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "entities/minecraft/zombie");
-			EntityCombatProperties entityProperties = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties);
-			styleMap = new HashMap<String, Integer>(entityProperties.getDefenseStyle());
-			elementMap = new HashMap<String, Integer>(entityProperties.getDefenseElement());
 			
 			double scale = Configuration.scale();
 			RenderSystem.pushMatrix();
@@ -47,7 +40,6 @@ public class DisplayDefenseData {
 			elementMap.forEach((key, factor) -> {
 				mc.fontRenderer.func_238418_a_(new StringTextComponent(DefenseDataHelper.toPercentageString(key, factor)), Configuration.posX(), Configuration.posY(), 0x000000, Integer.MAX_VALUE);
 			});
-			mc.fontRenderer.func_238418_a_(new StringTextComponent("Test"), 20, 20, 0x000000, Integer.MAX_VALUE);
 			RenderSystem.popMatrix();
 		}
 	}
