@@ -1,30 +1,34 @@
 package Tavi007.ElementalCombat.curios;
 
+import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import top.theillusivec4.curios.api.CuriosApi;
+import Tavi007.ElementalCombat.network.DefenseDataMessageToClient;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
+import top.theillusivec4.curios.api.event.CurioChangeEvent;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
 
 public class HandleCuriosInventory {
-	public static DefenseData getDefenseData(LivingEntity entity) {
-		DefenseData defData = new DefenseData();
+	@SubscribeEvent
+	public static void onCurioChange(CurioChangeEvent event) {
 
-		IItemHandlerModifiable itemHandler = CuriosApi.getCuriosHelper().getEquippedCurios(entity).orElse(null);
-		if (itemHandler != null) {
-			//loop over every curio slot.
-			int noSlots = itemHandler.getSlots();
-			for (int i = 0; i < noSlots; i++) {
-				ItemStack item = itemHandler.getStackInSlot(i);
-				if (!item.isEmpty())
-				{
-					// get defense data and add them up
-					DefenseData defDataItem = ElementalCombatAPI.getDefenseDataWithEnchantment(item);
-					defData.add(defDataItem);
-				}
-			}
+		// get Data
+		DefenseData defDataItemFrom = ElementalCombatAPI.getDefenseDataWithEnchantment(event.getFrom());
+		DefenseData defDataItemTo = ElementalCombatAPI.getDefenseDataWithEnchantment(event.getTo());
+
+		// compute Change
+		DefenseData newData = new DefenseData();
+		newData.substract(defDataItemFrom);
+		newData.add(defDataItemTo);
+
+		// apply change
+		if (!newData.isEmpty()) {
+			LivingEntity entity = event.getEntityLiving();
+			DefenseData defDataEntity = ElementalCombatAPI.getDefenseData(entity);
+			defDataEntity.add(newData);
+			DefenseDataMessageToClient messageToClient = new DefenseDataMessageToClient(newData, entity.getUniqueID());
+			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 		}
-		return defData;
 	}
 }
