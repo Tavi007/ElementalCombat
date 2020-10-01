@@ -1,7 +1,6 @@
 package Tavi007.ElementalCombat.events;
 
 import java.util.HashMap;
-import java.util.Set;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -50,8 +49,6 @@ public class DisplayDefenseData {
 		map.forEach ( (key, factor) -> {
 			mc.fontRenderer.func_243248_b(matrixStack, new StringTextComponent(DefenseDataHelper.toPercentageString(key, factor)), posX, posY + i[0]*textHeight, Integer.MAX_VALUE);
 			i[0] += 1;
-		});
-			
+		});	
 	}
-
 }

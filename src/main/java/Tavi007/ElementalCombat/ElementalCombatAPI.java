@@ -12,6 +12,7 @@ import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
+import Tavi007.ElementalCombat.network.DefenseDataMessageToClient;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -22,35 +23,54 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 public class ElementalCombatAPI 
 {
 
-	//LivingEntity
+	///////////////////
+	// Living Entity //
+	///////////////////
+	
+	/*
+	 * Returns the @return AttackData of the @param livingEntity.
+	 */
 	public static AttackData getAttackData(LivingEntity entity){
 		return (AttackData) entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
 	}
 
+	/*
+	 * Returns the @return DefenseData of the @param livingEntity.
+	 */
 	public static DefenseData getDefenseData(LivingEntity entity){
 		return (DefenseData) entity.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
 	}
 
-	//ItemStack
-	public static AttackData getAttackData(ItemStack item){
-		AttackData attackData = (AttackData) item.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+	///////////////
+	// ItemStack //
+	///////////////
+
+	/*
+	 * Returns the @return AttackData of the @param ItemStack.
+	 */
+	public static AttackData getAttackData(ItemStack itemStack){
+		AttackData attackData = (AttackData) itemStack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
 		return attackData;
 	}
 
-	public static DefenseData getDefenseData(ItemStack item){
-		DefenseData defenseData = (DefenseData) item.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
+	/*
+	 * Returns the @return DefenseData of the @param itemStack.
+	 */
+	public static DefenseData getDefenseData(ItemStack itemStack){
+		DefenseData defenseData = (DefenseData) itemStack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
 		return defenseData;
 	}
 
-	public static AttackData getAttackDataWithEnchantment(ItemStack item){
-		AttackData attackData = new AttackData((AttackData) item.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData()));
+	public static AttackData getAttackDataWithEnchantment(ItemStack itemStack){
+		AttackData attackData = new AttackData((AttackData) itemStack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData()));
 
-		if (!(item.getItem() instanceof EnchantedBookItem)) {
-			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(item);
+		if (!(itemStack.getItem() instanceof EnchantedBookItem)) {
+			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemStack);
 			enchantments.forEach((key, value) -> {
 
 				//currently only comparing strings.
@@ -69,17 +89,17 @@ public class ElementalCombatAPI
 		return attackData;
 	}
 
-	public static DefenseData getDefenseDataWithEnchantment(ItemStack item){
-		DefenseData defenseData = new DefenseData((DefenseData) item.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData()));
+	public static DefenseData getDefenseDataWithEnchantment(ItemStack itemStack){
+		DefenseData defenseData = new DefenseData((DefenseData) itemStack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData()));
 
-		if (!(item.getItem() instanceof EnchantedBookItem)) {
-			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(item);
+		if (!(itemStack.getItem() instanceof EnchantedBookItem)) {
+			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemStack);
 			HashMap<String, Integer> defStyle = new HashMap<String, Integer>();
 			HashMap<String, Integer> defElement = new HashMap<String, Integer>();
 			enchantments.forEach((key, level) -> {
 				//currently only comparing strings.
 				//maybe change to resourceLocation later, so other mods can interact with this as well.
-				
+
 				// elemental enchantments
 				if(key.getName() == CombatEnchantments.ICE_RESISTANCE.getName()) {
 					defElement.put("ice", level*ElementalCombat.SCALE_ENCHANTMENT);
@@ -106,7 +126,7 @@ public class ElementalCombatAPI
 					defStyle.put("projectile", level*ElementalCombat.SCALE_ENCHANTMENT);
 				}
 			});
-			
+
 			DefenseData defenseDataEnchantment = new DefenseData(defStyle, defElement);
 			defenseDataEnchantment.add(defenseData);
 			return defenseDataEnchantment;
@@ -114,44 +134,92 @@ public class ElementalCombatAPI
 		return defenseData;
 	}
 
-	//Projectiles
-	public static AttackData getAttackData(ProjectileEntity entity){
-		return (AttackData) entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+
+	/////////////////
+	// Projectiles //
+	/////////////////
+
+	/*
+	 * Returns the @return AttackData of the @param projectileEntity.
+	 */
+	public static AttackData getAttackData(ProjectileEntity projectileEntity){
+		return (AttackData) projectileEntity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
 	}
 
-	//get default values
+
+	/////////////////////
+	// Helperfunctions //
+	/////////////////////
+
+	/*
+	 * adds @param dataToAdd to the DefenseData of the @param livingEntity 
+	 */
+	public static void addDefenseData(LivingEntity livingEntity, DefenseData dataToAdd) {
+		if (dataToAdd.isEmpty()) return;
+		DefenseData defDataEntity = ElementalCombatAPI.getDefenseData(livingEntity);
+		defDataEntity.add(dataToAdd);
+		DefenseDataMessageToClient messageToClient = new DefenseDataMessageToClient(dataToAdd, livingEntity.getUniqueID());
+		ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
+
+	}
+
+	/*
+	 * adds @param dataToAdd to the DefenseData of the @param itemStack 
+	 */
+	public static void addDefenseData(ItemStack itemStack, DefenseData dataToAdd) {
+		if (dataToAdd.isEmpty()) return;
+		DefenseData defDataItem = ElementalCombatAPI.getDefenseData(itemStack);
+		defDataItem.add(dataToAdd);
+	}
+
+	////////////////////////
+	// get default values //
+	////////////////////////
+
+	/*
+	 * Returns the default @return BiomeCombatProperties of the @param biome.
+	 */
 	public static BiomeCombatProperties getDefaultProperties(Biome biome) {
 		ResourceLocation rlBiome = biome.getRegistryName();
 		ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "biomes/" + rlBiome.getNamespace() + "/" + rlBiome.getPath()); ;
 		return new BiomeCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties));
 	}
 
-	public static DamageSourceCombatProperties getDefaultProperties(DamageSource source) {
+	/*
+	 * Returns the default @return DamageSourceCombatProperties of the @param damageSource.
+	 */
+	public static DamageSourceCombatProperties getDefaultProperties(DamageSource damageSource) {
 		ResourceLocation rlDamageSource=null;
 		// do other mods implement their own natural damageSource? If so, how could I get the mod id from it?
 		// for now do not use Namespace.
-		if(source.isExplosion()) {
+		if(damageSource.isExplosion()) {
 			rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/explosion");
 		}
-		else if(source.isMagicDamage()) {
+		else if(damageSource.isMagicDamage()) {
 			rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/magic");
 		}
 		else {
-			rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/" + source.getDamageType().toLowerCase());
+			rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/" + damageSource.getDamageType().toLowerCase());
 		}
 		return new DamageSourceCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource));
 
 	}
 
-	public static EntityCombatProperties getDefaultProperties(LivingEntity entity) {
-		ResourceLocation rlEntity = entity.getType().getRegistryName();
+	/*
+	 * Returns the default @return EntityCombatProperties of the @param livingEntity.
+	 */
+	public static EntityCombatProperties getDefaultProperties(LivingEntity livingEntity) {
+		ResourceLocation rlEntity = livingEntity.getType().getRegistryName();
 		ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "entities/" + rlEntity.getNamespace() + "/" + rlEntity.getPath());
 		return new EntityCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
 
 	}
 
-	public static ItemCombatProperties getDefaultProperties(ItemStack item) {
-		ResourceLocation rlItem = item.getItem().getRegistryName();
+	/*
+	 * Returns the default @return ItemCombatProperties of the @param itemStack.
+	 */
+	public static ItemCombatProperties getDefaultProperties(ItemStack itemStack) {
+		ResourceLocation rlItem = itemStack.getItem().getRegistryName();
 		ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "items/" + rlItem.getNamespace() + "/" + rlItem.getPath());
 		return new ItemCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
 	}

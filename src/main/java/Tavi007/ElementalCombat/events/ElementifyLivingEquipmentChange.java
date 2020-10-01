@@ -3,7 +3,6 @@ package Tavi007.ElementalCombat.events;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import Tavi007.ElementalCombat.network.DefenseDataMessageToClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -12,7 +11,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Bus.FORGE)
 public class ElementifyLivingEquipmentChange 
@@ -34,12 +32,7 @@ public class ElementifyLivingEquipmentChange
 			newData.add(defDataItemTo);
 
 			// apply change
-			if (!newData.isEmpty()) {
-				DefenseData defDataEntity = ElementalCombatAPI.getDefenseData(entity);
-				defDataEntity.add(newData);
-				DefenseDataMessageToClient messageToClient = new DefenseDataMessageToClient(newData, entity.getUniqueID());
-				ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
-			}
+			ElementalCombatAPI.addDefenseData(entity, newData);
 		}
 	}
 
