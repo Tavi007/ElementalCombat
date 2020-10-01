@@ -1,17 +1,16 @@
 package Tavi007.ElementalCombat.events;
 
 import java.util.HashMap;
+import java.util.Set;
 
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import Tavi007.ElementalCombat.Configuration;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -30,18 +29,29 @@ public class DisplayDefenseData {
 			HashMap<String, Integer> styleMap = defData.getStyleFactor();
 			HashMap<String, Integer> elementMap = defData.getElementFactor();
 			
-			double scale = Configuration.scale();
-			RenderSystem.pushMatrix();
-			RenderSystem.scaled(scale, scale, scale);
-			styleMap.forEach((key, factor) -> {
-				mc.fontRenderer.func_238418_a_(new StringTextComponent(DefenseDataHelper.toPercentageString(key, factor)), Configuration.posX(), Configuration.posY(), 0x000000, Integer.MAX_VALUE);
-			});
+			MatrixStack matrixStack = event.getMatrixStack();
+			float scale = (float) Configuration.scale();
+			matrixStack.scale(scale, scale, scale);
+			
+			float posX = Configuration.posX();
+			float posY = Configuration.posY();
+			float textHeight = mc.fontRenderer.FONT_HEIGHT;
 
-			elementMap.forEach((key, factor) -> {
-				mc.fontRenderer.func_238418_a_(new StringTextComponent(DefenseDataHelper.toPercentageString(key, factor)), Configuration.posX(), Configuration.posY(), 0x000000, Integer.MAX_VALUE);
-			});
-			RenderSystem.popMatrix();
+			displayMap(styleMap, matrixStack, posX, posY);
+			displayMap(elementMap, matrixStack, posX, posY + styleMap.size()*textHeight);
 		}
+	}
+	
+	private static void displayMap(HashMap<String, Integer> map, MatrixStack matrixStack, float posX, float posY) {
+		Minecraft mc = Minecraft.getInstance();
+
+		float textHeight = mc.fontRenderer.FONT_HEIGHT;
+		final int[] i = {0};
+		map.forEach ( (key, factor) -> {
+			mc.fontRenderer.func_243248_b(matrixStack, new StringTextComponent(DefenseDataHelper.toPercentageString(key, factor)), posX, posY + i[0]*textHeight, Integer.MAX_VALUE);
+			i[0] += 1;
+		});
+			
 	}
 
 }
