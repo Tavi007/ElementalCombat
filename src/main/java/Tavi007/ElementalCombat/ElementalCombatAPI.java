@@ -17,6 +17,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
@@ -31,7 +32,7 @@ public class ElementalCombatAPI
 	///////////////////
 	// Living Entity //
 	///////////////////
-	
+
 	/*
 	 * Returns the @return AttackData of the @param livingEntity.
 	 */
@@ -158,8 +159,10 @@ public class ElementalCombatAPI
 		if (dataToAdd.isEmpty()) return;
 		DefenseData defDataEntity = ElementalCombatAPI.getDefenseData(livingEntity);
 		defDataEntity.add(dataToAdd);
-		DefenseDataMessage messageToClient = new DefenseDataMessage(dataToAdd, livingEntity.getUniqueID());
-		ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
+		if (livingEntity instanceof ServerPlayerEntity) {
+			DefenseDataMessage messageToClient = new DefenseDataMessage(dataToAdd, livingEntity.getUniqueID());
+			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
+		}
 	}
 
 	/*
@@ -176,7 +179,7 @@ public class ElementalCombatAPI
 	////////////////////////
 
 	/*
-	 * Returns the default @return BiomeCombatProperties of the @param biome.
+	 * Returns a copy of the default @return BiomeCombatProperties of the @param biome.
 	 */
 	public static BiomeCombatProperties getDefaultProperties(Biome biome) {
 		ResourceLocation rlBiome = biome.getRegistryName();
@@ -185,7 +188,7 @@ public class ElementalCombatAPI
 	}
 
 	/*
-	 * Returns the default @return DamageSourceCombatProperties of the @param damageSource.
+	 * Returns a copy of the default @return DamageSourceCombatProperties of the @param damageSource.
 	 */
 	public static DamageSourceCombatProperties getDefaultProperties(DamageSource damageSource) {
 		ResourceLocation rlDamageSource=null;
@@ -205,7 +208,7 @@ public class ElementalCombatAPI
 	}
 
 	/*
-	 * Returns the default @return EntityCombatProperties of the @param livingEntity.
+	 * Returns a copy of the default @return EntityCombatProperties of the @param livingEntity.
 	 */
 	public static EntityCombatProperties getDefaultProperties(LivingEntity livingEntity) {
 		ResourceLocation rlEntity = livingEntity.getType().getRegistryName();
@@ -215,7 +218,7 @@ public class ElementalCombatAPI
 	}
 
 	/*
-	 * Returns the default @return ItemCombatProperties of the @param itemStack.
+	 * Returns a copy of the default @return ItemCombatProperties of the @param itemStack.
 	 */
 	public static ItemCombatProperties getDefaultProperties(ItemStack itemStack) {
 		ResourceLocation rlItem = itemStack.getItem().getRegistryName();
