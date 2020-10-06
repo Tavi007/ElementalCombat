@@ -88,21 +88,22 @@ public class DefenseDataCapability {
 		@SubscribeEvent
 		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
 			if (event.getObject() instanceof LivingEntity) {
-
 				LivingEntity entity = (LivingEntity) event.getObject();
-				EntityCombatProperties entityProperties = ElementalCombatAPI.getDefaultProperties(entity);
+				if(entity.isServerWorld()) {
+					EntityCombatProperties entityProperties = ElementalCombatAPI.getDefaultProperties(entity);
 
-				HashMap<String, Integer> styleMap = new HashMap<String, Integer>(entityProperties.getDefenseStyle());
-				HashMap<String, Integer> elementMap = new HashMap<String, Integer>(entityProperties.getDefenseElement());
-				// player spawn is usually biome independent
-				if(entityProperties.getBiomeDependency()) 
-				{
-					BlockPos blockPos = new BlockPos(entity.getPositionVec());
-					BiomeCombatProperties biomeProperties = ElementalCombatAPI.getDefaultProperties(entity.getEntityWorld().getBiome(blockPos));
-					DefenseDataHelper.mergeMaps(elementMap, biomeProperties.getDefenseElement());					
+					HashMap<String, Integer> styleMap = new HashMap<String, Integer>(entityProperties.getDefenseStyle());
+					HashMap<String, Integer> elementMap = new HashMap<String, Integer>(entityProperties.getDefenseElement());
+					// player spawn is usually biome independent
+					if(entityProperties.getBiomeDependency()) 
+					{
+						BlockPos blockPos = new BlockPos(entity.getPositionVec());
+						BiomeCombatProperties biomeProperties = ElementalCombatAPI.getDefaultProperties(entity.getEntityWorld().getBiome(blockPos));
+						DefenseDataHelper.mergeMaps(elementMap, biomeProperties.getDefenseElement());					
+					}
+					final DefenseData defData = new DefenseData(styleMap, elementMap);
+					event.addCapability(ID, createProvider(defData));
 				}
-				final DefenseData defData = new DefenseData(styleMap, elementMap);
-				event.addCapability(ID, createProvider(defData));
 			}
 		}
 

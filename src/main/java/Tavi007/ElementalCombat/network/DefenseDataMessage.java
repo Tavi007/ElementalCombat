@@ -7,20 +7,20 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import net.minecraft.network.PacketBuffer;
 
-public class DefenseDataMessageToClient {
+public class DefenseDataMessage {
 
 	private boolean messageIsValid;
 	private DefenseData dataToSend;
 	private UUID uuid;
 
-	public DefenseDataMessageToClient(DefenseData dataToSend, UUID uuid){
+	public DefenseDataMessage(DefenseData dataToSend, UUID uuid){
 		this.dataToSend = dataToSend;
 		this.messageIsValid = true;
 		this.uuid = uuid;
 	}
 
 	// for use by the message handler only.
-	public DefenseDataMessageToClient(){
+	public DefenseDataMessage(){
 		dataToSend = new DefenseData();
 		messageIsValid = false;
 		uuid = new UUID(0,0);
@@ -42,9 +42,9 @@ public class DefenseDataMessageToClient {
 		this.uuid = new UUID(most, least);
 	}
 	
-	public static DefenseDataMessageToClient decode(PacketBuffer buf)
+	public static DefenseDataMessage decode(PacketBuffer buf)
 	{
-		DefenseDataMessageToClient retval = new DefenseDataMessageToClient();
+		DefenseDataMessage retval = new DefenseDataMessage();
 		try {
 			
 			//define uuid through 2 longs.
@@ -92,6 +92,6 @@ public class DefenseDataMessageToClient {
 	@Override
 	public String toString()
 	{
-		return "DefenseDataMessageToClient[DefenseData.elementFactor=" + dataToSend.getElementFactor().toString() + "; " + "DefenseData.styleFactor=" + dataToSend.getStyleFactor().toString() + "]";
+		return "DefenseDataMessage[DefenseData.elementFactor=" + dataToSend.getElementFactor().toString() + "; " + "DefenseData.styleFactor=" + dataToSend.getStyleFactor().toString() + "]";
 	}
 }

@@ -12,7 +12,7 @@ import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
-import Tavi007.ElementalCombat.network.DefenseDataMessageToClient;
+import Tavi007.ElementalCombat.network.DefenseDataMessage;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -158,9 +158,8 @@ public class ElementalCombatAPI
 		if (dataToAdd.isEmpty()) return;
 		DefenseData defDataEntity = ElementalCombatAPI.getDefenseData(livingEntity);
 		defDataEntity.add(dataToAdd);
-		DefenseDataMessageToClient messageToClient = new DefenseDataMessageToClient(dataToAdd, livingEntity.getUniqueID());
+		DefenseDataMessage messageToClient = new DefenseDataMessage(dataToAdd, livingEntity.getUniqueID());
 		ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
-
 	}
 
 	/*

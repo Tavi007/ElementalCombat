@@ -15,37 +15,29 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 public class PackageHandlerOnClient {
 
-	public static void onMessageReceived(final DefenseDataMessageToClient message, Supplier<NetworkEvent.Context> ctxSupplier) {
+	public static void onMessageReceived(final DefenseDataMessage message, Supplier<NetworkEvent.Context> ctxSupplier) {
 		NetworkEvent.Context ctx = ctxSupplier.get();
 		LogicalSide sideReceived = ctx.getDirection().getReceptionSide();
 		ctx.setPacketHandled(true);
 
 		if (sideReceived != LogicalSide.CLIENT) {
-			ElementalCombat.LOGGER.warn("DefenseDataMessageToClient received on wrong side:" + ctx.getDirection().getReceptionSide());
+			ElementalCombat.LOGGER.warn("DefenseDataMessage received on wrong side:" + ctx.getDirection().getReceptionSide());
 			return;
 		}
 		if (!message.isMessageValid()) {
-			ElementalCombat.LOGGER.warn("DefenseDataMessageToClient was invalid" + message.toString());
+			ElementalCombat.LOGGER.warn("DefenseDataMessage was invalid" + message.toString());
 			return;
 		}
-		// we know for sure that this handler is only used on the client side, so it is ok to assume
-		//  that the ctx handler is a client, and that Minecraft exists.
-		// Packets received on the server side must be handled differently!  See MessageHandlerOnServer
 
 		Optional<ClientWorld> clientWorld = LogicalSidedProvider.CLIENTWORLD.get(sideReceived);
 		if (!clientWorld.isPresent()) {
-			ElementalCombat.LOGGER.warn("DefenseDataMessageToClient context could not provide a ClientWorld.");
+			ElementalCombat.LOGGER.warn("DefenseDataMessage context could not provide a ClientWorld.");
 			return;
 		}
-
-		// This code creates a new task which will be executed by the client during the next tick
-		//  In this case, the task is to call messageHandlerOnClient.processMessage(worldclient, message)
 		ctx.enqueueWork(() -> processMessage(clientWorld.get(), message));
 	}
 
-
-
-	private static void processMessage(ClientWorld worldClient, DefenseDataMessageToClient message)
+	private static void processMessage(ClientWorld worldClient, DefenseDataMessage message)
 	{
 		PlayerEntity player = worldClient.getPlayerByUuid(message.getUUID());
 		DefenseData messageData = message.getDefenseData();

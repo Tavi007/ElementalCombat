@@ -4,7 +4,7 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
 import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.enchantments.StyleResistanceEnchantment;
-import Tavi007.ElementalCombat.network.DefenseDataMessageToClient;
+import Tavi007.ElementalCombat.network.DefenseDataMessage;
 import Tavi007.ElementalCombat.network.PackageHandlerOnClient;
 import Tavi007.ElementalCombat.network.PackageHandlerOnServer;
 
@@ -16,15 +16,12 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 
-import static net.minecraftforge.fml.network.NetworkDirection.PLAY_TO_CLIENT;
-
 public class StartupCommon {
-	public static final byte DEFENSEDATA_MESSAGE_ID = 35;      // a unique ID for this message type.  It helps detect errors if you don't use zero!
-
-	public static final String MESSAGE_PROTOCOL_VERSION = "1.0";  // a version number for the protocol you're using.  Can be used to maintain backward
-	// compatibility.  But to be honest you'll probably never need it for anything useful...
+	private static final byte DEFENSEDATA_MESSAGE_TO_CLIENT_ID = 1; 
+	public static final String MESSAGE_PROTOCOL_VERSION = "1.0"; 
 	
 	@SubscribeEvent
 	public static void onCommonSetup(FMLCommonSetupEvent event){
@@ -37,10 +34,10 @@ public class StartupCommon {
 				PackageHandlerOnClient::isThisProtocolAcceptedByClient,
 				PackageHandlerOnServer::isThisProtocolAcceptedByServer);
 		
-		ElementalCombat.simpleChannel.registerMessage(DEFENSEDATA_MESSAGE_ID, DefenseDataMessageToClient.class,
-				DefenseDataMessageToClient::encode, DefenseDataMessageToClient::decode,
+		ElementalCombat.simpleChannel.registerMessage(DEFENSEDATA_MESSAGE_TO_CLIENT_ID, DefenseDataMessage.class,
+				DefenseDataMessage::encode, DefenseDataMessage::decode,
 				PackageHandlerOnClient::onMessageReceived,
-	            Optional.of(PLAY_TO_CLIENT));
+	            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		
 		ElementalCombat.LOGGER.info("setup method registered.");
 	}
