@@ -13,10 +13,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Bus.FORGE)
-public class ElementifyLivingEquipmentChange 
+public class PlayerEvents
 {
 	@SubscribeEvent
-	public static void elementifyLivingEquipmentChange(LivingEquipmentChangeEvent event)
+	public static void livingEquipmentChange(LivingEquipmentChangeEvent event)
 	{
 		//change defense properties
 		LivingEntity entity = event.getEntityLiving();
@@ -39,7 +39,7 @@ public class ElementifyLivingEquipmentChange
 	// since elementifyLivingEquipmentChange is fired, whenever a player logs in,
 	// I need to 'remove' armor-stats from the player, when logging out. 
 	@SubscribeEvent
-	public static void onPlayerLoggedOutEvent(PlayerLoggedOutEvent event) {
+	public static void playerLoggedOut(PlayerLoggedOutEvent event) {
 		PlayerEntity entity = event.getPlayer();
 		if (entity != null) {
 			DefenseData defCapEntity = ElementalCombatAPI.getDefenseData(entity);
