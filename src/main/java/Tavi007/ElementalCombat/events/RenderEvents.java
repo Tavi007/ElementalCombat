@@ -1,5 +1,6 @@
 package Tavi007.ElementalCombat.events;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,51 +51,52 @@ public class RenderEvents {
 			if(!defStyle.isEmpty()) {
 				String textDefenseStyle = "" + TextFormatting.GRAY + "Style Resistance: " + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textDefenseStyle));
-				defStyle.forEach((key, factor) -> {
-					toolTip.add(new StringTextComponent(DefenseDataHelper.toPercentageString(key, factor)));
-				});
+				toolTip.addAll(toDisplayText(defStyle));
 			}
 			HashMap<String, Integer> defElement = defCap.getElementFactor();
 			if(!defElement.isEmpty()) {
 				String textDefenseElement = "" + TextFormatting.GRAY + "Elemental Resistance:" + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textDefenseElement));
-				defElement.forEach((key, factor) -> {
-					toolTip.add(new StringTextComponent(DefenseDataHelper.toPercentageString(key, factor)));
-				});
+				toolTip.addAll(toDisplayText(defElement));
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
-	public static void onRenderGameOverlay(RenderGameOverlayEvent.Text event)
+	public static void displayDefenseData(RenderGameOverlayEvent.Post event)
 	{
+		// see Screen#renderToolTips in client.gui.screen
+
 		Minecraft mc = Minecraft.getInstance();
 		if(mc.player != null) {
 			DefenseData defData = ElementalCombatAPI.getDefenseData(mc.player);
-			HashMap<String, Integer> styleMap = defData.getStyleFactor();
-			HashMap<String, Integer> elementMap = defData.getElementFactor();
-			
-			MatrixStack matrixStack = event.getMatrixStack();
-			float scale = (float) Configuration.scale();
-			matrixStack.scale(scale, scale, scale);
-			
-			float posX = Configuration.posX();
-			float posY = Configuration.posY();
-			float textHeight = mc.fontRenderer.FONT_HEIGHT;
+			if (!defData.isEmpty()) {
+				HashMap<String, Integer> styleMap = defData.getStyleFactor();
+				HashMap<String, Integer> elementMap = defData.getElementFactor();
 
-			displayMap(styleMap, matrixStack, posX, posY);
-			displayMap(elementMap, matrixStack, posX, posY + styleMap.size()*textHeight);
+				List<ITextComponent> list = new ArrayList<ITextComponent>();
+				list.addAll(toDisplayText(styleMap));
+				list.addAll(toDisplayText(elementMap));
+
+				MatrixStack matrixStack = event.getMatrixStack();
+				float scale = (float) Configuration.scale();
+				matrixStack.scale(scale, scale, scale);
+
+				float posX = Configuration.posX();
+				float posY = Configuration.posY();
+
+				if(mc.currentScreen != null) {
+					mc.currentScreen.func_243308_b(matrixStack, list, (int) posX, (int) posY);
+				}
+			}
 		}
 	}
-	
-	private static void displayMap(HashMap<String, Integer> map, MatrixStack matrixStack, float posX, float posY) {
-		Minecraft mc = Minecraft.getInstance();
 
-		float textHeight = mc.fontRenderer.FONT_HEIGHT;
-		final int[] i = {0};
-		map.forEach ( (key, factor) -> {
-			mc.fontRenderer.func_243248_b(matrixStack, new StringTextComponent(DefenseDataHelper.toPercentageString(key, factor)), posX, posY + i[0]*textHeight, Integer.MAX_VALUE);
-			i[0] += 1;
-		});	
+	private static List<ITextComponent> toDisplayText(HashMap<String, Integer> map){
+		List<ITextComponent> list = new ArrayList<ITextComponent>();
+		map.forEach((key, factor) -> {
+			list.add(new StringTextComponent(DefenseDataHelper.toPercentageString(key, factor)));
+		});
+		return list;
 	}
 }
