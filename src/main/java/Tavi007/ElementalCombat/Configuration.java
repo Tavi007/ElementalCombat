@@ -5,7 +5,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
-import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
 public class Configuration
 {
@@ -13,10 +12,8 @@ public class Configuration
 	private static final Configuration CONFIG;
 
 	public final BooleanValue enabled;
-	public final BooleanValue fadeOut;
-	public final IntValue displayTime;
-	public final IntValue posX;
-	public final IntValue posY;
+	public final BooleanValue isTop;
+	public final BooleanValue isLeft;
 	public final DoubleValue scale;
 	public final BooleanValue textShadow;
 
@@ -33,21 +30,15 @@ public class Configuration
 		enabled = builder
 				.comment("true if the defense data of the player should be shown, false otherwise")
 				.define("enabled", true);
-		fadeOut = builder
-				.comment("true if the defense data of the player should only show shortly when the biome is switched")
-				.define("fadeOut", true);
-		displayTime = builder
-				.comment("How long in ticks (20 ticks = 1 second) to display the defense data of the player, if fadeOut = true")
-				.defineInRange("displayTime", 30, 0, Integer.MAX_VALUE);
-		posX = builder
-				.comment("The X position to display the defense data of the player at")
-				.defineInRange("posX", 3, 0, Integer.MAX_VALUE);
-		posY = builder
-				.comment("The Y position to display the defense data of the player at")
-				.defineInRange("posY", 3, 0, Integer.MAX_VALUE);
+		isTop = builder
+				.comment("Display information on the top side")
+				.define("isTop", false);
+		isLeft = builder
+				.comment("Display information on the left side")
+				.define("isLeft", false);
 		scale = builder
 				.comment("The size of the defense data of the player (multiplier)")
-				.defineInRange("scale", 1.0D, 0.0D, Double.MAX_VALUE);
+				.defineInRange("scale", 1.0D, 0.1D, 1.0D);
 		textShadow = builder
 				.comment("true if the defense data of the player should be rendered with a shadow, false otherwise")
 				.define("textShadow", true);
@@ -58,24 +49,14 @@ public class Configuration
 		return CONFIG.enabled.get();
 	}
 
-	public static boolean fadeOut()
+	public static boolean isLeft()
 	{
-		return CONFIG.fadeOut.get();
+		return CONFIG.isLeft.get();
 	}
 
-	public static int displayTime()
+	public static boolean isTop()
 	{
-		return CONFIG.displayTime.get();
-	}
-
-	public static int posX()
-	{
-		return CONFIG.posX.get();
-	}
-
-	public static int posY()
-	{
-		return CONFIG.posY.get();
+		return CONFIG.isTop.get();
 	}
 
 	public static double scale()
