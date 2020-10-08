@@ -42,7 +42,12 @@ public class PackageHandlerOnClient {
 		PlayerEntity player = worldClient.getPlayerByUuid(message.getUUID());
 		DefenseData messageData = message.getDefenseData();
 		DefenseData playerData = ElementalCombatAPI.getDefenseData(player);
-		playerData.add(messageData);
+		if (message.isAdd()) {
+			playerData.add(messageData);
+		}
+		else {
+			playerData.set(messageData);
+		}
 	}
 
 

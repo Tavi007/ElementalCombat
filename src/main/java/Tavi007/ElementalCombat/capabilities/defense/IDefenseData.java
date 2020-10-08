@@ -8,7 +8,8 @@ public interface IDefenseData {
 	
 	HashMap<String, Integer> getElementFactor();
 	void setElementFactor(HashMap<String, Integer> set);
-	
+
+	void set(DefenseData data);
 	void add(DefenseData data);
 	void substract(DefenseData data);
 	boolean isEmpty();

@@ -12,18 +12,21 @@ public class DefenseDataMessage {
 	private boolean messageIsValid;
 	private DefenseData dataToSend;
 	private UUID uuid;
+	private boolean isAdd;
 
-	public DefenseDataMessage(DefenseData dataToSend, UUID uuid){
+	public DefenseDataMessage(DefenseData dataToSend, UUID uuid, boolean isAdd){
 		this.dataToSend = dataToSend;
 		this.messageIsValid = true;
 		this.uuid = uuid;
+		this.isAdd = isAdd;
 	}
 
 	// for use by the message handler only.
 	public DefenseDataMessage(){
-		dataToSend = new DefenseData();
-		messageIsValid = false;
-		uuid = new UUID(0,0);
+		this.dataToSend = new DefenseData();
+		this.messageIsValid = false;
+		this.uuid = new UUID(0,0);
+		this.isAdd = true;
 	}
 
 	public DefenseData getDefenseData() {
@@ -36,6 +39,14 @@ public class DefenseDataMessage {
 
 	public UUID getUUID() {
 		return uuid;
+	}
+	
+	public boolean isAdd() {
+		return this.isAdd;
+	}
+	
+	public void setIsAdd(boolean isSet) {
+		this.isAdd = isSet;
 	}
 	
 	public void setUUID(long most, long least) {
@@ -51,6 +62,7 @@ public class DefenseDataMessage {
 			retval.setUUID(buf.readLong(), buf.readLong());
 			retval.getDefenseData().setElementFactor(readMap(buf));
 			retval.getDefenseData().setStyleFactor(readMap(buf));
+			retval.setIsAdd(buf.readBoolean());
 			
 		} catch (IllegalArgumentException | IndexOutOfBoundsException e) {
 			ElementalCombat.LOGGER.warn("Exception while reading DefenseDataMessageToClient: " + e);
@@ -62,11 +74,12 @@ public class DefenseDataMessage {
 
 	public void encode(PacketBuffer buf)
 	{
-		if (!messageIsValid) return;
-		buf.writeLong(uuid.getMostSignificantBits());
-		buf.writeLong(uuid.getLeastSignificantBits());
-		writeMap(buf, dataToSend.getElementFactor());
-		writeMap(buf, dataToSend.getStyleFactor());
+		if (!this.messageIsValid) return;
+		buf.writeLong(this.uuid.getMostSignificantBits());
+		buf.writeLong(this.uuid.getLeastSignificantBits());
+		writeMap(buf, this.dataToSend.getElementFactor());
+		writeMap(buf, this.dataToSend.getStyleFactor());
+		buf.writeBoolean(this.isAdd);
 	}
 
 	private void writeMap(PacketBuffer buf, HashMap<String,Integer> map) {
@@ -92,6 +105,6 @@ public class DefenseDataMessage {
 	@Override
 	public String toString()
 	{
-		return "DefenseDataMessage[DefenseData.elementFactor=" + dataToSend.getElementFactor().toString() + "; " + "DefenseData.styleFactor=" + dataToSend.getStyleFactor().toString() + "]";
+		return "DefenseDataMessage[DefenseData.elementFactor=" + this.dataToSend.getElementFactor().toString() + "; " + "DefenseData.styleFactor=" + this.dataToSend.getStyleFactor().toString() + "]";
 	}
 }

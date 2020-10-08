@@ -48,7 +48,7 @@ public class ServerEvents {
 				ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) entity;
 				DefenseData defData = ElementalCombatAPI.getDefenseData(serverPlayerEntity);
 
-				DefenseDataMessage messageToClient = new DefenseDataMessage(defData, serverPlayerEntity.getUniqueID());
+				DefenseDataMessage messageToClient = new DefenseDataMessage(defData, serverPlayerEntity.getUniqueID(), false);
 				ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 			}
 			
