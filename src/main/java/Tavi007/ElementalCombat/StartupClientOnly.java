@@ -1,5 +1,6 @@
 package Tavi007.ElementalCombat;
 
+import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.particle.CombatParticle;
 import Tavi007.ElementalCombat.particle.ParticleList;
 import net.minecraft.client.Minecraft;
@@ -14,7 +15,7 @@ public class StartupClientOnly {
 	@SubscribeEvent
 	public static void onClientSetupEvent(final FMLClientSetupEvent event)
 	{
-		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Configuration.CONFIG_SPEC);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.CONFIG_SPEC);
 		ElementalCombat.LOGGER.info("ElementalCombat clientRegistries method registered.");	
 	}
 	

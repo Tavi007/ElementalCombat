@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat;
+package Tavi007.ElementalCombat.config;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -6,10 +6,11 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
 
-public class Configuration
+//@Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Bus.MOD)
+public class ClientConfig
 {
 	public static final ForgeConfigSpec CONFIG_SPEC;
-	private static final Configuration CONFIG;
+	private static final ClientConfig CLIENT;
 
 	public final BooleanValue enabled;
 	public final BooleanValue isTop;
@@ -19,13 +20,13 @@ public class Configuration
 
 	static
 	{
-		Pair<Configuration,ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Configuration::new);
+		Pair<ClientConfig,ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
 
 		CONFIG_SPEC = specPair.getRight();
-		CONFIG = specPair.getLeft();
+		CLIENT = specPair.getLeft();
 	}
 
-	Configuration(ForgeConfigSpec.Builder builder)
+	ClientConfig(ForgeConfigSpec.Builder builder)
 	{
 		enabled = builder
 				.comment("true if the defense data of the player should be shown, false otherwise")
@@ -46,26 +47,26 @@ public class Configuration
 
 	public static boolean enabled()
 	{
-		return CONFIG.enabled.get();
+		return CLIENT.enabled.get();
 	}
 
 	public static boolean isLeft()
 	{
-		return CONFIG.isLeft.get();
+		return CLIENT.isLeft.get();
 	}
 
 	public static boolean isTop()
 	{
-		return CONFIG.isTop.get();
+		return CLIENT.isTop.get();
 	}
 
 	public static double scale()
 	{
-		return CONFIG.scale.get();
+		return CLIENT.scale.get();
 	}
 
 	public static boolean textShadow()
 	{
-		return CONFIG.textShadow.get();
+		return CLIENT.textShadow.get();
 	}
 }

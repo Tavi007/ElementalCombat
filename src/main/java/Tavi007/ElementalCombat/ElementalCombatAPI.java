@@ -7,6 +7,7 @@ import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
+import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.enchantments.CombatEnchantments;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
@@ -76,15 +77,28 @@ public class ElementalCombatAPI
 
 				//currently only comparing strings.
 				//maybe change to resourceLocation later, so other mods can interact with this as well.
-				//sword
-				if(key.getName() == Enchantments.FIRE_ASPECT.getName()) {attackData.setElement("fire");}
-				if(key.getName() == CombatEnchantments.ICE_ASPECT.getName()) {attackData.setElement("ice");}
-				if(key.getName() == CombatEnchantments.WATER_ASPECT.getName()) {attackData.setElement("water");}
-				if(key.getName() == CombatEnchantments.THUNDER_ASPECT.getName()) {attackData.setElement("thunder");}
-				//bow
-				if(key.getName() == Enchantments.FLAME.getName()) {attackData.setElement("fire");}
-				//trident
-				if(key.getName() == Enchantments.CHANNELING.getName()) {attackData.setElement("thunder");}
+				if(ServerConfig.useEmoji()) {
+					//sword
+					if(key.getName() == Enchantments.FIRE_ASPECT.getName()) {attackData.setElement("🔥");}
+					if(key.getName() == CombatEnchantments.ICE_ASPECT.getName()) {attackData.setElement("❄");}
+					if(key.getName() == CombatEnchantments.WATER_ASPECT.getName()) {attackData.setElement("💧");}
+					if(key.getName() == CombatEnchantments.THUNDER_ASPECT.getName()) {attackData.setElement("⚡");}
+					//bow
+					if(key.getName() == Enchantments.FLAME.getName()) {attackData.setElement("🔥");}
+					//trident
+					if(key.getName() == Enchantments.CHANNELING.getName()) {attackData.setElement("⚡");}
+				}
+				else {
+					//sword
+					if(key.getName() == Enchantments.FIRE_ASPECT.getName()) {attackData.setElement("fire");}
+					if(key.getName() == CombatEnchantments.ICE_ASPECT.getName()) {attackData.setElement("ice");}
+					if(key.getName() == CombatEnchantments.WATER_ASPECT.getName()) {attackData.setElement("water");}
+					if(key.getName() == CombatEnchantments.THUNDER_ASPECT.getName()) {attackData.setElement("thunder");}
+					//bow
+					if(key.getName() == Enchantments.FLAME.getName()) {attackData.setElement("fire");}
+					//trident
+					if(key.getName() == Enchantments.CHANNELING.getName()) {attackData.setElement("thunder");}
+				}
 			});
 		}
 		return attackData;
@@ -101,30 +115,59 @@ public class ElementalCombatAPI
 				//currently only comparing strings.
 				//maybe change to resourceLocation later, so other mods can interact with this as well.
 
-				// elemental enchantments
-				if(key.getName() == CombatEnchantments.ICE_RESISTANCE.getName()) {
-					defElement.put("ice", level*ElementalCombat.SCALE_ENCHANTMENT);
-					defElement.put("fire", -level*ElementalCombat.SCALE_ENCHANTMENT);
-				}
-				else if(key.getName() == CombatEnchantments.FIRE_RESISTANCE.getName()) {
-					defElement.put( "fire", level*ElementalCombat.SCALE_ENCHANTMENT);
-					defElement.put( "ice", -level*ElementalCombat.SCALE_ENCHANTMENT);
-				}
-				else if(key.getName() == CombatEnchantments.WATER_RESISTANCE.getName()) {
-					defElement.put( "water", level*ElementalCombat.SCALE_ENCHANTMENT);
-					defElement.put( "thunder", -level*ElementalCombat.SCALE_ENCHANTMENT);
-				}
-				else if(key.getName() == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
-					defElement.put( "thunder", level*ElementalCombat.SCALE_ENCHANTMENT);
-					defElement.put( "water", -level*ElementalCombat.SCALE_ENCHANTMENT);
-				}
+				if(ServerConfig.useEmoji()) {
+					// elemental enchantments
+					if(key.getName() == CombatEnchantments.ICE_RESISTANCE.getName()) {
+						defElement.put("❄", level*ElementalCombat.SCALE_ENCHANTMENT);
+						defElement.put("🔥", -level*ElementalCombat.SCALE_ENCHANTMENT);
+					}
+					else if(key.getName() == CombatEnchantments.FIRE_RESISTANCE.getName()) {
+						defElement.put( "🔥", level*ElementalCombat.SCALE_ENCHANTMENT);
+						defElement.put( "❄", -level*ElementalCombat.SCALE_ENCHANTMENT);
+					}
+					else if(key.getName() == CombatEnchantments.WATER_RESISTANCE.getName()) {
+						defElement.put( "💧", level*ElementalCombat.SCALE_ENCHANTMENT);
+						defElement.put( "⚡", -level*ElementalCombat.SCALE_ENCHANTMENT);
+					}
+					else if(key.getName() == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
+						defElement.put( "⚡", level*ElementalCombat.SCALE_ENCHANTMENT);
+						defElement.put( "💧", -level*ElementalCombat.SCALE_ENCHANTMENT);
+					}
 
-				// style enchantments
-				if(key.getName() == CombatEnchantments.BLAST_PROTECTION.getName()) {
-					defStyle.put("explosion", level*ElementalCombat.SCALE_ENCHANTMENT);
+					// style enchantments
+					if(key.getName() == CombatEnchantments.BLAST_PROTECTION.getName()) {
+						defStyle.put("💣", level*ElementalCombat.SCALE_ENCHANTMENT);
+					}
+					else if(key.getName() == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
+						defStyle.put("➹", level*ElementalCombat.SCALE_ENCHANTMENT);
+					}
 				}
-				else if(key.getName() == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
-					defStyle.put("projectile", level*ElementalCombat.SCALE_ENCHANTMENT);
+				else {
+					// elemental enchantments
+					if(key.getName() == CombatEnchantments.ICE_RESISTANCE.getName()) {
+						defElement.put("ice", level*ElementalCombat.SCALE_ENCHANTMENT);
+						defElement.put("fire", -level*ElementalCombat.SCALE_ENCHANTMENT);
+					}
+					else if(key.getName() == CombatEnchantments.FIRE_RESISTANCE.getName()) {
+						defElement.put( "fire", level*ElementalCombat.SCALE_ENCHANTMENT);
+						defElement.put( "ice", -level*ElementalCombat.SCALE_ENCHANTMENT);
+					}
+					else if(key.getName() == CombatEnchantments.WATER_RESISTANCE.getName()) {
+						defElement.put( "water", level*ElementalCombat.SCALE_ENCHANTMENT);
+						defElement.put( "thunder", -level*ElementalCombat.SCALE_ENCHANTMENT);
+					}
+					else if(key.getName() == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
+						defElement.put( "thunder", level*ElementalCombat.SCALE_ENCHANTMENT);
+						defElement.put( "water", -level*ElementalCombat.SCALE_ENCHANTMENT);
+					}
+
+					// style enchantments
+					if(key.getName() == CombatEnchantments.BLAST_PROTECTION.getName()) {
+						defStyle.put("explosion", level*ElementalCombat.SCALE_ENCHANTMENT);
+					}
+					else if(key.getName() == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
+						defStyle.put("projectile", level*ElementalCombat.SCALE_ENCHANTMENT);
+					}
 				}
 			});
 

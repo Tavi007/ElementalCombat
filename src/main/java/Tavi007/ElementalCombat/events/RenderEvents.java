@@ -10,11 +10,11 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import Tavi007.ElementalCombat.Configuration;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -75,7 +75,7 @@ public class RenderEvents {
 	public static void displayDefenseData(RenderGameOverlayEvent.Post event)
 	{
 		if(event.getType().equals(RenderGameOverlayEvent.ElementType.HOTBAR)) {
-			if(Configuration.enabled()) {
+			if(ClientConfig.enabled()) {
 				// see Screen#renderToolTips in client.gui.screen
 				Minecraft mc = Minecraft.getInstance();
 				if(mc.player != null) {
@@ -88,7 +88,7 @@ public class RenderEvents {
 
 						if (!list.isEmpty()) {
 							MatrixStack matrixStack = event.getMatrixStack();
-							float scale = (float) Configuration.scale();
+							float scale = (float) ClientConfig.scale();
 							matrixStack.scale(scale, scale, scale);
 
 							List<? extends IReorderingProcessor> orderedList = Lists.transform(list, ITextComponent::func_241878_f);
@@ -108,11 +108,11 @@ public class RenderEvents {
 							// moves the coords so the text and box appear correct
 							int posX = 12;
 							int posY = 12;
-							if(!Configuration.isTop()) {
+							if(!ClientConfig.isTop()) {
 								int screenHeight = event.getWindow().getScaledHeight();
 								posY = Math.max(12, screenHeight - listHeight - 12);
 							}
-							if(!Configuration.isLeft()) {
+							if(!ClientConfig.isLeft()) {
 								int screenWidth = event.getWindow().getScaledWidth();
 								posX = Math.max(12, screenWidth - listWidth - 12);
 							}
@@ -153,7 +153,7 @@ public class RenderEvents {
 							for(int i = 0; i < orderedList.size(); ++i) {
 								IReorderingProcessor ireorderingprocessor1 = orderedList.get(i);
 								if (ireorderingprocessor1 != null) {
-									mc.fontRenderer.func_238416_a_(ireorderingprocessor1, (float)posX, (float)posY, -1, Configuration.textShadow(), matrix4f, irendertypebuffer$impl, false, 0, 15728880);
+									mc.fontRenderer.func_238416_a_(ireorderingprocessor1, (float)posX, (float)posY, -1, ClientConfig.textShadow(), matrix4f, irendertypebuffer$impl, false, 0, 15728880);
 								}
 								// first line is caption. add a little bit space to the next line
 								if (i == 0) {
