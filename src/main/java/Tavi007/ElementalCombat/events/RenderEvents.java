@@ -74,98 +74,97 @@ public class RenderEvents {
 	@SubscribeEvent
 	public static void displayDefenseData(RenderGameOverlayEvent.Post event)
 	{
-		if(Configuration.enabled()) {
-			// see Screen#renderToolTips in client.gui.screen
-			Minecraft mc = Minecraft.getInstance();
-			if(mc.player != null) {
-				DefenseData defData = ElementalCombatAPI.getDefenseData(mc.player);
-				if (!defData.isEmpty()) {
-					HashMap<String, Integer> styleMap = defData.getStyleFactor();
-					HashMap<String, Integer> elementMap = defData.getElementFactor();
+		if(event.getType().equals(RenderGameOverlayEvent.ElementType.HOTBAR)) {
+			if(Configuration.enabled()) {
+				// see Screen#renderToolTips in client.gui.screen
+				Minecraft mc = Minecraft.getInstance();
+				if(mc.player != null) {
+					DefenseData defData = ElementalCombatAPI.getDefenseData(mc.player);
+					if (!defData.isEmpty()) {
+						List<ITextComponent> list = new ArrayList<ITextComponent>();
+						list.add(new StringTextComponent("Defense:"));
+						list.addAll(toDisplayText(defData.getStyleFactor()));
+						list.addAll(toDisplayText(defData.getElementFactor()));
 
-					List<ITextComponent> list = new ArrayList<ITextComponent>();
-					list.add(new StringTextComponent("Defense:"));
-					list.addAll(toDisplayText(styleMap));
-					list.addAll(toDisplayText(elementMap));
+						if (!list.isEmpty()) {
+							MatrixStack matrixStack = event.getMatrixStack();
+							float scale = (float) Configuration.scale();
+							matrixStack.scale(scale, scale, scale);
 
-					if (!list.isEmpty()) {
-						MatrixStack matrixStack = event.getMatrixStack();
-						float scale = (float) Configuration.scale();
-						matrixStack.scale(scale, scale, scale);
-
-						List<? extends IReorderingProcessor> orderedList = Lists.transform(list, ITextComponent::func_241878_f);
-						// computes the width of the widest line.
-						int listWidth = 0;
-						for(IReorderingProcessor ireorderingprocessor : orderedList) {
-							int textWidth = mc.fontRenderer.func_243245_a(ireorderingprocessor);
-							listWidth = Math.max(textWidth, listWidth);
-						}
-
-						// computes the height of the list
-						int listHeight = 8;
-						if (orderedList.size() > 1) {
-							listHeight += 2 + (orderedList.size() - 1) * (mc.fontRenderer.FONT_HEIGHT+1);
-						}
-
-						// moves the coords so the text and box appear correct
-						int posX = 12;
-						int posY = 12;
-						if(!Configuration.isTop()) {
-							int screenHeight = event.getWindow().getScaledHeight();
-							posY = Math.max(12, screenHeight - listHeight - 12);
-						}
-						if(!Configuration.isLeft()) {
-							int screenWidth = event.getWindow().getScaledWidth();
-							posX = Math.max(12, screenWidth - listWidth - 12);
-						}
-
-						// draw background box
-						matrixStack.push();
-						int l = -267386864;
-						int i1 = 1347420415;
-						int j1 = 1344798847;
-						int k1 = 400;
-						Tessellator tessellator = Tessellator.getInstance();
-						BufferBuilder bufferbuilder = tessellator.getBuffer();
-						bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-						Matrix4f matrix4f = matrixStack.getLast().getMatrix();
-						func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 4, posX + listWidth + 3, posY - 3, 400, -267386864, -267386864);
-						func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY + listHeight + 3, posX + listWidth + 3, posY + listHeight + 4, 400, -267386864, -267386864);
-						func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + listWidth + 3, posY + listHeight + 3, 400, -267386864, -267386864);
-						func_238462_a_(matrix4f, bufferbuilder, posX - 4, posY - 3, posX - 3, posY + listHeight + 3, 400, -267386864, -267386864);
-						func_238462_a_(matrix4f, bufferbuilder, posX + listWidth + 3, posY - 3, posX + listWidth + 4, posY + listHeight + 3, 400, -267386864, -267386864);
-						func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3 + 1, posX - 3 + 1, posY + listHeight + 3 - 1, 400, 1347420415, 1344798847);
-						func_238462_a_(matrix4f, bufferbuilder, posX + listWidth + 2, posY - 3 + 1, posX + listWidth + 3, posY + listHeight + 3 - 1, 400, 1347420415, 1344798847);
-						func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + listWidth + 3, posY - 3 + 1, 400, 1347420415, 1347420415);
-						func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY + listHeight + 2, posX + listWidth + 3, posY + listHeight + 3, 400, 1344798847, 1344798847);
-						RenderSystem.enableDepthTest();
-						RenderSystem.disableTexture();
-						RenderSystem.enableBlend();
-						RenderSystem.defaultBlendFunc();
-						RenderSystem.shadeModel(7425);
-						bufferbuilder.finishDrawing();
-						WorldVertexBufferUploader.draw(bufferbuilder);
-						RenderSystem.shadeModel(7424);
-						RenderSystem.disableBlend();
-						RenderSystem.enableTexture();
-						IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-						matrixStack.translate(0.0D, 0.0D, 400.0D);
-
-						// write the list on top of the background
-						for(int i = 0; i < orderedList.size(); ++i) {
-							IReorderingProcessor ireorderingprocessor1 = orderedList.get(i);
-							if (ireorderingprocessor1 != null) {
-								mc.fontRenderer.func_238416_a_(ireorderingprocessor1, (float)posX, (float)posY, -1, Configuration.textShadow(), matrix4f, irendertypebuffer$impl, false, 0, 15728880);
+							List<? extends IReorderingProcessor> orderedList = Lists.transform(list, ITextComponent::func_241878_f);
+							// computes the width of the widest line.
+							int listWidth = 0;
+							for(IReorderingProcessor ireorderingprocessor : orderedList) {
+								int textWidth = mc.fontRenderer.func_243245_a(ireorderingprocessor);
+								listWidth = Math.max(textWidth, listWidth);
 							}
-							// first line is caption. add a little bit space to the next line
-							if (i == 0) {
-								posY += 2;
+
+							// computes the height of the list
+							int listHeight = 8;
+							if (orderedList.size() > 1) {
+								listHeight += 2 + (orderedList.size() - 1) * (mc.fontRenderer.FONT_HEIGHT+1);
 							}
-							//next line
-							posY += 10;
+
+							// moves the coords so the text and box appear correct
+							int posX = 12;
+							int posY = 12;
+							if(!Configuration.isTop()) {
+								int screenHeight = event.getWindow().getScaledHeight();
+								posY = Math.max(12, screenHeight - listHeight - 12);
+							}
+							if(!Configuration.isLeft()) {
+								int screenWidth = event.getWindow().getScaledWidth();
+								posX = Math.max(12, screenWidth - listWidth - 12);
+							}
+
+							matrixStack.push();
+//							int l = -267386864;
+//							int i1 = 1347420415;
+//							int j1 = 1344798847;
+//							int k1 = 400;
+							Tessellator tessellator = Tessellator.getInstance();
+							BufferBuilder bufferbuilder = tessellator.getBuffer();
+							bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+							Matrix4f matrix4f = matrixStack.getLast().getMatrix();
+							// draw background box
+							func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 4, posX + listWidth + 3, posY - 3, 400, -267386864, -267386864);
+							func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY + listHeight + 3, posX + listWidth + 3, posY + listHeight + 4, 400, -267386864, -267386864);
+							func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + listWidth + 3, posY + listHeight + 3, 400, -267386864, -267386864);
+							func_238462_a_(matrix4f, bufferbuilder, posX - 4, posY - 3, posX - 3, posY + listHeight + 3, 400, -267386864, -267386864);
+							func_238462_a_(matrix4f, bufferbuilder, posX + listWidth + 3, posY - 3, posX + listWidth + 4, posY + listHeight + 3, 400, -267386864, -267386864);
+							func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3 + 1, posX - 3 + 1, posY + listHeight + 3 - 1, 400, 1347420415, 1344798847);
+							func_238462_a_(matrix4f, bufferbuilder, posX + listWidth + 2, posY - 3 + 1, posX + listWidth + 3, posY + listHeight + 3 - 1, 400, 1347420415, 1344798847);
+							func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + listWidth + 3, posY - 3 + 1, 400, 1347420415, 1347420415);
+							func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY + listHeight + 2, posX + listWidth + 3, posY + listHeight + 3, 400, 1344798847, 1344798847);
+							RenderSystem.enableDepthTest();
+							RenderSystem.disableTexture();
+							RenderSystem.enableBlend();
+							RenderSystem.defaultBlendFunc();
+							RenderSystem.shadeModel(7425);
+							bufferbuilder.finishDrawing();
+							WorldVertexBufferUploader.draw(bufferbuilder);
+							RenderSystem.shadeModel(7424);
+							RenderSystem.disableBlend();
+							RenderSystem.enableTexture();
+							IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+							matrixStack.translate(0.0D, 0.0D, 400.0D);
+
+							// write the list on top of the background
+							for(int i = 0; i < orderedList.size(); ++i) {
+								IReorderingProcessor ireorderingprocessor1 = orderedList.get(i);
+								if (ireorderingprocessor1 != null) {
+									mc.fontRenderer.func_238416_a_(ireorderingprocessor1, (float)posX, (float)posY, -1, Configuration.textShadow(), matrix4f, irendertypebuffer$impl, false, 0, 15728880);
+								}
+								// first line is caption. add a little bit space to the next line
+								if (i == 0) {
+									posY += 2;
+								}
+								//next line
+								posY += 10;
+							}
+							irendertypebuffer$impl.finish();
+							matrixStack.pop();
 						}
-						irendertypebuffer$impl.finish();
-						matrixStack.pop();
 					}
 				}
 			}
@@ -180,6 +179,7 @@ public class RenderEvents {
 		return list;
 	}
 
+	//copied from Screen
 	protected static void func_238462_a_(Matrix4f p_238462_0_, BufferBuilder p_238462_1_, int p_238462_2_, int p_238462_3_, int p_238462_4_, int p_238462_5_, int p_238462_6_, int p_238462_7_, int p_238462_8_) {
 		float f = (float)(p_238462_7_ >> 24 & 255) / 255.0F;
 		float f1 = (float)(p_238462_7_ >> 16 & 255) / 255.0F;

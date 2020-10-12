@@ -15,7 +15,7 @@ public class StartupClientOnly {
 	public static void onClientSetupEvent(final FMLClientSetupEvent event)
 	{
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Configuration.CONFIG_SPEC);
-		ElementalCombat.LOGGER.info("clientRegistries method registered.");	
+		ElementalCombat.LOGGER.info("ElementalCombat clientRegistries method registered.");	
 	}
 	
 	@SuppressWarnings("resource")
