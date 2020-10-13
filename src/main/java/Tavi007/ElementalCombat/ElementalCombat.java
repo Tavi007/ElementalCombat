@@ -3,7 +3,6 @@ package Tavi007.ElementalCombat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.loading.CombatPropertiesManager;
 import Tavi007.ElementalCombat.particle.ParticleList;
@@ -14,7 +13,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
@@ -57,6 +56,8 @@ public class ElementalCombat
 	}
 	
 	public static void registerServerOnly() {
-		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.CONFIG_SPEC);
+		//maybe register on both sides?
+		//if true, move this to StartupCommon
+		ModLoadingContext.get().registerConfig(Type.SERVER, ServerConfig.CONFIG_SPEC, ElementalCombat.MOD_ID + "-server.toml");
 	}
 }

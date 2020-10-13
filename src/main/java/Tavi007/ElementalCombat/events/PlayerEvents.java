@@ -2,10 +2,13 @@ package Tavi007.ElementalCombat.events;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
+import Tavi007.ElementalCombat.StartupClientOnly;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.config.ClientConfig;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -49,6 +52,13 @@ public class PlayerEvents
 					defCapEntity.substract(defCapItem);
 				}
 			});
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onKeyInput(KeyInputEvent event) {
+		if(StartupClientOnly.TOGGLE_HUD.isKeyDown()){
+			ClientConfig.toogleHUD();
 		}
 	}
 }

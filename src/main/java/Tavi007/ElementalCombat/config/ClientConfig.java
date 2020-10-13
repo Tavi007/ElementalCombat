@@ -12,7 +12,8 @@ public class ClientConfig
 	public static final ForgeConfigSpec CONFIG_SPEC;
 	private static final ClientConfig CLIENT;
 
-	public final BooleanValue enabled;
+	private static boolean enableHUD = true;
+	
 	public final BooleanValue isTop;
 	public final BooleanValue isLeft;
 	public final DoubleValue scale;
@@ -28,9 +29,6 @@ public class ClientConfig
 
 	ClientConfig(ForgeConfigSpec.Builder builder)
 	{
-		enabled = builder
-				.comment("true if the defense data of the player should be shown, false otherwise")
-				.define("enabled", true);
 		isTop = builder
 				.comment("Display information on the top side")
 				.define("isTop", false);
@@ -45,9 +43,14 @@ public class ClientConfig
 				.define("textShadow", true);
 	}
 
-	public static boolean enabled()
+	public static boolean isHUDEnabled()
 	{
-		return CLIENT.enabled.get();
+		return enableHUD;
+	}
+	
+	public static void toogleHUD() {
+		if (enableHUD) {enableHUD = false;}
+		else {enableHUD = true;}
 	}
 
 	public static boolean isLeft()

@@ -75,7 +75,7 @@ public class RenderEvents {
 	public static void displayDefenseData(RenderGameOverlayEvent.Post event)
 	{
 		if(event.getType().equals(RenderGameOverlayEvent.ElementType.HOTBAR)) {
-			if(ClientConfig.enabled()) {
+			if(ClientConfig.isHUDEnabled()) {
 				// see Screen#renderToolTips in client.gui.screen
 				Minecraft mc = Minecraft.getInstance();
 				if(mc.player != null) {
@@ -88,9 +88,10 @@ public class RenderEvents {
 
 						if (!list.isEmpty()) {
 							MatrixStack matrixStack = event.getMatrixStack();
-							float scale = (float) ClientConfig.scale();
-							matrixStack.scale(scale, scale, scale);
 
+							//TODO: include scaling
+							
+							
 							List<? extends IReorderingProcessor> orderedList = Lists.transform(list, ITextComponent::func_241878_f);
 							// computes the width of the widest line.
 							int listWidth = 0;
