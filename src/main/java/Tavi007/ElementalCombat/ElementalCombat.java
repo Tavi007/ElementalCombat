@@ -29,12 +29,6 @@ public class ElementalCombat
 	public static final ResourceLocation simpleChannelRL = new ResourceLocation(MOD_ID, "channel");
 	public static SimpleChannel simpleChannel;    // used to transmit your network messages
     
-    public static final String DEFAULT_ELEMENT = "natural";
-    public static final String DEFAULT_STYLE = "basic";
-    public static final Integer MAX_FACTOR = 25;
-	public static final Integer SCALE_ENCHANTMENT = 2;
-       
-    
 	@SuppressWarnings("deprecation")
 	public ElementalCombat()
 	{

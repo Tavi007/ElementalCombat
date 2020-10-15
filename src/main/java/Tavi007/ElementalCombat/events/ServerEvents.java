@@ -6,6 +6,7 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.network.DefenseDataMessage;
 import Tavi007.ElementalCombat.particle.ParticleList;
@@ -113,8 +114,8 @@ public class ServerEvents {
 
 				//maybe mix and match with entity data? a wither skeleton will only use data from the stone sword...
 				AttackData atckCapEntity = ElementalCombatAPI.getAttackData(livingEntitySource);
-				if (sourceStyle == ElementalCombat.DEFAULT_STYLE) {sourceStyle = atckCapEntity.getStyle();}
-				if (sourceElement == ElementalCombat.DEFAULT_ELEMENT) {sourceElement = atckCapEntity.getElement();}
+				if (sourceStyle == ServerConfig.getDefaultStyle()) {sourceStyle = atckCapEntity.getStyle();}
+				if (sourceElement == ServerConfig.getDefaultElement()) {sourceElement = atckCapEntity.getElement();}
 			}
 		}
 		else if(damageSource.isProjectile()) {

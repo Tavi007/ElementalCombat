@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.config.ServerConfig;
 import net.minecraft.util.text.TextFormatting;
 
 @SuppressWarnings("deprecation")
@@ -64,7 +64,7 @@ public class DefenseDataHelper {
 	}
 
 	public static float getPercentage(Integer factor) {
-		return ((float) factor)/ElementalCombat.MAX_FACTOR;
+		return ((float) factor)/ServerConfig.getMaxFactor();
 	}
 
 	public static String toPercentageString(String key, Integer factor) {

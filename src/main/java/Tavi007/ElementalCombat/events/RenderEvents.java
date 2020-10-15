@@ -15,6 +15,7 @@ import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ClientConfig;
+import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -45,11 +46,11 @@ public class RenderEvents {
 		if (item != null) {
 			//attack
 			AttackData atckCap = ElementalCombatAPI.getAttackDataWithEnchantment(item);
-			if (!atckCap.getStyle().equals(ElementalCombat.DEFAULT_STYLE)) {
+			if (!atckCap.getStyle().equals(ServerConfig.getDefaultStyle())) {
 				String textAttackStyle = "" + TextFormatting.GRAY + "Attack Style: " + WordUtils.capitalize(atckCap.getStyle()) + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textAttackStyle));
 			}
-			if (!atckCap.getElement().equals(ElementalCombat.DEFAULT_ELEMENT)) {
+			if (!atckCap.getElement().equals(ServerConfig.getDefaultElement())) {
 				String textAttackElement = "" + TextFormatting.GRAY + "Elemental Attack: " + WordUtils.capitalize(atckCap.getElement()) + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textAttackElement));
 			}
@@ -90,7 +91,8 @@ public class RenderEvents {
 							MatrixStack matrixStack = event.getMatrixStack();
 
 							//TODO: include scaling
-							
+							//matrixStack.push();
+							//matrixStack.scale(0.5f,0.5f,0.5f);
 							
 							List<? extends IReorderingProcessor> orderedList = Lists.transform(list, ITextComponent::func_241878_f);
 							// computes the width of the widest line.

@@ -2,7 +2,7 @@ package Tavi007.ElementalCombat.loading;
 
 import java.util.HashMap;
 
-import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.config.ServerConfig;
 
 public class ItemCombatProperties 
 {
@@ -19,13 +19,13 @@ public class ItemCombatProperties
 		   this.defense_style = defenseStyle;
 		   this.defense_element = defenseElement;
 		   if (attackStyle.isEmpty()) {
-			   this.attack_style = ElementalCombat.DEFAULT_STYLE;
+			   this.attack_style = ServerConfig.getDefaultStyle();
 		   }
 		   else {
 			   this.attack_style = attackStyle;
 		   }
 		   if (attackElement.isEmpty()) {
-			   this.attack_element = ElementalCombat.DEFAULT_ELEMENT;
+			   this.attack_element = ServerConfig.getDefaultElement();
 		   }
 		   else {
 			   this.attack_element = attackElement;
@@ -36,8 +36,8 @@ public class ItemCombatProperties
 	   {
 		   this.defense_style = new HashMap<String, Integer>();
 		   this.defense_element = new HashMap<String, Integer>();
-		   this.attack_style = ElementalCombat.DEFAULT_STYLE;
-		   this.attack_element = ElementalCombat.DEFAULT_ELEMENT;
+		   this.attack_style = ServerConfig.getDefaultStyle();
+		   this.attack_element = ServerConfig.getDefaultElement();
 	   }
 
 	   public ItemCombatProperties(ItemCombatProperties properties)
