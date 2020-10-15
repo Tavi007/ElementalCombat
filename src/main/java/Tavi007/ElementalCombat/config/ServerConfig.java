@@ -31,16 +31,16 @@ public class ServerConfig {
 				.comment("true if emoji should be used for enchantments data, false will use text only")
 				.define("isEmojiEnabled", true);
 		defaultElement = builder
-				.comment("true if emoji should be used for enchantments data, false will use text only")
+				.comment("the default element")
 				.define("defaultElement", "natural");
 		defaultStyle = builder
-				.comment("true if emoji should be used for enchantments data, false will use text only")
+				.comment("the default style")
 				.define("defaultStyle", "basic");
 		maxFactor = builder
-				.comment("true if emoji should be used for enchantments data, false will use text only")
+				.comment("the maximal combat factor. See vanilla EPF")
 				.defineInRange("maxFactor", 25, 1, 100);
 		enchantmentScaling = builder
-				.comment("true if emoji should be used for enchantments data, false will use text only")
+				.comment("scaling for protection enchantments")
 				.defineInRange("enchantmentScaling", 2, 1, 10);
 	}
 
