@@ -86,7 +86,6 @@ public class ServerEvents {
 	{
 		DamageSource damageSource = event.getSource();
 		String damageType = damageSource.getDamageType();
-		System.out.println("Damage: " + damageSource.getDamageType());
 
 		// no modification. Entity should take normal damage and die eventually.
 		if(damageSource == DamageSource.OUT_OF_WORLD) {
