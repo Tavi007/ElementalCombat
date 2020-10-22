@@ -26,15 +26,19 @@ public class ElementalCombatAPI
 	// Living Entity //
 	///////////////////
 
-	/*
-	 * Returns the @return AttackData of the @param livingEntity.
+	/**
+	 * Returns the attack-combat data {@link AttackData} of the {@link LivingEntity}.
+	 * @param entity A LivingEntity.
+	 * @return the AttackData, containing the attack style and attack element.
 	 */
 	public static AttackData getAttackData(LivingEntity entity){
 		return (AttackData) entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
 	}
 
-	/*
-	 * Returns the @return DefenseData of the @param livingEntity.
+	/**
+	 * Returns the defense-combat data {@link DefenseData} of the {@link LivingEntity}.
+	 * @param entity A LivingEntity.
+	 * @return the DefenseData, containing the style defense-mapping and element defense-mapping.
 	 */
 	public static DefenseData getDefenseData(LivingEntity entity){
 		return (DefenseData) entity.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
@@ -44,24 +48,30 @@ public class ElementalCombatAPI
 	// ItemStack //
 	///////////////
 
-	/*
-	 * Returns the @return AttackData of the @param ItemStack.
+
+	/**
+	 * Returns the attack-combat data {@link AttackData} of the {@link ItemStack}.
+	 * @param stack An ItemStack.
+	 * @return the AttackData, containing the attack style and attack element.
 	 */
-	public static AttackData getAttackData(ItemStack itemStack){
-		AttackData attackData = (AttackData) itemStack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+	public static AttackData getAttackData(ItemStack stack){
+		AttackData attackData = (AttackData) stack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
 		if (!attackData.areEnchantmentChangesApplied()) {
-			attackData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(itemStack));
+			attackData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
 		}
 		return attackData;
 	}
 
-	/*
-	 * Returns the @return DefenseData of the @param itemStack.
+
+	/**
+	 * Returns the defense-combat data {@link DefenseData} of the {@link ItemStack}.
+	 * @param stack An ItemStack.
+	 * @return the DefenseData, containing the style defense-mapping and element defense-mapping.
 	 */
-	public static DefenseData getDefenseData(ItemStack itemStack){
-		DefenseData defenseData = (DefenseData) itemStack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
+	public static DefenseData getDefenseData(ItemStack stack){
+		DefenseData defenseData = (DefenseData) stack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
 		if (!defenseData.areEnchantmentChangesApplied()) {
-			defenseData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(itemStack));
+			defenseData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
 		}
 		return defenseData;
 	}
@@ -70,8 +80,10 @@ public class ElementalCombatAPI
 	// Projectiles //
 	/////////////////
 
-	/*
-	 * Returns the @return AttackData of the @param projectileEntity.
+	/**
+	 * Returns the attack-combat data {@link AttackData} of the {@link ProjectileEntity}.
+	 * @param stack A ProjectileEntity.
+	 * @return the AttackData, containing the attack style and attack element.
 	 */
 	public static AttackData getAttackData(ProjectileEntity projectileEntity){
 		return (AttackData) projectileEntity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
@@ -82,8 +94,10 @@ public class ElementalCombatAPI
 	// Helperfunctions //
 	/////////////////////
 
-	/*
-	 * adds @param dataToAdd to the DefenseData of the @param livingEntity 
+	/**
+	 * Adds additional {@link DefenseData} to the DefenseData of the {@link LivingEntity}. The values of the style and element mappings will be summed up.
+	 * @param dataToAdd The additional DefenseData.
+	 * @param livingEntity The LivingEntity. 
 	 */
 	public static void addDefenseData(LivingEntity livingEntity, DefenseData dataToAdd) {
 		if (dataToAdd.isEmpty()) return;
@@ -95,12 +109,14 @@ public class ElementalCombatAPI
 		}
 	}
 
-	/*
-	 * adds @param dataToAdd to the DefenseData of the @param itemStack 
+	/**
+	 * Adds additional {@link DefenseData} to the DefenseData of the {@link ItemStack}. The values of the style and element mappings will be summed up.
+	 * @param dataToAdd The additional DefenseData.
+	 * @param stack The ItemStack. 
 	 */
-	public static void addDefenseData(ItemStack itemStack, DefenseData dataToAdd) {
+	public static void addDefenseData(ItemStack stack, DefenseData dataToAdd) {
 		if (dataToAdd.isEmpty()) return;
-		DefenseData defDataItem = ElementalCombatAPI.getDefenseData(itemStack);
+		DefenseData defDataItem = ElementalCombatAPI.getDefenseData(stack);
 		defDataItem.add(dataToAdd);
 	}
 
@@ -108,8 +124,9 @@ public class ElementalCombatAPI
 	// get default values //
 	////////////////////////
 
-	/*
-	 * Returns a copy of the default @return BiomeCombatProperties of the @param biome.
+	/**
+	 * Returns a copy of the default {@link BiomeCombatProperties} of any {@link Biome}.
+	 * @param biome The Biome.
 	 */
 	public static BiomeCombatProperties getDefaultProperties(Biome biome) {
 		ResourceLocation rlBiome = biome.getRegistryName();
@@ -117,8 +134,10 @@ public class ElementalCombatAPI
 		return new BiomeCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties));
 	}
 
-	/*
-	 * Returns a copy of the default @return DamageSourceCombatProperties of the @param damageSource.
+	/**
+	 * Returns a copy of the default {@link DamageSourceCombatProperties} of any {@link DamageSource}. 
+	 * This includes lightning, burning, drowning, suffocating in a wall and so on.
+	 * @param damageSource The DamageSource.
 	 */
 	public static DamageSourceCombatProperties getDefaultProperties(DamageSource damageSource) {
 		ResourceLocation rlDamageSource=null;
@@ -137,8 +156,9 @@ public class ElementalCombatAPI
 
 	}
 
-	/*
-	 * Returns a copy of the default @return EntityCombatProperties of the @param livingEntity.
+	/**
+	 * Returns a copy of the default {@link EntityCombatProperties} of any {@link LivingEntity}.
+	 * @param livingEntity The LivingEntity.
 	 */
 	public static EntityCombatProperties getDefaultProperties(LivingEntity livingEntity) {
 		ResourceLocation rlEntity = livingEntity.getType().getRegistryName();
@@ -147,11 +167,12 @@ public class ElementalCombatAPI
 
 	}
 
-	/*
-	 * Returns a copy of the default @return ItemCombatProperties of the @param itemStack.
+	/**
+	 * Returns a copy of the default {@link ItemCombatProperties} of any {@link ItemStack}.
+	 * @param stack The ItemStack.
 	 */
-	public static ItemCombatProperties getDefaultProperties(ItemStack itemStack) {
-		ResourceLocation rlItem = itemStack.getItem().getRegistryName();
+	public static ItemCombatProperties getDefaultProperties(ItemStack stack) {
+		ResourceLocation rlItem = stack.getItem().getRegistryName();
 		ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "items/" + rlItem.getNamespace() + "/" + rlItem.getPath());
 		return new ItemCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
 	}
