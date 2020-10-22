@@ -108,7 +108,7 @@ public class ServerEvents {
 			}
 			else {
 				//use data from held item
-				AttackData atckCap = ElementalCombatAPI.getAttackDataWithEnchantment(livingEntitySource.getHeldItemMainhand());
+				AttackData atckCap = ElementalCombatAPI.getAttackData(livingEntitySource.getHeldItemMainhand());
 				sourceStyle = atckCap.getStyle();
 				sourceElement = atckCap.getElement();
 

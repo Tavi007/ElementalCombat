@@ -4,11 +4,79 @@ import java.util.HashMap;
 
 import org.apache.commons.lang3.text.WordUtils;
 
+import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ServerConfig;
+import Tavi007.ElementalCombat.enchantments.CombatEnchantments;
 import net.minecraft.util.text.TextFormatting;
 
 @SuppressWarnings("deprecation")
 public class DefenseDataHelper {
+
+	public static DefenseData getEnchantmentData(HashMap<String, Integer> enchantments) {
+		HashMap<String, Integer> defElement = new HashMap<String, Integer>();
+		HashMap<String, Integer> defStyle = new HashMap<String, Integer>();
+		enchantments.forEach( (key, level) -> {
+			if (level != 0) {
+				if(ServerConfig.isEmojiEnabled()) {
+					// elemental enchantments
+					if(key == CombatEnchantments.ICE_RESISTANCE.getName()) {
+						defElement.put("❄", level*ServerConfig.getEnchantmentScaling());
+						defElement.put("🔥", -level*ServerConfig.getEnchantmentScaling());
+					}
+					else if(key == CombatEnchantments.FIRE_RESISTANCE.getName()) {
+						defElement.put( "🔥", level*ServerConfig.getEnchantmentScaling());
+						defElement.put( "❄", -level*ServerConfig.getEnchantmentScaling());
+					}
+					else if(key == CombatEnchantments.WATER_RESISTANCE.getName()) {
+						defElement.put( "💧", level*ServerConfig.getEnchantmentScaling());
+						defElement.put( "⚡", -level*ServerConfig.getEnchantmentScaling());
+					}
+					else if(key == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
+						defElement.put( "⚡", level*ServerConfig.getEnchantmentScaling());
+						defElement.put( "💧", -level*ServerConfig.getEnchantmentScaling());
+					}
+
+					// style enchantments
+					if(key == CombatEnchantments.BLAST_PROTECTION.getName()) {
+						defStyle.put("💣", level*ServerConfig.getEnchantmentScaling());
+					}
+					else if(key == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
+						defStyle.put("➹", level*ServerConfig.getEnchantmentScaling());
+					}
+				}
+				else {
+					// elemental enchantments
+					if(key == CombatEnchantments.ICE_RESISTANCE.getName()) {
+						defElement.put("ice", level*ServerConfig.getEnchantmentScaling());
+						defElement.put("fire", -level*ServerConfig.getEnchantmentScaling());
+					}
+					else if(key == CombatEnchantments.FIRE_RESISTANCE.getName()) {
+						defElement.put( "fire", level*ServerConfig.getEnchantmentScaling());
+						defElement.put( "ice", -level*ServerConfig.getEnchantmentScaling());
+					}
+					else if(key == CombatEnchantments.WATER_RESISTANCE.getName()) {
+						defElement.put( "water", level*ServerConfig.getEnchantmentScaling());
+						defElement.put( "thunder", -level*ServerConfig.getEnchantmentScaling());
+					}
+					else if(key == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
+						defElement.put( "thunder", level*ServerConfig.getEnchantmentScaling());
+						defElement.put( "water", -level*ServerConfig.getEnchantmentScaling());
+					}
+
+					// style enchantments
+					if(key == CombatEnchantments.BLAST_PROTECTION.getName()) {
+						defStyle.put("explosion", level*ServerConfig.getEnchantmentScaling());
+					}
+					else if(key == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
+						defStyle.put("projectile", level*ServerConfig.getEnchantmentScaling());
+					}
+				}
+			}
+		});
+		return new DefenseData(defStyle, defElement);
+	}
+
+
 
 	//merge the @param additionalMap into the @param baseMap, so the highest value persists.
 	public static void mergeMaps(HashMap<String, Integer> baseMap, HashMap<String, Integer> additionalMap){

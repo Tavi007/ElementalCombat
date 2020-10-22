@@ -45,7 +45,7 @@ public class RenderEvents {
 		List<ITextComponent> toolTip = event.getToolTip();
 		if (item != null) {
 			//attack
-			AttackData atckCap = ElementalCombatAPI.getAttackDataWithEnchantment(item);
+			AttackData atckCap = ElementalCombatAPI.getAttackData(item);
 			if (!atckCap.getStyle().equals(ServerConfig.getDefaultStyle())) {
 				String textAttackStyle = "" + TextFormatting.GRAY + "Attack Style: " + WordUtils.capitalize(atckCap.getStyle()) + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textAttackStyle));
@@ -56,7 +56,7 @@ public class RenderEvents {
 			}
 
 			//defense
-			DefenseData defCap = ElementalCombatAPI.getDefenseDataWithEnchantment(item);
+			DefenseData defCap = ElementalCombatAPI.getDefenseData(item);
 			HashMap<String, Integer> defStyle = defCap.getStyleFactor();
 			if(!defStyle.isEmpty()) {
 				String textDefenseStyle = "" + TextFormatting.GRAY + "Style Resistance: " + TextFormatting.RESET;

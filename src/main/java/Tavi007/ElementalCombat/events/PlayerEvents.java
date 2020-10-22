@@ -26,8 +26,8 @@ public class PlayerEvents
 		if(event.getSlot().getSlotType() == EquipmentSlotType.Group.ARMOR)
 		{
 			// get Data
-			DefenseData defDataItemFrom = ElementalCombatAPI.getDefenseDataWithEnchantment(event.getFrom());
-			DefenseData defDataItemTo = ElementalCombatAPI.getDefenseDataWithEnchantment(event.getTo());
+			DefenseData defDataItemFrom = ElementalCombatAPI.getDefenseData(event.getFrom());
+			DefenseData defDataItemTo = ElementalCombatAPI.getDefenseData(event.getTo());
 
 			// compute Change
 			DefenseData newData = new DefenseData();
@@ -48,7 +48,7 @@ public class PlayerEvents
 			DefenseData defCapEntity = ElementalCombatAPI.getDefenseData(entity);
 			entity.getArmorInventoryList().forEach(item -> {
 				if (!item.isEmpty()) {
-					DefenseData defCapItem = ElementalCombatAPI.getDefenseDataWithEnchantment(item);
+					DefenseData defCapItem = ElementalCombatAPI.getDefenseData(item);
 					defCapEntity.substract(defCapItem);
 				}
 			});

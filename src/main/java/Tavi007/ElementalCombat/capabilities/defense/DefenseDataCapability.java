@@ -52,6 +52,7 @@ public class DefenseDataCapability {
 				CompoundNBT nbt = new CompoundNBT();
 				nbt.put("defense_style", NBTHelper.fromMapToNBT(instance.getStyleFactor()));
 				nbt.put("defense_element", NBTHelper.fromMapToNBT(instance.getElementFactor()));
+				nbt.put("enchantment_data", NBTHelper.fromMapToNBT(instance.getEnchantmentData()));
 				return nbt;
 			}
 
@@ -63,6 +64,7 @@ public class DefenseDataCapability {
 				//fill list with data
 				instance.setStyleFactor(NBTHelper.fromNBTToMap(nbtCompound.getCompound("defense_style")));
 				instance.setElementFactor(NBTHelper.fromNBTToMap(nbtCompound.getCompound("defense_element")));
+				instance.setEnchantmentData(NBTHelper.fromNBTToMap(nbtCompound.getCompound("enchantment_data")));
 			}
 
 
@@ -113,7 +115,7 @@ public class DefenseDataCapability {
 			//default values
 			HashMap<String, Integer> styleMap = itemProperties.getDefenseStyle();
 			HashMap<String, Integer> elementMap = itemProperties.getDefenseElement();
-
+			
 			final DefenseData defData = new DefenseData(styleMap, elementMap);
 			event.addCapability(ID, createProvider(defData));
 		}

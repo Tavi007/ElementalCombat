@@ -10,8 +10,8 @@ public class HandleCuriosInventory {
 	public static void onCurioChange(CurioChangeEvent event) {
 
 		// get Data
-		DefenseData defDataItemFrom = ElementalCombatAPI.getDefenseDataWithEnchantment(event.getFrom());
-		DefenseData defDataItemTo = ElementalCombatAPI.getDefenseDataWithEnchantment(event.getTo());
+		DefenseData defDataItemFrom = ElementalCombatAPI.getDefenseData(event.getFrom());
+		DefenseData defDataItemTo = ElementalCombatAPI.getDefenseData(event.getTo());
 
 		// compute Change
 		DefenseData newData = new DefenseData();

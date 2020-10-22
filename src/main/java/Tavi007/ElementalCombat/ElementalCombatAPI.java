@@ -1,26 +1,18 @@
 package Tavi007.ElementalCombat;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
-import Tavi007.ElementalCombat.config.ServerConfig;
-import Tavi007.ElementalCombat.enchantments.CombatEnchantments;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import Tavi007.ElementalCombat.network.DefenseDataMessage;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -57,6 +49,9 @@ public class ElementalCombatAPI
 	 */
 	public static AttackData getAttackData(ItemStack itemStack){
 		AttackData attackData = (AttackData) itemStack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+		if (!attackData.areEnchantmentChangesApplied()) {
+			attackData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(itemStack));
+		}
 		return attackData;
 	}
 
@@ -65,119 +60,11 @@ public class ElementalCombatAPI
 	 */
 	public static DefenseData getDefenseData(ItemStack itemStack){
 		DefenseData defenseData = (DefenseData) itemStack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
-		return defenseData;
-	}
-
-	public static AttackData getAttackDataWithEnchantment(ItemStack itemStack){
-		AttackData attackData = new AttackData((AttackData) itemStack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData()));
-
-		if (!(itemStack.getItem() instanceof EnchantedBookItem)) {
-			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemStack);
-			enchantments.forEach((key, value) -> {
-
-				//currently only comparing strings.
-				//maybe change to resourceLocation later, so other mods can interact with this as well.
-				if(ServerConfig.isEmojiEnabled()) {
-					//sword
-					if(key.getName() == Enchantments.FIRE_ASPECT.getName()) {attackData.setElement("🔥");}
-					if(key.getName() == CombatEnchantments.ICE_ASPECT.getName()) {attackData.setElement("❄");}
-					if(key.getName() == CombatEnchantments.WATER_ASPECT.getName()) {attackData.setElement("💧");}
-					if(key.getName() == CombatEnchantments.THUNDER_ASPECT.getName()) {attackData.setElement("⚡");}
-					//bow
-					if(key.getName() == Enchantments.FLAME.getName()) {attackData.setElement("🔥");}
-					//trident
-					if(key.getName() == Enchantments.CHANNELING.getName()) {attackData.setElement("⚡");}
-				}
-				else {
-					//sword
-					if(key.getName() == Enchantments.FIRE_ASPECT.getName()) {attackData.setElement("fire");}
-					if(key.getName() == CombatEnchantments.ICE_ASPECT.getName()) {attackData.setElement("ice");}
-					if(key.getName() == CombatEnchantments.WATER_ASPECT.getName()) {attackData.setElement("water");}
-					if(key.getName() == CombatEnchantments.THUNDER_ASPECT.getName()) {attackData.setElement("thunder");}
-					//bow
-					if(key.getName() == Enchantments.FLAME.getName()) {attackData.setElement("fire");}
-					//trident
-					if(key.getName() == Enchantments.CHANNELING.getName()) {attackData.setElement("thunder");}
-				}
-			});
-		}
-		return attackData;
-	}
-
-	public static DefenseData getDefenseDataWithEnchantment(ItemStack itemStack){
-		DefenseData defenseData = new DefenseData((DefenseData) itemStack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData()));
-
-		if (!(itemStack.getItem() instanceof EnchantedBookItem)) {
-			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemStack);
-			HashMap<String, Integer> defStyle = new HashMap<String, Integer>();
-			HashMap<String, Integer> defElement = new HashMap<String, Integer>();
-			enchantments.forEach((key, level) -> {
-				//currently only comparing strings.
-				//maybe change to resourceLocation later, so other mods can interact with this as well.
-
-				if(ServerConfig.isEmojiEnabled()) {
-					// elemental enchantments
-					if(key.getName() == CombatEnchantments.ICE_RESISTANCE.getName()) {
-						defElement.put("❄", level*ServerConfig.getEnchantmentScaling());
-						defElement.put("🔥", -level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key.getName() == CombatEnchantments.FIRE_RESISTANCE.getName()) {
-						defElement.put( "🔥", level*ServerConfig.getEnchantmentScaling());
-						defElement.put( "❄", -level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key.getName() == CombatEnchantments.WATER_RESISTANCE.getName()) {
-						defElement.put( "💧", level*ServerConfig.getEnchantmentScaling());
-						defElement.put( "⚡", -level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key.getName() == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
-						defElement.put( "⚡", level*ServerConfig.getEnchantmentScaling());
-						defElement.put( "💧", -level*ServerConfig.getEnchantmentScaling());
-					}
-
-					// style enchantments
-					if(key.getName() == CombatEnchantments.BLAST_PROTECTION.getName()) {
-						defStyle.put("💣", level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key.getName() == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
-						defStyle.put("➹", level*ServerConfig.getEnchantmentScaling());
-					}
-				}
-				else {
-					// elemental enchantments
-					if(key.getName() == CombatEnchantments.ICE_RESISTANCE.getName()) {
-						defElement.put("ice", level*ServerConfig.getEnchantmentScaling());
-						defElement.put("fire", -level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key.getName() == CombatEnchantments.FIRE_RESISTANCE.getName()) {
-						defElement.put( "fire", level*ServerConfig.getEnchantmentScaling());
-						defElement.put( "ice", -level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key.getName() == CombatEnchantments.WATER_RESISTANCE.getName()) {
-						defElement.put( "water", level*ServerConfig.getEnchantmentScaling());
-						defElement.put( "thunder", -level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key.getName() == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
-						defElement.put( "thunder", level*ServerConfig.getEnchantmentScaling());
-						defElement.put( "water", -level*ServerConfig.getEnchantmentScaling());
-					}
-
-					// style enchantments
-					if(key.getName() == CombatEnchantments.BLAST_PROTECTION.getName()) {
-						defStyle.put("explosion", level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key.getName() == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
-						defStyle.put("projectile", level*ServerConfig.getEnchantmentScaling());
-					}
-				}
-			});
-
-			DefenseData defenseDataEnchantment = new DefenseData(defStyle, defElement);
-			defenseDataEnchantment.add(defenseData);
-			return defenseDataEnchantment;
+		if (!defenseData.areEnchantmentChangesApplied()) {
+			defenseData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(itemStack));
 		}
 		return defenseData;
 	}
-
 
 	/////////////////
 	// Projectiles //
