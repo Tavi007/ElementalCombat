@@ -90,7 +90,6 @@ public class RenderEvents {
 						if (!list.isEmpty()) {
 							MatrixStack matrixStack = event.getMatrixStack();
 
-							//TODO: include scaling
 							matrixStack.push();
 							float scale = (float) ClientConfig.scale();
 							matrixStack.scale(scale, scale, scale);
