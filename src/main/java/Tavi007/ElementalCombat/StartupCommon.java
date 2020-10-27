@@ -1,7 +1,6 @@
 package Tavi007.ElementalCombat;
 
 import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
-import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.enchantments.StyleResistanceEnchantment;
@@ -16,8 +15,6 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -41,9 +38,6 @@ public class StartupCommon {
 				DefenseDataMessage::encode, DefenseDataMessage::decode,
 				PackageHandlerOnClient::onMessageReceived,
 	            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-
-		//configs
-		ModLoadingContext.get().registerConfig(Type.SERVER, ServerConfig.CONFIG_SPEC, ElementalCombat.MOD_ID + "-server.toml");
 		
 		ElementalCombat.LOGGER.info("setup method registered.");
 	}

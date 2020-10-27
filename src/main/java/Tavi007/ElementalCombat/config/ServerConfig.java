@@ -28,19 +28,19 @@ public class ServerConfig {
 	ServerConfig(ForgeConfigSpec.Builder builder)
 	{
 		isEmojiEnabled = builder
-				.comment("true if emoji should be used for enchantments data, false will use text only")
-				.define("isEmojiEnabled", true);
+				.comment("If true emojies are used for enchantment data. When false, it will use only text.")
+				.define("isEmojiEnabled", false);
 		defaultElement = builder
-				.comment("the default element")
+				.comment("The default element.")
 				.define("defaultElement", "natural");
 		defaultStyle = builder
-				.comment("the default style")
+				.comment("The default style.")
 				.define("defaultStyle", "basic");
 		maxFactor = builder
-				.comment("the maximal combat factor. See vanilla EPF")
+				.comment("The maximal combat factor. See vanilla Enchantment Protection Factor.")
 				.defineInRange("maxFactor", 25, 1, 100);
 		enchantmentScaling = builder
-				.comment("scaling for protection enchantments")
+				.comment("scaling for protection enchantments. See vanilla Enchantment Protection Factor.")
 				.defineInRange("enchantmentScaling", 2, 1, 10);
 	}
 

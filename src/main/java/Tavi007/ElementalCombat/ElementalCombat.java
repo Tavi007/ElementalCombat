@@ -3,6 +3,8 @@ package Tavi007.ElementalCombat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import Tavi007.ElementalCombat.config.ClientConfig;
+import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.loading.CombatPropertiesManager;
 import Tavi007.ElementalCombat.particle.ParticleList;
 import net.minecraft.util.ResourceLocation;
@@ -10,7 +12,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
@@ -33,6 +37,10 @@ public class ElementalCombat
 		
 		//register particles
 		ParticleList.PARTICLES.register(ElementalCombat.MOD_EVENT_BUS);
+
+		//config (cause they must be in  the main class)
+		ModLoadingContext.get().registerConfig(Type.CLIENT, ClientConfig.CONFIG_SPEC, ElementalCombat.MOD_ID + "-client.toml");
+		ModLoadingContext.get().registerConfig(Type.SERVER, ServerConfig.CONFIG_SPEC, ElementalCombat.MOD_ID + "-server.toml");
 		
 		//register common stuff
 		MOD_EVENT_BUS.register(StartupCommon.class);
