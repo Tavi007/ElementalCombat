@@ -91,8 +91,9 @@ public class RenderEvents {
 							MatrixStack matrixStack = event.getMatrixStack();
 
 							//TODO: include scaling
-							//matrixStack.push();
-							//matrixStack.scale(0.5f,0.5f,0.5f);
+							matrixStack.push();
+							float scale = (float) ClientConfig.scale();
+							matrixStack.scale(scale, scale, scale);
 							
 							List<? extends IReorderingProcessor> orderedList = Lists.transform(list, ITextComponent::func_241878_f);
 							// computes the width of the widest line.
@@ -112,15 +113,14 @@ public class RenderEvents {
 							int posX = 12;
 							int posY = 12;
 							if(!ClientConfig.isTop()) {
-								int screenHeight = event.getWindow().getScaledHeight();
+								int screenHeight = (int) (event.getWindow().getScaledHeight()/scale);
 								posY = Math.max(12, screenHeight - listHeight - 12);
 							}
 							if(!ClientConfig.isLeft()) {
-								int screenWidth = event.getWindow().getScaledWidth();
+								int screenWidth = (int) (event.getWindow().getScaledWidth()/scale);
 								posX = Math.max(12, screenWidth - listWidth - 12);
 							}
 
-							matrixStack.push();
 //							int l = -267386864;
 //							int i1 = 1347420415;
 //							int j1 = 1344798847;

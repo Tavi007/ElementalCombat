@@ -37,7 +37,7 @@ public class ClientConfig
 				.define("isLeft", false);
 		scale = builder
 				.comment("The size of the defense data of the player (multiplier)")
-				.defineInRange("scale", 1.0D, 0.1D, 1.0D);
+				.defineInRange("scale", 1.0D, 0.25D, 1.0D);
 		textShadow = builder
 				.comment("true if the defense data of the player should be rendered with a shadow, false otherwise")
 				.define("textShadow", true);
