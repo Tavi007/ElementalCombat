@@ -23,8 +23,11 @@ public class StartupClientOnly {
 	@SubscribeEvent
 	public static void onClientSetupEvent(final FMLClientSetupEvent event)
 	{
+		//config
 		ModLoadingContext.get().registerConfig(Type.CLIENT, ClientConfig.CONFIG_SPEC, ElementalCombat.MOD_ID + "-client.toml");
+		//key bindings
 		ClientRegistry.registerKeyBinding(TOGGLE_HUD);
+		
 		ElementalCombat.LOGGER.info("ElementalCombat clientRegistries method registered.");	
 	}
 	
