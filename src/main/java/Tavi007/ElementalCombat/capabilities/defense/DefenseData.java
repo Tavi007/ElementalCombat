@@ -99,13 +99,15 @@ public class DefenseData implements IDefenseData{
 		});
 
 		//compute difference
-		DefenseData diffData = DefenseDataHelper.getEnchantmentData(newEnchantments);
-		DefenseData oldData = DefenseDataHelper.getEnchantmentData(this.enchantmentData);
-		diffData.substract(oldData);
-		
-		//apply
-		this.add(diffData);
+		if(!newEnchantments.equals(this.enchantmentData) && !newEnchantments.isEmpty()) {
+			DefenseData diffData = DefenseDataHelper.getEnchantmentData(newEnchantments);
+			DefenseData oldData = DefenseDataHelper.getEnchantmentData(this.enchantmentData);
+			diffData.substract(oldData);
+			
+			//apply
+			this.add(diffData);
+			this.enchantmentData = newEnchantments;
+		}
 		this.areEnchantmentChangesApplied = true;
-		this.enchantmentData = newEnchantments;
 	}
 }

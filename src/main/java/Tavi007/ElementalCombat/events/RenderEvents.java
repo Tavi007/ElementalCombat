@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
@@ -42,32 +43,36 @@ public class RenderEvents {
 	@SubscribeEvent
 	public static void addTooltipInformation(ItemTooltipEvent event) {
 		ItemStack item = event.getItemStack();
-		List<ITextComponent> toolTip = event.getToolTip();
-		if (item != null) {
-			//attack
-			AttackData atckCap = ElementalCombatAPI.getAttackData(item);
-			if (!atckCap.getStyle().equals(ServerConfig.getDefaultStyle())) {
-				String textAttackStyle = "" + TextFormatting.GRAY + "Attack Style: " + WordUtils.capitalize(atckCap.getStyle()) + TextFormatting.RESET;
-				toolTip.add(new StringTextComponent(textAttackStyle));
-			}
-			if (!atckCap.getElement().equals(ServerConfig.getDefaultElement())) {
-				String textAttackElement = "" + TextFormatting.GRAY + "Elemental Attack: " + WordUtils.capitalize(atckCap.getElement()) + TextFormatting.RESET;
-				toolTip.add(new StringTextComponent(textAttackElement));
-			}
 
-			//defense
-			DefenseData defCap = ElementalCombatAPI.getDefenseData(item);
-			HashMap<String, Integer> defStyle = defCap.getStyleFactor();
-			if(!defStyle.isEmpty()) {
-				String textDefenseStyle = "" + TextFormatting.GRAY + "Style Resistance: " + TextFormatting.RESET;
-				toolTip.add(new StringTextComponent(textDefenseStyle));
-				toolTip.addAll(toDisplayText(defStyle));
-			}
-			HashMap<String, Integer> defElement = defCap.getElementFactor();
-			if(!defElement.isEmpty()) {
-				String textDefenseElement = "" + TextFormatting.GRAY + "Elemental Resistance:" + TextFormatting.RESET;
-				toolTip.add(new StringTextComponent(textDefenseElement));
-				toolTip.addAll(toDisplayText(defElement));
+		if(item.getItem() != Items.ENCHANTED_BOOK)
+		{
+			List<ITextComponent> toolTip = event.getToolTip();
+			if (item != null) {
+				//attack
+				AttackData atckCap = ElementalCombatAPI.getAttackData(item);
+				if (!atckCap.getStyle().equals(ServerConfig.getDefaultStyle())) {
+					String textAttackStyle = "" + TextFormatting.GRAY + "Attack Style: " + WordUtils.capitalize(atckCap.getStyle()) + TextFormatting.RESET;
+					toolTip.add(new StringTextComponent(textAttackStyle));
+				}
+				if (!atckCap.getElement().equals(ServerConfig.getDefaultElement())) {
+					String textAttackElement = "" + TextFormatting.GRAY + "Elemental Attack: " + WordUtils.capitalize(atckCap.getElement()) + TextFormatting.RESET;
+					toolTip.add(new StringTextComponent(textAttackElement));
+				}
+
+				//defense
+				DefenseData defCap = ElementalCombatAPI.getDefenseData(item);
+				HashMap<String, Integer> defStyle = defCap.getStyleFactor();
+				if(!defStyle.isEmpty()) {
+					String textDefenseStyle = "" + TextFormatting.GRAY + "Style Resistance: " + TextFormatting.RESET;
+					toolTip.add(new StringTextComponent(textDefenseStyle));
+					toolTip.addAll(toDisplayText(defStyle));
+				}
+				HashMap<String, Integer> defElement = defCap.getElementFactor();
+				if(!defElement.isEmpty()) {
+					String textDefenseElement = "" + TextFormatting.GRAY + "Elemental Resistance:" + TextFormatting.RESET;
+					toolTip.add(new StringTextComponent(textDefenseElement));
+					toolTip.addAll(toDisplayText(defElement));
+				}
 			}
 		}
 	}
@@ -93,7 +98,7 @@ public class RenderEvents {
 							matrixStack.push();
 							float scale = (float) ClientConfig.scale();
 							matrixStack.scale(scale, scale, scale);
-							
+
 							List<? extends IReorderingProcessor> orderedList = Lists.transform(list, ITextComponent::func_241878_f);
 							// computes the width of the widest line.
 							int listWidth = 0;
@@ -120,10 +125,10 @@ public class RenderEvents {
 								posX = Math.max(12, screenWidth - listWidth - 12);
 							}
 
-//							int l = -267386864;
-//							int i1 = 1347420415;
-//							int j1 = 1344798847;
-//							int k1 = 400;
+							//							int l = -267386864;
+							//							int i1 = 1347420415;
+							//							int j1 = 1344798847;
+							//							int k1 = 400;
 							Tessellator tessellator = Tessellator.getInstance();
 							BufferBuilder bufferbuilder = tessellator.getBuffer();
 							bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
