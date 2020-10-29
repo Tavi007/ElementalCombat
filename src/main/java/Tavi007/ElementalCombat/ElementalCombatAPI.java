@@ -130,6 +130,9 @@ public class ElementalCombatAPI
 	 */
 	public static BiomeCombatProperties getDefaultProperties(Biome biome) {
 		ResourceLocation rlBiome = biome.getRegistryName();
+		if (rlBiome == null) {
+			return new BiomeCombatProperties();
+		}
 		ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "biomes/" + rlBiome.getNamespace() + "/" + rlBiome.getPath()); ;
 		return new BiomeCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties));
 	}
@@ -153,7 +156,6 @@ public class ElementalCombatAPI
 			rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/" + damageSource.getDamageType().toLowerCase());
 		}
 		return new DamageSourceCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource));
-
 	}
 
 	/**
@@ -162,6 +164,9 @@ public class ElementalCombatAPI
 	 */
 	public static EntityCombatProperties getDefaultProperties(LivingEntity livingEntity) {
 		ResourceLocation rlEntity = livingEntity.getType().getRegistryName();
+		if (rlEntity == null) {
+			return new EntityCombatProperties();
+		}
 		ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "entities/" + rlEntity.getNamespace() + "/" + rlEntity.getPath());
 		return new EntityCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
 
@@ -173,6 +178,9 @@ public class ElementalCombatAPI
 	 */
 	public static ItemCombatProperties getDefaultProperties(ItemStack stack) {
 		ResourceLocation rlItem = stack.getItem().getRegistryName();
+		if (rlItem == null) {
+			return new ItemCombatProperties();
+		}
 		ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "items/" + rlItem.getNamespace() + "/" + rlItem.getPath());
 		return new ItemCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
 	}
