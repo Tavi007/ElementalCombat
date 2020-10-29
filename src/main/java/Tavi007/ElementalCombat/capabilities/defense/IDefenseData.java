@@ -21,4 +21,6 @@ public interface IDefenseData {
 	void add(DefenseData data);
 	void substract(DefenseData data);
 	boolean isEmpty();
+	
+	void clear();
 }

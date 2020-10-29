@@ -37,10 +37,18 @@ public class DefenseData implements IDefenseData{
 	}
 
 	@Override
+	public void clear() {
+		this.styleFactor = new HashMap<String, Integer>();
+		this.elementFactor = new HashMap<String, Integer>();
+		this.enchantmentData = new HashMap<String, Integer>();
+		this.areEnchantmentChangesApplied = false;
+	}
+	
+	@Override
 	public HashMap<String, Integer> getEnchantmentData() {
 		return this.enchantmentData;
 	}
-
+	
 	@Override
 	public void setEnchantmentData(HashMap<String, Integer> data) {
 		this.enchantmentData = data;

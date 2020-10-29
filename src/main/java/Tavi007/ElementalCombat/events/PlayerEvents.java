@@ -39,19 +39,14 @@ public class PlayerEvents
 		}
 	}
 
-	// since elementifyLivingEquipmentChange is fired, whenever a player logs in,
-	// I need to 'remove' armor-stats from the player, when logging out. 
+	// every armor piece (curios and vanilla) will be re-applied on log in
+	// same goes for any auras (WIP)
 	@SubscribeEvent
 	public static void playerLoggedOut(PlayerLoggedOutEvent event) {
 		PlayerEntity entity = event.getPlayer();
 		if (entity != null) {
 			DefenseData defCapEntity = ElementalCombatAPI.getDefenseData(entity);
-			entity.getArmorInventoryList().forEach(item -> {
-				if (!item.isEmpty()) {
-					DefenseData defCapItem = ElementalCombatAPI.getDefenseData(item);
-					defCapEntity.substract(defCapItem);
-				}
-			});
+			defCapEntity.clear();
 		}
 	}
 	
