@@ -30,14 +30,14 @@ public class ClientConfig
 	ClientConfig(ForgeConfigSpec.Builder builder)
 	{
 		isTop = builder
-				.comment("Display information on the top side.")
+				.comment("If true, displays HUD on the top side.")
 				.define("isTop", false);
 		isLeft = builder
-				.comment("Display information on the left side.")
+				.comment("If true, displays HUD on the left side.")
 				.define("isLeft", false);
 		scale = builder
-				.comment("The multiplier of the defense data HUD.")
-				.defineInRange("scale", 1.0D, 0.25D, 1.0D);
+				.comment("The multiplier of the defense data HUD size.")
+				.defineInRange("scale", 1.0D, 0.25D, 4.0D);
 		textShadow = builder
 				.comment("If true the defense data of the player is rendered with a shadow.")
 				.define("textShadow", true);

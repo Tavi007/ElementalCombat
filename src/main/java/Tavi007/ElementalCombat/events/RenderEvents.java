@@ -24,7 +24,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
@@ -44,35 +43,32 @@ public class RenderEvents {
 	public static void addTooltipInformation(ItemTooltipEvent event) {
 		ItemStack item = event.getItemStack();
 
-		if(item.getItem() != Items.ENCHANTED_BOOK)
-		{
-			List<ITextComponent> toolTip = event.getToolTip();
-			if (item != null) {
-				//attack
-				AttackData atckCap = ElementalCombatAPI.getAttackData(item);
-				if (!atckCap.getStyle().equals(ServerConfig.getDefaultStyle())) {
-					String textAttackStyle = "" + TextFormatting.GRAY + "Attack Style: " + WordUtils.capitalize(atckCap.getStyle()) + TextFormatting.RESET;
-					toolTip.add(new StringTextComponent(textAttackStyle));
-				}
-				if (!atckCap.getElement().equals(ServerConfig.getDefaultElement())) {
-					String textAttackElement = "" + TextFormatting.GRAY + "Elemental Attack: " + WordUtils.capitalize(atckCap.getElement()) + TextFormatting.RESET;
-					toolTip.add(new StringTextComponent(textAttackElement));
-				}
+		List<ITextComponent> toolTip = event.getToolTip();
+		if (item != null) {
+			//attack
+			AttackData atckCap = new AttackData(ElementalCombatAPI.getAttackData(item));
+			if (!atckCap.getStyle().equals(ServerConfig.getDefaultStyle())) {
+				String textAttackStyle = "" + TextFormatting.GRAY + "Attack Style: " + WordUtils.capitalize(atckCap.getStyle()) + TextFormatting.RESET;
+				toolTip.add(new StringTextComponent(textAttackStyle));
+			}
+			if (!atckCap.getElement().equals(ServerConfig.getDefaultElement())) {
+				String textAttackElement = "" + TextFormatting.GRAY + "Attack Element: " + WordUtils.capitalize(atckCap.getElement()) + TextFormatting.RESET;
+				toolTip.add(new StringTextComponent(textAttackElement));
+			}
 
-				//defense
-				DefenseData defCap = ElementalCombatAPI.getDefenseData(item);
-				HashMap<String, Integer> defStyle = defCap.getStyleFactor();
-				if(!defStyle.isEmpty()) {
-					String textDefenseStyle = "" + TextFormatting.GRAY + "Style Resistance: " + TextFormatting.RESET;
-					toolTip.add(new StringTextComponent(textDefenseStyle));
-					toolTip.addAll(toDisplayText(defStyle));
-				}
-				HashMap<String, Integer> defElement = defCap.getElementFactor();
-				if(!defElement.isEmpty()) {
-					String textDefenseElement = "" + TextFormatting.GRAY + "Elemental Resistance:" + TextFormatting.RESET;
-					toolTip.add(new StringTextComponent(textDefenseElement));
-					toolTip.addAll(toDisplayText(defElement));
-				}
+			//defense
+			DefenseData defCap = new DefenseData(ElementalCombatAPI.getDefenseData(item));
+			HashMap<String, Integer> defStyle = defCap.getStyleFactor();
+			if(!defStyle.isEmpty()) {
+				String textDefenseStyle = "" + TextFormatting.GRAY + "Style Resistance: " + TextFormatting.RESET;
+				toolTip.add(new StringTextComponent(textDefenseStyle));
+				toolTip.addAll(toDisplayText(defStyle));
+			}
+			HashMap<String, Integer> defElement = defCap.getElementFactor();
+			if(!defElement.isEmpty()) {
+				String textDefenseElement = "" + TextFormatting.GRAY + "Elemental Resistance:" + TextFormatting.RESET;
+				toolTip.add(new StringTextComponent(textDefenseElement));
+				toolTip.addAll(toDisplayText(defElement));
 			}
 		}
 	}
