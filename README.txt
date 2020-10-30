@@ -1,37 +1,28 @@
 Welcome to the Elemental Combat repository.
 
-Goal of this mod is to enhance the combat system by adding elemental attack and defense properties to mobs and players. Upon hitting something, this properties will be checked and a new value will be calculated. 
-While these properties are usually final for mobs, the player can choose his elemental properties by equipping armor and attacking with the right weapon.
-New particles will tell you, how the enemy reacted to your attack.
+Goal of this mod is to enhance the combat system by adding elemental and style properties to combat. This means, that players, mobs and items all have new attack and defense properties. Upon hitting something, these properties will be checked and a new damage value will be calculated.
 
-The defense properties include 4 sets: Weakness, Resistance, Immunity, Absorption. Each can contain strings of element names (I choose sets, so no duplicated entries are possible).  
-Weakness will double the damage, while 'Resistance' will half it. Immunity means no damage will be dealt, and Absorption will even heal the target.
-The attack property is a set of mappings, that maps element names to a value. Take a look at this example:
-["fire":1, "ice":2]
-This sword will deal 2/3 ice damage and 1/3 fire damage. 
-On hit, a loop will go through the attack set and check if the key is in any of the defense sets. Highest priority has the Absorption set. (then immunity, resistance and last weakness) If the key isn't included in any of these list, the default value will be used.
-The value, which is mapped through the key, is used to scale the corresponding elemental damage. If the mob happens to absorb ice damage, but is weak to fire the new damage value will be computed like this:
-scaleFire = 1/3
-sclaeIce = 2/3
-newDmg = oldDmg*scaleFire*2 - oldDmg*scaleIce
-If it is still unclear, how the new damage value is calculated, then take a look at 
-https://github.com/Tavi007/ElementalCombat/blob/master/src/main/java/Tavi007/ElementalCombat/events/ElementifyLivingHurtEvent.java
-All in all I'm open to discuss other method to compute a new damage value.
-There is also a 'hidden' element called 'natural', which means, that the attack list is actually empty. You can use this element to make mob resistant/immune etc to non elemental damage.
+I made this mod, because I noticed, that in a lot of modpacks you end up using the same weapon. With this mod I hope there is an incentiv to switch your weapon and armor depending on the monster you are about to fight.
 
-This mod also provides an API for other mods to interact with. Add special behaviour to your own mobs like aura buffs and debuffs or changing attack/defense properties midfight.
-I'm planing to support other peoples mods directly by adding default values for theire mobs just like I did with vanilla mobs. 
+API:
+I also designed this mod to be used as an API for other mods by exposing easy to use functions for other devs. First of you can easily interact with the properties and change them as you want (for example changing attack/defense properties of an enemy midfight). You can also add special behaviour to your own mobs like creating aura buffs and debuffs, tho this is still WIP.
 
-These default values can also be set through the help of datapacks. Take a look at 
-https://github.com/Tavi007/ElementalCombat/tree/master/src/main/resources/data/minecraft/elementalcombat/elementalproperties/entities
-for some examples. This way, everyone can change the values to their heart's contents.
+DataPacks:
+Another method to interact with these properties are datapacks, because those defines the default values for any items and mobs, even non vanilla ones. I will provide datapacks, for other well known mods, which you can then use from the get go. If you are creating a modpack and you want the datapack to be loaded globally, then you can use other mods, that do just that. One example would be Global Data- & Resourcepacks.
 
-It's also planned to add default values for items the same way (minus the biomeDependency), but that's still WIP.
+Damage Calculation (technical stuff):
+See here: https://github.com/Tavi007/ElementalCombat/blob/bc6f6654d808bd804aa7b8a3c2e2f544da3d92ae/src/main/java/Tavi007/ElementalCombat/events/ServerEvents.java#L85
 
+Enchantments:
+I added a few enchantments, so the player can change armor and weapon properties from the get go. For example the vanilla Fire Resistance now uses this new system, which means the player can now have more then the 80% damage reduction from vanilla minecraft.
 
-I hope, I can polish this mod, so it can be used as a base mod like baubles. I also hope, that other mods take interest in this mod and use the provided API to change some of their mob behaviour.
+Configs:
+A few things are controlled by client and server configs. The client configs control the new HUD-element (which also can be toggled on/off with the J-key), while server config changes some gameplay aspects like the default style and the default element. Also the server configs contain the value maxFactor (see spoiler above) and level-scaling for enchantments (basically the effectiveness of an enchantment). The default values for both maxFactor and enchantmentScaling are the same as the vanilla Enchantment Protection Factor-System, so my system can mimic it. Lastly you can toggle, if the enchantment should use strings such like "fire" or "water", or if they should use emojies (❄, 🔥, 💧 and so on). Sadly not every emoji is supported by the minecraft font yet, so I would advice against turning emojies on. If you do however want emoji turned on, you should also use the provided emoji-datapack. Otherwise the mod will be useless.
 
-Best regards,
-Tavi007
+So please tell me, what you think of this mod and how I could make it better.
 
-PS: This is first time modding minecraft. So some stuff might be solved in a suboptimal fashion :-D
+Best regards, Tavi007.
+
+ 
+
+PS: I do not plan on backporting it. Mostly because 1.16 introduced the ProjectileEntity-class, which is a parent class for ArrowProjectile/FireBallProjectile and so. In 1.15 and earlier this didn't exist and I would have to rewrite quite a lot of code.
