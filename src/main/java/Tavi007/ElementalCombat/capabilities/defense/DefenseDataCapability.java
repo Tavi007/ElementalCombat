@@ -113,8 +113,8 @@ public class DefenseDataCapability {
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
 			ItemCombatProperties itemProperties = ElementalCombatAPI.getDefaultProperties(event.getObject());
 			//default values
-			HashMap<String, Integer> styleMap = itemProperties.getDefenseStyle();
-			HashMap<String, Integer> elementMap = itemProperties.getDefenseElement();
+			HashMap<String, Integer> styleMap = new HashMap<String, Integer>(itemProperties.getDefenseStyle());
+			HashMap<String, Integer> elementMap = new HashMap<String, Integer>(itemProperties.getDefenseElement());
 			
 			final DefenseData defData = new DefenseData(styleMap, elementMap);
 			event.addCapability(ID, createProvider(defData));

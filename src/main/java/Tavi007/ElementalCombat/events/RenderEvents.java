@@ -42,7 +42,6 @@ public class RenderEvents {
 	@SubscribeEvent
 	public static void addTooltipInformation(ItemTooltipEvent event) {
 		ItemStack item = event.getItemStack();
-
 		List<ITextComponent> toolTip = event.getToolTip();
 		if (item != null) {
 			//attack
