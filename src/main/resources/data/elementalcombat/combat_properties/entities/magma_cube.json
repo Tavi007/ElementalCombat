@@ -9,7 +9,7 @@
 	"defense_element":{
 		"fire":25,
 		"ice":-25,
-		"natural":12
+		"normal":12
 	},
 	
 	"biome_dependency":false

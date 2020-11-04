@@ -1,7 +1,6 @@
 {	
 	"defense_element":{
 		"ice":12,
-		"bio":4,
-		"earth":12
+		"bio":4
 	}
 }
