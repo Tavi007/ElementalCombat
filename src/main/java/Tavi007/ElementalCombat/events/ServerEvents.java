@@ -128,9 +128,9 @@ public class ServerEvents {
 			sourceElement = damageSourceProperties.getAttackElement();
 		}
 
-		//defaul values in case style or element is empty
-		if (sourceStyle.isEmpty()) {sourceStyle = "basic";}
-		if (sourceElement.isEmpty()) {sourceElement = "natural";}
+		//defaul values in case style or element is empty (which should not happen)
+		if (sourceStyle.isEmpty()) {sourceStyle = ServerConfig.getDefaultStyle();}
+		if (sourceElement.isEmpty()) {sourceElement = ServerConfig.getDefaultElement();}
 
 		// compute new Damage value  
 		LivingEntity target = event.getEntityLiving();
