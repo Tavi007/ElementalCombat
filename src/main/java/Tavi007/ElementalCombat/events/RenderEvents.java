@@ -47,11 +47,11 @@ public class RenderEvents {
 		if (item != null) {
 			//attack
 			AttackData atckCap = new AttackData(ElementalCombatAPI.getAttackData(item));
-			if (!atckCap.getStyle().equals(ServerConfig.getDefaultStyle())) {
+			if (!(atckCap.getStyle().equals(ServerConfig.getDefaultStyle()) || atckCap.getStyle().isEmpty())) {
 				String textAttackStyle = "" + TextFormatting.GRAY + "Attack Style: " + WordUtils.capitalize(atckCap.getStyle()) + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textAttackStyle));
 			}
-			if (!atckCap.getElement().equals(ServerConfig.getDefaultElement())) {
+			if (!(atckCap.getElement().equals(ServerConfig.getDefaultElement()) || atckCap.getElement().isEmpty())) {
 				String textAttackElement = "" + TextFormatting.GRAY + "Attack Element: " + WordUtils.capitalize(atckCap.getElement()) + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textAttackElement));
 			}
