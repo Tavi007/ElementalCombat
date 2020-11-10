@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.config.ServerConfig;
+import Tavi007.ElementalCombat.curios.HandleCuriosInventory;
 import Tavi007.ElementalCombat.loading.CombatPropertiesManager;
 import Tavi007.ElementalCombat.particle.ParticleList;
 import net.minecraft.util.ResourceLocation;
@@ -12,6 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig.Type;
@@ -44,6 +46,9 @@ public class ElementalCombat
 		
 		//register common stuff
 		MOD_EVENT_BUS.register(StartupCommon.class);
+		if(ModList.get().isLoaded("curios")) {
+			MinecraftForge.EVENT_BUS.register(HandleCuriosInventory.class);
+		}
 		
 		//register client only stuff
         DistExecutor.runWhenOn(Dist.CLIENT, () -> ElementalCombat::registerClientOnly);
