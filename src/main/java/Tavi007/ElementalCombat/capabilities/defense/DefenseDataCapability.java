@@ -91,21 +91,19 @@ public class DefenseDataCapability {
 		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
 			if (event.getObject() instanceof LivingEntity) {
 				LivingEntity entity = (LivingEntity) event.getObject();
-				if(entity.isServerWorld()) {
-					EntityCombatProperties entityProperties = ElementalCombatAPI.getDefaultProperties(entity);
+				EntityCombatProperties entityProperties = ElementalCombatAPI.getDefaultProperties(entity);
 
-					HashMap<String, Integer> styleMap = new HashMap<String, Integer>(entityProperties.getDefenseStyle());
-					HashMap<String, Integer> elementMap = new HashMap<String, Integer>(entityProperties.getDefenseElement());
-					// player spawn is usually biome independent
-					if(entityProperties.getBiomeDependency()) 
-					{
-						BlockPos blockPos = new BlockPos(entity.getPositionVec());
-						BiomeCombatProperties biomeProperties = ElementalCombatAPI.getDefaultProperties(entity.getEntityWorld().getBiome(blockPos));
-						DefenseDataHelper.mergeMaps(elementMap, biomeProperties.getDefenseElement());					
-					}
-					final DefenseData defData = new DefenseData(styleMap, elementMap);
-					event.addCapability(ID, createProvider(defData));
+				HashMap<String, Integer> styleMap = new HashMap<String, Integer>(entityProperties.getDefenseStyle());
+				HashMap<String, Integer> elementMap = new HashMap<String, Integer>(entityProperties.getDefenseElement());
+				// player spawn is usually biome independent
+				if(entityProperties.getBiomeDependency()) 
+				{
+					BlockPos blockPos = new BlockPos(entity.getPositionVec());
+					BiomeCombatProperties biomeProperties = ElementalCombatAPI.getDefaultProperties(entity.getEntityWorld().getBiome(blockPos));
+					DefenseDataHelper.mergeMaps(elementMap, biomeProperties.getDefenseElement());					
 				}
+				final DefenseData defData = new DefenseData(styleMap, elementMap);
+				event.addCapability(ID, createProvider(defData));
 			}
 		}
 
@@ -115,7 +113,7 @@ public class DefenseDataCapability {
 			//default values
 			HashMap<String, Integer> styleMap = new HashMap<String, Integer>(itemProperties.getDefenseStyle());
 			HashMap<String, Integer> elementMap = new HashMap<String, Integer>(itemProperties.getDefenseElement());
-			
+
 			final DefenseData defData = new DefenseData(styleMap, elementMap);
 			event.addCapability(ID, createProvider(defData));
 		}

@@ -83,16 +83,14 @@ public class AttackDataCapability {
 		 */
 		@SubscribeEvent
 		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
-			if(!event.getObject().getEntityWorld().isRemote()) {
-				if (event.getObject() instanceof LivingEntity) {
-					EntityCombatProperties entityProperties = ElementalCombatAPI.getDefaultProperties((LivingEntity) event.getObject());
-					final AttackData atck = new AttackData(entityProperties.getAttackStyle(), entityProperties.getAttackElement());
-					event.addCapability(ID, createProvider(atck));
-				}
-				else if (event.getObject() instanceof ProjectileEntity) {
-					final AttackData atck = new AttackData();
-					event.addCapability(ID, createProvider(atck));
-				}
+			if (event.getObject() instanceof LivingEntity) {
+				EntityCombatProperties entityProperties = ElementalCombatAPI.getDefaultProperties((LivingEntity) event.getObject());
+				final AttackData atck = new AttackData(entityProperties.getAttackStyle(), entityProperties.getAttackElement());
+				event.addCapability(ID, createProvider(atck));
+			}
+			else if (event.getObject() instanceof ProjectileEntity) {
+				final AttackData atck = new AttackData();
+				event.addCapability(ID, createProvider(atck));
 			}
 		}
 
