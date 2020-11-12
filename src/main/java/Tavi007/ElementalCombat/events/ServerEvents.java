@@ -8,7 +8,7 @@ import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
-import Tavi007.ElementalCombat.network.DefenseDataMessage;
+import Tavi007.ElementalCombat.network.DefenseDataEntityMessage;
 import Tavi007.ElementalCombat.particle.ParticleList;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.entity.Entity;
@@ -49,7 +49,7 @@ public class ServerEvents {
 				ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) entity;
 				DefenseData defData = ElementalCombatAPI.getDefenseData(serverPlayerEntity);
 
-				DefenseDataMessage messageToClient = new DefenseDataMessage(defData, serverPlayerEntity.getUniqueID(), false);
+				DefenseDataEntityMessage messageToClient = new DefenseDataEntityMessage(defData, serverPlayerEntity.getUniqueID(), false);
 				ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 			}
 			

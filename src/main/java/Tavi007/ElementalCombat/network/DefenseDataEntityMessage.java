@@ -7,14 +7,14 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import net.minecraft.network.PacketBuffer;
 
-public class DefenseDataMessage {
+public class DefenseDataEntityMessage {
 
 	private boolean messageIsValid;
 	private DefenseData dataToSend;
 	private UUID uuid;
 	private boolean isAdd;
 
-	public DefenseDataMessage(DefenseData dataToSend, UUID uuid, boolean isAdd){
+	public DefenseDataEntityMessage(DefenseData dataToSend, UUID uuid, boolean isAdd){
 		this.dataToSend = dataToSend;
 		this.messageIsValid = true;
 		this.uuid = uuid;
@@ -22,7 +22,7 @@ public class DefenseDataMessage {
 	}
 
 	// for use by the message handler only.
-	public DefenseDataMessage(){
+	public DefenseDataEntityMessage(){
 		this.dataToSend = new DefenseData();
 		this.messageIsValid = false;
 		this.uuid = new UUID(0,0);
@@ -53,9 +53,9 @@ public class DefenseDataMessage {
 		this.uuid = new UUID(most, least);
 	}
 	
-	public static DefenseDataMessage decode(PacketBuffer buf)
+	public static DefenseDataEntityMessage decode(PacketBuffer buf)
 	{
-		DefenseDataMessage retval = new DefenseDataMessage();
+		DefenseDataEntityMessage retval = new DefenseDataEntityMessage();
 		try {
 			
 			//define uuid through 2 longs.

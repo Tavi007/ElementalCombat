@@ -15,7 +15,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 public class PackageHandlerOnClient {
 
-	public static void onMessageReceived(final DefenseDataMessage message, Supplier<NetworkEvent.Context> ctxSupplier) {
+	public static void onMessageReceived(final DefenseDataEntityMessage message, Supplier<NetworkEvent.Context> ctxSupplier) {
 		NetworkEvent.Context ctx = ctxSupplier.get();
 		LogicalSide sideReceived = ctx.getDirection().getReceptionSide();
 		ctx.setPacketHandled(true);
@@ -37,7 +37,7 @@ public class PackageHandlerOnClient {
 		ctx.enqueueWork(() -> processMessage(clientWorld.get(), message));
 	}
 
-	private static void processMessage(ClientWorld worldClient, DefenseDataMessage message)
+	private static void processMessage(ClientWorld worldClient, DefenseDataEntityMessage message)
 	{
 		PlayerEntity player = worldClient.getPlayerByUuid(message.getUUID());
 		DefenseData messageData = message.getDefenseData();
