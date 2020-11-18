@@ -38,10 +38,10 @@ public class ServerConfig {
 				.define("defaultStyle", "basic");
 		maxFactor = builder
 				.comment("The maximal combat factor. See vanilla Enchantment Protection Factor.")
-				.defineInRange("maxFactor", 25, 1, 100);
+				.defineInRange("maxFactor", 100, 1, 200);
 		enchantmentScaling = builder
 				.comment("scaling for protection enchantments. See vanilla Enchantment Protection Factor.")
-				.defineInRange("enchantmentScaling", 2, 1, 10);
+				.defineInRange("enchantmentScaling", 8, 1, 25);
 	}
 
 	public static boolean isEmojiEnabled()
