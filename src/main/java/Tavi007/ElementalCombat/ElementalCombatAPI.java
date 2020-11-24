@@ -8,7 +8,7 @@ import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
-import Tavi007.ElementalCombat.network.DefenseDataEntityMessage;
+import Tavi007.ElementalCombat.network.EntityMessage;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -101,14 +101,17 @@ public class ElementalCombatAPI
 	 */
 	public static void addDefenseData(LivingEntity livingEntity, DefenseData dataToAdd) {
 		if (dataToAdd.isEmpty()) return;
-		DefenseData defDataEntity = ElementalCombatAPI.getDefenseData(livingEntity);
-		defDataEntity.add(dataToAdd);
+		DefenseData defData = ElementalCombatAPI.getDefenseData(livingEntity);
+		AttackData atckData = ElementalCombatAPI.getAttackData(livingEntity);
+		defData.add(dataToAdd);
 		if (livingEntity instanceof ServerPlayerEntity) {
-			DefenseDataEntityMessage messageToClient = new DefenseDataEntityMessage(dataToAdd, livingEntity.getUniqueID(), true);
+			EntityMessage messageToClient = new EntityMessage(dataToAdd, atckData, true, livingEntity.getUniqueID());
+			
+			//DefenseDataEntityMessage messageToClient = new DefenseDataEntityMessage(dataToAdd, livingEntity.getUniqueID(), true);
 			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 		}
 	}
-
+	
 	/**
 	 * Adds additional {@link DefenseData} to the DefenseData of the {@link ItemStack}. The values of the style and element mappings will be summed up.
 	 * @param dataToAdd The additional DefenseData.

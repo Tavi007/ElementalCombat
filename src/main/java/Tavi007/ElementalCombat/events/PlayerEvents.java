@@ -5,11 +5,14 @@ import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.StartupClientOnly;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ClientConfig;
+import Tavi007.ElementalCombat.items.ElementalChestplate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,11 +28,11 @@ public class PlayerEvents
 		LivingEntity entity = event.getEntityLiving();
 		if(event.getSlot().getSlotType() == EquipmentSlotType.Group.ARMOR)
 		{
-			// get Data
+			// get data
 			DefenseData defDataItemFrom = ElementalCombatAPI.getDefenseData(event.getFrom());
 			DefenseData defDataItemTo = ElementalCombatAPI.getDefenseData(event.getTo());
 
-			// compute Change
+			// compute change
 			DefenseData newData = new DefenseData();
 			newData.substract(defDataItemFrom);
 			newData.add(defDataItemTo);
@@ -41,6 +44,7 @@ public class PlayerEvents
 
 	// every armor piece (curios and vanilla) will be re-applied on log in
 	// same goes for any auras (WIP)
+	// this is why, all this stuff need to be removed on log out.
 	@SubscribeEvent
 	public static void playerLoggedOut(PlayerLoggedOutEvent event) {
 		PlayerEntity entity = event.getPlayer();
@@ -55,5 +59,29 @@ public class PlayerEvents
 		if(StartupClientOnly.TOGGLE_HUD.isKeyDown()){
 			ClientConfig.toogleHUD();
 		}
+	}
+	
+	//for testing purpose
+	@SubscribeEvent
+	public static void onJump(LivingJumpEvent event) {
+		LivingEntity entity = event.getEntityLiving();
+		Iterable<ItemStack> armorList = entity.getArmorInventoryList();
+		armorList.forEach(stack -> {
+			if (stack.getItem() instanceof ElementalChestplate) {
+				DefenseData data = ElementalCombatAPI.getDefenseData(stack);
+				data.getElementFactor().forEach((key,value) ->{
+					if (value > 200) {
+						data.getElementFactor().put(key, 1);
+					}
+				});
+				data.getStyleFactor().forEach((key,value) ->{
+					if (value > 200) {
+						data.getStyleFactor().put(key, 1);
+					}
+				});
+				ElementalCombatAPI.addDefenseData(stack, data);
+			}
+		});
+		
 	}
 }

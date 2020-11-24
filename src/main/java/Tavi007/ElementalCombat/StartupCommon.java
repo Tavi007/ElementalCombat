@@ -4,7 +4,7 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
 import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.enchantments.StyleResistanceEnchantment;
-import Tavi007.ElementalCombat.network.DefenseDataEntityMessage;
+import Tavi007.ElementalCombat.network.EntityMessage;
 import Tavi007.ElementalCombat.network.PackageHandlerOnClient;
 import Tavi007.ElementalCombat.network.PackageHandlerOnServer;
 
@@ -34,8 +34,8 @@ public class StartupCommon {
 				PackageHandlerOnClient::isThisProtocolAcceptedByClient,
 				PackageHandlerOnServer::isThisProtocolAcceptedByServer);
 		
-		ElementalCombat.simpleChannel.registerMessage(DEFENSEDATA_MESSAGE_TO_CLIENT_ID, DefenseDataEntityMessage.class,
-				DefenseDataEntityMessage::encode, DefenseDataEntityMessage::decode,
+		ElementalCombat.simpleChannel.registerMessage(DEFENSEDATA_MESSAGE_TO_CLIENT_ID, EntityMessage.class,
+				EntityMessage::encode, EntityMessage::decode,
 				PackageHandlerOnClient::onMessageReceived,
 	            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		

@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.StartupCommon;
+import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,17 +16,17 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 public class PackageHandlerOnClient {
 
-	public static void onMessageReceived(final DefenseDataEntityMessage message, Supplier<NetworkEvent.Context> ctxSupplier) {
+	public static void onMessageReceived(final EntityMessage message, Supplier<NetworkEvent.Context> ctxSupplier) {
 		NetworkEvent.Context ctx = ctxSupplier.get();
 		LogicalSide sideReceived = ctx.getDirection().getReceptionSide();
 		ctx.setPacketHandled(true);
 
 		if (sideReceived != LogicalSide.CLIENT) {
-			ElementalCombat.LOGGER.warn("DefenseDataMessage received on wrong side:" + ctx.getDirection().getReceptionSide());
+			ElementalCombat.LOGGER.warn("DefenseDataMessage received on wrong side: " + ctx.getDirection().getReceptionSide());
 			return;
 		}
 		if (!message.isMessageValid()) {
-			ElementalCombat.LOGGER.warn("DefenseDataMessage was invalid" + message.toString());
+			ElementalCombat.LOGGER.warn("DefenseDataMessage was invalid " + message.toString());
 			return;
 		}
 
@@ -37,16 +38,20 @@ public class PackageHandlerOnClient {
 		ctx.enqueueWork(() -> processMessage(clientWorld.get(), message));
 	}
 
-	private static void processMessage(ClientWorld worldClient, DefenseDataEntityMessage message)
+	private static void processMessage(ClientWorld worldClient, EntityMessage message)
 	{
 		PlayerEntity player = worldClient.getPlayerByUuid(message.getUUID());
-		DefenseData messageData = message.getDefenseData();
-		DefenseData playerData = ElementalCombatAPI.getDefenseData(player);
+		AttackData atckData = message.getAttackData();
+		DefenseData defData = message.getDefenseData();
+		DefenseData playerDefData = ElementalCombatAPI.getDefenseData(player);
+		AttackData playerAtckData = ElementalCombatAPI.getAttackData(player);
+		playerAtckData.setElement(atckData.getElement());
+		playerAtckData.setStyle(atckData.getStyle());
 		if (message.isAdd()) {
-			playerData.add(messageData);
+			playerDefData.add(defData);
 		}
 		else {
-			playerData.set(messageData);
+			playerDefData.set(defData);
 		}
 	}
 
