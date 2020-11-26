@@ -104,10 +104,9 @@ public class ElementalCombatAPI
 		DefenseData defData = ElementalCombatAPI.getDefenseData(livingEntity);
 		AttackData atckData = ElementalCombatAPI.getAttackData(livingEntity);
 		defData.add(dataToAdd);
+		
 		if (livingEntity instanceof ServerPlayerEntity) {
-			EntityMessage messageToClient = new EntityMessage(dataToAdd, atckData, true, livingEntity.getUniqueID());
-			
-			//DefenseDataEntityMessage messageToClient = new DefenseDataEntityMessage(dataToAdd, livingEntity.getUniqueID(), true);
+			EntityMessage messageToClient = new EntityMessage(atckData, dataToAdd, true, livingEntity.getUniqueID());
 			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 		}
 	}

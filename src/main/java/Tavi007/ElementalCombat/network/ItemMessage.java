@@ -1,40 +1,34 @@
 package Tavi007.ElementalCombat.network;
 
-import java.util.UUID;
-
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import net.minecraft.network.PacketBuffer;
 
-public class EntityMessage extends CombatDataMessage {
-
-	private UUID id;
+public class ItemMessage extends CombatDataMessage {
+	private int windowId;
+	private int slotNumber;
 	
-	public EntityMessage(AttackData atckToSend, DefenseData defToSend, boolean isAdd, UUID id) {
-		super(atckToSend, defToSend, isAdd);
-		this.id = id;
+	public ItemMessage(AttackData atckToSend, DefenseData defToSend, int windowId, int slotNumber) {
+		super(atckToSend, defToSend, false);
+		this.windowId = windowId;
+		this.slotNumber = slotNumber;
 	}
 
 	// for use by the message handler only.
-	public EntityMessage(){
+	public ItemMessage() {
 		super();
-		this.id = new UUID(0,0);
-	}
-
-	public UUID getId() {
-		return this.id;
+		this.windowId = 0;
+		this.slotNumber = 0;
 	}
 	
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	
-	public static EntityMessage decode(PacketBuffer buf)
+	public static ItemMessage decode(PacketBuffer buf)
 	{
-		EntityMessage retval = new EntityMessage();
+		ItemMessage retval = new ItemMessage();
 		try {
-			retval.setId(new UUID(buf.readLong(), buf.readLong()));
+			//for the container slot
+			retval.windowId = buf.readInt();
+			retval.slotNumber = buf.readInt();
 			
 			//rest of the combat properties
 			CombatDataMessage combatMessage = readCombatDataFromPacket(buf);
@@ -43,7 +37,7 @@ public class EntityMessage extends CombatDataMessage {
 			retval.setIsAdd(combatMessage.isAdd());
 			
 		} catch (IllegalArgumentException | IndexOutOfBoundsException e) {
-			ElementalCombat.LOGGER.warn("Exception while reading EntityMessage: " + e);
+			ElementalCombat.LOGGER.warn("Exception while reading ItemMessage: " + e);
 			return retval;
 		}
 		retval.setValid(true);
@@ -53,11 +47,14 @@ public class EntityMessage extends CombatDataMessage {
 	public void encode(PacketBuffer buf)
 	{
 		if (!isMessageValid()) return;
-		//get entity through id
-		buf.writeLong(this.id.getMostSignificantBits());
-		buf.writeLong(this.id.getLeastSignificantBits());
+		//define container slot
+		buf.writeInt(windowId);
+		buf.writeInt(slotNumber);
 		
 		//write rest of the combat properties
 		writeCombatDataToPacket(buf);
 	}
+	
+	public int getWindowId() {return this.windowId;}
+	public int getSlotNumber() {return this.slotNumber;}
 }

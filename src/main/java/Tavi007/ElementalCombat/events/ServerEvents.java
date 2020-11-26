@@ -45,16 +45,15 @@ public class ServerEvents {
 			Entity entity = event.getEntity();
 
 			// for syncronising after switching dimensions
-			if (entity instanceof ServerPlayerEntity) {
-				ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) entity;
-				DefenseData defData = ElementalCombatAPI.getDefenseData(serverPlayerEntity);
-
-				//DefenseDataEntityMessage messageToClient = new DefenseDataEntityMessage(defData, serverPlayerEntity.getUniqueID(), false);
-
-				AttackData atckData = ElementalCombatAPI.getAttackData(serverPlayerEntity);
-				EntityMessage messageToClient = new EntityMessage(defData, atckData, false, serverPlayerEntity.getUniqueID());
+			if (entity instanceof LivingEntity) {
+				LivingEntity livingEntity = (LivingEntity) entity;
+				DefenseData defData = ElementalCombatAPI.getDefenseData(livingEntity);
+				AttackData atckData = ElementalCombatAPI.getAttackData(livingEntity);
 				
-				ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
+				if (livingEntity instanceof ServerPlayerEntity) {
+					EntityMessage messageToClient = new EntityMessage(atckData, defData, false, livingEntity.getUniqueID());
+					ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
+				}
 			}
 			
 			// for newly spawned projectiles.

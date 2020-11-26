@@ -10,33 +10,33 @@ import net.minecraft.network.PacketBuffer;
 public class CombatDataMessage {
 
 	private boolean messageIsValid;
-	private DefenseData defToSend;
 	private AttackData atckToSend;
+	private DefenseData defToSend;
 	private boolean isAdd;
 	
-	public CombatDataMessage(DefenseData defToSend, AttackData atckToSend, boolean isAdd) {
-		this.defToSend = defToSend;
+	public CombatDataMessage(AttackData atckToSend, DefenseData defToSend, boolean isAdd) {
 		this.atckToSend = atckToSend;
+		this.defToSend = defToSend;
 		this.isAdd = isAdd;
 		this.messageIsValid = true;
 	}
 	
 	public CombatDataMessage(CombatDataMessage message) {
-		this.defToSend = message.getDefenseData();
 		this.atckToSend = message.getAttackData();
+		this.defToSend = message.getDefenseData();
 		this.isAdd = message.isAdd();
 		this.messageIsValid = message.isMessageValid();
 	}
 	
 	// for use by the message handler only.
 	public CombatDataMessage(){
-		this.defToSend = new DefenseData();
 		this.atckToSend = new AttackData();
+		this.defToSend = new DefenseData();
 		this.isAdd = true;
 		this.messageIsValid = false;
 	}
 
-	public static CombatDataMessage read(PacketBuffer buf)
+	public static CombatDataMessage readCombatDataFromPacket(PacketBuffer buf)
 	{
 		CombatDataMessage retval = new CombatDataMessage();
 		try {
@@ -52,7 +52,7 @@ public class CombatDataMessage {
 		return retval;
 	}
 
-	public void write(PacketBuffer buf)
+	public void writeCombatDataToPacket(PacketBuffer buf)
 	{
 		if (!this.messageIsValid) return;
 		writeMap(buf, this.defToSend.getElementFactor());

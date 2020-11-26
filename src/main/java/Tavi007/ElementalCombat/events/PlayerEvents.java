@@ -82,6 +82,5 @@ public class PlayerEvents
 				ElementalCombatAPI.addDefenseData(stack, data);
 			}
 		});
-		
 	}
 }

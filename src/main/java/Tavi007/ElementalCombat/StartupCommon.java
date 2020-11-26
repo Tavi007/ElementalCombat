@@ -5,11 +5,14 @@ import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.enchantments.StyleResistanceEnchantment;
 import Tavi007.ElementalCombat.network.EntityMessage;
+import Tavi007.ElementalCombat.network.ItemMessage;
 import Tavi007.ElementalCombat.network.PackageHandlerOnClient;
 import Tavi007.ElementalCombat.network.PackageHandlerOnServer;
 
 import java.util.Optional;
 
+import Tavi007.ElementalCombat.capabilities.CapabilityContainerListener;
+import Tavi007.ElementalCombat.capabilities.CapabilityContainerListenerManager;
 import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
@@ -20,7 +23,8 @@ import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 
 public class StartupCommon {
-	private static final byte DEFENSEDATA_MESSAGE_TO_CLIENT_ID = 1; 
+	private static final byte ENTITYDATA_MESSAGE_TO_CLIENT_ID = 1; 
+	private static final byte ITEMDATA_MESSAGE_TO_CLIENT_ID = 2; 
 	public static final String MESSAGE_PROTOCOL_VERSION = "1.0"; 
 	
 	@SubscribeEvent
@@ -28,14 +32,20 @@ public class StartupCommon {
 		//capabilities
 		AttackDataCapability.register();
 		DefenseDataCapability.register();
+		CapabilityContainerListenerManager.registerListenerFactory(CapabilityContainerListener::new);
 
 		//networking
 		ElementalCombat.simpleChannel = NetworkRegistry.newSimpleChannel(ElementalCombat.simpleChannelRL, () -> MESSAGE_PROTOCOL_VERSION,
 				PackageHandlerOnClient::isThisProtocolAcceptedByClient,
 				PackageHandlerOnServer::isThisProtocolAcceptedByServer);
 		
-		ElementalCombat.simpleChannel.registerMessage(DEFENSEDATA_MESSAGE_TO_CLIENT_ID, EntityMessage.class,
+		ElementalCombat.simpleChannel.registerMessage(ENTITYDATA_MESSAGE_TO_CLIENT_ID, EntityMessage.class,
 				EntityMessage::encode, EntityMessage::decode,
+				PackageHandlerOnClient::onMessageReceived,
+	            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+		ElementalCombat.simpleChannel.registerMessage(ITEMDATA_MESSAGE_TO_CLIENT_ID, ItemMessage.class,
+				ItemMessage::encode, ItemMessage::decode,
 				PackageHandlerOnClient::onMessageReceived,
 	            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		

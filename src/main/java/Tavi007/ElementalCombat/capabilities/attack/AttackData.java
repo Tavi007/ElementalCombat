@@ -29,7 +29,13 @@ public class AttackData implements IAttackData{
 	}
 
 	@Override
-	public void setAttackData(String style, String element) {
+	public void set(AttackData data) {
+		this.style = data.getStyle();
+		this.element = data.getElement();
+	}
+
+	@Override
+	public void set(String style, String element) {
 		this.style = style;
 		this.element = element;
 	}
