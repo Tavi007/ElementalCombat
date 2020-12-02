@@ -29,8 +29,8 @@ import net.minecraftforge.fml.common.Mod;
 
 public class DefenseDataCapability {
 
-	@CapabilityInject(IDefenseData.class)
-	public static final Capability<IDefenseData> ELEMENTAL_DEFENSE_CAPABILITY = null;
+	@CapabilityInject(DefenseData.class)
+	public static final Capability<DefenseData> ELEMENTAL_DEFENSE_CAPABILITY = null;
 
 	/**
 	 * The default {@link Direction} to use for this capability.
@@ -43,10 +43,10 @@ public class DefenseDataCapability {
 	public static final ResourceLocation ID = new ResourceLocation(ElementalCombat.MOD_ID, "elemental_defense");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IDefenseData.class, new Capability.IStorage<IDefenseData>() {
+		CapabilityManager.INSTANCE.register(DefenseData.class, new Capability.IStorage<DefenseData>() {
 
 			@Override
-			public INBT writeNBT(final Capability<IDefenseData> capability, final IDefenseData instance, final Direction side) {
+			public INBT writeNBT(final Capability<DefenseData> capability, final DefenseData instance, final Direction side) {
 
 				//fill nbt with data
 				CompoundNBT nbt = new CompoundNBT();
@@ -57,7 +57,7 @@ public class DefenseDataCapability {
 			}
 
 			@Override
-			public void readNBT(final Capability<IDefenseData> capability, final IDefenseData instance, final Direction side, final INBT nbt) {
+			public void readNBT(final Capability<DefenseData> capability, final DefenseData instance, final Direction side, final INBT nbt) {
 
 				CompoundNBT nbtCompound = (CompoundNBT)nbt;
 
@@ -71,7 +71,7 @@ public class DefenseDataCapability {
 		}, () -> new DefenseData());
 	}
 
-	public static ICapabilityProvider createProvider(final IDefenseData def) {
+	public static ICapabilityProvider createProvider(final DefenseData def) {
 		return new SerializableCapabilityProvider<>(ELEMENTAL_DEFENSE_CAPABILITY, DEFAULT_FACING, def);
 	}
 

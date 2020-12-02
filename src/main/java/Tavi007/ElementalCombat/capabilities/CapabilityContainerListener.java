@@ -24,7 +24,10 @@ public class CapabilityContainerListener implements IContainerListener {
 	public void sendAllContents(Container containerToSend, NonNullList<ItemStack> itemsList) {
 		// create BulkItemMessage and send it. 
 		// or send each item separately with sendSlotContents()
-		
+//		int size=itemsList.size();
+//		for(int i=0; i<size; i++) {
+//			sendSlotContents(containerToSend, i, itemsList.get(i));
+//		}
 	}
 
 	@Override
@@ -32,7 +35,6 @@ public class CapabilityContainerListener implements IContainerListener {
 		// create a single ItemMessage and send it.
 		AttackData atckData = ElementalCombatAPI.getAttackData(stack);
 		DefenseData defData = ElementalCombatAPI.getDefenseData(stack);
-		
 		ItemMessage message = new ItemMessage(atckData, defData, containerToSend.windowId, slotInd);
 		ElementalCombat.simpleChannel.send(PacketDistributor.PLAYER.with(() -> player), message);
 	}

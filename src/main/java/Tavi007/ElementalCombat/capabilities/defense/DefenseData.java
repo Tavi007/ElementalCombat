@@ -6,7 +6,7 @@ import java.util.Map;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.enchantment.Enchantment;
 
-public class DefenseData implements IDefenseData{
+public class DefenseData {
 
 	private HashMap<String, Integer> styleFactor = new HashMap<String, Integer>();
 	private HashMap<String, Integer> elementFactor = new HashMap<String, Integer>();
@@ -36,7 +36,6 @@ public class DefenseData implements IDefenseData{
 		this.areEnchantmentChangesApplied = data.areEnchantmentChangesApplied();
 	}
 
-	@Override
 	public void clear() {
 		this.styleFactor = new HashMap<String, Integer>();
 		this.elementFactor = new HashMap<String, Integer>();
@@ -44,61 +43,49 @@ public class DefenseData implements IDefenseData{
 		this.areEnchantmentChangesApplied = false;
 	}
 	
-	@Override
 	public HashMap<String, Integer> getEnchantmentData() {
 		return this.enchantmentData;
 	}
 	
-	@Override
 	public void setEnchantmentData(HashMap<String, Integer> data) {
 		this.enchantmentData = data;
 	}
-	@Override
+	
 	public boolean areEnchantmentChangesApplied() {return this.areEnchantmentChangesApplied;}
 
-	@Override
 	public HashMap<String, Integer> getStyleFactor() {
 		return this.styleFactor;
 	}
 
-	@Override
 	public void setStyleFactor(HashMap<String, Integer> set) {this.styleFactor = set;}
 
-	@Override
 	public HashMap<String, Integer> getElementFactor() {return this.elementFactor;}
 
-	@Override
 	public void setElementFactor(HashMap<String, Integer> set) {this.elementFactor = set;}
 
-	@Override
 	public void set(DefenseData data) {
 		this.styleFactor = data.getStyleFactor();
 		this.elementFactor = data.getElementFactor();
 	}
 
-	@Override
 	public void add(DefenseData data) {
 		DefenseDataHelper.sumMaps(this.styleFactor, data.getStyleFactor());
 		DefenseDataHelper.sumMaps(this.elementFactor, data.getElementFactor());
 	}
 
-	@Override
 	public void substract(DefenseData data) {
 		DefenseDataHelper.substractMaps(this.styleFactor, data.getStyleFactor());
 		DefenseDataHelper.substractMaps(this.elementFactor, data.getElementFactor());
 	}
 
-	@Override
 	public boolean isEmpty() {
 		return (this.styleFactor.isEmpty() && this.elementFactor.isEmpty());
 	}
 
-	@Override
 	public String toString() {
 		return "ElementFactor=" + this.elementFactor.toString() + "; " + "StyleFactor=" + this.styleFactor.toString();
 	}
 
-	@Override
 	public void applyEnchantmentChanges(Map<Enchantment, Integer> currentEnchantments) {
 		// change map
 		HashMap<String, Integer> newEnchantments = new HashMap<String, Integer>();		

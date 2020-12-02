@@ -24,8 +24,8 @@ import net.minecraftforge.fml.common.Mod;
 
 public class AttackDataCapability {
 
-	@CapabilityInject(IAttackData.class)
-	public static final Capability<IAttackData> ELEMENTAL_ATTACK_CAPABILITY = null;
+	@CapabilityInject(AttackData.class)
+	public static final Capability<AttackData> ELEMENTAL_ATTACK_CAPABILITY = null;
 
 	/**
 	 * The default {@link Direction} to use for this capability.
@@ -38,10 +38,10 @@ public class AttackDataCapability {
 	public static final ResourceLocation ID = new ResourceLocation(ElementalCombat.MOD_ID, "attack_data");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IAttackData.class, new Capability.IStorage<IAttackData>() {
+		CapabilityManager.INSTANCE.register(AttackData.class, new Capability.IStorage<AttackData>() {
 
 			@Override
-			public INBT writeNBT(final Capability<IAttackData> capability, final IAttackData instance, final Direction side) {
+			public INBT writeNBT(final Capability<AttackData> capability, final AttackData instance, final Direction side) {
 
 				String style = instance.getStyle();
 				String element = instance.getElement();
@@ -54,7 +54,7 @@ public class AttackDataCapability {
 			}
 
 			@Override
-			public void readNBT(final Capability<IAttackData> capability, final IAttackData instance, final Direction side, final INBT nbt) {
+			public void readNBT(final Capability<AttackData> capability, final AttackData instance, final Direction side, final INBT nbt) {
 
 				StringNBT styleNBT = (StringNBT) ((CompoundNBT) nbt).get("attack_style");
 				StringNBT elementNBT = (StringNBT) ((CompoundNBT) nbt).get("attack_element");
@@ -65,7 +65,7 @@ public class AttackDataCapability {
 		}, () -> new AttackData());
 	}
 
-	public static ICapabilityProvider createProvider(final IAttackData atck) {
+	public static ICapabilityProvider createProvider(final AttackData atck) {
 		return new SerializableCapabilityProvider<>(ELEMENTAL_ATTACK_CAPABILITY, DEFAULT_FACING, atck);
 	}
 

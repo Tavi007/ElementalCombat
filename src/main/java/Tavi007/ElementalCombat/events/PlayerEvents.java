@@ -3,17 +3,18 @@ package Tavi007.ElementalCombat.events;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.StartupClientOnly;
+import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ClientConfig;
-import Tavi007.ElementalCombat.items.ElementalChestplate;
+import Tavi007.ElementalCombat.items.ElementalSword;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -63,24 +64,18 @@ public class PlayerEvents
 	
 	//for testing purpose
 	@SubscribeEvent
-	public static void onJump(LivingJumpEvent event) {
-		LivingEntity entity = event.getEntityLiving();
-		Iterable<ItemStack> armorList = entity.getArmorInventoryList();
-		armorList.forEach(stack -> {
-			if (stack.getItem() instanceof ElementalChestplate) {
-				DefenseData data = ElementalCombatAPI.getDefenseData(stack);
-				data.getElementFactor().forEach((key,value) ->{
-					if (value > 200) {
-						data.getElementFactor().put(key, 1);
-					}
-				});
-				data.getStyleFactor().forEach((key,value) ->{
-					if (value > 200) {
-						data.getStyleFactor().put(key, 1);
-					}
-				});
-				ElementalCombatAPI.addDefenseData(stack, data);
+	public static void onRightClickItem(RightClickItem event) {
+		if(!event.getWorld().isRemote()){
+			ItemStack stack = event.getItemStack();
+			if(stack.getItem() instanceof ElementalSword) {
+				AttackData atckData = ElementalCombatAPI.getAttackData(stack);
+				if (atckData.getElement() == "fire") {
+					atckData.setElement("ice");
+				}
+				else {
+					atckData.setElement("fire");
+				}
 			}
-		});
+		}
 	}
 }

@@ -7,7 +7,7 @@ import Tavi007.ElementalCombat.enchantments.CombatEnchantments;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 
-public class AttackData implements IAttackData{
+public class AttackData {
 
 	private String style = ServerConfig.getDefaultStyle();
 	private String element = ServerConfig.getDefaultElement();
@@ -28,36 +28,28 @@ public class AttackData implements IAttackData{
 		this.element = data.getElement();
 	}
 
-	@Override
 	public void set(AttackData data) {
 		this.style = data.getStyle();
 		this.element = data.getElement();
 	}
 
-	@Override
 	public void set(String style, String element) {
 		this.style = style;
 		this.element = element;
 	}
 
-	@Override
 	public String getElement() {return this.element;}
 
-	@Override
 	public String getStyle() {return this.style;}
 
-	@Override
 	public void setElement(String element) {this.element = element;}
 
-	@Override
 	public void setStyle(String style) {this.style = style;}
 
-	@Override
 	public boolean areEnchantmentChangesApplied() {
 		return this.areEnchantmentChangesApplied;
 	}
-
-	@Override
+	
 	public void applyEnchantmentChanges(Map<Enchantment, Integer> currentEnchantments) {
 		currentEnchantments.forEach((ench, value) -> {
 			//currently only comparing strings.
