@@ -43,6 +43,8 @@ public class CombatDataMessage {
 			retval.getDefenseData().setElementFactor(readMap(buf));
 			retval.getDefenseData().setStyleFactor(readMap(buf));
 			retval.setIsAdd(buf.readBoolean());
+			retval.getAttackData().setElement(buf.readString());
+			retval.getAttackData().setStyle(buf.readString());
 			
 		} catch (IllegalArgumentException | IndexOutOfBoundsException e) {
 			ElementalCombat.LOGGER.warn("Exception while reading DefenseDataMessageToClient: " + e);
@@ -58,6 +60,8 @@ public class CombatDataMessage {
 		writeMap(buf, this.defToSend.getElementFactor());
 		writeMap(buf, this.defToSend.getStyleFactor());
 		buf.writeBoolean(this.isAdd);
+		buf.writeString(this.atckToSend.getElement());
+		buf.writeString(this.atckToSend.getStyle());
 	}
 
 	public DefenseData getDefenseData() {
@@ -107,7 +111,8 @@ public class CombatDataMessage {
 	@Override
 	public String toString()
 	{
-		return "Defense: Element=" + this.defToSend.getElementFactor().toString() + "; " + "Style=" + this.defToSend.getStyleFactor().toString() + "\n" + 
-			   "Attack: Element=" + this.atckToSend.getElement() + "; " + "Style=" + this.atckToSend.getStyle();
+		return "Attack:  Element=" + this.atckToSend.getElement() + "; " + "Style=" + this.atckToSend.getStyle() + "\n" +
+			   "Defense: Element=" + this.defToSend.getElementFactor().toString() + "; " + "Style=" + this.defToSend.getStyleFactor().toString();
+			   
 	}
 }

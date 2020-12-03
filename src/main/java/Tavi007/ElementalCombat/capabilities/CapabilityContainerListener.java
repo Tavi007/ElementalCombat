@@ -15,19 +15,21 @@ import net.minecraftforge.fml.network.PacketDistributor;
 public class CapabilityContainerListener implements IContainerListener {
 
 	private final ServerPlayerEntity player;
-	
+
 	public CapabilityContainerListener(ServerPlayerEntity player) {
 		this.player = player;
 	}
-	
+
 	@Override
 	public void sendAllContents(Container containerToSend, NonNullList<ItemStack> itemsList) {
 		// create BulkItemMessage and send it. 
 		// or send each item separately with sendSlotContents()
-//		int size=itemsList.size();
-//		for(int i=0; i<size; i++) {
-//			sendSlotContents(containerToSend, i, itemsList.get(i));
-//		}
+		int size=itemsList.size();
+		for(int i=0; i<size; i++) {
+			if(!itemsList.get(i).isEmpty()) {
+				sendSlotContents(containerToSend, i, itemsList.get(i));
+			}
+		}
 	}
 
 	@Override

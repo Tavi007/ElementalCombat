@@ -35,6 +35,7 @@ public class ItemMessage extends CombatDataMessage {
 			retval.getDefenseData().setElementFactor(combatMessage.getDefenseData().getElementFactor());
 			retval.getDefenseData().setStyleFactor(combatMessage.getDefenseData().getStyleFactor());
 			retval.setIsAdd(combatMessage.isAdd());
+			retval.getAttackData().set(combatMessage.getAttackData());
 			
 		} catch (IllegalArgumentException | IndexOutOfBoundsException e) {
 			ElementalCombat.LOGGER.warn("Exception while reading ItemMessage: " + e);
