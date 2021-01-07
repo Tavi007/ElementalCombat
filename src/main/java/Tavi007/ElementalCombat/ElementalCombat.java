@@ -76,7 +76,7 @@ public class ElementalCombat
 
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(ItemList.ELEMENTAL_SWORD.get());
+			return new ItemStack(ItemList.FIREANDICE_SWORD.get());
 		}
 		
 	}

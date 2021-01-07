@@ -1,9 +1,6 @@
 package Tavi007.ElementalCombat;
 
 import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
-import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
-import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
-import Tavi007.ElementalCombat.enchantments.StyleResistanceEnchantment;
 import Tavi007.ElementalCombat.network.EntityMessage;
 import Tavi007.ElementalCombat.network.ItemMessage;
 import Tavi007.ElementalCombat.network.PackageHandlerOnClient;
@@ -14,9 +11,6 @@ import java.util.Optional;
 import Tavi007.ElementalCombat.capabilities.CapabilityContainerListener;
 import Tavi007.ElementalCombat.capabilities.CapabilityContainerListenerManager;
 import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.network.NetworkDirection;
