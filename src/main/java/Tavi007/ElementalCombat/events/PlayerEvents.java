@@ -1,25 +1,16 @@
 package Tavi007.ElementalCombat.events;
 
-import org.apache.commons.lang3.text.WordUtils;
-
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.StartupClientOnly;
-import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ClientConfig;
-import Tavi007.ElementalCombat.items.ElementalSword;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -64,27 +55,6 @@ public class PlayerEvents
 	public static void onKeyInput(KeyInputEvent event) {
 		if(StartupClientOnly.TOGGLE_HUD.isKeyDown()){
 			ClientConfig.toogleHUD();
-		}
-	}
-	
-	//for testing purpose
-	@SubscribeEvent
-	public static void onRightClickItem(RightClickItem event) {
-		if(!event.getWorld().isRemote()){
-			ItemStack stack = event.getItemStack();
-			String textAttackElement;
-			if(stack.getItem() instanceof ElementalSword) {
-				AttackData atckData = ElementalCombatAPI.getAttackData(stack);
-				if (atckData.getElement() == "fire") {
-					atckData.setElement("ice");
-					textAttackElement = "Attack Element: " + TextFormatting.BLUE + "Ice" + TextFormatting.RESET;
-				}
-				else {
-					atckData.setElement("fire");
-					textAttackElement = "Attack Element: " + TextFormatting.RED + "Fire" + TextFormatting.RESET;
-				}
-				event.getPlayer().sendMessage(new StringTextComponent(textAttackElement), event.getPlayer().getUniqueID());
-			}
 		}
 	}
 }

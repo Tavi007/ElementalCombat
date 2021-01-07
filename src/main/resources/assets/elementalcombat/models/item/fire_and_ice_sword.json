@@ -2,6 +2,6 @@
     "parent": "item/generated",
     "textures": 
 	{
-        "layer0": "elementalcombat:item/elemental_sword"
+        "layer0": "elementalcombat:item/fire_and_ice_sword"
     }
 }
