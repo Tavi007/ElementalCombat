@@ -32,7 +32,7 @@ public class ServerConfig {
 				.define("isEmojiEnabled", false);
 		defaultElement = builder
 				.comment("The default element.")
-				.define("defaultElement", "normal");
+				.define("defaultElement", "natural");
 		defaultStyle = builder
 				.comment("The default style.")
 				.define("defaultStyle", "basic");
