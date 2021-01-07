@@ -4,12 +4,12 @@ import java.util.HashMap;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
-import Tavi007.ElementalCombat.capabilities.NBTHelper;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
+import Tavi007.ElementalCombat.util.NBTHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -47,26 +47,16 @@ public class DefenseDataCapability {
 
 			@Override
 			public INBT writeNBT(final Capability<DefenseData> capability, final DefenseData instance, final Direction side) {
-
-				//fill nbt with data
 				CompoundNBT nbt = new CompoundNBT();
-				nbt.put("defense_style", NBTHelper.fromMapToNBT(instance.getStyleFactor()));
-				nbt.put("defense_element", NBTHelper.fromMapToNBT(instance.getElementFactor()));
-				nbt.put("enchantment_data", NBTHelper.fromMapToNBT(instance.getEnchantmentData()));
+				NBTHelper.writeDefenseDataToNBT(nbt, instance);
 				return nbt;
 			}
 
 			@Override
 			public void readNBT(final Capability<DefenseData> capability, final DefenseData instance, final Direction side, final INBT nbt) {
-
-				CompoundNBT nbtCompound = (CompoundNBT)nbt;
-
-				//fill list with data
-				instance.setStyleFactor(NBTHelper.fromNBTToMap(nbtCompound.getCompound("defense_style")));
-				instance.setElementFactor(NBTHelper.fromNBTToMap(nbtCompound.getCompound("defense_element")));
-				instance.setEnchantmentData(NBTHelper.fromNBTToMap(nbtCompound.getCompound("enchantment_data")));
+				DefenseData data = NBTHelper.readDefenseDataFromNBT((CompoundNBT)nbt);
+				instance.set(data);
 			}
-
 
 		}, () -> new DefenseData());
 	}

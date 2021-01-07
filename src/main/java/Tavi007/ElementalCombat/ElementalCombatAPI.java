@@ -121,7 +121,8 @@ public class ElementalCombatAPI
 		DefenseData defDataItem = ElementalCombatAPI.getDefenseData(stack);
 		defDataItem.add(dataToAdd);
 	}
-
+	
+	
 	////////////////////////
 	// get default values //
 	////////////////////////

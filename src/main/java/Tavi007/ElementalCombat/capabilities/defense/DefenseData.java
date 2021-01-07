@@ -66,6 +66,7 @@ public class DefenseData {
 	public void set(DefenseData data) {
 		this.styleFactor = data.getStyleFactor();
 		this.elementFactor = data.getElementFactor();
+		this.enchantmentData = data.getEnchantmentData();
 	}
 
 	public void add(DefenseData data) {

@@ -1,15 +1,18 @@
 package Tavi007.ElementalCombat.items;
 
+
+import javax.annotation.Nullable;
+
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
+import Tavi007.ElementalCombat.util.NBTHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class FireAndIceSword extends SwordItem{
@@ -21,19 +24,29 @@ public class FireAndIceSword extends SwordItem{
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		String textAttackElement;
 		AttackData atckData = ElementalCombatAPI.getAttackData(stack);
 		if (atckData.getElement() == "fire") {
 			atckData.setElement("ice");
-			textAttackElement = "Attack Element: " + TextFormatting.BLUE + "Ice" + TextFormatting.RESET;
 		}
 		else {
 			atckData.setElement("fire");
-			textAttackElement = "Attack Element: " + TextFormatting.RED + "Fire" + TextFormatting.RESET;
-		}
-		if (!worldIn.isRemote()) {
-			playerIn.sendMessage(new StringTextComponent(textAttackElement), playerIn.getUniqueID());
 		}
 		return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
 	}
+	
+
+    @Override
+    public CompoundNBT getShareTag(ItemStack stack)
+    {
+        CompoundNBT nbt = stack.getTag();
+        NBTHelper.writeAttackDataToNBT(nbt, ElementalCombatAPI.getAttackData(stack));
+        return nbt;
+    }
+
+    @Override
+	public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt)
+    {
+        stack.setTag(nbt);
+        ElementalCombatAPI.getAttackData(stack).set(NBTHelper.readAttackDataFromNBT(nbt));
+    }
 }

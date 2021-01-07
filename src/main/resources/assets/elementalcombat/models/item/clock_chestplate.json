@@ -2,6 +2,6 @@
     "parent": "item/generated",
     "textures": 
 	{
-        "layer0": "elementalcombat:item/elemental_chestplate"
+        "layer0": "elementalcombat:item/clock_chestplate"
     }
 }

@@ -8,12 +8,8 @@ import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.StartupCommon;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -55,28 +51,6 @@ public class PackageHandlerOnClient {
 			}
 			else {
 				ElementalCombatAPI.getDefenseData((LivingEntity) player).set(defData);
-			}
-		}
-		else if(message instanceof ItemMessage) {
-			ItemMessage itemMessage = (ItemMessage) message;
-			@SuppressWarnings("resource")
-			final PlayerEntity player = Minecraft.getInstance().player;
-			final Container container;
-			if (itemMessage.getWindowId() == 0) {
-				container = player.container;
-			} else if (itemMessage.getWindowId() == player.openContainer.windowId) {
-				container = player.openContainer;
-			} else {
-				return;
-			}
-
-			final ItemStack stack = container.getSlot(itemMessage.getSlotNumber()).getStack();
-			ElementalCombatAPI.getAttackData(stack).set(atckData);
-			if (message.isAdd()) {
-				ElementalCombatAPI.getDefenseData(stack).add(defData);
-			}
-			else {
-				ElementalCombatAPI.getDefenseData(stack).set(defData);
 			}
 		}
 	}
