@@ -1,6 +1,8 @@
-package Tavi007.ElementalCombat.items;
+package Tavi007.ElementalCombat.init;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.items.ElementalChestplate;
+import Tavi007.ElementalCombat.items.ElementalSword;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;

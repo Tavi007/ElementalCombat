@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.particle;
+package Tavi007.ElementalCombat.init;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.particles.BasicParticleType;

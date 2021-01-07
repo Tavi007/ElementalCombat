@@ -6,9 +6,10 @@ import org.apache.logging.log4j.Logger;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.curios.HandleCuriosInventory;
-import Tavi007.ElementalCombat.items.ItemList;
+import Tavi007.ElementalCombat.init.EnchantmentList;
+import Tavi007.ElementalCombat.init.ItemList;
+import Tavi007.ElementalCombat.init.ParticleList;
 import Tavi007.ElementalCombat.loading.CombatPropertiesManager;
-import Tavi007.ElementalCombat.particle.ParticleList;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -39,16 +40,16 @@ public class ElementalCombat
 	public ElementalCombat()
 	{
 		MOD_EVENT_BUS = FMLJavaModLoadingContext.get().getModEventBus();
-		
-		//register particles
-		ParticleList.PARTICLES.register(ElementalCombat.MOD_EVENT_BUS);
-		
-		//register Items
-		ItemList.ITEMS.register(ElementalCombat.MOD_EVENT_BUS);
-		
+
 		//config (cause they must be in  the main class)
 		ModLoadingContext.get().registerConfig(Type.CLIENT, ClientConfig.CONFIG_SPEC, ElementalCombat.MOD_ID + "-client.toml");
 		ModLoadingContext.get().registerConfig(Type.SERVER, ServerConfig.CONFIG_SPEC, ElementalCombat.MOD_ID + "-server.toml");
+		
+		//register
+		ParticleList.PARTICLES.register(ElementalCombat.MOD_EVENT_BUS);
+		ItemList.ITEMS.register(ElementalCombat.MOD_EVENT_BUS);
+		EnchantmentList.ENCHANTMENTS.register(ElementalCombat.MOD_EVENT_BUS);
+		MOD_EVENT_BUS.register(EnchantmentList.class);
 		
 		//register common stuff
 		MOD_EVENT_BUS.register(StartupCommon.class);
