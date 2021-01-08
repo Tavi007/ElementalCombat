@@ -9,7 +9,7 @@ import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
-import Tavi007.ElementalCombat.util.NBTHelper;
+import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -48,13 +48,13 @@ public class DefenseDataCapability {
 			@Override
 			public INBT writeNBT(final Capability<DefenseData> capability, final DefenseData instance, final Direction side) {
 				CompoundNBT nbt = new CompoundNBT();
-				NBTHelper.writeDefenseDataToNBT(nbt, instance);
+				ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, instance);
 				return nbt;
 			}
 
 			@Override
 			public void readNBT(final Capability<DefenseData> capability, final DefenseData instance, final Direction side, final INBT nbt) {
-				DefenseData data = NBTHelper.readDefenseDataFromNBT((CompoundNBT)nbt);
+				DefenseData data = ElementalCombatNBTHelper.readDefenseDataFromNBT((CompoundNBT)nbt);
 				instance.set(data);
 			}
 

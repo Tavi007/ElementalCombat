@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
-import Tavi007.ElementalCombat.util.NBTHelper;
+import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
@@ -39,7 +39,7 @@ public class FireAndIceSword extends SwordItem{
     public CompoundNBT getShareTag(ItemStack stack)
     {
         CompoundNBT nbt = stack.getTag();
-        NBTHelper.writeAttackDataToNBT(nbt, ElementalCombatAPI.getAttackData(stack));
+        ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, ElementalCombatAPI.getAttackData(stack));
         return nbt;
     }
 
@@ -47,6 +47,6 @@ public class FireAndIceSword extends SwordItem{
 	public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt)
     {
         stack.setTag(nbt);
-        ElementalCombatAPI.getAttackData(stack).set(NBTHelper.readAttackDataFromNBT(nbt));
+        ElementalCombatAPI.getAttackData(stack).set(ElementalCombatNBTHelper.readAttackDataFromNBT(nbt));
     }
 }

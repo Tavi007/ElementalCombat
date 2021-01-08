@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import Tavi007.ElementalCombat.util.NBTHelper;
+import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
@@ -42,7 +42,7 @@ public class ClockChestplate extends  ArmorItem {
     public CompoundNBT getShareTag(ItemStack stack)
     {
         CompoundNBT nbt = stack.getTag();
-        NBTHelper.writeDefenseDataToNBT(nbt, ElementalCombatAPI.getDefenseData(stack));
+        ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, ElementalCombatAPI.getDefenseData(stack));
         return nbt;
     }
 
@@ -50,6 +50,6 @@ public class ClockChestplate extends  ArmorItem {
 	public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt)
     {
         stack.setTag(nbt);
-        ElementalCombatAPI.getDefenseData(stack).set(NBTHelper.readDefenseDataFromNBT(nbt));
+        ElementalCombatAPI.getDefenseData(stack).set(ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt));
     }
 }

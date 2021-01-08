@@ -8,7 +8,7 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.StringNBT;
 
-public class NBTHelper {
+public class ElementalCombatNBTHelper {
 	
 	public static void writeAttackDataToNBT(CompoundNBT nbt, AttackData data) {
 		nbt.put("attack_element", StringNBT.valueOf(data.getElement()));
