@@ -1,8 +1,8 @@
-package Tavi007.ElementalCombat;
+package Tavi007.ElementalCombat.init;
 
 import org.lwjgl.glfw.GLFW;
 
-import Tavi007.ElementalCombat.init.ParticleList;
+import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.particle.CombatParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;

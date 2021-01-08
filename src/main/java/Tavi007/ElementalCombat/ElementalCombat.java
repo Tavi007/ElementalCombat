@@ -9,6 +9,8 @@ import Tavi007.ElementalCombat.curios.HandleCuriosInventory;
 import Tavi007.ElementalCombat.init.EnchantmentList;
 import Tavi007.ElementalCombat.init.ItemList;
 import Tavi007.ElementalCombat.init.ParticleList;
+import Tavi007.ElementalCombat.init.StartupClientOnly;
+import Tavi007.ElementalCombat.init.StartupCommon;
 import Tavi007.ElementalCombat.loading.CombatPropertiesManager;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;

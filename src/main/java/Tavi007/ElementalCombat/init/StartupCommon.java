@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat;
+package Tavi007.ElementalCombat.init;
 
 import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
 import Tavi007.ElementalCombat.network.EntityMessage;
@@ -7,6 +7,7 @@ import Tavi007.ElementalCombat.network.PackageHandlerOnServer;
 
 import java.util.Optional;
 
+import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;

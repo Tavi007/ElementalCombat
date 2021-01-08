@@ -1,6 +1,6 @@
 package Tavi007.ElementalCombat.network;
 
-import Tavi007.ElementalCombat.StartupCommon;
+import Tavi007.ElementalCombat.init.StartupCommon;
 
 public class PackageHandlerOnServer {
 	
