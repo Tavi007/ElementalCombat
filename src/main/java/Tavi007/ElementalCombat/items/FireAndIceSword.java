@@ -25,7 +25,7 @@ public class FireAndIceSword extends SwordItem{
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		AttackData atckData = ElementalCombatAPI.getAttackData(stack);
-		if (atckData.getElement() == "fire") {
+		if (atckData.getElement().equals("fire")) {
 			atckData.setElement("ice");
 		}
 		else {

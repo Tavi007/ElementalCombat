@@ -113,23 +113,6 @@ public class CombatPropertiesManager extends JsonReloadListener
 			que.pop();
 			throw e;
 		}
-
-		/*
-		 * I don't know, what this part does
-		if (!custom)
-		{
-			CombatPropertiesLoadEvent event = new CombatPropertiesLoadEvent(name, ret, this);
-			if (MinecraftForge.EVENT_BUS.post(event))
-			{
-				ret = EntityCombatProperties.EMPTY;
-			}
-			ret = event.getEntityData();
-		}
-
-		if (ret != null)
-		    ret.freeze();
-		*/
-
 		return ret;
 	}
 

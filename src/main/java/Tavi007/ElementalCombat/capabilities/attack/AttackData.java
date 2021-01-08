@@ -56,28 +56,32 @@ public class AttackData {
 			//maybe change to resourceLocation later, so other mods can interact with this as well.
 			if(ServerConfig.isEmojiEnabled()) {
 				//sword
-				if(ench.getName() == Enchantments.FIRE_ASPECT.getName()) {this.setElement("🔥");}
-				if(ench.getName() == CombatEnchantments.ICE_ASPECT.getName()) {this.setElement("❄");}
-				if(ench.getName() == CombatEnchantments.WATER_ASPECT.getName()) {this.setElement("💧");}
-				if(ench.getName() == CombatEnchantments.THUNDER_ASPECT.getName()) {this.setElement("⚡");}
+				if(ench.getName().equals(Enchantments.FIRE_ASPECT.getName())) {this.setElement("🔥");}
+				if(ench.getName().equals(CombatEnchantments.ICE_ASPECT.getName())) {this.setElement("❄");}
+				if(ench.getName().equals(CombatEnchantments.WATER_ASPECT.getName())) {this.setElement("💧");}
+				if(ench.getName().equals(CombatEnchantments.THUNDER_ASPECT.getName())) {this.setElement("⚡");}
 				//bow
-				if(ench.getName() == Enchantments.FLAME.getName()) {this.setElement("🔥");}
+				if(ench.getName().equals(Enchantments.FLAME.getName())) {this.setElement("🔥");}
 				//trident
-				if(ench.getName() == Enchantments.CHANNELING.getName()) {this.setElement("⚡");}
+				if(ench.getName().equals(Enchantments.CHANNELING.getName())) {this.setElement("⚡");}
 			}
 			else {
 				//sword
-				if(ench.getName() == Enchantments.FIRE_ASPECT.getName()) {this.setElement("fire");}
-				if(ench.getName() == CombatEnchantments.ICE_ASPECT.getName()) {this.setElement("ice");}
-				if(ench.getName() == CombatEnchantments.WATER_ASPECT.getName()) {this.setElement("water");}
-				if(ench.getName() == CombatEnchantments.THUNDER_ASPECT.getName()) {this.setElement("thunder");}
+				if(ench.getName().equals(Enchantments.FIRE_ASPECT.getName())) {this.setElement("fire");}
+				if(ench.getName().equals(CombatEnchantments.ICE_ASPECT.getName())) {this.setElement("ice");}
+				if(ench.getName().equals(CombatEnchantments.WATER_ASPECT.getName())) {this.setElement("water");}
+				if(ench.getName().equals(CombatEnchantments.THUNDER_ASPECT.getName())) {this.setElement("thunder");}
 				//bow
-				if(ench.getName() == Enchantments.FLAME.getName()) {this.setElement("fire");}
+				if(ench.getName().equals(Enchantments.FLAME.getName())) {this.setElement("fire");}
 				//trident
-				if(ench.getName() == Enchantments.CHANNELING.getName()) {this.setElement("thunder");}
+				if(ench.getName().equals(Enchantments.CHANNELING.getName())) {this.setElement("thunder");}
 			}
 		});
 
 		this.areEnchantmentChangesApplied = true;
+	}
+
+	public boolean isEmpty() {
+		return (element.isEmpty() || element.equals(ServerConfig.getDefaultElement())) && (style.isEmpty() || style.equals(ServerConfig.getDefaultStyle()));
 	}
 }

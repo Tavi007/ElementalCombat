@@ -37,7 +37,7 @@ public class ServerEvents {
 		event.addListener(ElementalCombat.COMBAT_PROPERTIES_MANGER);
 		ElementalCombat.LOGGER.info("ReloadListener for combat data registered.");	
 	}
-	
+
 	@SubscribeEvent
 	public static void entityJoinWorld(EntityJoinWorldEvent event)
 	{
@@ -49,13 +49,13 @@ public class ServerEvents {
 				LivingEntity livingEntity = (LivingEntity) entity;
 				DefenseData defData = ElementalCombatAPI.getDefenseData(livingEntity);
 				AttackData atckData = ElementalCombatAPI.getAttackData(livingEntity);
-				
+
 				if (livingEntity instanceof ServerPlayerEntity) {
 					EntityMessage messageToClient = new EntityMessage(atckData, defData, false, livingEntity.getUniqueID());
 					ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 				}
 			}
-			
+
 			// for newly spawned projectiles.
 			else if(entity instanceof ProjectileEntity){
 				if(entity.ticksExisted == 0){
@@ -83,7 +83,7 @@ public class ServerEvents {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void elementifyLivingHurtEvent(LivingHurtEvent event)
 	{
@@ -100,7 +100,7 @@ public class ServerEvents {
 		String sourceStyle;
 
 		// check damageType
-		if (damageType == "player" || damageType == "mob") {
+		if (damageType.equals("player") || damageType.equals("mob")) {
 			LivingEntity livingEntitySource = (LivingEntity) damageSource.getImmediateSource();
 			if(livingEntitySource.getHeldItemMainhand().isEmpty()){
 				//use data from livingEntity
@@ -116,8 +116,12 @@ public class ServerEvents {
 
 				//maybe mix and match with entity data? a wither skeleton will only use data from the stone sword...
 				AttackData atckCapEntity = ElementalCombatAPI.getAttackData(livingEntitySource);
-				if (sourceStyle == ServerConfig.getDefaultStyle()) {sourceStyle = atckCapEntity.getStyle();}
-				if (sourceElement == ServerConfig.getDefaultElement()) {sourceElement = atckCapEntity.getElement();}
+				if (sourceStyle.equals(ServerConfig.getDefaultStyle())) {
+					sourceStyle = atckCapEntity.getStyle();
+				}
+				if (sourceElement.equals(ServerConfig.getDefaultElement())) {
+					sourceElement = atckCapEntity.getElement();
+				}
 			}
 		}
 		else if(damageSource.isProjectile()) {
