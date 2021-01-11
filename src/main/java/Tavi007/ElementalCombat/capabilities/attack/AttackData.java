@@ -52,30 +52,15 @@ public class AttackData {
 	
 	public void applyEnchantmentChanges(Map<Enchantment, Integer> currentEnchantments) {
 		currentEnchantments.forEach((ench, value) -> {
-			//currently only comparing strings.
-			//maybe change to resourceLocation later, so other mods can interact with this as well.
-			if(ServerConfig.isEmojiEnabled()) {
 				//sword
-				if(ench.getName().equals(Enchantments.FIRE_ASPECT.getName())) {this.setElement("🔥");}
-				if(ench.getName().equals(CombatEnchantments.ICE_ASPECT.getName())) {this.setElement("❄");}
-				if(ench.getName().equals(CombatEnchantments.WATER_ASPECT.getName())) {this.setElement("💧");}
-				if(ench.getName().equals(CombatEnchantments.THUNDER_ASPECT.getName())) {this.setElement("⚡");}
-				//bow
-				if(ench.getName().equals(Enchantments.FLAME.getName())) {this.setElement("🔥");}
-				//trident
-				if(ench.getName().equals(Enchantments.CHANNELING.getName())) {this.setElement("⚡");}
-			}
-			else {
-				//sword
-				if(ench.getName().equals(Enchantments.FIRE_ASPECT.getName())) {this.setElement("fire");}
-				if(ench.getName().equals(CombatEnchantments.ICE_ASPECT.getName())) {this.setElement("ice");}
-				if(ench.getName().equals(CombatEnchantments.WATER_ASPECT.getName())) {this.setElement("water");}
-				if(ench.getName().equals(CombatEnchantments.THUNDER_ASPECT.getName())) {this.setElement("thunder");}
-				//bow
-				if(ench.getName().equals(Enchantments.FLAME.getName())) {this.setElement("fire");}
-				//trident
-				if(ench.getName().equals(Enchantments.CHANNELING.getName())) {this.setElement("thunder");}
-			}
+			if(ench.getName().equals(Enchantments.FIRE_ASPECT.getName())) {this.setElement("fire");}
+			if(ench.getName().equals(CombatEnchantments.ICE_ASPECT.getName())) {this.setElement("ice");}
+			if(ench.getName().equals(CombatEnchantments.WATER_ASPECT.getName())) {this.setElement("water");}
+			if(ench.getName().equals(CombatEnchantments.THUNDER_ASPECT.getName())) {this.setElement("thunder");}
+			//bow
+			if(ench.getName().equals(Enchantments.FLAME.getName())) {this.setElement("fire");}
+			//trident
+			if(ench.getName().equals(Enchantments.CHANNELING.getName())) {this.setElement("thunder");}
 		});
 
 		this.areEnchantmentChangesApplied = true;

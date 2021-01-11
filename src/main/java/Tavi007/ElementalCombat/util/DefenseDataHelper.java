@@ -23,59 +23,30 @@ public class DefenseDataHelper {
 		HashMap<String, Integer> defStyle = new HashMap<String, Integer>();
 		enchantments.forEach( (key, level) -> {
 			if (level != 0) {
-				if(ServerConfig.isEmojiEnabled()) {
-					// elemental enchantments
-					if(key == CombatEnchantments.ICE_RESISTANCE.getName()) {
-						defElement.put("❄", level*ServerConfig.getEnchantmentScaling());
-						defElement.put("🔥", -level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key == CombatEnchantments.FIRE_RESISTANCE.getName()) {
-						defElement.put( "🔥", level*ServerConfig.getEnchantmentScaling());
-						defElement.put( "❄", -level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key == CombatEnchantments.WATER_RESISTANCE.getName()) {
-						defElement.put( "💧", level*ServerConfig.getEnchantmentScaling());
-						defElement.put( "⚡", -level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
-						defElement.put( "⚡", level*ServerConfig.getEnchantmentScaling());
-						defElement.put( "💧", -level*ServerConfig.getEnchantmentScaling());
-					}
-
-					// style enchantments
-					if(key == CombatEnchantments.BLAST_PROTECTION.getName()) {
-						defStyle.put("💣", level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
-						defStyle.put("➹", level*ServerConfig.getEnchantmentScaling());
-					}
+				// elemental enchantments
+				if(key == CombatEnchantments.ICE_RESISTANCE.getName()) {
+					defElement.put("ice", level*ServerConfig.getEnchantmentScaling());
+					defElement.put("fire", -level*ServerConfig.getEnchantmentScaling());
 				}
-				else {
-					// elemental enchantments
-					if(key == CombatEnchantments.ICE_RESISTANCE.getName()) {
-						defElement.put("ice", level*ServerConfig.getEnchantmentScaling());
-						defElement.put("fire", -level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key == CombatEnchantments.FIRE_RESISTANCE.getName()) {
-						defElement.put( "fire", level*ServerConfig.getEnchantmentScaling());
-						defElement.put( "ice", -level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key == CombatEnchantments.WATER_RESISTANCE.getName()) {
-						defElement.put( "water", level*ServerConfig.getEnchantmentScaling());
-						defElement.put( "thunder", -level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
-						defElement.put( "thunder", level*ServerConfig.getEnchantmentScaling());
-						defElement.put( "water", -level*ServerConfig.getEnchantmentScaling());
-					}
+				else if(key == CombatEnchantments.FIRE_RESISTANCE.getName()) {
+					defElement.put( "fire", level*ServerConfig.getEnchantmentScaling());
+					defElement.put( "ice", -level*ServerConfig.getEnchantmentScaling());
+				}
+				else if(key == CombatEnchantments.WATER_RESISTANCE.getName()) {
+					defElement.put( "water", level*ServerConfig.getEnchantmentScaling());
+					defElement.put( "thunder", -level*ServerConfig.getEnchantmentScaling());
+				}
+				else if(key == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
+					defElement.put( "thunder", level*ServerConfig.getEnchantmentScaling());
+					defElement.put( "water", -level*ServerConfig.getEnchantmentScaling());
+				}
 
-					// style enchantments
-					if(key == CombatEnchantments.BLAST_PROTECTION.getName()) {
-						defStyle.put("explosion", level*ServerConfig.getEnchantmentScaling());
-					}
-					else if(key == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
-						defStyle.put("projectile", level*ServerConfig.getEnchantmentScaling());
-					}
+				// style enchantments
+				if(key == CombatEnchantments.BLAST_PROTECTION.getName()) {
+					defStyle.put("explosion", level*ServerConfig.getEnchantmentScaling());
+				}
+				else if(key == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
+					defStyle.put("projectile", level*ServerConfig.getEnchantmentScaling());
 				}
 			}
 		});

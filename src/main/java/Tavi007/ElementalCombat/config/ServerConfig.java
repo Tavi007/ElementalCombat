@@ -11,7 +11,6 @@ public class ServerConfig {
 	public static final ForgeConfigSpec CONFIG_SPEC;
 	private static final ServerConfig SERVER;
 
-	private final BooleanValue isEmojiEnabled;
 	private final ConfigValue<String> defaultElement;
 	private final ConfigValue<String> defaultStyle;
 	private final IntValue maxFactor;
@@ -27,9 +26,6 @@ public class ServerConfig {
 
 	ServerConfig(ForgeConfigSpec.Builder builder)
 	{
-		isEmojiEnabled = builder
-				.comment("If true emojies are used for enchantment data. When false, it will use only text.")
-				.define("isEmojiEnabled", false);
 		defaultElement = builder
 				.comment("The default element.")
 				.define("defaultElement", "natural");
@@ -42,11 +38,6 @@ public class ServerConfig {
 		enchantmentScaling = builder
 				.comment("scaling for protection enchantments. See vanilla Enchantment Protection Factor.")
 				.defineInRange("enchantmentScaling", 8, 1, 25);
-	}
-
-	public static boolean isEmojiEnabled()
-	{
-		return SERVER.isEmojiEnabled.get();
 	}
 
 	public static int getMaxFactor()
