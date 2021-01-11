@@ -15,7 +15,7 @@ public class DefenseDataHelper {
 	/**
 	 * Computes the {@link DefenseData} for enchantments. 
 	 * Depending on the {@link ServerConfig}, the resulting DefenseData will use emojies or not.
-	 * @param enchantments A Map with the enchantment name and the level.
+	 * @param enchantments A map with the enchantment names and their level.
 	 * @return The DefenseData of all the enchantment summed up.
 	 */
 	public static DefenseData getEnchantmentData(HashMap<String, Integer> enchantments) {
@@ -147,7 +147,7 @@ public class DefenseDataHelper {
 	 * Computes the scaling factor for giving defense map and given key.
 	 * @param map Should either be the element or style defense mapping.
 	 * @param key The key, which should be checked for.
-	 * @return The scaling factor. Can be any decimal number.
+	 * @return The resulting scaling factor. It can be any decimal number.
 	 */
 	public static float getScaling(HashMap<String, Integer> map, String key) {
 		Integer factor = map.getOrDefault(key, 0);
@@ -165,7 +165,7 @@ public class DefenseDataHelper {
 	}
 
 	/**
-	 * A Helper-function for constructing a formatted string. Used for tooltips and hud.
+	 * A Helper-function for constructing a formatted string. Used for tooltips and hud. (See {@link RenderEvents})
 	 * @param key The Name of the value. The key can be from the element or style defense mapping.
 	 * @param factor The corresponding value to the key from the element or style defense mapping.
 	 * @return A formatted String ready to be displayed.

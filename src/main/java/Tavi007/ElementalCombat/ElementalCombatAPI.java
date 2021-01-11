@@ -130,6 +130,7 @@ public class ElementalCombatAPI
 	/**
 	 * Returns a copy of the default {@link EntityCombatProperties} of any {@link LivingEntity}.
 	 * @param livingEntity The LivingEntity.
+	 * @return copy of EntityCombatProperties.
 	 */
 	public static EntityCombatProperties getDefaultProperties(LivingEntity livingEntity) {
 		ResourceLocation rlEntity = livingEntity.getType().getRegistryName();
@@ -144,6 +145,7 @@ public class ElementalCombatAPI
 	/**
 	 * Returns a copy of the default {@link ItemCombatProperties} of any {@link ItemStack}.
 	 * @param stack The ItemStack.
+	 * @return copy of ItemCombatProperties.
 	 */
 	public static ItemCombatProperties getDefaultProperties(ItemStack stack) {
 		ResourceLocation rlItem = stack.getItem().getRegistryName();
@@ -157,6 +159,7 @@ public class ElementalCombatAPI
 	/**
 	 * Returns a copy of the default {@link BiomeCombatProperties} of any {@link Biome}.
 	 * @param biome The Biome.
+	 * @return copy of BiomeCombatProperties.
 	 */
 	public static BiomeCombatProperties getDefaultProperties(Biome biome) {
 		ResourceLocation rlBiome = biome.getRegistryName();
@@ -171,6 +174,7 @@ public class ElementalCombatAPI
 	 * Returns a copy of the default {@link DamageSourceCombatProperties} of any {@link DamageSource}. 
 	 * This includes lightning, burning, drowning, suffocating in a wall and so on.
 	 * @param damageSource The DamageSource.
+	 * @return copy of DamageSourceCombatProperties.
 	 */
 	public static DamageSourceCombatProperties getDefaultProperties(DamageSource damageSource) {
 		ResourceLocation rlDamageSource=null;
