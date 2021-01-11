@@ -1,0 +1,21 @@
+{
+"mapping":{
+	"natural":"Natural",
+	"fire":"Fire",
+	"ice":"Ice",
+	"water":"Water",
+	"thunder":"Thunder",
+	"darkness":"Darkness",
+	"light":"Light",
+	"wind":"Wind",
+	"earth":"Earth",
+	"bio":"Bio",
+	
+	"basic":"Basic",
+	"slash":"Slash",
+	"stab":"Stab",
+	"explosion":"Explosion",
+	"projectile":"Projectile",
+	"magic":"Magic"
+	}
+}

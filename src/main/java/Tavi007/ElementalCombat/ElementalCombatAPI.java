@@ -128,6 +128,16 @@ public class ElementalCombatAPI
 	////////////////////////
 
 	/**
+	 * Returns the mapped String, which is defined in the combat_properties_mapping.json.
+	 * Always use this function, when you want to display the data.
+	 * @param key They key (aka the value on the left side in the .json)
+	 * @return the corresponding String (aka the value on the right side in the .json)
+	 */
+	public static String getMappedString(String key) {
+		return ElementalCombat.COMBAT_PROPERTIES_MANGER.getPropertiesMapping().getValue(key);
+	}
+
+	/**
 	 * Returns a copy of the default {@link EntityCombatProperties} of any {@link LivingEntity}.
 	 * @param livingEntity The LivingEntity.
 	 * @return copy of EntityCombatProperties.

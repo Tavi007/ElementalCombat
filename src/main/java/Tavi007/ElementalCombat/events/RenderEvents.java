@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.lang3.text.WordUtils;
-
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -48,11 +46,11 @@ public class RenderEvents {
 			//attack
 			AttackData atckCap = new AttackData(ElementalCombatAPI.getAttackData(item));
 			if (!(atckCap.getStyle().equals(ServerConfig.getDefaultStyle()) || atckCap.getStyle().isEmpty())) {
-				String textAttackStyle = "" + TextFormatting.GRAY + "Attack Style: " + WordUtils.capitalize(atckCap.getStyle()) + TextFormatting.RESET;
+				String textAttackStyle = "" + TextFormatting.GRAY + "Attack Style: " + ElementalCombatAPI.getMappedString(atckCap.getStyle()) + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textAttackStyle));
 			}
 			if (!(atckCap.getElement().equals(ServerConfig.getDefaultElement()) || atckCap.getElement().isEmpty())) {
-				String textAttackElement = "" + TextFormatting.GRAY + "Attack Element: " + WordUtils.capitalize(atckCap.getElement()) + TextFormatting.RESET;
+				String textAttackElement = "" + TextFormatting.GRAY + "Attack Element: " + ElementalCombatAPI.getMappedString(atckCap.getElement()) + TextFormatting.RESET;
 				toolTip.add(new StringTextComponent(textAttackElement));
 			}
 
@@ -104,13 +102,14 @@ public class RenderEvents {
 							data.setElement(atckCapEntity.getElement());
 						}
 					}
+					
 					if(!data.isEmpty()) {
 						list.add(new StringTextComponent("Attack:"));
 						if(!data.getStyle().equals(ServerConfig.getDefaultStyle())) {
-							list.add(new StringTextComponent("- " + WordUtils.capitalize(data.getStyle())));
+							list.add(new StringTextComponent("- " + ElementalCombatAPI.getMappedString(data.getStyle()) ));
 						}
 						if(!data.getElement().equals(ServerConfig.getDefaultElement())) {
-							list.add(new StringTextComponent("- " + WordUtils.capitalize(data.getElement())));
+							list.add(new StringTextComponent("- " + ElementalCombatAPI.getMappedString(data.getElement()) ));
 						}
 					}
 

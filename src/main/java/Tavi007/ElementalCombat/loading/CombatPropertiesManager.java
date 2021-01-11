@@ -28,16 +28,15 @@ public class CombatPropertiesManager extends JsonReloadListener
 	private Map<ResourceLocation, ItemCombatProperties> registeredItemData = ImmutableMap.of();
 	private Map<ResourceLocation, BiomeCombatProperties> registeredBiomeData = ImmutableMap.of();
 	private Map<ResourceLocation, DamageSourceCombatProperties> registeredDamageSourceData = ImmutableMap.of();
+	private CombatPropertiesMapping mapping;
 	
 	private static ThreadLocal<Deque<CombatPropertiesContext>> dataContext = new ThreadLocal<Deque<CombatPropertiesContext>>();
 
-	public CombatPropertiesManager() 
-	{
+	public CombatPropertiesManager() {
 		super(GSON, "combat_properties");
 	}
 
-	protected void apply(Map<ResourceLocation, JsonElement> objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn) 
-	{
+	protected void apply(Map<ResourceLocation, JsonElement> objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn) {
 		Builder<ResourceLocation, EntityCombatProperties> builderEntity = ImmutableMap.builder();
 		Builder<ResourceLocation, ItemCombatProperties> builderItem = ImmutableMap.builder();
 		Builder<ResourceLocation, BiomeCombatProperties> builderBiome = ImmutableMap.builder();
@@ -69,6 +68,10 @@ public class CombatPropertiesManager extends JsonReloadListener
 					DamageSourceCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), DamageSourceCombatProperties.class);
 					builderDamageSource.put(rl, combatProperties);
 				}
+				else if(rl.getPath().contains("combat_properties_mapping")){
+					this.mapping = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), CombatPropertiesMapping.class);
+					
+				}
 				ElementalCombat.LOGGER.info(rl.toString() + " succesfully loaded.");
 			}
 			catch (Exception exception)
@@ -95,44 +98,41 @@ public class CombatPropertiesManager extends JsonReloadListener
 	private <T> T loadData(Gson gson, ResourceLocation name, JsonElement data, boolean custom, Class<T> classOfT)
 	{
 		Deque<CombatPropertiesContext> que = dataContext.get();
-		if (que == null)
-		{
+		if (que == null){
 			que = Queues.newArrayDeque();
 			dataContext.set(que);
 		}
 
 		T ret = null;
-		try
-		{
+		try{
 			que.push(new CombatPropertiesContext(name, custom));
 			ret = gson.fromJson(data, classOfT);
 			que.pop();
 		}
-		catch (JsonParseException e)
-		{
+		catch (JsonParseException e){
 			que.pop();
 			throw e;
 		}
 		return ret;
 	}
 
-	public EntityCombatProperties getEntityDataFromLocation(ResourceLocation rl)
-	{
+	public CombatPropertiesMapping getPropertiesMapping(){
+		return this.mapping;
+	}
+
+	public EntityCombatProperties getEntityDataFromLocation(ResourceLocation rl){
 		return this.registeredEntityData.getOrDefault(rl, EntityCombatProperties.EMPTY);
 	}
 
-	public ItemCombatProperties getItemDataFromLocation(ResourceLocation rl)
-	{
+	public ItemCombatProperties getItemDataFromLocation(ResourceLocation rl){
 		return this.registeredItemData.getOrDefault(rl, ItemCombatProperties.EMPTY);
 	}
 
-	public BiomeCombatProperties getBiomeDataFromLocation(ResourceLocation rl)
-	{
+	public BiomeCombatProperties getBiomeDataFromLocation(ResourceLocation rl){
 		return this.registeredBiomeData.getOrDefault(rl, BiomeCombatProperties.EMPTY);
 	}
 
-	public DamageSourceCombatProperties getDamageSourceDataFromLocation(ResourceLocation rl)
-	{
+	public DamageSourceCombatProperties getDamageSourceDataFromLocation(ResourceLocation rl){
 		return this.registeredDamageSourceData.getOrDefault(rl, DamageSourceCombatProperties.EMPTY);
 	}
 }
