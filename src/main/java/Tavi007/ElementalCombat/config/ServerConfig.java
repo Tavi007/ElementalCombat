@@ -3,7 +3,6 @@ package Tavi007.ElementalCombat.config;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
@@ -36,7 +35,7 @@ public class ServerConfig {
 				.comment("The maximal combat factor. See vanilla Enchantment Protection Factor.")
 				.defineInRange("maxFactor", 100, 1, 200);
 		enchantmentScaling = builder
-				.comment("scaling for protection enchantments. See vanilla Enchantment Protection Factor.")
+				.comment("Scaling for protection enchantments. See vanilla Enchantment Protection Factor.")
 				.defineInRange("enchantmentScaling", 8, 1, 25);
 	}
 
