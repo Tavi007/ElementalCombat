@@ -28,7 +28,7 @@ public class CombatPropertiesManager extends JsonReloadListener
 	private Map<ResourceLocation, ItemCombatProperties> registeredItemData = ImmutableMap.of();
 	private Map<ResourceLocation, BiomeCombatProperties> registeredBiomeData = ImmutableMap.of();
 	private Map<ResourceLocation, DamageSourceCombatProperties> registeredDamageSourceData = ImmutableMap.of();
-	private CombatPropertiesMapping mapping;
+	private CombatPropertiesTextMapping mapping;
 	
 	private static ThreadLocal<Deque<CombatPropertiesContext>> dataContext = new ThreadLocal<Deque<CombatPropertiesContext>>();
 
@@ -69,7 +69,7 @@ public class CombatPropertiesManager extends JsonReloadListener
 					builderDamageSource.put(rl, combatProperties);
 				}
 				else if(rl.getPath().contains("combat_properties_mapping")){
-					this.mapping = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), CombatPropertiesMapping.class);
+					this.mapping = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), CombatPropertiesTextMapping.class);
 					
 				}
 				ElementalCombat.LOGGER.info(rl.toString() + " succesfully loaded.");
@@ -116,7 +116,7 @@ public class CombatPropertiesManager extends JsonReloadListener
 		return ret;
 	}
 
-	public CombatPropertiesMapping getPropertiesMapping(){
+	public CombatPropertiesTextMapping getPropertiesMapping(){
 		return this.mapping;
 	}
 

@@ -2,14 +2,14 @@ package Tavi007.ElementalCombat.loading;
 
 import java.util.HashMap;
 
-public class CombatPropertiesMapping {
+public class CombatPropertiesTextMapping {
 	private final HashMap<String, String> mapping;
 
-	public CombatPropertiesMapping() {
+	public CombatPropertiesTextMapping() {
 		this.mapping = new HashMap<String, String>();
 	}
 
-	public CombatPropertiesMapping(HashMap<String, String> mapping) {
+	public CombatPropertiesTextMapping(HashMap<String, String> mapping) {
 		this.mapping = mapping;
 	}
 	
