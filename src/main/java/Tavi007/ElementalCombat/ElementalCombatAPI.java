@@ -82,7 +82,7 @@ public class ElementalCombatAPI
 
 	/**
 	 * Returns the attack-combat data {@link AttackData} of the {@link ProjectileEntity}.
-	 * @param stack A ProjectileEntity.
+	 * @param projectileEntity A ProjectileEntity.
 	 * @return the AttackData, containing the attack style and attack element.
 	 */
 	public static AttackData getAttackData(ProjectileEntity projectileEntity){

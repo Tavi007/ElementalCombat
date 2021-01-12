@@ -20,7 +20,7 @@ public class CombatParticle extends SpriteTexturedParticle{
 		this.particleGreen = f;
 		this.particleBlue = f;
 		
-		this.setSize(0.4f, 0.4f);
+		this.setSize(0.6f, 0.6f);
 		this.motionX = xSpeedIn;
 		this.motionY = Math.abs(ySpeedIn);
 		this.motionZ = zSpeedIn;

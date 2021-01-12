@@ -2,14 +2,12 @@ package Tavi007.ElementalCombat.util;
 
 import java.util.HashMap;
 
-import org.apache.commons.lang3.text.WordUtils;
-
+import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.enchantments.CombatEnchantments;
 import net.minecraft.util.text.TextFormatting;
 
-@SuppressWarnings("deprecation")
 public class DefenseDataHelper {
 
 	/**
@@ -136,7 +134,7 @@ public class DefenseDataHelper {
 	}
 
 	/**
-	 * A Helper-function for constructing a formatted string. Used for tooltips and hud. (See {@link RenderEvents})
+	 * A Helper-function for constructing a formatted string. Used for tooltips and hud. (See {@link Tavi007.ElementalCombat.events.RenderEvents})
 	 * @param key The Name of the value. The key can be from the element or style defense mapping.
 	 * @param factor The corresponding value to the key from the element or style defense mapping.
 	 * @return A formatted String ready to be displayed.
@@ -151,6 +149,6 @@ public class DefenseDataHelper {
 		if (percentage > 100) {textFormatting = TextFormatting.GREEN;}
 
 		//make string
-		return "" + TextFormatting.GRAY + " - " + WordUtils.capitalize(key) + " " + textFormatting + String.valueOf(percentage)+ "%" + TextFormatting.RESET;
+		return "" + TextFormatting.GRAY + " - " + ElementalCombatAPI.getMappedString(key) + " " + textFormatting + String.valueOf(percentage)+ "%" + TextFormatting.RESET;
 	}
 }

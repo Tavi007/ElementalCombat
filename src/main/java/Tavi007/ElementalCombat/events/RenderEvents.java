@@ -106,10 +106,10 @@ public class RenderEvents {
 					if(!data.isEmpty()) {
 						list.add(new StringTextComponent("Attack:"));
 						if(!data.getStyle().equals(ServerConfig.getDefaultStyle())) {
-							list.add(new StringTextComponent("- " + ElementalCombatAPI.getMappedString(data.getStyle()) ));
+							list.add(new StringTextComponent("" + TextFormatting.GRAY + " - " + ElementalCombatAPI.getMappedString(data.getStyle()) + TextFormatting.RESET));
 						}
 						if(!data.getElement().equals(ServerConfig.getDefaultElement())) {
-							list.add(new StringTextComponent("- " + ElementalCombatAPI.getMappedString(data.getElement()) ));
+							list.add(new StringTextComponent("" + TextFormatting.GRAY + " - " + ElementalCombatAPI.getMappedString(data.getElement()) + TextFormatting.RESET));
 						}
 					}
 
@@ -191,10 +191,6 @@ public class RenderEvents {
 							IReorderingProcessor ireorderingprocessor1 = orderedList.get(i);
 							if (ireorderingprocessor1 != null) {
 								mc.fontRenderer.func_238416_a_(ireorderingprocessor1, (float)posX, (float)posY, -1, ClientConfig.textShadow(), matrix4f, irendertypebuffer$impl, false, 0, 15728880);
-							}
-							// first line is caption. add a little bit space to the next line
-							if (i == 0) {
-								posY += 2;
 							}
 							//next line
 							posY += 10;
