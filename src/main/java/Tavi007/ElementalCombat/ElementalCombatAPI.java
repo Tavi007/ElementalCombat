@@ -95,7 +95,8 @@ public class ElementalCombatAPI
 	/////////////////////
 
 	/**
-	 * Adds additional {@link DefenseData} to the DefenseData of the {@link LivingEntity}. The values of the style and element mappings will be summed up.
+	 * Adds additional {@link DefenseData} to the DefenseData of the {@link LivingEntity}. The values of the style and element mappings will be summed up
+	 * and a message will be send to the client.
 	 * @param dataToAdd The additional DefenseData.
 	 * @param livingEntity The LivingEntity. 
 	 */
