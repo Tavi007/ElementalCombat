@@ -13,14 +13,6 @@ public class StyleResistanceEnchantment extends Enchantment{
 	public StyleResistanceEnchantment(StyleResistanceEnchantment.Type typeIn) {
 		super(Rarity.UNCOMMON, EnchantmentType.ARMOR, ARMOR_SLOTS);
 		this.protectionType = typeIn;
-		switch(typeIn.typeName) {
-		case("projectile"): 
-			super.name = "Projectile Protection";
-	    	break;
-		case("explosion"): 
-			super.name = "Blast Protection";
-	    	break;
-		}
 	}
 
 	/**
@@ -38,15 +30,13 @@ public class StyleResistanceEnchantment extends Enchantment{
 	}
 
 	public static enum Type {
-		PROJECTILE("projectile", 10, 8),
-		EXPLOSION("explosion", 10, 8);
+		PROJECTILE(10, 8),
+		EXPLOSION(10, 8);
 
-		private final String typeName;
 		private final int minEnchantability;
 		private final int levelCost;
 
-		private Type(String typeName, int minEnchantability, int levelCost) {
-			this.typeName = typeName;
+		private Type(int minEnchantability, int levelCost) {
 			this.minEnchantability = minEnchantability;
 			this.levelCost = levelCost;
 		}

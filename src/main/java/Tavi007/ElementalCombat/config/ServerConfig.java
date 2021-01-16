@@ -36,7 +36,7 @@ public class ServerConfig {
 				.defineInRange("maxFactor", 100, 1, 200);
 		enchantmentScaling = builder
 				.comment("Scaling for protection enchantments. See vanilla Enchantment Protection Factor.")
-				.defineInRange("enchantmentScaling", 8, 1, 25);
+				.defineInRange("enchantmentScaling", 5, 1, 15);
 	}
 
 	public static int getMaxFactor()

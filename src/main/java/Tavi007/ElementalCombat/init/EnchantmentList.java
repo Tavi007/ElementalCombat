@@ -18,10 +18,14 @@ public class EnchantmentList {
 	public static final RegistryObject<Enchantment> ICE_PROTECTION = ENCHANTMENTS.register("ice_protection", () -> new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.ICE) );
 	public static final RegistryObject<Enchantment> WATER_PROTECTION = ENCHANTMENTS.register("water_protection", () -> new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.WATER) );
 	public static final RegistryObject<Enchantment> THUNDER_PROTECTION = ENCHANTMENTS.register("thunder_protection", () -> new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.THUNDER) );
+	public static final RegistryObject<Enchantment> DARKNESS_PROTECTION = ENCHANTMENTS.register("darkness_protection", () -> new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.DARKNESS) );
+	public static final RegistryObject<Enchantment> LIGHT_PROTECTION = ENCHANTMENTS.register("light_protection", () -> new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.LIGHT) );
 
 	public static final RegistryObject<Enchantment> ICE_ASPECT = ENCHANTMENTS.register("ice_aspect", () -> new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.ICE) );
 	public static final RegistryObject<Enchantment> WATER_ASPECT = ENCHANTMENTS.register("water_aspect", () -> new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.WATER) );
 	public static final RegistryObject<Enchantment> THUNDER_ASPECT = ENCHANTMENTS.register("thunder_aspect", () -> new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.THUNDER) );
+	public static final RegistryObject<Enchantment> DARKNESS_ASPECT = ENCHANTMENTS.register("darkness_aspect", () -> new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.DARKNESS) );
+	public static final RegistryObject<Enchantment> LIGHT_ASPECT = ENCHANTMENTS.register("light_aspect", () -> new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.LIGHT) );
 
 
 	@SubscribeEvent

@@ -1,4 +1,17 @@
 {
 	"item.elementalcombat.fire_and_ice_sword" : "Fire & Ice Sword",
-	"item.elementalcombat.clock_chestplate" : "Clock Chestplate"
+	"item.elementalcombat.clock_chestplate" : "Clock Chestplate",
+	
+	"enchantment.elementalcombat.ice_protection" : "Ice Resistance",
+	"enchantment.elementalcombat.thunder_protection" : "Thunder Resistance",
+	"enchantment.elementalcombat.water_protection" : "Water Resistance",
+	"enchantment.elementalcombat.darkness_protection" : "Darkness Resistance",
+	"enchantment.elementalcombat.light_protection" : "Light Resistance",
+	
+	"enchantment.elementalcombat.ice_aspect" : "Ice Aspekt",
+	"enchantment.elementalcombat.thunder_aspect" : "Thunder Aspekt",
+	"enchantment.elementalcombat.water_aspect" : "Water Aspekt",
+	"enchantment.elementalcombat.darkness_aspect" : "Darkness Aspekt",
+	"enchantment.elementalcombat.light_aspect" : "Light Aspekt"
+	
 }

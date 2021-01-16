@@ -5,7 +5,8 @@ import java.util.HashMap;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ServerConfig;
-import Tavi007.ElementalCombat.enchantments.CombatEnchantments;
+import Tavi007.ElementalCombat.init.EnchantmentList;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.util.text.TextFormatting;
 
 public class DefenseDataHelper {
@@ -22,28 +23,36 @@ public class DefenseDataHelper {
 		enchantments.forEach( (key, level) -> {
 			if (level != 0) {
 				// elemental enchantments
-				if(key == CombatEnchantments.ICE_RESISTANCE.getName()) {
-					defElement.put("ice", level*ServerConfig.getEnchantmentScaling());
-					defElement.put("fire", -level*ServerConfig.getEnchantmentScaling());
-				}
-				else if(key == CombatEnchantments.FIRE_RESISTANCE.getName()) {
+				if(key == Enchantments.FIRE_PROTECTION.getName()) {
 					defElement.put( "fire", level*ServerConfig.getEnchantmentScaling());
-					defElement.put( "ice", -level*ServerConfig.getEnchantmentScaling());
+					defElement.put( "ice", -level*ServerConfig.getEnchantmentScaling()/2);
 				}
-				else if(key == CombatEnchantments.WATER_RESISTANCE.getName()) {
+				else if(key == EnchantmentList.ICE_PROTECTION.get().getName()) {
+					defElement.put("ice", level*ServerConfig.getEnchantmentScaling());
+					defElement.put("fire", -level*ServerConfig.getEnchantmentScaling()/2);
+				}
+				else if(key == EnchantmentList.WATER_PROTECTION.get().getName()) {
 					defElement.put( "water", level*ServerConfig.getEnchantmentScaling());
-					defElement.put( "thunder", -level*ServerConfig.getEnchantmentScaling());
+					defElement.put( "thunder", -level*ServerConfig.getEnchantmentScaling()/2);
 				}
-				else if(key == CombatEnchantments.THUNDER_RESISTANCE.getName()) {
+				else if(key == EnchantmentList.THUNDER_PROTECTION.get().getName()) {
 					defElement.put( "thunder", level*ServerConfig.getEnchantmentScaling());
-					defElement.put( "water", -level*ServerConfig.getEnchantmentScaling());
+					defElement.put( "water", -level*ServerConfig.getEnchantmentScaling()/2);
+				}
+				else if(key == EnchantmentList.DARKNESS_PROTECTION.get().getName()) {
+					defElement.put( "darkness", level*ServerConfig.getEnchantmentScaling());
+					defElement.put( "light", -level*ServerConfig.getEnchantmentScaling()/2);
+				}
+				else if(key == EnchantmentList.LIGHT_PROTECTION.get().getName()) {
+					defElement.put( "light", level*ServerConfig.getEnchantmentScaling());
+					defElement.put( "darkness", -level*ServerConfig.getEnchantmentScaling()/2);
 				}
 
 				// style enchantments
-				if(key == CombatEnchantments.BLAST_PROTECTION.getName()) {
+				if(key == Enchantments.BLAST_PROTECTION.getName()) {
 					defStyle.put("explosion", level*ServerConfig.getEnchantmentScaling());
 				}
-				else if(key == CombatEnchantments.PROJECTILE_PROTECTION.getName()) {
+				else if(key == Enchantments.PROJECTILE_PROTECTION.getName()) {
 					defStyle.put("projectile", level*ServerConfig.getEnchantmentScaling());
 				}
 			}

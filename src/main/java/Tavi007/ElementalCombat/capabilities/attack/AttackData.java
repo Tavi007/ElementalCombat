@@ -3,7 +3,7 @@ package Tavi007.ElementalCombat.capabilities.attack;
 import java.util.Map;
 
 import Tavi007.ElementalCombat.config.ServerConfig;
-import Tavi007.ElementalCombat.enchantments.CombatEnchantments;
+import Tavi007.ElementalCombat.init.EnchantmentList;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 
@@ -54,9 +54,11 @@ public class AttackData {
 		currentEnchantments.forEach((ench, value) -> {
 				//sword
 			if(ench.getName().equals(Enchantments.FIRE_ASPECT.getName())) {this.setElement("fire");}
-			if(ench.getName().equals(CombatEnchantments.ICE_ASPECT.getName())) {this.setElement("ice");}
-			if(ench.getName().equals(CombatEnchantments.WATER_ASPECT.getName())) {this.setElement("water");}
-			if(ench.getName().equals(CombatEnchantments.THUNDER_ASPECT.getName())) {this.setElement("thunder");}
+			if(ench.getName().equals(EnchantmentList.ICE_ASPECT.get().getName())) {this.setElement("ice");}
+			if(ench.getName().equals(EnchantmentList.WATER_ASPECT.get().getName())) {this.setElement("water");}
+			if(ench.getName().equals(EnchantmentList.THUNDER_ASPECT.get().getName())) {this.setElement("thunder");}
+			if(ench.getName().equals(EnchantmentList.DARKNESS_ASPECT.get().getName())) {this.setElement("darkness");}
+			if(ench.getName().equals(EnchantmentList.LIGHT_ASPECT.get().getName())) {this.setElement("light");}
 			//bow
 			if(ench.getName().equals(Enchantments.FLAME.getName())) {this.setElement("fire");}
 			//trident

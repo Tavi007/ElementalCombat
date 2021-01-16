@@ -13,20 +13,6 @@ public class ElementalResistanceEnchantment extends Enchantment{
 	public ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type typeIn) {
 		super(Rarity.UNCOMMON, EnchantmentType.ARMOR, ARMOR_SLOTS);
 		this.protectionType = typeIn;
-		switch(typeIn.typeName) {
-		case("fire"): 
-			super.name = "Fire Resistance";
-	    	break;
-		case("ice"): 
-			super.name = "Ice Resistance";
-	    	break;
-		case("water"): 
-			super.name = "Water Resistance";
-	    	break;
-		case("thunder"): 
-			super.name = "Thunder Resistance";
-	    	break;
-		}
 	}
 
 	/**
@@ -44,17 +30,17 @@ public class ElementalResistanceEnchantment extends Enchantment{
 	}
 
 	public static enum Type {
-		FIRE("fire", 10, 8),
-		ICE("ice", 10, 8),
-		WATER("water", 10, 8),
-		THUNDER("thunder", 10, 8);
+		FIRE(10, 8),
+		ICE(10, 8),
+		WATER(10, 8),
+		THUNDER(10, 8),
+		DARKNESS(10, 8),
+		LIGHT(10, 8);
 
-		private final String typeName;
 		private final int minEnchantability;
 		private final int levelCost;
 
-		private Type(String typeName, int minEnchantability, int levelCost) {
-			this.typeName = typeName;
+		private Type(int minEnchantability, int levelCost) {
 			this.minEnchantability = minEnchantability;
 			this.levelCost = levelCost;
 		}
