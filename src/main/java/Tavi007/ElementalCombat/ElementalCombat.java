@@ -33,6 +33,7 @@ public class ElementalCombat
 	public static final String MOD_ID = "elementalcombat";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	public static CombatPropertiesManager COMBAT_PROPERTIES_MANGER = new CombatPropertiesManager();
+	public static final ItemGroup ELEMENTAL_COMBAT_GROUP = new ElementalCombat.ElementalCombatItemGroup(MOD_ID);
     public static IEventBus MOD_EVENT_BUS;
 
 	public static final ResourceLocation simpleChannelRL = new ResourceLocation(MOD_ID, "channel");
@@ -70,9 +71,10 @@ public class ElementalCombat
 		MOD_EVENT_BUS.register(StartupClientOnly.class);
 	}
 	
-	public static class MateriaItemGroup extends ItemGroup {
+	
+	public static class ElementalCombatItemGroup extends ItemGroup {
 
-		public MateriaItemGroup(String name) {
+		public ElementalCombatItemGroup(String name) {
 			super(name);
 		}
 
