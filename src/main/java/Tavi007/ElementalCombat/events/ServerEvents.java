@@ -144,8 +144,8 @@ public class ServerEvents {
 		float damageAmount = event.getAmount();
 		// Get the protection data from target
 		DefenseData defCap = ElementalCombatAPI.getDefenseData(target);
-		float defenseStyleScaling = DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceStyle);
-		float defenseElementScaling = Math.max(0.0f, DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceElement));
+		float defenseStyleScaling = Math.max(0.0f, DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceStyle));
+		float defenseElementScaling = DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceElement);
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
 
 		// display particles
