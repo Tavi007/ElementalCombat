@@ -31,7 +31,8 @@ public class StyleResistanceEnchantment extends Enchantment{
 
 	public static enum Type {
 		PROJECTILE(10, 8),
-		EXPLOSION(10, 8);
+		EXPLOSION(10, 8),
+		MAGIC(10, 8);
 
 		private final int minEnchantability;
 		private final int levelCost;

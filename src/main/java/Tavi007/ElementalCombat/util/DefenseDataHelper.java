@@ -47,6 +47,12 @@ public class DefenseDataHelper {
 					defElement.put( "light", level*ServerConfig.getEnchantmentScaling());
 					defElement.put( "darkness", -level*ServerConfig.getEnchantmentScaling()/2);
 				}
+				else if(key == EnchantmentList.ELEMENT_PROTECTION.get().getName()) {
+					defElement.put( "fire", level*ServerConfig.getEnchantmentScaling()/4);
+					defElement.put( "water", level*ServerConfig.getEnchantmentScaling()/4);
+					defElement.put( "ice", level*ServerConfig.getEnchantmentScaling()/4);
+					defElement.put( "thunder", level*ServerConfig.getEnchantmentScaling()/4);
+				}
 
 				// style enchantments
 				if(key == Enchantments.BLAST_PROTECTION.getName()) {
@@ -54,6 +60,9 @@ public class DefenseDataHelper {
 				}
 				else if(key == Enchantments.PROJECTILE_PROTECTION.getName()) {
 					defStyle.put("projectile", level*ServerConfig.getEnchantmentScaling());
+				}
+				else if(key == EnchantmentList.MAGIC_PROTECTION.get().getName()) {
+					defStyle.put("magic", level*ServerConfig.getEnchantmentScaling());
 				}
 			}
 		});

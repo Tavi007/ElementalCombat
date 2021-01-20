@@ -35,7 +35,8 @@ public class ElementalResistanceEnchantment extends Enchantment{
 		WATER(10, 8),
 		THUNDER(10, 8),
 		DARKNESS(10, 8),
-		LIGHT(10, 8);
+		LIGHT(10, 8),
+		ELEMENT(10, 8);
 
 		private final int minEnchantability;
 		private final int levelCost;
