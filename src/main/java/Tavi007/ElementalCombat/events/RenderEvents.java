@@ -20,7 +20,10 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.math.vector.Matrix4f;
@@ -29,6 +32,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -38,6 +42,19 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, value = Dist.CLIENT, bus = Bus.FORGE)
 public class RenderEvents {
 
+	@SubscribeEvent
+	public static void changeLivingEntityOverlayTexture(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
+		LivingEntity entityIn = event.getEntity();
+		if (entityIn.hurtTime > 0) {
+			//check which layer should be applied (yellow or green?)
+			
+//			LayerRenderer<LivingEntity, EntityModel<LivingEntity>> layer = new LayerRenderer<LivingEntity, EntityModel<LivingEntity>>(event.getRenderer());
+//			event.getRenderer().addLayer(layer);
+		}
+		else {
+		}
+	}
+	
 	@SubscribeEvent
 	public static void addTooltipInformation(ItemTooltipEvent event) {
 		ItemStack item = event.getItemStack();
