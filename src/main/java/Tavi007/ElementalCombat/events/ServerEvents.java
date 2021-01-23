@@ -88,7 +88,7 @@ public class ServerEvents {
 	public static void elementifyLivingHurtEvent(LivingHurtEvent event)
 	{
 		DamageSource damageSource = event.getSource();
-		String damageType = damageSource.getDamageType();
+		Entity immediateSource = damageSource.getImmediateSource();
 
 		// no modification. Entity should take normal damage and die eventually.
 		if(damageSource == DamageSource.OUT_OF_WORLD) {
@@ -100,8 +100,8 @@ public class ServerEvents {
 		String sourceStyle;
 
 		// check damageType
-		if (damageType.equals("player") || damageType.equals("mob")) {
-			LivingEntity livingEntitySource = (LivingEntity) damageSource.getImmediateSource();
+		if (immediateSource instanceof LivingEntity) {
+			LivingEntity livingEntitySource = (LivingEntity) immediateSource;
 			if(livingEntitySource.getHeldItemMainhand().isEmpty()){
 				//use data from livingEntity
 				AttackData atckCap = ElementalCombatAPI.getAttackData(livingEntitySource);
@@ -124,7 +124,7 @@ public class ServerEvents {
 				}
 			}
 		}
-		else if(damageSource.isProjectile()) {
+		else if(immediateSource instanceof ProjectileEntity) {
 			AttackData atckCap = ElementalCombatAPI.getAttackData((ProjectileEntity) damageSource.getImmediateSource());
 			sourceStyle = atckCap.getStyle();
 			sourceElement = atckCap.getElement();
