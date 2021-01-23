@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "elementalcombat:diamond_spear"
+        },
+        {
+            "item": "minecraft:diamond_axe"
+        }
+    ],
+    "result":
+    {
+        "item": "elementalcombat:diamond_halberd",
+        "count": 1
+    }
+}

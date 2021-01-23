@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        " xx",
+        " ax",
+        "a  "
+    ],
+    "key":
+    {
+        "x":
+        {
+            "tag": "minecraft:planks"
+        },
+        "a":
+        {
+            "item": "minecraft:stick"
+        }
+    },
+    "result":
+    {
+        "item": "elementalcombat:wooden_spear",
+        "count": 1
+    }
+}

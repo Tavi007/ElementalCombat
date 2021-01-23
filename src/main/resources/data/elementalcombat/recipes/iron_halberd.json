@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "elementalcombat:iron_spear"
+        },
+        {
+            "item": "minecraft:iron_axe"
+        }
+    ],
+    "result":
+    {
+        "item": "elementalcombat:iron_halberd",
+        "count": 1
+    }
+}
