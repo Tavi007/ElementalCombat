@@ -2,6 +2,17 @@
 	"itemGroup.elementalcombat" : "Elemental Combat",
 	"item.elementalcombat.fire_and_ice_sword" : "Fire & Ice Sword",
 	"item.elementalcombat.clock_chestplate" : "Clock Chestplate",
+
+	"item.elementalcombat.wooden_spear" : "Wooden Spear",
+	"item.elementalcombat.wooden_halberd" : "Wooden Halberd",
+	"item.elementalcombat.stone_spear" : "Stone Spear",
+	"item.elementalcombat.stone_halberd" : "Stone Halberd",
+	"item.elementalcombat.iron_spear" : "Iron Spear",
+	"item.elementalcombat.iron_halberd" : "Iron Halberd",
+	"item.elementalcombat.golden_spear" : "Golden Spear",
+	"item.elementalcombat.golden_halberd" : "Golden Halberd",
+	"item.elementalcombat.diamond_spear" : "Diamond Spear",
+	"item.elementalcombat.diamond_halberd" : "Diamond Halberd",
 	
 	"enchantment.elementalcombat.ice_protection" : "Ice Resistance",
 	"enchantment.elementalcombat.thunder_protection" : "Thunder Resistance",
