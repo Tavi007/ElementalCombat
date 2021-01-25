@@ -71,8 +71,9 @@ dependencies {
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}")
-//    compileOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}:api")
-//    runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}")
+	
+    compileOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}:api")
+    runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}")
 }
 
 jar {
@@ -90,8 +91,15 @@ jar {
 }
 
 repositories {
-    maven { url "https://maven.theillusivec4.top/" }
-//    maven { url "https://maven.tehnut.info" }
+    mavenCentral()
+    maven { 
+        name = "curios"
+		url = "https://maven.theillusivec4.top/" 
+	}
+    maven {
+		name = "hwyla"
+		url = "https://maven.tehnut.info" 
+	}
 }
 
 jar.finalizedBy('reobfJar') 

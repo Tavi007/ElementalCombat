@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.curios;
+package Tavi007.ElementalCombat.interaction;
 
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
