@@ -6,6 +6,7 @@ import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
+import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
@@ -36,6 +37,33 @@ public class ElementalCombatAPI
 	 */
 	public static AttackData getAttackData(LivingEntity entity){
 		return (AttackData) entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+	}
+	
+	/**
+	 * Returns the attack-combat data {@link AttackData} of the {@link LivingEntity}, but the held itemstack data will be applied aswell. 
+	 * @param entity A LivingEntity.
+	 * @return the AttackData, containing the attack style and attack element.
+	 */
+	public static AttackData getAttackDataWithActiveItem(LivingEntity entity) {
+		AttackData atckData = new AttackData();
+		if(entity.getHeldItemMainhand().isEmpty()){
+			//use data from livingEntity
+			atckData.set(ElementalCombatAPI.getAttackData(entity));
+		}
+		else {
+			//use data from held item
+			atckData.set(ElementalCombatAPI.getAttackData(entity.getHeldItemMainhand()));
+
+			//maybe mix and match with entity data? a wither skeleton will only use data from the stone sword...
+			AttackData atckDataEntity = ElementalCombatAPI.getAttackData(entity);
+			if (atckData.getStyle().equals(ServerConfig.getDefaultStyle())) {
+				atckData.setStyle(atckDataEntity.getStyle());
+			}
+			if (atckData.getElement().equals(ServerConfig.getDefaultElement())) {
+				atckData.setElement(atckDataEntity.getElement());
+			}
+		}
+		return atckData;
 	}
 
 	/**

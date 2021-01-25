@@ -1,7 +1,6 @@
 package Tavi007.ElementalCombat.events;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -13,8 +12,7 @@ import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ClientConfig;
-import Tavi007.ElementalCombat.config.ServerConfig;
-import Tavi007.ElementalCombat.util.DefenseDataHelper;
+import Tavi007.ElementalCombat.util.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -28,8 +26,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -61,30 +57,12 @@ public class RenderEvents {
 		List<ITextComponent> toolTip = event.getToolTip();
 		if (item != null) {
 			//attack
-			AttackData atckCap = new AttackData(ElementalCombatAPI.getAttackData(item));
-			if (!(atckCap.getStyle().equals(ServerConfig.getDefaultStyle()) || atckCap.getStyle().isEmpty())) {
-				String textAttackStyle = "" + TextFormatting.GRAY + "Attack Style: " + ElementalCombatAPI.getMappedString(atckCap.getStyle()) + TextFormatting.RESET;
-				toolTip.add(new StringTextComponent(textAttackStyle));
-			}
-			if (!(atckCap.getElement().equals(ServerConfig.getDefaultElement()) || atckCap.getElement().isEmpty())) {
-				String textAttackElement = "" + TextFormatting.GRAY + "Attack Element: " + ElementalCombatAPI.getMappedString(atckCap.getElement()) + TextFormatting.RESET;
-				toolTip.add(new StringTextComponent(textAttackElement));
-			}
+			AttackData atckData = new AttackData(ElementalCombatAPI.getAttackData(item));
+			toolTip.addAll(RenderHelper.getDisplayText(atckData));
 
 			//defense
-			DefenseData defCap = new DefenseData(ElementalCombatAPI.getDefenseData(item));
-			HashMap<String, Integer> defStyle = defCap.getStyleFactor();
-			if(!defStyle.isEmpty()) {
-				String textDefenseStyle = "" + TextFormatting.GRAY + "Style Resistance: " + TextFormatting.RESET;
-				toolTip.add(new StringTextComponent(textDefenseStyle));
-				toolTip.addAll(toDisplayText(defStyle));
-			}
-			HashMap<String, Integer> defElement = defCap.getElementFactor();
-			if(!defElement.isEmpty()) {
-				String textDefenseElement = "" + TextFormatting.GRAY + "Elemental Resistance:" + TextFormatting.RESET;
-				toolTip.add(new StringTextComponent(textDefenseElement));
-				toolTip.addAll(toDisplayText(defElement));
-			}
+			DefenseData defData = new DefenseData(ElementalCombatAPI.getDefenseData(item));
+			toolTip.addAll(RenderHelper.getDisplayText(defData));
 		}
 	}
 
@@ -98,46 +76,11 @@ public class RenderEvents {
 				if(mc.player != null) {
 					List<ITextComponent> list = new ArrayList<ITextComponent>();
 			
-					AttackData data = new AttackData();
-					if(mc.player.getHeldItemMainhand().isEmpty()){
-						//use data from livingEntity
-						AttackData atckCap = ElementalCombatAPI.getAttackData(mc.player);
-						data.setStyle(atckCap.getStyle());
-						data.setElement(atckCap.getElement());
-					}
-					else {
-						//use data from held item
-						AttackData atckCap = ElementalCombatAPI.getAttackData(mc.player.getHeldItemMainhand());
-						data.set(atckCap);
-
-						//maybe mix and match with entity data? a wither skeleton will only use data from the stone sword...
-						AttackData atckCapEntity = ElementalCombatAPI.getAttackData(mc.player);
-						if (data.getStyle().equals(ServerConfig.getDefaultStyle())) {
-							data.setStyle(atckCapEntity.getStyle());
-						}
-						if (data.getElement().equals(ServerConfig.getDefaultElement())) {
-							data.setElement(atckCapEntity.getElement());
-						}
-					}
+					AttackData atckData = ElementalCombatAPI.getAttackDataWithActiveItem(mc.player);
+					list.addAll(RenderHelper.getDisplayText(atckData));
 					
-					if(!data.isEmpty()) {
-						list.add(new StringTextComponent("Attack:"));
-						if(!data.getStyle().equals(ServerConfig.getDefaultStyle())) {
-							list.add(new StringTextComponent("" + TextFormatting.GRAY + " - " + ElementalCombatAPI.getMappedString(data.getStyle()) + TextFormatting.RESET));
-						}
-						if(!data.getElement().equals(ServerConfig.getDefaultElement())) {
-							list.add(new StringTextComponent("" + TextFormatting.GRAY + " - " + ElementalCombatAPI.getMappedString(data.getElement()) + TextFormatting.RESET));
-						}
-					}
-
-
 					DefenseData defData = ElementalCombatAPI.getDefenseData(mc.player);
-					if (!defData.isEmpty()) {
-						list.add(new StringTextComponent("Defense:"));
-						list.addAll(toDisplayText(defData.getStyleFactor()));
-						list.addAll(toDisplayText(defData.getElementFactor()));
-					}
-
+					list.addAll(RenderHelper.getDisplayText(defData));
 
 					if (!list.isEmpty()) {
 						MatrixStack matrixStack = event.getMatrixStack();
@@ -219,14 +162,6 @@ public class RenderEvents {
 				}
 			}
 		}
-	}
-
-	private static List<ITextComponent> toDisplayText(HashMap<String, Integer> map){
-		List<ITextComponent> list = new ArrayList<ITextComponent>();
-		map.forEach((key, factor) -> {
-			list.add(new StringTextComponent(DefenseDataHelper.toPercentageString(key, factor)));
-		});
-		return list;
 	}
 
 	//copied from Screen

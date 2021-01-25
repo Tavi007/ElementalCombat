@@ -2,12 +2,10 @@ package Tavi007.ElementalCombat.util;
 
 import java.util.HashMap;
 
-import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.EnchantmentList;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.util.text.TextFormatting;
 
 public class DefenseDataHelper {
 
@@ -149,24 +147,5 @@ public class DefenseDataHelper {
 	 */
 	public static float getPercentage(Integer factor) {
 		return ((float) factor)/ServerConfig.getMaxFactor();
-	}
-
-	/**
-	 * A Helper-function for constructing a formatted string. Used for tooltips and hud. (See {@link Tavi007.ElementalCombat.events.RenderEvents})
-	 * @param key The Name of the value. The key can be from the element or style defense mapping.
-	 * @param factor The corresponding value to the key from the element or style defense mapping.
-	 * @return A formatted String ready to be displayed.
-	 */
-	public static String toPercentageString(String key, Integer factor) {
-		//get color
-		Integer percentage = Math.round(DefenseDataHelper.getPercentage(factor)*100);
-		TextFormatting textFormatting = TextFormatting.GRAY;
-		if (percentage < 0) {textFormatting = TextFormatting.RED;}
-		if (percentage > 0 && percentage < 100) {textFormatting = TextFormatting.BLUE;}
-		if (percentage == 100) {textFormatting = TextFormatting.YELLOW;}
-		if (percentage > 100) {textFormatting = TextFormatting.GREEN;}
-
-		//make string
-		return "" + TextFormatting.GRAY + " - " + ElementalCombatAPI.getMappedString(key) + " " + textFormatting + String.valueOf(percentage)+ "%" + TextFormatting.RESET;
 	}
 }
