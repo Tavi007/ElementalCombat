@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:iron_chestplate"
+        },
+        {
+            "item": "minecraft:clock"
+        }
+    ],
+    "result":
+    {
+        "item": "elementalcombat:clock_chestplate",
+        "count": 1
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+		"   ",
+		"yax",
+		"   "
+    ],
+    "key":
+    {
+        "y":
+        {
+            "item": "minecraft:blaze_rod"
+        },
+        "x":
+        {
+            "item": "minecraft:blue_ice"
+        },
+        "a":
+        {
+            "item": "minecraft:iron_sword"
+        }
+    },
+    "result":
+    {
+        "item": "elementalcombat:fire_and_ice_sword",
+        "count": 1
+    }
+}
