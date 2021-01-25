@@ -1,15 +1,21 @@
 package Tavi007.ElementalCombat.events;
 
+import java.util.HashMap;
+
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
+import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
+import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -56,5 +62,19 @@ public class PlayerEvents
 		if(StartupClientOnly.TOGGLE_HUD.isKeyDown()){
 			ClientConfig.toogleHUD();
 		}
+	}
+	
+	@SubscribeEvent
+	public static void onItemCrafted(ItemCraftedEvent event) {
+		ItemStack stack = event.getCrafting();
+		ItemCombatProperties itemProperties = ElementalCombatAPI.getDefaultProperties(stack);
+
+		DefenseData defData = ElementalCombatAPI.getDefenseData(stack);
+		defData.setElementFactor(new HashMap<String, Integer>(itemProperties.getDefenseElement()));
+		defData.setElementFactor(new HashMap<String, Integer>(itemProperties.getDefenseStyle()));
+		
+		AttackData atckData = ElementalCombatAPI.getAttackData(stack);
+		final AttackData atck = new AttackData(itemProperties.getAttackStyle(), itemProperties.getAttackElement());
+		atckData.set(atck);
 	}
 }
