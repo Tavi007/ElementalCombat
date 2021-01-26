@@ -19,6 +19,8 @@
 	"enchantment.elementalcombat.water_protection" : "Water Resistance",
 	"enchantment.elementalcombat.darkness_protection" : "Darkness Resistance",
 	"enchantment.elementalcombat.light_protection" : "Light Resistance",
+	"enchantment.elementalcombat.element_protection" : "Element Resistance",
+	"enchantment.elementalcombat.magic_protection" : "Magic Resistance",
 	
 	"enchantment.elementalcombat.ice_aspect" : "Ice Aspekt",
 	"enchantment.elementalcombat.thunder_aspect" : "Thunder Aspekt",

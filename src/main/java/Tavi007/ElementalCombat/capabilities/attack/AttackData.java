@@ -19,8 +19,18 @@ public class AttackData {
 	}
 
 	public AttackData(String style, String element) {
-		this.style = style;
-		this.element = element;
+		if(style.isEmpty()) {
+			this.style = ServerConfig.getDefaultStyle();
+		}
+		else {
+			this.style = style;
+		}
+		if(element.isEmpty()) {
+			this.element = ServerConfig.getDefaultElement();
+		}
+		else {
+			this.element = element;
+		}
 	}
 
 	public AttackData(AttackData data) {
@@ -29,8 +39,18 @@ public class AttackData {
 	}
 
 	public void set(AttackData data) {
-		this.style = data.getStyle();
-		this.element = data.getElement();
+		if(data.getStyle().isEmpty()) {
+			this.style = ServerConfig.getDefaultStyle();
+		}
+		else {
+			this.style = data.getStyle();
+		}
+		if(data.getElement().isEmpty()) {
+			this.element = ServerConfig.getDefaultElement();
+		}
+		else {
+			this.element = data.getElement();
+		}
 	}
 
 	public void set(String style, String element) {
@@ -42,17 +62,31 @@ public class AttackData {
 
 	public String getStyle() {return this.style;}
 
-	public void setElement(String element) {this.element = element;}
+	public void setElement(String element) {
+		if(element.isEmpty()) {
+			this.element = ServerConfig.getDefaultElement();
+		}
+		else {
+			this.element = element;
+		}
+	}
 
-	public void setStyle(String style) {this.style = style;}
+	public void setStyle(String style) {
+		if(style.isEmpty()) {
+			this.style = ServerConfig.getDefaultStyle();
+		}
+		else {
+			this.style = style;
+		}
+	}
 
 	public boolean areEnchantmentChangesApplied() {
 		return this.areEnchantmentChangesApplied;
 	}
-	
+
 	public void applyEnchantmentChanges(Map<Enchantment, Integer> currentEnchantments) {
 		currentEnchantments.forEach((ench, value) -> {
-				//sword
+			//sword
 			if(ench.getName().equals(Enchantments.FIRE_ASPECT.getName())) {this.setElement("fire");}
 			if(ench.getName().equals(EnchantmentList.ICE_ASPECT.get().getName())) {this.setElement("ice");}
 			if(ench.getName().equals(EnchantmentList.WATER_ASPECT.get().getName())) {this.setElement("water");}

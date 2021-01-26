@@ -84,8 +84,10 @@ public class RenderEvents {
 					list.addAll(RenderHelper.getDisplayText(atckData));
 					
 					DefenseData defData = ElementalCombatAPI.getDefenseData(mc.player);
-					list.addAll(RenderHelper.getDisplayText(defData));
-
+					if(!defData.isEmpty()) {
+						list.addAll(RenderHelper.getDisplayText(defData));
+					}
+						
 					if (!list.isEmpty()) {
 						MatrixStack matrixStack = event.getMatrixStack();
 
