@@ -18,12 +18,12 @@ public class HandleWailaRender {
 	@SubscribeEvent
 	public static void onWailaRender(WailaTooltipEvent event) {
 		List<ITextComponent> toolTip = event.getCurrentTip();
-		AttackData atckData = new AttackData();
-		DefenseData defData = new DefenseData();
 		
 		// check entity
 		Entity entity = event.getAccessor().getEntity();
 		if (entity != null) {
+			AttackData atckData = new AttackData();
+			DefenseData defData = new DefenseData();
 			if(entity instanceof LivingEntity) {
 				atckData = ElementalCombatAPI.getAttackDataWithActiveItem((LivingEntity) entity);
 				defData = ElementalCombatAPI.getDefenseData((LivingEntity) entity);
@@ -32,11 +32,12 @@ public class HandleWailaRender {
 			else if (entity instanceof ProjectileEntity) {
 				atckData = ElementalCombatAPI.getAttackData((ProjectileEntity) entity);
 			}
+			
+			// add the text
+			toolTip.addAll(RenderHelper.getDisplayText(atckData));
+			if(!defData.isEmpty()) {
+				toolTip.addAll(RenderHelper.getIteratingDisplayText(defData));
+			}
 		}
-		
-		
-		// add the text
-		toolTip.addAll(RenderHelper.getDisplayText(atckData));
-		toolTip.addAll(RenderHelper.getDisplayText(defData));
 	}
 }

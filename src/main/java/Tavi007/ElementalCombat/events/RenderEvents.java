@@ -58,11 +58,15 @@ public class RenderEvents {
 		if (item != null) {
 			//attack
 			AttackData atckData = new AttackData(ElementalCombatAPI.getAttackData(item));
-			toolTip.addAll(RenderHelper.getDisplayText(atckData));
-
+			if(!atckData.isEmpty()) {
+				toolTip.addAll(RenderHelper.getDisplayText(atckData));
+			}
+			
 			//defense
 			DefenseData defData = new DefenseData(ElementalCombatAPI.getDefenseData(item));
-			toolTip.addAll(RenderHelper.getDisplayText(defData));
+			if(!defData.isEmpty()) {
+				toolTip.addAll(RenderHelper.getDisplayText(defData));
+			}
 		}
 	}
 

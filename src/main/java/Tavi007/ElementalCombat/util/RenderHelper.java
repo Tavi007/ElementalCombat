@@ -7,34 +7,55 @@ import java.util.List;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import Tavi007.ElementalCombat.config.ServerConfig;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
 public class RenderHelper {
 
+	private static int ticks = 0;
+	private static int counter = 0;
+	
 	public static List<ITextComponent> getDisplayText(AttackData atckData) {
 		List<ITextComponent> list = new ArrayList<ITextComponent>();
-		if(!atckData.isEmpty()) {
-			list.add(new StringTextComponent("Attack:"));
-			if(!atckData.getStyle().equals(ServerConfig.getDefaultStyle())) {
-				list.add(new StringTextComponent("" + TextFormatting.GRAY + " - " + ElementalCombatAPI.getMappedString(atckData.getStyle()) + TextFormatting.RESET));
-			}
-			if(!atckData.getElement().equals(ServerConfig.getDefaultElement())) {
-				list.add(new StringTextComponent("" + TextFormatting.GRAY + " - " + ElementalCombatAPI.getMappedString(atckData.getElement()) + TextFormatting.RESET));
-			}
-		}
+		list.add(new StringTextComponent("Attack:"));
+		list.add(new StringTextComponent("" + TextFormatting.GRAY + " - " + ElementalCombatAPI.getMappedString(atckData.getElement()) + " " + 
+										ElementalCombatAPI.getMappedString(atckData.getStyle()) + TextFormatting.RESET));
 		return list;
 	}
 
 	public static List<ITextComponent> getDisplayText(DefenseData defData) {
 		List<ITextComponent> list = new ArrayList<ITextComponent>();
-		if (!defData.isEmpty()) {
-			list.add(new StringTextComponent("Defense:"));
-			list.addAll(toDisplayText(defData.getStyleFactor()));
-			list.addAll(toDisplayText(defData.getElementFactor()));
+		list.add(new StringTextComponent("Defense:"));
+		list.addAll(toDisplayText(defData.getStyleFactor()));
+		list.addAll(toDisplayText(defData.getElementFactor()));
+		return list;
+	}
+
+	public static List<ITextComponent> getIteratingDisplayText(DefenseData defData) {
+		ticks++;
+		if(ticks>20) { // Is 1 second enough?
+			ticks = 0;
+			counter++;
 		}
+		if(counter>100) {
+			counter = 0;
+		}
+		
+		List<ITextComponent> list = new ArrayList<ITextComponent>();
+		list.add(new StringTextComponent("Defense:"));
+		
+		Object[] elementKeys = defData.getElementFactor().keySet().toArray();
+		if(elementKeys.length > 0) {
+			String key = (String) elementKeys[counter % elementKeys.length];
+			list.add(new StringTextComponent(toPercentageString(key, defData.getElementFactor().get(key) )));
+		}
+		Object[] styleKeys = defData.getStyleFactor().keySet().toArray();
+		if(styleKeys.length > 0) {
+			String key = (String) styleKeys[counter % styleKeys.length];
+			list.add(new StringTextComponent(toPercentageString(key, defData.getStyleFactor().get(key) )));
+		}
+		
 		return list;
 	}
 	
