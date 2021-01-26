@@ -15,8 +15,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
@@ -44,7 +42,7 @@ public class ServerEvents {
 		if(!event.getWorld().isRemote()){ // only server side should check
 			Entity entity = event.getEntity();
 
-			// for syncronising after switching dimensions
+			// for synchronization after switching dimensions
 			if (entity instanceof LivingEntity) {
 				LivingEntity livingEntity = (LivingEntity) entity;
 				DefenseData defData = ElementalCombatAPI.getDefenseData(livingEntity);
@@ -62,17 +60,7 @@ public class ServerEvents {
 					ProjectileEntity projectile = (ProjectileEntity) entity;
 					Entity  source = projectile.func_234616_v_();
 					if(source != null && source instanceof LivingEntity){
-						LivingEntity sourceEntity = (LivingEntity) source;
-						// If sourceEntity holds an item, use item data.
-						// If not, use data from sourceEntity as default.
-						AttackData sourceData;
-						if(sourceEntity.hasItemInSlot(EquipmentSlotType.MAINHAND)){
-							ItemStack item = sourceEntity.getActiveItemStack();
-							sourceData = ElementalCombatAPI.getAttackData(item);
-						}
-						else{
-							sourceData = ElementalCombatAPI.getAttackData(sourceEntity);
-						}
+						AttackData sourceData = ElementalCombatAPI.getAttackDataWithActiveItem((LivingEntity) source);
 
 						//copy elemental attack capability
 						AttackData projectileData = ElementalCombatAPI.getAttackData(projectile);
@@ -95,37 +83,16 @@ public class ServerEvents {
 			return;	
 		}
 
-		// Get combat data from attack
+		// Get combat data from source
 		String sourceElement;
 		String sourceStyle;
-
-		// check damageType
 		if (immediateSource instanceof LivingEntity) {
-			LivingEntity livingEntitySource = (LivingEntity) immediateSource;
-			if(livingEntitySource.getHeldItemMainhand().isEmpty()){
-				//use data from livingEntity
-				AttackData atckCap = ElementalCombatAPI.getAttackData(livingEntitySource);
-				sourceStyle = atckCap.getStyle();
-				sourceElement = atckCap.getElement();
-			}
-			else {
-				//use data from held item
-				AttackData atckCap = ElementalCombatAPI.getAttackData(livingEntitySource.getHeldItemMainhand());
-				sourceStyle = atckCap.getStyle();
-				sourceElement = atckCap.getElement();
-
-				//maybe mix and match with entity data? a wither skeleton will only use data from the stone sword...
-				AttackData atckCapEntity = ElementalCombatAPI.getAttackData(livingEntitySource);
-				if (sourceStyle.equals(ServerConfig.getDefaultStyle())) {
-					sourceStyle = atckCapEntity.getStyle();
-				}
-				if (sourceElement.equals(ServerConfig.getDefaultElement())) {
-					sourceElement = atckCapEntity.getElement();
-				}
-			}
+			AttackData atckCap = ElementalCombatAPI.getAttackDataWithActiveItem((LivingEntity) immediateSource);
+			sourceStyle = atckCap.getStyle();
+			sourceElement = atckCap.getElement();
 		}
 		else if(immediateSource instanceof ProjectileEntity) {
-			AttackData atckCap = ElementalCombatAPI.getAttackData((ProjectileEntity) damageSource.getImmediateSource());
+			AttackData atckCap = ElementalCombatAPI.getAttackData((ProjectileEntity) immediateSource);
 			sourceStyle = atckCap.getStyle();
 			sourceElement = atckCap.getElement();
 		}
@@ -135,7 +102,7 @@ public class ServerEvents {
 			sourceElement = damageSourceProperties.getAttackElement();
 		}
 
-		//defaul values in case style or element is empty (which should not happen)
+		//default values in case style or element is empty (which should not happen)
 		if (sourceStyle.isEmpty()) {sourceStyle = ServerConfig.getDefaultStyle();}
 		if (sourceElement.isEmpty()) {sourceElement = ServerConfig.getDefaultElement();}
 
