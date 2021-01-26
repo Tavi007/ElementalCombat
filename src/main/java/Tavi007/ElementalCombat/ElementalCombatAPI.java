@@ -35,10 +35,10 @@ public class ElementalCombatAPI
 	 * @param entity A LivingEntity.
 	 * @return the AttackData, containing the attack style and attack element.
 	 */
-	public static AttackData getAttackData(LivingEntity entity){
+	public static AttackData getAttackData(LivingEntity entity) {
 		return (AttackData) entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
 	}
-	
+
 	/**
 	 * Returns the attack-combat data {@link AttackData} of the {@link LivingEntity}, but the held itemstack data will be applied aswell. 
 	 * @param entity A LivingEntity.
@@ -71,7 +71,7 @@ public class ElementalCombatAPI
 	 * @param entity A LivingEntity.
 	 * @return the DefenseData, containing the style defense-mapping and element defense-mapping.
 	 */
-	public static DefenseData getDefenseData(LivingEntity entity){
+	public static DefenseData getDefenseData(LivingEntity entity) {
 		return (DefenseData) entity.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
 	}
 
@@ -85,12 +85,17 @@ public class ElementalCombatAPI
 	 * @param stack An ItemStack.
 	 * @return the AttackData, containing the attack style and attack element.
 	 */
-	public static AttackData getAttackData(ItemStack stack){
-		AttackData attackData = (AttackData) stack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
-		if (!attackData.areEnchantmentChangesApplied()) {
-			attackData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
+	public static AttackData getAttackData(ItemStack stack) {
+		if(stack.isEmpty()) {
+			return new AttackData();
 		}
-		return attackData;
+		else {
+			AttackData attackData = (AttackData) stack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+			if (!attackData.areEnchantmentChangesApplied()) {
+				attackData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
+			}
+			return attackData;
+		}
 	}
 
 
@@ -99,12 +104,17 @@ public class ElementalCombatAPI
 	 * @param stack An ItemStack.
 	 * @return the DefenseData, containing the style defense-mapping and element defense-mapping.
 	 */
-	public static DefenseData getDefenseData(ItemStack stack){
-		DefenseData defenseData = (DefenseData) stack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
-		if (!defenseData.areEnchantmentChangesApplied()) {
-			defenseData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
+	public static DefenseData getDefenseData(ItemStack stack) {
+		if(stack.isEmpty()) {
+			return new DefenseData();
 		}
-		return defenseData;
+		else {
+			DefenseData defenseData = (DefenseData) stack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
+			if (!defenseData.areEnchantmentChangesApplied()) {
+				defenseData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
+			}
+			return defenseData;
+		}
 	}
 
 	/////////////////
@@ -116,7 +126,7 @@ public class ElementalCombatAPI
 	 * @param projectileEntity A ProjectileEntity.
 	 * @return the AttackData, containing the attack style and attack element.
 	 */
-	public static AttackData getAttackData(ProjectileEntity projectileEntity){
+	public static AttackData getAttackData(ProjectileEntity projectileEntity) {
 		return (AttackData) projectileEntity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
 	}
 
@@ -136,13 +146,13 @@ public class ElementalCombatAPI
 		DefenseData defData = ElementalCombatAPI.getDefenseData(livingEntity);
 		AttackData atckData = ElementalCombatAPI.getAttackData(livingEntity);
 		defData.add(dataToAdd);
-		
+
 		if (livingEntity instanceof ServerPlayerEntity) {
 			EntityMessage messageToClient = new EntityMessage(atckData, dataToAdd, true, livingEntity.getUniqueID());
 			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 		}
 	}
-	
+
 	/**
 	 * Adds additional {@link DefenseData} to the DefenseData of the {@link ItemStack}. The values of the style and element mappings will be summed up.
 	 * @param dataToAdd The additional DefenseData.
@@ -153,8 +163,8 @@ public class ElementalCombatAPI
 		DefenseData defDataItem = ElementalCombatAPI.getDefenseData(stack);
 		defDataItem.add(dataToAdd);
 	}
-	
-	
+
+
 	////////////////////////
 	// get default values //
 	////////////////////////
@@ -202,7 +212,7 @@ public class ElementalCombatAPI
 		ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "items/" + rlItem.getPath());
 		return new ItemCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
 	}
-	
+
 	/**
 	 * Returns a copy of the default {@link BiomeCombatProperties} of any {@link Biome}.
 	 * @param biome The Biome.
