@@ -1,6 +1,6 @@
 {
 "mapping":{
-	"natural":"Natural",
+	"normal":"Normal",
 	"fire":"Fire",
 	"ice":"Ice",
 	"water":"Water",
@@ -9,13 +9,14 @@
 	"light":"Light",
 	"wind":"Wind",
 	"earth":"Earth",
-	"bio":"Bio",
+	"flora":"Flora",
 	
-	"basic":"Basic",
+	"hit":"Hit",
 	"slash":"Slash",
 	"stab":"Stab",
 	"explosion":"Explosion",
 	"projectile":"Projectile",
+	"enviroment":"Enviroment",
 	"magic":"Magic"
 	}
 }

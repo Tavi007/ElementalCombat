@@ -27,10 +27,10 @@ public class ServerConfig {
 	{
 		defaultElement = builder
 				.comment("The default element.")
-				.define("defaultElement", "natural");
+				.define("defaultElement", "normal");
 		defaultStyle = builder
 				.comment("The default style.")
-				.define("defaultStyle", "basic");
+				.define("defaultStyle", "hit");
 		maxFactor = builder
 				.comment("The maximal combat factor. See vanilla Enchantment Protection Factor.")
 				.defineInRange("maxFactor", 100, 1, 200);

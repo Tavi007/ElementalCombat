@@ -7,8 +7,8 @@
 	},
 	
 	"defense_element":{
-		"bio":12
+		"flora":12
 	},
 	
-	"biome_dependency":false
+	"florame_dependency":false
 }
