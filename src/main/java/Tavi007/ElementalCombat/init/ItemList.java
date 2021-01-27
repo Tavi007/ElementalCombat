@@ -5,6 +5,7 @@ import Tavi007.ElementalCombat.items.FireAndIceSword;
 import Tavi007.ElementalCombat.items.HalberdItem;
 import Tavi007.ElementalCombat.items.ClockChestplate;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.Properties;
@@ -37,4 +38,7 @@ public class ItemList {
 	public static final RegistryObject<Item> DIAMOND_HALBERD = ITEMS.register("diamond_halberd", () -> new HalberdItem(ItemTier.DIAMOND, 5, -2.8F, singleStack));
 	
 	//armor
+	public static final RegistryObject<Item> CREEPER_CHESTPLATE = ITEMS.register("creeper_chestplate", () -> new ArmorItem(ArmorMaterial.IRON, EquipmentSlotType.CHEST, singleStack));
+	public static final RegistryObject<Item> CREEPER_LEGGINS = ITEMS.register("creeper_leggings", () -> new ArmorItem(ArmorMaterial.IRON, EquipmentSlotType.LEGS, singleStack));
+	public static final RegistryObject<Item> CREEPER_BOOTS = ITEMS.register("creeper_boots", () -> new ArmorItem(ArmorMaterial.IRON, EquipmentSlotType.FEET, singleStack));
 }

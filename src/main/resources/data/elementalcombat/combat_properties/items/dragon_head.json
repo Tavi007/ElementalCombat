@@ -1,0 +1,15 @@
+{
+	"attack_style":"",
+	"attack_element":"",
+	
+	"defense_style":{
+		"projectile":-10
+	},
+	
+	"defense_element":{
+		"fire":10,
+		"ice":10,
+		"water":10,
+		"thunder":10
+	}
+}

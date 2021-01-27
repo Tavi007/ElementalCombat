@@ -14,6 +14,11 @@
 	"item.elementalcombat.diamond_spear" : "Diamond Spear",
 	"item.elementalcombat.diamond_halberd" : "Diamond Halberd",
 	
+	"item.elementalcombat.creeper_boots" : "Creeper Boots",
+	"item.elementalcombat.creeper_leggings" : "Creeper Leggings",
+	"item.elementalcombat.creeper_chestplate" : "Creeper Chestplate",
+	"item.elementalcombat.creeper_helmet" : "Creeper Helmet",
+	
 	"enchantment.elementalcombat.ice_protection" : "Ice Resistance",
 	"enchantment.elementalcombat.thunder_protection" : "Thunder Resistance",
 	"enchantment.elementalcombat.water_protection" : "Water Resistance",
