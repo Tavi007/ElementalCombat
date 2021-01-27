@@ -5,6 +5,7 @@ import java.util.List;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.RenderHelper;
 import mcp.mobius.waila.api.event.WailaTooltipEvent;
 import net.minecraft.entity.Entity;
@@ -15,6 +16,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class HandleWailaRender {
 
+	static int ticks=0;
+	static int counter=0;
+	
 	@SubscribeEvent
 	public static void onWailaRender(WailaTooltipEvent event) {
 		List<ITextComponent> toolTip = event.getCurrentTip();
@@ -32,11 +36,20 @@ public class HandleWailaRender {
 			else if (entity instanceof ProjectileEntity) {
 				atckData = ElementalCombatAPI.getAttackData((ProjectileEntity) entity);
 			}
+
+			ticks++;
+			if(ticks>ClientConfig.iterationSpeed()) { 
+				ticks = 0;
+				counter++;
+			}
+			if(counter>100) {
+				counter = 0;
+			}
 			
 			// add the text
 			toolTip.addAll(RenderHelper.getDisplayText(atckData));
 			if(!defData.isEmpty()) {
-				toolTip.addAll(RenderHelper.getIteratingDisplayText(defData));
+				toolTip.addAll(RenderHelper.getIteratingDisplayText(defData, counter));
 			}
 		}
 	}

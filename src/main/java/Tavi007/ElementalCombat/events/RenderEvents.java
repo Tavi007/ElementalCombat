@@ -70,6 +70,9 @@ public class RenderEvents {
 		}
 	}
 
+	static int ticks=0;
+	static int counter=0;
+	
 	@SubscribeEvent
 	public static void displayData(RenderGameOverlayEvent.Post event)
 	{
@@ -85,7 +88,20 @@ public class RenderEvents {
 					
 					DefenseData defData = ElementalCombatAPI.getDefenseData(mc.player);
 					if(!defData.isEmpty()) {
-						list.addAll(RenderHelper.getDisplayText(defData));
+						if(ClientConfig.iterateDefense()) {
+							ticks++;
+							if(ticks>1.5*ClientConfig.iterationSpeed()) { //this event triggers slightly more often than the waila tooltip 
+								ticks = 0;
+								counter++;
+							}
+							if(counter>100) {
+								counter = 0;
+							}
+							list.addAll(RenderHelper.getIteratingDisplayText(defData, counter));
+						}
+						else {
+							list.addAll(RenderHelper.getDisplayText(defData));
+						}
 					}
 						
 					if (!list.isEmpty()) {

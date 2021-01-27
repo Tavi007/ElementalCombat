@@ -12,9 +12,6 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
 public class RenderHelper {
-
-	private static int ticks = 0;
-	private static int counter = 0;
 	
 	public static List<ITextComponent> getDisplayText(AttackData atckData) {
 		List<ITextComponent> list = new ArrayList<ITextComponent>();
@@ -32,16 +29,7 @@ public class RenderHelper {
 		return list;
 	}
 
-	public static List<ITextComponent> getIteratingDisplayText(DefenseData defData) {
-		ticks++;
-		if(ticks>20) { // Is 1 second enough?
-			ticks = 0;
-			counter++;
-		}
-		if(counter>100) {
-			counter = 0;
-		}
-		
+	public static List<ITextComponent> getIteratingDisplayText(DefenseData defData, int counter) {
 		List<ITextComponent> list = new ArrayList<ITextComponent>();
 		list.add(new StringTextComponent("Defense:"));
 		
