@@ -1,0 +1,29 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        " x ",
+        "yay",
+        " y "
+    ],
+    "key":
+    {
+        "x":
+        {
+            "item": "minecraft:creeper_head"
+        },
+        "y":
+        {
+            "item": "minecraft:gunpowder"
+        },
+        "a":
+        {
+            "item": "minecraft:iron_boots"
+        }
+    },
+    "result":
+    {
+        "item": "elementalcombat:creeper_boots",
+        "count": 1
+    }
+}

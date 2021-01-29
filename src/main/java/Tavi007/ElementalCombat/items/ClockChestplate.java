@@ -4,9 +4,11 @@ import java.util.HashMap;
 
 import javax.annotation.Nullable;
 
+import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
@@ -51,5 +53,11 @@ public class ClockChestplate extends  ArmorItem {
     {
         stack.setTag(nbt);
         ElementalCombatAPI.getDefenseData(stack).set(ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt));
+    }
+
+    @Nullable
+    @Override
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+        return ElementalCombat.MOD_ID + ":textures/models/armor/clock_chestplate.png";
     }
 }
