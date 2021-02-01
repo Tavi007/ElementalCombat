@@ -9,6 +9,7 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.ParticleList;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
+import Tavi007.ElementalCombat.network.DisableRedMessage;
 import Tavi007.ElementalCombat.network.EntityMessage;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.entity.Entity;
@@ -117,13 +118,19 @@ public class ServerEvents {
 
 		// display particles
 		displayParticle(defenseStyleScaling, defenseElementScaling, target.getEyePosition(0), (ServerWorld) target.getEntityWorld());
+		
 
+		// send message to disable the red overlaytexture from rendering
+		DisableRedMessage messageToClient = new DisableRedMessage(target.getEntityId());
+		ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
+		
 		// heals the target, if damage is lower than 0
 		if(damageAmount <= 0)
 		{
 			target.heal(-damageAmount);
 			event.setCanceled(true);
 			damageAmount = 0;
+			
 		}
 
 		event.setAmount(damageAmount);

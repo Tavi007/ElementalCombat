@@ -36,8 +36,7 @@ public class CombatDataMessage {
 		this.messageIsValid = false;
 	}
 
-	public static CombatDataMessage readCombatDataFromPacket(PacketBuffer buf)
-	{
+	public static CombatDataMessage readCombatDataFromPacket(PacketBuffer buf) {
 		CombatDataMessage retval = new CombatDataMessage();
 		try {
 			retval.getDefenseData().setElementFactor(readMap(buf));
@@ -54,8 +53,7 @@ public class CombatDataMessage {
 		return retval;
 	}
 
-	public void writeCombatDataToPacket(PacketBuffer buf)
-	{
+	public void writeCombatDataToPacket(PacketBuffer buf) {
 		if (!this.messageIsValid) return;
 		writeMap(buf, this.defToSend.getElementFactor());
 		writeMap(buf, this.defToSend.getStyleFactor());

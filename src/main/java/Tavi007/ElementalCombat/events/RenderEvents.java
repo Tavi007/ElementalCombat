@@ -11,6 +11,8 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.capabilities.render.HurtOverlayData;
+import Tavi007.ElementalCombat.capabilities.render.HurtOverlayDataCapability;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.RenderHelper;
 import net.minecraft.client.Minecraft;
@@ -18,7 +20,6 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
@@ -39,15 +40,25 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 public class RenderEvents {
 
 	@SubscribeEvent
-	public static void changeLivingEntityOverlayTexture(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
+	public static void RenderLivingEventPre(RenderLivingEvent.Pre<LivingEntity, EntityModel<LivingEntity>> event) {
 		LivingEntity entityIn = event.getEntity();
-		if (entityIn.hurtTime > 0) {
-			//check which layer should be applied (yellow or green?)
-			
-//			LayerRenderer<LivingEntity, EntityModel<LivingEntity>> layer = new LayerRenderer<LivingEntity, EntityModel<LivingEntity>>(event.getRenderer());
-//			event.getRenderer().addLayer(layer);
+		HurtOverlayData data = (HurtOverlayData) entityIn.getCapability(HurtOverlayDataCapability.HURT_OVERLAY_CAPABILITY, null).orElse(new HurtOverlayData());
+		if (data.disableRedOverlay) {
+			data.setHurtTime(entityIn.hurtTime);
+			entityIn.hurtTime = 0; //desync client and server hurtTime. Is this a problem?
 		}
 		else {
+			data.disableRedOverlay = false;
+		}
+	}
+	
+	@SubscribeEvent
+	public static void RenderLivingEventPost(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
+		LivingEntity entityIn = event.getEntity();
+		HurtOverlayData data = (HurtOverlayData) entityIn.getCapability(HurtOverlayDataCapability.HURT_OVERLAY_CAPABILITY, null).orElse(new HurtOverlayData());
+		if (data.disableRedOverlay && data.getHurtTime() > 0) {
+			entityIn.hurtTime = data.getHurtTime();
+			data.setHurtTime(0);
 		}
 	}
 	
