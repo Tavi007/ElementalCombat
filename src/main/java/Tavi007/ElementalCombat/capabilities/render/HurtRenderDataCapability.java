@@ -18,9 +18,9 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-public class HurtOverlayDataCapability {
-	@CapabilityInject(HurtOverlayData.class)
-	public static final Capability<HurtOverlayData> HURT_OVERLAY_CAPABILITY = null;
+public class HurtRenderDataCapability {
+	@CapabilityInject(HurtRenderData.class)
+	public static final Capability<HurtRenderData> HURT_RENDER_CAPABILITY = null;
 
 	/**
 	 * The default {@link Direction} to use for this capability.
@@ -33,37 +33,37 @@ public class HurtOverlayDataCapability {
 	public static final ResourceLocation ID = new ResourceLocation(ElementalCombat.MOD_ID, "hurt_overlay");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(HurtOverlayData.class, new Capability.IStorage<HurtOverlayData>() {
+		CapabilityManager.INSTANCE.register(HurtRenderData.class, new Capability.IStorage<HurtRenderData>() {
 
 			@Override
-			public INBT writeNBT(final Capability<HurtOverlayData> capability, final HurtOverlayData instance, final Direction side) {
+			public INBT writeNBT(final Capability<HurtRenderData> capability, final HurtRenderData instance, final Direction side) {
 
 				//fill nbt with data
 				CompoundNBT nbt = new CompoundNBT();
 				nbt.put("hurt_time", IntNBT.valueOf(instance.getHurtTime()));
-				nbt.put("disable_red", ByteNBT.valueOf(instance.disableRedOverlay));
+				nbt.put("disable_flag", ByteNBT.valueOf(instance.disableFlag));
 				return nbt;
 			}
 
 			@Override
-			public void readNBT(final Capability<HurtOverlayData> capability, final HurtOverlayData instance, final Direction side, final INBT nbt) {
+			public void readNBT(final Capability<HurtRenderData> capability, final HurtRenderData instance, final Direction side, final INBT nbt) {
 				IntNBT timeNBT = (IntNBT) ((CompoundNBT) nbt).get("hurt_time");
-				ByteNBT redNBT = (ByteNBT) ((CompoundNBT) nbt).get("disable_red");
+				ByteNBT redNBT = (ByteNBT) ((CompoundNBT) nbt).get("disable_flag");
 				
 				instance.setHurtTime(timeNBT.getInt());
 				if(redNBT.equals(ByteNBT.ONE)) {
-					instance.disableRedOverlay = true;
+					instance.disableFlag = true;
 				}
 				else {
-					instance.disableRedOverlay = false;
+					instance.disableFlag = false;
 				}
 
 			}
-		}, () -> new HurtOverlayData());
+		}, () -> new HurtRenderData());
 	}
 
-	public static ICapabilityProvider createProvider(final HurtOverlayData atck) {
-		return new SerializableCapabilityProvider<>(HURT_OVERLAY_CAPABILITY, DEFAULT_FACING, atck);
+	public static ICapabilityProvider createProvider(final HurtRenderData atck) {
+		return new SerializableCapabilityProvider<>(HURT_RENDER_CAPABILITY, DEFAULT_FACING, atck);
 	}
 
 
@@ -81,8 +81,8 @@ public class HurtOverlayDataCapability {
 		@SubscribeEvent
 		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
 			if (event.getObject() instanceof LivingEntity) {
-				final HurtOverlayData HurtOverlayData = new HurtOverlayData();
-				event.addCapability(ID, createProvider(HurtOverlayData));
+				final HurtRenderData HurtRenderData = new HurtRenderData();
+				event.addCapability(ID, createProvider(HurtRenderData));
 			}
 		}
 	}

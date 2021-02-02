@@ -7,8 +7,8 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import Tavi007.ElementalCombat.capabilities.render.HurtOverlayData;
-import Tavi007.ElementalCombat.capabilities.render.HurtOverlayDataCapability;
+import Tavi007.ElementalCombat.capabilities.render.HurtRenderData;
+import Tavi007.ElementalCombat.capabilities.render.HurtRenderDataCapability;
 import Tavi007.ElementalCombat.init.StartupCommon;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
@@ -41,7 +41,7 @@ public class PackageHandlerOnClient {
 		ctx.enqueueWork(() -> processMessage(clientWorld.get(), message));
 	}
 
-	public static void onDisableRedMessageReceived(final DisableRedMessage message, Supplier<NetworkEvent.Context> ctxSupplier) {
+	public static void onDisableDamageRenderMessageReceived(final DisableDamageRenderMessage message, Supplier<NetworkEvent.Context> ctxSupplier) {
 		NetworkEvent.Context ctx = ctxSupplier.get();
 		LogicalSide sideReceived = ctx.getDirection().getReceptionSide();
 		ctx.setPacketHandled(true);
@@ -80,13 +80,13 @@ public class PackageHandlerOnClient {
 		}
 	}
 	
-	private static void processMessage(ClientWorld clientWorld, DisableRedMessage message)
+	private static void processMessage(ClientWorld clientWorld, DisableDamageRenderMessage message)
 	{
 		Entity entity = clientWorld.getEntityByID((message.getId()));
 		if(entity instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity) entity;
-			HurtOverlayData data = (HurtOverlayData) livingEntity.getCapability(HurtOverlayDataCapability.HURT_OVERLAY_CAPABILITY, null).orElse(new HurtOverlayData());
-			data.disableRedOverlay = true;
+			HurtRenderData data = (HurtRenderData) livingEntity.getCapability(HurtRenderDataCapability.HURT_RENDER_CAPABILITY, null).orElse(new HurtRenderData());
+			data.disableFlag = true;
 		}
 	}
 

@@ -3,24 +3,24 @@ package Tavi007.ElementalCombat.network;
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.network.PacketBuffer;
 
-public class DisableRedMessage {
+public class DisableDamageRenderMessage {
 
 	private boolean messageIsValid;
 	private int id;
 	
-	public DisableRedMessage(int id) {
+	public DisableDamageRenderMessage(int id) {
 		this.messageIsValid = true;
 		this.id = id;
 	}
 	
-	public DisableRedMessage(DisableRedMessage message) {
+	public DisableDamageRenderMessage(DisableDamageRenderMessage message) {
 		this.messageIsValid = message.isMessageValid();
 		this.id = message.getId();
 	}
 
 
 	// for use by the message handler only.
-	public DisableRedMessage(){
+	public DisableDamageRenderMessage(){
 		this.messageIsValid = false;
 		this.id = 0;
 	}
@@ -29,8 +29,8 @@ public class DisableRedMessage {
 	public int getId() {return this.id;}
 	private void setId(int id) {this.id = id;}
 	
-	public static DisableRedMessage decode(PacketBuffer buf) {
-		DisableRedMessage retval = new DisableRedMessage();
+	public static DisableDamageRenderMessage decode(PacketBuffer buf) {
+		DisableDamageRenderMessage retval = new DisableDamageRenderMessage();
 		try {
 			retval.setId(buf.readInt());
 			

@@ -11,8 +11,8 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import Tavi007.ElementalCombat.capabilities.render.HurtOverlayData;
-import Tavi007.ElementalCombat.capabilities.render.HurtOverlayDataCapability;
+import Tavi007.ElementalCombat.capabilities.render.HurtRenderData;
+import Tavi007.ElementalCombat.capabilities.render.HurtRenderDataCapability;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.RenderHelper;
 import net.minecraft.client.Minecraft;
@@ -28,6 +28,7 @@ import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -40,27 +41,38 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 public class RenderEvents {
 
 	@SubscribeEvent
-	public static void RenderLivingEventPre(RenderLivingEvent.Pre<LivingEntity, EntityModel<LivingEntity>> event) {
+	public static void onRenderLivingEventPre(RenderLivingEvent.Pre<LivingEntity, EntityModel<LivingEntity>> event) {
 		LivingEntity entityIn = event.getEntity();
-		HurtOverlayData data = (HurtOverlayData) entityIn.getCapability(HurtOverlayDataCapability.HURT_OVERLAY_CAPABILITY, null).orElse(new HurtOverlayData());
-		if (data.disableRedOverlay) {
-			data.setHurtTime(entityIn.hurtTime);
-			entityIn.hurtTime = 0; //desync client and server hurtTime. Is this a problem?
+		HurtRenderData data = (HurtRenderData) entityIn.getCapability(HurtRenderDataCapability.HURT_RENDER_CAPABILITY, null).orElse(new HurtRenderData());
+		if(entityIn.hurtTime > 0) {
+			if (data.disableFlag) {
+				data.setHurtTime(entityIn.hurtTime);
+				entityIn.hurtTime = 0; //desync client and server hurtTime. Is this a problem?
+				
+				//to do: add green overlay texture
+			}
 		}
 		else {
-			data.disableRedOverlay = false;
+			data.disableFlag = false;
 		}
+		
 	}
 	
 	@SubscribeEvent
-	public static void RenderLivingEventPost(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
+	public static void onRenderLivingEventPost(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
 		LivingEntity entityIn = event.getEntity();
-		HurtOverlayData data = (HurtOverlayData) entityIn.getCapability(HurtOverlayDataCapability.HURT_OVERLAY_CAPABILITY, null).orElse(new HurtOverlayData());
-		if (data.disableRedOverlay && data.getHurtTime() > 0) {
+		HurtRenderData data = (HurtRenderData) entityIn.getCapability(HurtRenderDataCapability.HURT_RENDER_CAPABILITY, null).orElse(new HurtRenderData());
+		if (data.disableFlag && data.getHurtTime() > 0) {
 			entityIn.hurtTime = data.getHurtTime();
 			data.setHurtTime(0);
 		}
 	}
+	
+//	@SubscribeEvent
+//	public static void onEntityViewRenderEvent(EntityViewRenderEvent event) {
+//		
+//	}
+	
 	
 	@SubscribeEvent
 	public static void addTooltipInformation(ItemTooltipEvent event) {
