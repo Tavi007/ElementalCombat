@@ -20,15 +20,17 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IReorderingProcessor;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -48,16 +50,18 @@ public class RenderEvents {
 			if (data.disableFlag) {
 				data.setHurtTime(entityIn.hurtTime);
 				entityIn.hurtTime = 0; //desync client and server hurtTime. Is this a problem?
-				
+
 				//to do: add green overlay texture
+				//				LayerRenderer<LivingEntity, EntityModel<LivingEntity>> layer = new ;
+				//				event.getRenderer().addLayer(layer);
 			}
 		}
 		else {
 			data.disableFlag = false;
 		}
-		
+
 	}
-	
+
 	@SubscribeEvent
 	public static void onRenderLivingEventPost(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
 		LivingEntity entityIn = event.getEntity();
@@ -67,13 +71,25 @@ public class RenderEvents {
 			data.setHurtTime(0);
 		}
 	}
-	
-//	@SubscribeEvent
-//	public static void onEntityViewRenderEvent(EntityViewRenderEvent event) {
-//		
-//	}
-	
-	
+
+	@SubscribeEvent
+	public static void onEntityViewRenderEvent(CameraSetup event) {
+		Minecraft mc = Minecraft.getInstance();
+		if(mc.player != null) {
+			if (mc.player.hurtTime > 0) {
+				HurtRenderData data = (HurtRenderData) mc.player.getCapability(HurtRenderDataCapability.HURT_RENDER_CAPABILITY, null).orElse(new HurtRenderData());
+				if(data.disableFlag) {
+					// Use the same calculation as in GameRenderer#hurtCameraEffect.
+					float f = (float) (mc.player.hurtTime - event.getRenderPartialTicks());
+					f = f / (float) mc.player.maxHurtTime;
+					f = MathHelper.sin(f * f * f * f * (float)Math.PI);
+					event.setRoll(f * 14.0F); // counter acts the screen shake. Only the hand is moving now.
+				}
+			}
+		}
+	}
+
+
 	@SubscribeEvent
 	public static void addTooltipInformation(ItemTooltipEvent event) {
 		ItemStack item = event.getItemStack();
@@ -84,7 +100,7 @@ public class RenderEvents {
 			if(!atckData.isEmpty()) {
 				toolTip.addAll(RenderHelper.getDisplayText(atckData));
 			}
-			
+
 			//defense
 			DefenseData defData = new DefenseData(ElementalCombatAPI.getDefenseData(item));
 			if(!defData.isEmpty()) {
@@ -95,7 +111,7 @@ public class RenderEvents {
 
 	static int ticks=0;
 	static int counter=0;
-	
+
 	@SubscribeEvent
 	public static void displayData(RenderGameOverlayEvent.Post event)
 	{
@@ -105,10 +121,10 @@ public class RenderEvents {
 				Minecraft mc = Minecraft.getInstance();
 				if(mc.player != null) {
 					List<ITextComponent> list = new ArrayList<ITextComponent>();
-			
+
 					AttackData atckData = ElementalCombatAPI.getAttackDataWithActiveItem(mc.player);
 					list.addAll(RenderHelper.getDisplayText(atckData));
-					
+
 					DefenseData defData = ElementalCombatAPI.getDefenseData(mc.player);
 					if(!defData.isEmpty()) {
 						if(ClientConfig.iterateDefense()) {
@@ -126,7 +142,7 @@ public class RenderEvents {
 							list.addAll(RenderHelper.getDisplayText(defData));
 						}
 					}
-						
+
 					if (!list.isEmpty()) {
 						MatrixStack matrixStack = event.getMatrixStack();
 
