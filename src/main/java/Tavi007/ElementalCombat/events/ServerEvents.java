@@ -17,6 +17,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
@@ -133,8 +134,8 @@ public class ServerEvents {
 			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 
 			// plays a healing sound 
-			SoundEvent soundevent = SoundEvents.BLOCK_ANVIL_PLACE;
-			target.playSound(soundevent, 1.0F, 1.0F);
+			SoundEvent sound = SoundEvents.BLOCK_ANVIL_PLACE; //need better sound
+			target.getEntityWorld().playSound(null, target.getPosition(), sound, SoundCategory.MASTER, 1.0f, 1.0f);
 		}
 
 		event.setAmount(damageAmount);

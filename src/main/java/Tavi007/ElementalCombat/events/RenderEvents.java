@@ -54,8 +54,8 @@ public class RenderEvents {
 				entityIn.hurtTime = 0; //desync client and server hurtTime. Is this a problem?
 
 				//to do: add green overlay texture
-				//				LayerRenderer<LivingEntity, EntityModel<LivingEntity>> layer = new ;
-				//				event.getRenderer().addLayer(layer);
+				//LayerRenderer<LivingEntity, EntityModel<LivingEntity>> layer = new ;
+				//event.getRenderer().addLayer(layer);
 			}
 		}
 		else {
@@ -96,11 +96,15 @@ public class RenderEvents {
 		Minecraft mc = Minecraft.getInstance();
 		if(mc.player != null) {
 			if (mc.player.hurtTime == mc.player.maxHurtTime) {
-				//rename HurtRendereData maybe to ImmersionData....
 				ImmersionData data = (ImmersionData) mc.player.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
 				if(data.disableFlag) {
-					if(event.getName() == SoundEvents.ENTITY_PLAYER_HURT.getName().getPath()) {
-						event.setResult(null);
+					//What if other mods implements their own version of an hurt sound?
+					//Also what if the on_fire sound gets disabled, even so I still took fire damage?
+					if( event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT.getRegistryName()) || 
+						event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_DROWN.getRegistryName()) ||
+						event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_ON_FIRE.getRegistryName()) ||
+						event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH.getRegistryName()) ) {
+						event.setResult(null); 
 					}
 				}
 			}
