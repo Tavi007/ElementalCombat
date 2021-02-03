@@ -11,8 +11,8 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import Tavi007.ElementalCombat.capabilities.render.HurtRenderData;
-import Tavi007.ElementalCombat.capabilities.render.HurtRenderDataCapability;
+import Tavi007.ElementalCombat.capabilities.render.ImmersionData;
+import Tavi007.ElementalCombat.capabilities.render.ImmersionDataCapability;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.RenderHelper;
 import net.minecraft.client.Minecraft;
@@ -47,7 +47,7 @@ public class RenderEvents {
 	@SubscribeEvent
 	public static void onRenderLivingEventPre(RenderLivingEvent.Pre<LivingEntity, EntityModel<LivingEntity>> event) {
 		LivingEntity entityIn = event.getEntity();
-		HurtRenderData data = (HurtRenderData) entityIn.getCapability(HurtRenderDataCapability.HURT_RENDER_CAPABILITY, null).orElse(new HurtRenderData());
+		ImmersionData data = (ImmersionData) entityIn.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
 		if(entityIn.hurtTime > 0) {
 			if (data.disableFlag) {
 				data.setHurtTime(entityIn.hurtTime);
@@ -67,7 +67,7 @@ public class RenderEvents {
 	@SubscribeEvent
 	public static void onRenderLivingEventPost(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
 		LivingEntity entityIn = event.getEntity();
-		HurtRenderData data = (HurtRenderData) entityIn.getCapability(HurtRenderDataCapability.HURT_RENDER_CAPABILITY, null).orElse(new HurtRenderData());
+		ImmersionData data = (ImmersionData) entityIn.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
 		if (data.disableFlag && data.getHurtTime() > 0) {
 			entityIn.hurtTime = data.getHurtTime();
 			data.setHurtTime(0);
@@ -79,7 +79,7 @@ public class RenderEvents {
 		Minecraft mc = Minecraft.getInstance();
 		if(mc.player != null) {
 			if (mc.player.hurtTime > 0) {
-				HurtRenderData data = (HurtRenderData) mc.player.getCapability(HurtRenderDataCapability.HURT_RENDER_CAPABILITY, null).orElse(new HurtRenderData());
+				ImmersionData data = (ImmersionData) mc.player.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
 				if(data.disableFlag) {
 					// Use the same calculation as in GameRenderer#hurtCameraEffect.
 					float f = (float) (mc.player.hurtTime - event.getRenderPartialTicks());
@@ -97,7 +97,7 @@ public class RenderEvents {
 		if(mc.player != null) {
 			if (mc.player.hurtTime == mc.player.maxHurtTime) {
 				//rename HurtRendereData maybe to ImmersionData....
-				HurtRenderData data = (HurtRenderData) mc.player.getCapability(HurtRenderDataCapability.HURT_RENDER_CAPABILITY, null).orElse(new HurtRenderData());
+				ImmersionData data = (ImmersionData) mc.player.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
 				if(data.disableFlag) {
 					if(event.getName() == SoundEvents.ENTITY_PLAYER_HURT.getName().getPath()) {
 						event.setResult(null);

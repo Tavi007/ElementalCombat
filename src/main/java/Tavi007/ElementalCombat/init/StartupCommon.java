@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.init;
 
 import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
-import Tavi007.ElementalCombat.capabilities.render.HurtRenderDataCapability;
+import Tavi007.ElementalCombat.capabilities.render.ImmersionDataCapability;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
 import Tavi007.ElementalCombat.network.EntityMessage;
 import Tavi007.ElementalCombat.network.PackageHandlerOnClient;
@@ -26,7 +26,7 @@ public class StartupCommon {
 		//capabilities
 		AttackDataCapability.register();
 		DefenseDataCapability.register();
-		HurtRenderDataCapability.register();
+		ImmersionDataCapability.register();
 
 		//networking
 		ElementalCombat.simpleChannel = NetworkRegistry.newSimpleChannel(ElementalCombat.simpleChannelRL, () -> MESSAGE_PROTOCOL_VERSION,

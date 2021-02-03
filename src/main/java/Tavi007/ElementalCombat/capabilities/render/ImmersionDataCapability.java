@@ -18,9 +18,9 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-public class HurtRenderDataCapability {
-	@CapabilityInject(HurtRenderData.class)
-	public static final Capability<HurtRenderData> HURT_RENDER_CAPABILITY = null;
+public class ImmersionDataCapability {
+	@CapabilityInject(ImmersionData.class)
+	public static final Capability<ImmersionData> IMMERSION_DATA_CAPABILITY = null;
 
 	/**
 	 * The default {@link Direction} to use for this capability.
@@ -33,10 +33,10 @@ public class HurtRenderDataCapability {
 	public static final ResourceLocation ID = new ResourceLocation(ElementalCombat.MOD_ID, "hurt_overlay");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(HurtRenderData.class, new Capability.IStorage<HurtRenderData>() {
+		CapabilityManager.INSTANCE.register(ImmersionData.class, new Capability.IStorage<ImmersionData>() {
 
 			@Override
-			public INBT writeNBT(final Capability<HurtRenderData> capability, final HurtRenderData instance, final Direction side) {
+			public INBT writeNBT(final Capability<ImmersionData> capability, final ImmersionData instance, final Direction side) {
 
 				//fill nbt with data
 				CompoundNBT nbt = new CompoundNBT();
@@ -46,7 +46,7 @@ public class HurtRenderDataCapability {
 			}
 
 			@Override
-			public void readNBT(final Capability<HurtRenderData> capability, final HurtRenderData instance, final Direction side, final INBT nbt) {
+			public void readNBT(final Capability<ImmersionData> capability, final ImmersionData instance, final Direction side, final INBT nbt) {
 				IntNBT timeNBT = (IntNBT) ((CompoundNBT) nbt).get("hurt_time");
 				ByteNBT redNBT = (ByteNBT) ((CompoundNBT) nbt).get("disable_flag");
 				
@@ -59,11 +59,11 @@ public class HurtRenderDataCapability {
 				}
 
 			}
-		}, () -> new HurtRenderData());
+		}, () -> new ImmersionData());
 	}
 
-	public static ICapabilityProvider createProvider(final HurtRenderData atck) {
-		return new SerializableCapabilityProvider<>(HURT_RENDER_CAPABILITY, DEFAULT_FACING, atck);
+	public static ICapabilityProvider createProvider(final ImmersionData atck) {
+		return new SerializableCapabilityProvider<>(IMMERSION_DATA_CAPABILITY, DEFAULT_FACING, atck);
 	}
 
 
@@ -81,8 +81,8 @@ public class HurtRenderDataCapability {
 		@SubscribeEvent
 		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
 			if (event.getObject() instanceof LivingEntity) {
-				final HurtRenderData HurtRenderData = new HurtRenderData();
-				event.addCapability(ID, createProvider(HurtRenderData));
+				final ImmersionData ImmersionData = new ImmersionData();
+				event.addCapability(ID, createProvider(ImmersionData));
 			}
 		}
 	}

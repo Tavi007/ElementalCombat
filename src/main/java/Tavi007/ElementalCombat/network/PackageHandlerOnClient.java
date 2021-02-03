@@ -7,8 +7,8 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import Tavi007.ElementalCombat.capabilities.render.HurtRenderData;
-import Tavi007.ElementalCombat.capabilities.render.HurtRenderDataCapability;
+import Tavi007.ElementalCombat.capabilities.render.ImmersionData;
+import Tavi007.ElementalCombat.capabilities.render.ImmersionDataCapability;
 import Tavi007.ElementalCombat.init.StartupCommon;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
@@ -85,7 +85,7 @@ public class PackageHandlerOnClient {
 		Entity entity = clientWorld.getEntityByID((message.getId()));
 		if(entity instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity) entity;
-			HurtRenderData data = (HurtRenderData) livingEntity.getCapability(HurtRenderDataCapability.HURT_RENDER_CAPABILITY, null).orElse(new HurtRenderData());
+			ImmersionData data = (ImmersionData) livingEntity.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
 			data.disableFlag = true;
 		}
 	}

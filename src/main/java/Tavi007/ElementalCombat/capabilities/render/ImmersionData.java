@@ -1,14 +1,14 @@
 package Tavi007.ElementalCombat.capabilities.render;
 
-public class HurtRenderData {
+public class ImmersionData {
 	public boolean disableFlag; //used to disable sound an rendering
 	private int hurtTime; //used to temporarily save the hurt time of an entity
 	
-	public HurtRenderData() {
+	public ImmersionData() {
 		hurtTime = 0;
 		disableFlag = false;
 	}
-	public HurtRenderData(int hurtTime, boolean disableFlag) {
+	public ImmersionData(int hurtTime, boolean disableFlag) {
 		this.hurtTime = hurtTime;
 		this.disableFlag = disableFlag;
 	}
