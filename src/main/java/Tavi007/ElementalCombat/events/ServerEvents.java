@@ -17,6 +17,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -118,7 +120,7 @@ public class ServerEvents {
 
 		// display particles
 		displayParticle(defenseStyleScaling, defenseElementScaling, target.getEyePosition(0), (ServerWorld) target.getEntityWorld());
-		
+
 		// heals the target, if damage is lower than 0
 		if(damageAmount <= 0)
 		{
@@ -129,9 +131,10 @@ public class ServerEvents {
 			// send message to disable the hurt animation and sound.
 			DisableDamageRenderMessage messageToClient = new DisableDamageRenderMessage(target.getEntityId());
 			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
-			
+
 			// plays a healing sound 
-			
+			SoundEvent soundevent = SoundEvents.BLOCK_ANVIL_PLACE;
+			target.playSound(soundevent, 1.0F, 1.0F);
 		}
 
 		event.setAmount(damageAmount);

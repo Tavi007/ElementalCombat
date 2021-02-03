@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IReorderingProcessor;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
@@ -33,6 +34,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -89,6 +91,21 @@ public class RenderEvents {
 		}
 	}
 
+	@SubscribeEvent
+	public static void onPlaySoundEvent(PlaySoundEvent event) {
+		Minecraft mc = Minecraft.getInstance();
+		if(mc.player != null) {
+			if (mc.player.hurtTime == mc.player.maxHurtTime) {
+				//rename HurtRendereData maybe to ImmersionData....
+				HurtRenderData data = (HurtRenderData) mc.player.getCapability(HurtRenderDataCapability.HURT_RENDER_CAPABILITY, null).orElse(new HurtRenderData());
+				if(data.disableFlag) {
+					if(event.getName() == SoundEvents.ENTITY_PLAYER_HURT.getName().getPath()) {
+						event.setResult(null);
+					}
+				}
+			}
+		}
+	}
 
 	@SubscribeEvent
 	public static void addTooltipInformation(ItemTooltipEvent event) {
