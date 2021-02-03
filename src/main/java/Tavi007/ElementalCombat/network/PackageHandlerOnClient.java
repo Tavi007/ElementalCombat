@@ -47,17 +47,17 @@ public class PackageHandlerOnClient {
 		ctx.setPacketHandled(true);
 
 		if (sideReceived != LogicalSide.CLIENT) {
-			ElementalCombat.LOGGER.warn("CombatDataMessage received on wrong side: " + ctx.getDirection().getReceptionSide());
+			ElementalCombat.LOGGER.warn("DisableDamageRenderMessage received on wrong side: " + ctx.getDirection().getReceptionSide());
 			return;
 		}
 		if (!message.isMessageValid()) {
-			ElementalCombat.LOGGER.warn("CombatDataMessage was invalid " + message.toString());
+			ElementalCombat.LOGGER.warn("DisableDamageRenderMessage was invalid " + message.toString());
 			return;
 		}
 
 		Optional<ClientWorld> clientWorld = LogicalSidedProvider.CLIENTWORLD.get(sideReceived);
 		if (!clientWorld.isPresent()) {
-			ElementalCombat.LOGGER.warn("CombatDataMessage context could not provide a ClientWorld.");
+			ElementalCombat.LOGGER.warn("DisableDamageRenderMessage context could not provide a ClientWorld.");
 			return;
 		}
 		ctx.enqueueWork(() -> processMessage(clientWorld.get(), message));
@@ -69,13 +69,16 @@ public class PackageHandlerOnClient {
 		DefenseData defData = message.getDefenseData();
 
 		if(message instanceof EntityMessage) {
-			LivingEntity player = clientWorld.getPlayerByUuid(((EntityMessage) message).getId());
-			ElementalCombatAPI.getAttackData((LivingEntity) player).set(atckData);
-			if (message.isAdd()) {
-				ElementalCombatAPI.getDefenseData((LivingEntity) player).add(defData);
-			}
-			else {
-				ElementalCombatAPI.getDefenseData((LivingEntity) player).set(defData);
+			Entity entity = clientWorld.getEntityByID(((EntityMessage) message).getId());
+			if (entity instanceof LivingEntity) {
+				LivingEntity livingEntity = (LivingEntity) entity;
+				ElementalCombatAPI.getAttackData(livingEntity).set(atckData);
+				if (message.isAdd()) {
+					ElementalCombatAPI.getDefenseData(livingEntity).add(defData);
+				}
+				else {
+					ElementalCombatAPI.getDefenseData(livingEntity).set(defData);
+				}
 			}
 		}
 	}

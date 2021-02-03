@@ -1,7 +1,5 @@
 package Tavi007.ElementalCombat.network;
 
-import java.util.UUID;
-
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
@@ -9,9 +7,9 @@ import net.minecraft.network.PacketBuffer;
 
 public class EntityMessage extends CombatDataMessage {
 
-	private UUID id;
+	private int id;
 	
-	public EntityMessage(AttackData atckToSend, DefenseData defToSend, boolean isAdd, UUID id) {
+	public EntityMessage(AttackData atckToSend, DefenseData defToSend, boolean isAdd, int id) {
 		super(atckToSend, defToSend, isAdd);
 		this.id = id;
 	}
@@ -19,14 +17,14 @@ public class EntityMessage extends CombatDataMessage {
 	// for use by the message handler only.
 	public EntityMessage(){
 		super();
-		this.id = new UUID(0,0);
+		this.id = 0;
 	}
 
-	public UUID getId() {
+	public int getId() {
 		return this.id;
 	}
 	
-	public void setId(UUID id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	
@@ -34,7 +32,7 @@ public class EntityMessage extends CombatDataMessage {
 	{
 		EntityMessage retval = new EntityMessage();
 		try {
-			retval.setId(new UUID(buf.readLong(), buf.readLong()));
+			retval.setId(buf.readInt());
 			
 			//rest of the combat properties
 			CombatDataMessage combatMessage = readCombatDataFromPacket(buf);
@@ -54,8 +52,7 @@ public class EntityMessage extends CombatDataMessage {
 	{
 		if (!isMessageValid()) return;
 		//get entity through id
-		buf.writeLong(this.id.getMostSignificantBits());
-		buf.writeLong(this.id.getLeastSignificantBits());
+		buf.writeInt(this.id);
 		
 		//write rest of the combat properties
 		writeCombatDataToPacket(buf);

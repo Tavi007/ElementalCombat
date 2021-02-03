@@ -148,7 +148,7 @@ public class ElementalCombatAPI
 		defData.add(dataToAdd);
 
 		if (livingEntity instanceof ServerPlayerEntity) {
-			EntityMessage messageToClient = new EntityMessage(atckData, dataToAdd, true, livingEntity.getUniqueID());
+			EntityMessage messageToClient = new EntityMessage(atckData, dataToAdd, true, livingEntity.getEntityId());
 			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 		}
 	}

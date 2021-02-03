@@ -52,7 +52,7 @@ public class ServerEvents {
 				AttackData atckData = ElementalCombatAPI.getAttackData(livingEntity);
 
 				if (livingEntity instanceof ServerPlayerEntity) {
-					EntityMessage messageToClient = new EntityMessage(atckData, defData, false, livingEntity.getUniqueID());
+					EntityMessage messageToClient = new EntityMessage(atckData, defData, false, livingEntity.getEntityId());
 					ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 				}
 			}
