@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.capabilities.render;
+package Tavi007.ElementalCombat.capabilities.immersion;
 
 public class ImmersionData {
 	public boolean disableFlag; //used to disable sound an rendering

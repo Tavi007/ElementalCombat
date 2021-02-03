@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.init;
 
 import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
-import Tavi007.ElementalCombat.capabilities.render.ImmersionDataCapability;
+import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
 import Tavi007.ElementalCombat.network.EntityMessage;
 import Tavi007.ElementalCombat.network.PackageHandlerOnClient;

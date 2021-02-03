@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.capabilities.render;
+package Tavi007.ElementalCombat.capabilities.immersion;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
