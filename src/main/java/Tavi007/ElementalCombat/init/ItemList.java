@@ -7,10 +7,13 @@ import Tavi007.ElementalCombat.items.ArmorMaterial;
 import Tavi007.ElementalCombat.items.ClockChestplate;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.AxeItem;
+import net.minecraft.item.BowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.Properties;
 import net.minecraft.item.ItemTier;
 import net.minecraft.item.SwordItem;
+import net.minecraft.item.ToolItem;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,8 +23,9 @@ public class ItemList {
 
 	private static Properties singleStack = new Item.Properties().group(ElementalCombat.ELEMENTAL_COMBAT_GROUP).maxStackSize(1);
 	
+	
 	//special items
-	public static final RegistryObject<Item> ELEMENTAL_CHESTPLATE = ITEMS.register("clock_chestplate", () -> new ClockChestplate(ArmorMaterial.CLOCK, EquipmentSlotType.CHEST, singleStack));
+	public static final RegistryObject<Item> CLOCK_CHESTPLATE = ITEMS.register("clock_chestplate", () -> new ClockChestplate(ArmorMaterial.CLOCK, EquipmentSlotType.CHEST, singleStack));
 	public static final RegistryObject<Item> FIREANDICE_SWORD = ITEMS.register("fire_and_ice_sword", () -> new FireAndIceSword(ItemTier.IRON, 3, -2.4F, singleStack));
 
 	//weapons
@@ -36,6 +40,15 @@ public class ItemList {
 	public static final RegistryObject<Item> IRON_HALBERD = ITEMS.register("iron_halberd", () -> new HalberdItem(ItemTier.IRON, 5, -2.8F, singleStack));
 	public static final RegistryObject<Item> GOLDEN_HALBERD = ITEMS.register("golden_halberd", () -> new HalberdItem(ItemTier.GOLD, 5, -2.8F, singleStack));
 	public static final RegistryObject<Item> DIAMOND_HALBERD = ITEMS.register("diamond_halberd", () -> new HalberdItem(ItemTier.DIAMOND, 5, -2.8F, singleStack));
+	
+
+	public static final RegistryObject<Item> WATER_STAFF = ITEMS.register("water_staff", () -> new ToolItem(6, -1.5F, ItemTier.DIAMOND, null, singleStack));
+	public static final RegistryObject<Item> QUAKE_HAMMER = ITEMS.register("quake_hammer", () -> new ToolItem(14, -3.0F, ItemTier.DIAMOND, null, singleStack));
+	public static final RegistryObject<Item> THORN_CLUB = ITEMS.register("thorn_club", () -> new ToolItem(14, -3.0F, ItemTier.DIAMOND, null, singleStack));
+	public static final RegistryObject<Item> GUST_SWORD = ITEMS.register("gust_sword", () -> new ToolItem(7, -1.2F, ItemTier.DIAMOND, null, singleStack));
+	public static final RegistryObject<Item> LIGHTNING_DAGGER = ITEMS.register("lightning_dagger", () -> new ToolItem(3, -0.6F, ItemTier.DIAMOND, null, singleStack));
+	public static final RegistryObject<Item> VOID_AXE = ITEMS.register("void_axe", () -> new AxeItem(ItemTier.DIAMOND, 7, -1.2F, singleStack));
+	public static final RegistryObject<Item> LIGHT_BOW = ITEMS.register("light_bow", () -> new BowItem(singleStack));
 	
 	//armor
 	public static final RegistryObject<Item> CREEPER_CHESTPLATE = ITEMS.register("creeper_chestplate", () -> new ArmorItem(ArmorMaterial.CREEPER, EquipmentSlotType.CHEST, singleStack));

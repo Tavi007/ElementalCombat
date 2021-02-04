@@ -14,6 +14,14 @@
 	"item.elementalcombat.diamond_spear" : "Diamond Spear",
 	"item.elementalcombat.diamond_halberd" : "Diamond Halberd",
 	
+	"item.elementalcombat.water_staff" : "Water Staff",
+	"item.elementalcombat.quake_hammer" : "Quake Hammer",
+	"item.elementalcombat.thorn_club" : "Thorn Club",
+	"item.elementalcombat.gust_sword" : "Gust Sword",
+	"item.elementalcombat.lightning_dagger" : "Lightning Dagger",
+	"item.elementalcombat.void_axe" : "Void Axe",
+	"item.elementalcombat.light_bow" : "Light Bow",
+	
 	"item.elementalcombat.creeper_boots" : "Creeper Boots",
 	"item.elementalcombat.creeper_leggings" : "Creeper Leggings",
 	"item.elementalcombat.creeper_chestplate" : "Creeper Chestplate",
