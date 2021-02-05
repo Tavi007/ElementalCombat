@@ -23,10 +23,6 @@ public class ItemList {
 
 	private static Properties singleStack = new Item.Properties().group(ElementalCombat.ELEMENTAL_COMBAT_GROUP).maxStackSize(1);
 	
-	
-	//special items
-	public static final RegistryObject<Item> CLOCK_CHESTPLATE = ITEMS.register("clock_chestplate", () -> new ClockChestplate(ArmorMaterial.CLOCK, EquipmentSlotType.CHEST, singleStack));
-	public static final RegistryObject<Item> FIREANDICE_SWORD = ITEMS.register("fire_and_ice_sword", () -> new FireAndIceSword(ItemTier.IRON, 3, -2.4F, singleStack));
 
 	//weapons
 	public static final RegistryObject<Item> WOODEN_SPEAR = ITEMS.register("wooden_spear", () -> new SwordItem(ItemTier.WOOD, 3, -2.4F, singleStack));
@@ -41,7 +37,6 @@ public class ItemList {
 	public static final RegistryObject<Item> GOLDEN_HALBERD = ITEMS.register("golden_halberd", () -> new HalberdItem(ItemTier.GOLD, 5, -2.8F, singleStack));
 	public static final RegistryObject<Item> DIAMOND_HALBERD = ITEMS.register("diamond_halberd", () -> new HalberdItem(ItemTier.DIAMOND, 5, -2.8F, singleStack));
 	
-
 	public static final RegistryObject<Item> WATER_STAFF = ITEMS.register("water_staff", () -> new ToolItem(6, -1.5F, ItemTier.DIAMOND, null, singleStack));
 	public static final RegistryObject<Item> QUAKE_HAMMER = ITEMS.register("quake_hammer", () -> new ToolItem(14, -3.0F, ItemTier.DIAMOND, null, singleStack));
 	public static final RegistryObject<Item> THORN_CLUB = ITEMS.register("thorn_club", () -> new ToolItem(14, -3.0F, ItemTier.DIAMOND, null, singleStack));
@@ -50,8 +45,12 @@ public class ItemList {
 	public static final RegistryObject<Item> VOID_AXE = ITEMS.register("void_axe", () -> new AxeItem(ItemTier.DIAMOND, 7, -1.2F, singleStack));
 	public static final RegistryObject<Item> LIGHT_BOW = ITEMS.register("light_bow", () -> new BowItem(singleStack));
 	
+	public static final RegistryObject<Item> FIREANDICE_SWORD = ITEMS.register("fire_and_ice_sword", () -> new FireAndIceSword(ItemTier.IRON, 3, -2.4F, singleStack));
+	
 	//armor
 	public static final RegistryObject<Item> CREEPER_CHESTPLATE = ITEMS.register("creeper_chestplate", () -> new ArmorItem(ArmorMaterial.CREEPER, EquipmentSlotType.CHEST, singleStack));
 	public static final RegistryObject<Item> CREEPER_LEGGINS = ITEMS.register("creeper_leggings", () -> new ArmorItem(ArmorMaterial.CREEPER, EquipmentSlotType.LEGS, singleStack));
 	public static final RegistryObject<Item> CREEPER_BOOTS = ITEMS.register("creeper_boots", () -> new ArmorItem(ArmorMaterial.CREEPER, EquipmentSlotType.FEET, singleStack));
+	
+	public static final RegistryObject<Item> CLOCK_CHESTPLATE = ITEMS.register("clock_chestplate", () -> new ClockChestplate(ArmorMaterial.CLOCK, EquipmentSlotType.CHEST, singleStack));
 }
