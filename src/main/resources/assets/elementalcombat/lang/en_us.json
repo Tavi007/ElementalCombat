@@ -14,6 +14,16 @@
 	"item.elementalcombat.diamond_spear" : "Diamond Spear",
 	"item.elementalcombat.diamond_halberd" : "Diamond Halberd",
 	
+	"item.elementalcombat.essence_fire" : "Fire Essence",
+	"item.elementalcombat.essence_ice" : "Ice Essence",
+	"item.elementalcombat.essence_water" : "Water Essence",
+	"item.elementalcombat.essence_thunder" : "Thunder Essence",
+	"item.elementalcombat.essence_darkness" : "Darkness Essence",
+	"item.elementalcombat.essence_light" : "Light Essence",
+	"item.elementalcombat.essence_earth" : "Earth Essence",
+	"item.elementalcombat.essence_wind" : "Wind Essence",
+	"item.elementalcombat.essence_flora" : "Flora Essence",
+	
 	"item.elementalcombat.water_staff" : "Water Staff",
 	"item.elementalcombat.quake_hammer" : "Quake Hammer",
 	"item.elementalcombat.thorn_club" : "Thorn Club",
