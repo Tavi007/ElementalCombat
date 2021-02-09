@@ -15,7 +15,9 @@ import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -67,6 +69,7 @@ public class ServerEvents {
 						AttackData sourceData = ElementalCombatAPI.getAttackDataWithActiveItem((LivingEntity) source);
 
 						//copy elemental attack capability
+						//maybe also check type of projectile?
 						AttackData projectileData = ElementalCombatAPI.getAttackData(projectile);
 						projectileData.setElement(sourceData.getElement());
 						projectileData.setStyle("projectile");

@@ -1,0 +1,29 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+        " y ",
+        "yxy",
+        "ay "
+    ],
+    "key":
+    {
+        "x":
+        {
+            "tag": "minecraft:iron_ingot"
+        },
+        "y":
+        {
+            "tag": "elementalcombat:thunder_essence"
+        },
+        "a":
+        {
+            "item": "minecraft:stick"
+        }
+    },
+    "result":
+    {
+        "item": "elementalcombat:lightning_dagger",
+        "count": 1
+    }
+}
