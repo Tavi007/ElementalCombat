@@ -10,11 +10,11 @@
     {
         "x":
         {
-            "tag": "minecraft:iron_ingot"
+            "tag": "minecraft:wood"
         },
         "y":
         {
-            "tag": "elementalcombat:thunder_essence"
+            "item": "elementalcombat:essence_flora"
         },
         "a":
         {
@@ -23,7 +23,7 @@
     },
     "result":
     {
-        "item": "elementalcombat:lightning_dagger",
+        "item": "elementalcombat:thorn_club",
         "count": 1
     }
 }

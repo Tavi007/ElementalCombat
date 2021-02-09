@@ -3,27 +3,23 @@
     "pattern":
     [
         " y ",
-        "yxy",
-        "ay "
+        " xy",
+        "x  "
     ],
     "key":
     {
         "x":
         {
-            "tag": "minecraft:iron_ingot"
+            "item": "minecraft:iron_ingot"
         },
         "y":
         {
-            "tag": "elementalcombat:thunder_essence"
-        },
-        "a":
-        {
-            "item": "minecraft:stick"
+            "item": "elementalcombat:essence_block_earth"
         }
     },
     "result":
     {
-        "item": "elementalcombat:lightning_dagger",
+        "item": "elementalcombat:quake_hammer",
         "count": 1
     }
 }

@@ -2,24 +2,20 @@
     "type": "minecraft:crafting_shaped",
     "pattern":
     [
-        " yx",
-        "yxy",
-        "xy "
+        "xxx",
+        "xxx",
+        "xxx"
     ],
     "key":
     {
         "x":
-        {
-            "item": "minecraft:iron_ingot"
-        },
-        "y":
         {
             "item": "elementalcombat:essence_water"
         }
     },
     "result":
     {
-        "item": "elementalcombat:water_staff",
+        "item": "elementalcombat:essence_block_water",
         "count": 1
     }
 }

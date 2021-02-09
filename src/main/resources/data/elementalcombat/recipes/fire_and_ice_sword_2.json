@@ -3,18 +3,18 @@
     "pattern":
     [
 		"   ",
-		"yax",
+		"xay",
 		"   "
     ],
     "key":
     {
         "y":
         {
-            "item": "minecraft:blaze_rod"
+            "item": "elementalcombat:essence_block_fire"
         },
         "x":
         {
-            "item": "minecraft:blue_ice"
+            "item": "elementalcombat:essence_block_ice"
         },
         "a":
         {

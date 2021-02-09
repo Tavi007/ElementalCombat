@@ -2,24 +2,20 @@
     "type": "minecraft:crafting_shaped",
     "pattern":
     [
-        " y ",
-        "yxy",
-        " y "
+        "xxx",
+        "xxx",
+        "xxx"
     ],
     "key":
     {
         "x":
-        {
-            "item": "minecraft:bow"
-        },
-        "y":
         {
             "item": "elementalcombat:essence_light"
         }
     },
     "result":
     {
-        "item": "elementalcombat:light_bow",
+        "item": "elementalcombat:essence_block_light",
         "count": 1
     }
 }

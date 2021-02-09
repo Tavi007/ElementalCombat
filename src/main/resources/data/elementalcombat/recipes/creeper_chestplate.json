@@ -4,13 +4,13 @@
     [
         " x ",
         "yay",
-        " y "
+        " x "
     ],
     "key":
     {
         "x":
         {
-            "item": "minecraft:creeper_head"
+            "item": "elementalcombat:essence_thunder"
         },
         "y":
         {

@@ -10,11 +10,11 @@
     {
         "x":
         {
-            "tag": "minecraft:iron_ingot"
+            "item": "minecraft:iron_ingot"
         },
         "y":
         {
-            "tag": "elementalcombat:thunder_essence"
+            "item": "elementalcombat:essence_thunder"
         },
         "a":
         {

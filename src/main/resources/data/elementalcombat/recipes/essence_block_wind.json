@@ -2,16 +2,12 @@
     "type": "minecraft:crafting_shaped",
     "pattern":
     [
-        "  x",
-        " x ",
-        "a  "
+        "xxx",
+        "xxx",
+        "xxx"
     ],
     "key":
     {
-        "a":
-        {
-            "item": "minecraft:iron_ingot"
-        },
         "x":
         {
             "item": "elementalcombat:essence_wind"
@@ -19,7 +15,7 @@
     },
     "result":
     {
-        "item": "elementalcombat:gust_sword",
+        "item": "elementalcombat:essence_block_wind",
         "count": 1
     }
 }
