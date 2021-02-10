@@ -1,5 +1,6 @@
 package Tavi007.ElementalCombat.events;
 
+import java.util.Collection;
 import java.util.Random;
 
 import Tavi007.ElementalCombat.ElementalCombat;
@@ -7,6 +8,7 @@ import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ServerConfig;
+import Tavi007.ElementalCombat.init.ItemList;
 import Tavi007.ElementalCombat.init.ParticleList;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
@@ -14,10 +16,13 @@ import Tavi007.ElementalCombat.network.EntityMessage;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.SpectralArrowEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -26,6 +31,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -79,6 +85,62 @@ public class ServerEvents {
 		}
 	}
 
+	@SubscribeEvent
+	public static void onLivingDropsEvent(LivingDropsEvent event) {
+		if(!(event.getEntityLiving() instanceof PlayerEntity)) {
+			AttackData atckData = ElementalCombatAPI.getAttackDataWithActiveItem(event.getEntityLiving());
+			addEssenceDropToList(atckData.getElement(), event.getEntityLiving(), event.getDrops(), event.getLootingLevel());
+			
+			DefenseData defData = ElementalCombatAPI.getDefenseData(event.getEntityLiving());
+			defData.getElementFactor().forEach((element,factor) -> {
+				if(factor > 0) {
+					addEssenceDropToList(element, event.getEntityLiving(), event.getDrops(), event.getLootingLevel());
+				}
+			}); 
+		}
+	}
+	
+	private static void addEssenceDropToList(String element, LivingEntity entity, Collection<ItemEntity> drops, int lootingLevel) {
+		
+		int numberOfDrops = 1 + lootingLevel;
+		
+		if (numberOfDrops > 0) {
+			double x = entity.getPosX();
+			double y = entity.getPosY();
+			double z = entity.getPosZ();
+			
+			switch(element) {
+			case "fire":
+				drops.add(new ItemEntity(entity.getEntityWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_FIRE.get(), numberOfDrops)));
+				break;
+			case "ice":
+				drops.add(new ItemEntity(entity.getEntityWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_ICE.get(), numberOfDrops)));
+				break;
+			case "water":
+				drops.add(new ItemEntity(entity.getEntityWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_WATER.get(), numberOfDrops)));
+				break;
+			case "thunder":
+				drops.add(new ItemEntity(entity.getEntityWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_THUNDER.get(), numberOfDrops)));
+				break;
+			case "darkness":
+				drops.add(new ItemEntity(entity.getEntityWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_DARKNESS.get(), numberOfDrops)));
+				break;
+			case "light":
+				drops.add(new ItemEntity(entity.getEntityWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_LIGHT.get(), numberOfDrops)));
+				break;
+			case "earth":
+				drops.add(new ItemEntity(entity.getEntityWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_EARTH.get(), numberOfDrops)));
+				break;
+			case "wind":
+				drops.add(new ItemEntity(entity.getEntityWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_WIND.get(), numberOfDrops)));
+				break;
+			case "flora":
+				drops.add(new ItemEntity(entity.getEntityWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_FLORA.get(), numberOfDrops)));
+				break;
+			}
+		}
+	}
+	
 	@SubscribeEvent
 	public static void elementifyLivingHurtEvent(LivingHurtEvent event)
 	{
