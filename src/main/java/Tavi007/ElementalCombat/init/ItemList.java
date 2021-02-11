@@ -1,10 +1,12 @@
 package Tavi007.ElementalCombat.init;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.items.FireAndIceSword;
-import Tavi007.ElementalCombat.items.HalberdItem;
+import Tavi007.ElementalCombat.items.StyleSwitchingSword;
 import Tavi007.ElementalCombat.items.ArmorMaterial;
-import Tavi007.ElementalCombat.items.ClockChestplate;
+import Tavi007.ElementalCombat.items.BiomeArmor;
+import Tavi007.ElementalCombat.items.DayNightArmor;
+import Tavi007.ElementalCombat.items.ElementSwitchingSword;
+import Tavi007.ElementalCombat.items.MirrorArmor;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.AxeItem;
@@ -24,7 +26,7 @@ public class ItemList {
 	private static Properties singleStack = new Item.Properties().group(ElementalCombat.ELEMENTAL_COMBAT_GROUP).maxStackSize(1);
 	private static Properties fullStack = new Item.Properties().group(ElementalCombat.ELEMENTAL_COMBAT_GROUP).maxStackSize(64);
 	
-	//stuff
+	//essence
 	public static final RegistryObject<Item> ESSENCE_FIRE 		= ITEMS.register("essence_fire", () -> new Item(fullStack));
 	public static final RegistryObject<Item> ESSENCE_ICE 		= ITEMS.register("essence_ice", () -> new Item(fullStack));
 	public static final RegistryObject<Item> ESSENCE_WATER 		= ITEMS.register("essence_water", () -> new Item(fullStack));
@@ -42,11 +44,11 @@ public class ItemList {
 	public static final RegistryObject<Item> GOLDEN_SPEAR 	= ITEMS.register("golden_spear", () -> new SwordItem(ItemTier.GOLD, 3, -2.4F, singleStack));
 	public static final RegistryObject<Item> DIAMOND_SPEAR 	= ITEMS.register("diamond_spear", () -> new SwordItem(ItemTier.DIAMOND, 3, -2.4F, singleStack));
 	
-	public static final RegistryObject<Item> WOODEN_HALBERD 	= ITEMS.register("wooden_halberd", () -> new HalberdItem(ItemTier.WOOD, 5, -2.8F, singleStack));
-	public static final RegistryObject<Item> STONE_HALBERD 		= ITEMS.register("stone_halberd", () -> new HalberdItem(ItemTier.STONE, 5, -2.8F, singleStack));
-	public static final RegistryObject<Item> IRON_HALBERD 		= ITEMS.register("iron_halberd", () -> new HalberdItem(ItemTier.IRON, 5, -2.8F, singleStack));
-	public static final RegistryObject<Item> GOLDEN_HALBERD 	= ITEMS.register("golden_halberd", () -> new HalberdItem(ItemTier.GOLD, 5, -2.8F, singleStack));
-	public static final RegistryObject<Item> DIAMOND_HALBERD 	= ITEMS.register("diamond_halberd", () -> new HalberdItem(ItemTier.DIAMOND, 5, -2.8F, singleStack));
+	public static final RegistryObject<Item> WOODEN_HALBERD 	= ITEMS.register("wooden_halberd", () -> new StyleSwitchingSword(ItemTier.WOOD, 5, -2.8F, singleStack));
+	public static final RegistryObject<Item> STONE_HALBERD 		= ITEMS.register("stone_halberd", () -> new StyleSwitchingSword(ItemTier.STONE, 5, -2.8F, singleStack));
+	public static final RegistryObject<Item> IRON_HALBERD 		= ITEMS.register("iron_halberd", () -> new StyleSwitchingSword(ItemTier.IRON, 5, -2.8F, singleStack));
+	public static final RegistryObject<Item> GOLDEN_HALBERD 	= ITEMS.register("golden_halberd", () -> new StyleSwitchingSword(ItemTier.GOLD, 5, -2.8F, singleStack));
+	public static final RegistryObject<Item> DIAMOND_HALBERD 	= ITEMS.register("diamond_halberd", () -> new StyleSwitchingSword(ItemTier.DIAMOND, 5, -2.8F, singleStack));
 	
 	public static final RegistryObject<Item> WATER_STAFF 		= ITEMS.register("water_staff", () -> new ToolItem(6, -1.5F, ItemTier.DIAMOND, null, singleStack));
 	public static final RegistryObject<Item> QUAKE_HAMMER 		= ITEMS.register("quake_hammer", () -> new ToolItem(14, -3.0F, ItemTier.DIAMOND, null, singleStack));
@@ -56,12 +58,22 @@ public class ItemList {
 	public static final RegistryObject<Item> VOID_AXE 			= ITEMS.register("void_axe", () -> new AxeItem(ItemTier.DIAMOND, 7, -1.2F, singleStack));
 	public static final RegistryObject<Item> LIGHT_BOW 			= ITEMS.register("light_bow", () -> new BowItem(singleStack));
 	
-	public static final RegistryObject<Item> FIREANDICE_SWORD = ITEMS.register("fire_and_ice_sword", () -> new FireAndIceSword(ItemTier.IRON, 3, -2.4F, singleStack));
+	public static final RegistryObject<Item> FIREANDICE_SWORD = ITEMS.register("fire_and_ice_sword", () -> new ElementSwitchingSword(ItemTier.IRON, 3, -2.4F, singleStack));
 	
 	//armor
 	public static final RegistryObject<Item> CREEPER_CHESTPLATE = ITEMS.register("creeper_chestplate", () -> new ArmorItem(ArmorMaterial.CREEPER, EquipmentSlotType.CHEST, singleStack));
 	public static final RegistryObject<Item> CREEPER_LEGGINS 	= ITEMS.register("creeper_leggings", () -> new ArmorItem(ArmorMaterial.CREEPER, EquipmentSlotType.LEGS, singleStack));
 	public static final RegistryObject<Item> CREEPER_BOOTS 		= ITEMS.register("creeper_boots", () -> new ArmorItem(ArmorMaterial.CREEPER, EquipmentSlotType.FEET, singleStack));
 	
-	public static final RegistryObject<Item> CLOCK_CHESTPLATE = ITEMS.register("clock_chestplate", () -> new ClockChestplate(ArmorMaterial.CLOCK, EquipmentSlotType.CHEST, singleStack));
+	public static final RegistryObject<Item> BIOME_HELMET		= ITEMS.register("biome_helmet", () -> new BiomeArmor(ArmorMaterial.BIOME, EquipmentSlotType.HEAD, singleStack));
+	public static final RegistryObject<Item> BIOME_CHESTPLATE	= ITEMS.register("biome_chestplate", () -> new BiomeArmor(ArmorMaterial.BIOME, EquipmentSlotType.CHEST, singleStack));
+	public static final RegistryObject<Item> BIOME_LEGGINS	 	= ITEMS.register("biome_leggings", () -> new BiomeArmor(ArmorMaterial.BIOME, EquipmentSlotType.LEGS, singleStack));
+	public static final RegistryObject<Item> BIOME_BOOTS		= ITEMS.register("biome_boots", () -> new BiomeArmor(ArmorMaterial.BIOME, EquipmentSlotType.FEET, singleStack));
+
+	public static final RegistryObject<Item> MIRROR_HELMET		= ITEMS.register("mirror_helmet", () -> new MirrorArmor(ArmorMaterial.BIOME, EquipmentSlotType.HEAD, singleStack));
+	public static final RegistryObject<Item> MIRROR_CHESTPLATE	= ITEMS.register("mirror_chestplate", () -> new MirrorArmor(ArmorMaterial.BIOME, EquipmentSlotType.CHEST, singleStack));
+	public static final RegistryObject<Item> MIRROR_LEGGINS	 	= ITEMS.register("mirror_leggings", () -> new MirrorArmor(ArmorMaterial.BIOME, EquipmentSlotType.LEGS, singleStack));
+	public static final RegistryObject<Item> MIRROR_BOOTS		= ITEMS.register("mirror_boots", () -> new MirrorArmor(ArmorMaterial.BIOME, EquipmentSlotType.FEET, singleStack));
+	
+	public static final RegistryObject<Item> DAYNIGHT_CHESTPLATE = ITEMS.register("daynight_chestplate", () -> new DayNightArmor(ArmorMaterial.CLOCK, EquipmentSlotType.CHEST, singleStack));
 }

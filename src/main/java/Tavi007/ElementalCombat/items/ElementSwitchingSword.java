@@ -23,9 +23,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class FireAndIceSword extends SwordItem{
+public class ElementSwitchingSword extends SwordItem{
 
-	public FireAndIceSword(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties p_i48460_4_) {
+	public ElementSwitchingSword(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties p_i48460_4_) {
 		super(tier, attackDamageIn, attackSpeedIn, p_i48460_4_);
 	}
 

@@ -22,9 +22,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class HalberdItem extends SwordItem {
+public class StyleSwitchingSword extends SwordItem {
 
-	public HalberdItem(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn) {
+	public StyleSwitchingSword(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn) {
 		super(tier, attackDamageIn, attackSpeedIn, builderIn);
 	}
 

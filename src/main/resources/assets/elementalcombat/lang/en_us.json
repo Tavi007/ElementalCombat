@@ -1,7 +1,7 @@
 {
 	"itemGroup.elementalcombat" : "Elemental Combat",
 	"item.elementalcombat.fire_and_ice_sword" : "Fire & Ice Sword",
-	"item.elementalcombat.clock_chestplate" : "Clock Chestplate",
+	"item.elementalcombat.daynight_chestplate" : "Day & Night Chestplate",
 
 	"item.elementalcombat.wooden_spear" : "Wooden Spear",
 	"item.elementalcombat.wooden_halberd" : "Wooden Halberd",
@@ -35,7 +35,11 @@
 	"item.elementalcombat.creeper_boots" : "Creeper Boots",
 	"item.elementalcombat.creeper_leggings" : "Creeper Leggings",
 	"item.elementalcombat.creeper_chestplate" : "Creeper Chestplate",
-	"item.elementalcombat.creeper_helmet" : "Creeper Helmet",
+	
+	"item.elementalcombat.biome_boots" : "Biome Boots",
+	"item.elementalcombat.biome_leggings" : "Biome Leggings",
+	"item.elementalcombat.biome_chestplate" : "Biome Chestplate",
+	"item.elementalcombat.biome_helmet" : "Biome Helmet",
 	
 	"enchantment.elementalcombat.ice_protection" : "Ice Resistance",
 	"enchantment.elementalcombat.thunder_protection" : "Thunder Resistance",

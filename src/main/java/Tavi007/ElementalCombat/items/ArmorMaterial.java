@@ -3,6 +3,7 @@ package Tavi007.ElementalCombat.items;
 import java.util.function.Supplier;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.init.ItemList;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.IArmorMaterial;
@@ -15,7 +16,8 @@ import net.minecraftforge.common.util.Lazy;
 
 public enum ArmorMaterial implements IArmorMaterial {
 	CREEPER("creeper",  30, new int[] {2, 6, 7, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1.0F, 0.0F, () -> Ingredient.fromItems(Items.CREEPER_HEAD)),
-	CLOCK("clock", 		30, new int[] {2, 6, 7, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1.0F, 0.0F, () -> Ingredient.fromItems(Items.CLOCK))
+	BIOME("biome",  30, new int[] {2, 6, 7, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1.0F, 0.0F, () -> Ingredient.fromItems(ItemList.ESSENCE_EARTH.get())),
+	CLOCK("clock", 	30, new int[] {2, 6, 7, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1.0F, 0.0F, () -> Ingredient.fromItems(Items.CLOCK))
 	
 	;
 
