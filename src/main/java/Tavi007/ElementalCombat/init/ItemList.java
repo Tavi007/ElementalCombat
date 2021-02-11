@@ -1,5 +1,9 @@
 package Tavi007.ElementalCombat.init;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.items.StyleSwitchingSword;
 import Tavi007.ElementalCombat.items.ArmorMaterial;
@@ -44,11 +48,13 @@ public class ItemList {
 	public static final RegistryObject<Item> GOLDEN_SPEAR 	= ITEMS.register("golden_spear", () -> new SwordItem(ItemTier.GOLD, 3, -2.4F, singleStack));
 	public static final RegistryObject<Item> DIAMOND_SPEAR 	= ITEMS.register("diamond_spear", () -> new SwordItem(ItemTier.DIAMOND, 3, -2.4F, singleStack));
 	
-	public static final RegistryObject<Item> WOODEN_HALBERD 	= ITEMS.register("wooden_halberd", () -> new StyleSwitchingSword(ItemTier.WOOD, 5, -2.8F, singleStack));
-	public static final RegistryObject<Item> STONE_HALBERD 		= ITEMS.register("stone_halberd", () -> new StyleSwitchingSword(ItemTier.STONE, 5, -2.8F, singleStack));
-	public static final RegistryObject<Item> IRON_HALBERD 		= ITEMS.register("iron_halberd", () -> new StyleSwitchingSword(ItemTier.IRON, 5, -2.8F, singleStack));
-	public static final RegistryObject<Item> GOLDEN_HALBERD 	= ITEMS.register("golden_halberd", () -> new StyleSwitchingSword(ItemTier.GOLD, 5, -2.8F, singleStack));
-	public static final RegistryObject<Item> DIAMOND_HALBERD 	= ITEMS.register("diamond_halberd", () -> new StyleSwitchingSword(ItemTier.DIAMOND, 5, -2.8F, singleStack));
+	public static final String[] halberdStylesArray = new String[] {"slash", "stab"};
+	public static final Set<String> halberdStyles = new HashSet<>(Arrays.asList(halberdStylesArray));
+	public static final RegistryObject<Item> WOODEN_HALBERD 	= ITEMS.register("wooden_halberd", () -> new StyleSwitchingSword(ItemTier.WOOD, 5, -2.8F, halberdStyles, singleStack));
+	public static final RegistryObject<Item> STONE_HALBERD 		= ITEMS.register("stone_halberd", () -> new StyleSwitchingSword(ItemTier.STONE, 5, -2.8F, halberdStyles, singleStack));
+	public static final RegistryObject<Item> IRON_HALBERD 		= ITEMS.register("iron_halberd", () -> new StyleSwitchingSword(ItemTier.IRON, 5, -2.8F, halberdStyles, singleStack));
+	public static final RegistryObject<Item> GOLDEN_HALBERD 	= ITEMS.register("golden_halberd", () -> new StyleSwitchingSword(ItemTier.GOLD, 5, -2.8F, halberdStyles, singleStack));
+	public static final RegistryObject<Item> DIAMOND_HALBERD 	= ITEMS.register("diamond_halberd", () -> new StyleSwitchingSword(ItemTier.DIAMOND, 5, -2.8F, halberdStyles, singleStack));
 	
 	public static final RegistryObject<Item> WATER_STAFF 		= ITEMS.register("water_staff", () -> new ToolItem(6, -1.5F, ItemTier.DIAMOND, null, singleStack));
 	public static final RegistryObject<Item> QUAKE_HAMMER 		= ITEMS.register("quake_hammer", () -> new ToolItem(14, -3.0F, ItemTier.DIAMOND, null, singleStack));
@@ -58,7 +64,9 @@ public class ItemList {
 	public static final RegistryObject<Item> VOID_AXE 			= ITEMS.register("void_axe", () -> new AxeItem(ItemTier.DIAMOND, 7, -1.2F, singleStack));
 	public static final RegistryObject<Item> LIGHT_BOW 			= ITEMS.register("light_bow", () -> new BowItem(singleStack));
 	
-	public static final RegistryObject<Item> FIREANDICE_SWORD = ITEMS.register("fire_and_ice_sword", () -> new ElementSwitchingSword(ItemTier.IRON, 3, -2.4F, singleStack));
+	public static final String[] fireAndIceArray = new String[] {"fire", "ice"};
+	public static final Set<String> fireAndIce = new HashSet<>(Arrays.asList(fireAndIceArray));
+	public static final RegistryObject<Item> FIREANDICE_SWORD = ITEMS.register("fire_and_ice_sword", () -> new ElementSwitchingSword(ItemTier.IRON, 3, -2.4F, fireAndIce, singleStack));
 	
 	//armor
 	public static final RegistryObject<Item> CREEPER_CHESTPLATE = ITEMS.register("creeper_chestplate", () -> new ArmorItem(ArmorMaterial.CREEPER, EquipmentSlotType.CHEST, singleStack));
@@ -76,4 +84,5 @@ public class ItemList {
 	public static final RegistryObject<Item> MIRROR_BOOTS		= ITEMS.register("mirror_boots", () -> new MirrorArmor(ArmorMaterial.BIOME, EquipmentSlotType.FEET, singleStack));
 	
 	public static final RegistryObject<Item> DAYNIGHT_CHESTPLATE = ITEMS.register("daynight_chestplate", () -> new DayNightArmor(ArmorMaterial.CLOCK, EquipmentSlotType.CHEST, singleStack));
+
 }

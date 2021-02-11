@@ -1,11 +1,15 @@
 package Tavi007.ElementalCombat.items;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
+import Tavi007.ElementalCombat.config.ServerConfig;
+import Tavi007.ElementalCombat.util.CollectionUtil;
 import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,21 +28,26 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class StyleSwitchingSword extends SwordItem {
 
-	public StyleSwitchingSword(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn) {
+	private Set<String> styles = new HashSet<String>();
+	
+	public StyleSwitchingSword(IItemTier tier, int attackDamageIn, float attackSpeedIn, Set<String> styles, Properties builderIn) {
 		super(tier, attackDamageIn, attackSpeedIn, builderIn);
+		this.styles = styles;
 	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		AttackData atckData = ElementalCombatAPI.getAttackData(stack);
-		if (atckData.getStyle().equals("slash")) {
-			atckData.setStyle("stab");
+		String nextStyle = CollectionUtil.getNext(styles, atckData.getStyle(), true);
+		if(styles != null) {
+			atckData.setStyle(nextStyle);
+			return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
 		}
 		else {
-			atckData.setStyle("slash");
+			atckData.setElement(ServerConfig.getDefaultStyle());
+			return ActionResult.resultFail(playerIn.getHeldItem(handIn));
 		}
-		return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
 	}
 	
 
@@ -58,6 +67,6 @@ public class StyleSwitchingSword extends SwordItem {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-    	tooltip.add(new StringTextComponent("" + TextFormatting.GRAY + "Right-click to toggle style" + TextFormatting.RESET));
+    	tooltip.add(new StringTextComponent("" + TextFormatting.GRAY + "Right-click to switch style" + TextFormatting.RESET));
     }
 }

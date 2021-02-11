@@ -1,12 +1,16 @@
 package Tavi007.ElementalCombat.items;
 
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
+import Tavi007.ElementalCombat.config.ServerConfig;
+import Tavi007.ElementalCombat.util.CollectionUtil;
 import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,23 +27,33 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ElementSwitchingSword extends SwordItem{
+public class ElementSwitchingSword extends SwordItem {
 
-	public ElementSwitchingSword(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties p_i48460_4_) {
+	private Set<String> elements = new HashSet<String>();
+	
+	public ElementSwitchingSword(IItemTier tier, int attackDamageIn, float attackSpeedIn, Set<String> elements, Properties p_i48460_4_) {
 		super(tier, attackDamageIn, attackSpeedIn, p_i48460_4_);
+		if(elements.isEmpty()) {
+			this.elements.add(ServerConfig.getDefaultElement());
+		}
+		else {
+			this.elements = elements;
+		}
 	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		AttackData atckData = ElementalCombatAPI.getAttackData(stack);
-		if (atckData.getElement().equals("fire")) {
-			atckData.setElement("ice");
+		String nextElement = CollectionUtil.getNext(elements, atckData.getElement(), true);
+		if(nextElement != null) {
+			atckData.setElement(nextElement);
+			return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
 		}
 		else {
-			atckData.setElement("fire");
+			atckData.setElement(ServerConfig.getDefaultElement());
+			return ActionResult.resultFail(playerIn.getHeldItem(handIn));
 		}
-		return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
 	}
 	
 
@@ -54,7 +68,7 @@ public class ElementSwitchingSword extends SwordItem{
     @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-    	tooltip.add(new StringTextComponent("" + TextFormatting.GRAY + "Right-click to toggle element" + TextFormatting.RESET));
+    	tooltip.add(new StringTextComponent("" + TextFormatting.GRAY + "Right-click to switch element" + TextFormatting.RESET));
     }
 
     @Override
