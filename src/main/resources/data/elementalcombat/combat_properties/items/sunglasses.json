@@ -1,0 +1,12 @@
+{
+	"attack_style":"",
+	"attack_element":"",
+	
+	"defense_style":{
+	},
+	
+	"defense_element":{
+		"light":30
+		"darkness":-30
+	}
+}

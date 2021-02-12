@@ -73,15 +73,25 @@ public class ItemList {
 	public static final RegistryObject<Item> CREEPER_LEGGINS 	= ITEMS.register("creeper_leggings", () -> new ArmorItem(ArmorMaterial.CREEPER, EquipmentSlotType.LEGS, singleStack));
 	public static final RegistryObject<Item> CREEPER_BOOTS 		= ITEMS.register("creeper_boots", () -> new ArmorItem(ArmorMaterial.CREEPER, EquipmentSlotType.FEET, singleStack));
 	
+	public static final RegistryObject<Item> SUNGLASSES 			= ITEMS.register("sunglasses", () -> new ArmorItem(ArmorMaterial.SUNGLASS, EquipmentSlotType.HEAD, singleStack));
+	public static final RegistryObject<Item> WETSUIT_CHESTPLATE		= ITEMS.register("wetsuit_chestplate", () -> new ArmorItem(ArmorMaterial.RUBBER, EquipmentSlotType.CHEST, singleStack));
+	public static final RegistryObject<Item> WETSUIT_LEGGINGS 		= ITEMS.register("wetsuit_leggings", () -> new ArmorItem(ArmorMaterial.RUBBER, EquipmentSlotType.LEGS, singleStack));
+	public static final RegistryObject<Item> RUBBERBOOTS 			= ITEMS.register("rubber_boots", () -> new ArmorItem(ArmorMaterial.RUBBER, EquipmentSlotType.FEET, singleStack));
+	
+	public static final RegistryObject<Item> WOOL_HELMET 		= ITEMS.register("wool_helmet", () -> new ArmorItem(ArmorMaterial.WOOL, EquipmentSlotType.HEAD, singleStack));
+	public static final RegistryObject<Item> WOOL_CHESTPLATE 	= ITEMS.register("wool_chestplate", () -> new ArmorItem(ArmorMaterial.WOOL, EquipmentSlotType.CHEST, singleStack));
+	public static final RegistryObject<Item> WOOL_LEGGINS 		= ITEMS.register("wool_leggings", () -> new ArmorItem(ArmorMaterial.WOOL, EquipmentSlotType.LEGS, singleStack));
+	public static final RegistryObject<Item> WOOL_BOOTS 		= ITEMS.register("wool_boots", () -> new ArmorItem(ArmorMaterial.WOOL, EquipmentSlotType.FEET, singleStack));
+	
 	public static final RegistryObject<Item> BIOME_HELMET		= ITEMS.register("biome_helmet", () -> new BiomeArmor(ArmorMaterial.BIOME, EquipmentSlotType.HEAD, singleStack));
 	public static final RegistryObject<Item> BIOME_CHESTPLATE	= ITEMS.register("biome_chestplate", () -> new BiomeArmor(ArmorMaterial.BIOME, EquipmentSlotType.CHEST, singleStack));
 	public static final RegistryObject<Item> BIOME_LEGGINS	 	= ITEMS.register("biome_leggings", () -> new BiomeArmor(ArmorMaterial.BIOME, EquipmentSlotType.LEGS, singleStack));
 	public static final RegistryObject<Item> BIOME_BOOTS		= ITEMS.register("biome_boots", () -> new BiomeArmor(ArmorMaterial.BIOME, EquipmentSlotType.FEET, singleStack));
 
-	public static final RegistryObject<Item> MIRROR_HELMET		= ITEMS.register("mirror_helmet", () -> new MirrorArmor(ArmorMaterial.BIOME, EquipmentSlotType.HEAD, singleStack));
-	public static final RegistryObject<Item> MIRROR_CHESTPLATE	= ITEMS.register("mirror_chestplate", () -> new MirrorArmor(ArmorMaterial.BIOME, EquipmentSlotType.CHEST, singleStack));
-	public static final RegistryObject<Item> MIRROR_LEGGINS	 	= ITEMS.register("mirror_leggings", () -> new MirrorArmor(ArmorMaterial.BIOME, EquipmentSlotType.LEGS, singleStack));
-	public static final RegistryObject<Item> MIRROR_BOOTS		= ITEMS.register("mirror_boots", () -> new MirrorArmor(ArmorMaterial.BIOME, EquipmentSlotType.FEET, singleStack));
+	public static final RegistryObject<Item> MIRROR_HELMET		= ITEMS.register("mirror_helmet", () -> new MirrorArmor(ArmorMaterial.MIRROR, EquipmentSlotType.HEAD, singleStack));
+	public static final RegistryObject<Item> MIRROR_CHESTPLATE	= ITEMS.register("mirror_chestplate", () -> new MirrorArmor(ArmorMaterial.MIRROR, EquipmentSlotType.CHEST, singleStack));
+	public static final RegistryObject<Item> MIRROR_LEGGINS	 	= ITEMS.register("mirror_leggings", () -> new MirrorArmor(ArmorMaterial.MIRROR, EquipmentSlotType.LEGS, singleStack));
+	public static final RegistryObject<Item> MIRROR_BOOTS		= ITEMS.register("mirror_boots", () -> new MirrorArmor(ArmorMaterial.MIRROR, EquipmentSlotType.FEET, singleStack));
 	
 	public static final RegistryObject<Item> DAYNIGHT_CHESTPLATE = ITEMS.register("daynight_chestplate", () -> new DayNightArmor(ArmorMaterial.CLOCK, EquipmentSlotType.CHEST, singleStack));
 
