@@ -199,8 +199,8 @@ public class ServerEvents {
 			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 
 			// plays a healing sound 
-			SoundEvent sound = SoundEvents.BLOCK_ANVIL_PLACE; //need better sound
-			target.getEntityWorld().playSound(null, target.getPosition(), sound, SoundCategory.MASTER, 1.0f, 1.0f);
+			SoundEvent sound = SoundEvents.ENTITY_PLAYER_LEVELUP; //need better sound
+			target.getEntityWorld().playSound(null, target.getPosition(), sound, SoundCategory.MASTER, 1.0f, 0.5f);
 		}
 
 		event.setAmount(damageAmount);
