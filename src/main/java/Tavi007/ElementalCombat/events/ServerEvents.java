@@ -1,6 +1,7 @@
 package Tavi007.ElementalCombat.events;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Random;
 
 import Tavi007.ElementalCombat.ElementalCombat;
@@ -10,6 +11,7 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.ItemList;
 import Tavi007.ElementalCombat.init.ParticleList;
+import Tavi007.ElementalCombat.items.MirrorArmor;
 import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
 import Tavi007.ElementalCombat.network.EntityMessage;
@@ -19,9 +21,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
@@ -204,6 +204,21 @@ public class ServerEvents {
 		}
 
 		event.setAmount(damageAmount);
+		
+		// for mirror armor
+		final String element = sourceElement;
+		final String style = sourceStyle;
+		target.getArmorInventoryList().forEach( armorStack -> {
+			if(armorStack.getItem() instanceof MirrorArmor) {
+				DefenseData armorDef = ElementalCombatAPI.getDefenseData(armorStack);
+				HashMap<String, Integer> elemMap = new HashMap<String, Integer>();
+				HashMap<String, Integer> styleMap = new HashMap<String, Integer>();
+				elemMap.put(element, ServerConfig.getMaxFactor()/10);
+				styleMap.put(style, ServerConfig.getMaxFactor()/10);
+				armorDef.setElementFactor(elemMap);
+				armorDef.setStyleFactor(styleMap);
+			}
+		});
 	}
 
 	private static void displayParticle(float scalingStyle, float scalingElement, Vector3d position, ServerWorld world) {
