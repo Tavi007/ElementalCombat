@@ -2,6 +2,6 @@
     "parent": "minecraft:item/generated",
     "textures": 
 	{
-        "layer0": "elementalcombat:item/biome_helmet"
+        "layer0": "elementalcombat:item/sunglasses"
     }
 }
