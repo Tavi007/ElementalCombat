@@ -194,7 +194,7 @@ public class ElementalCombatAPI
 		if (rlEntity == null) {
 			return new EntityCombatProperties();
 		}
-		ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "entities/" + rlEntity.getPath());
+		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "entities/" + rlEntity.getPath());
 		return new EntityCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
 
 	}
@@ -209,7 +209,7 @@ public class ElementalCombatAPI
 		if (rlItem == null) {
 			return new ItemCombatProperties();
 		}
-		ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "items/" + rlItem.getPath());
+		ResourceLocation rlProperties = new ResourceLocation(rlItem.getNamespace(), "items/" + rlItem.getPath());
 		return new ItemCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
 	}
 
@@ -223,7 +223,7 @@ public class ElementalCombatAPI
 		if (rlBiome == null) {
 			return new BiomeCombatProperties();
 		}
-		ResourceLocation rlProperties = new ResourceLocation(ElementalCombat.MOD_ID, "biomes/" + rlBiome.getPath()); ;
+		ResourceLocation rlProperties = new ResourceLocation(rlBiome.getNamespace(), "biomes/" + rlBiome.getPath()); ;
 		return new BiomeCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties));
 	}
 
@@ -238,13 +238,13 @@ public class ElementalCombatAPI
 		// do other mods implement their own natural damageSource? If so, how could I get the mod id from it?
 		// for now do not use Namespace.
 		if(damageSource.isExplosion()) {
-			rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/explosion");
+			rlDamageSource = new ResourceLocation("minecraft", "damage_sources/explosion");
 		}
 		else if(damageSource.isMagicDamage()) {
-			rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/magic");
+			rlDamageSource = new ResourceLocation("minecraft", "damage_sources/magic");
 		}
 		else {
-			rlDamageSource = new ResourceLocation(ElementalCombat.MOD_ID, "damage_sources/" + damageSource.getDamageType().toLowerCase());
+			rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + damageSource.getDamageType().toLowerCase());
 		}
 		return new DamageSourceCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource));
 	}

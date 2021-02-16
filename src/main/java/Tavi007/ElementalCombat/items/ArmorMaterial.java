@@ -16,7 +16,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Lazy;
 
 public enum ArmorMaterial implements IArmorMaterial {
-	BIOME("biome",  30, new int[] {2, 6, 7, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1.0F, 0.0F, () -> Ingredient.fromItems(ItemList.ESSENCE_EARTH.get())),
+	// needs balance changes
+	HIKING("hiking",  30, new int[] {2, 6, 7, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1.0F, 0.0F, () -> Ingredient.fromItems(ItemList.ESSENCE_EARTH.get())),
 	CLOCK("clock", 	30, new int[] {2, 6, 7, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1.0F, 0.0F, () -> Ingredient.fromItems(Items.CLOCK)),
 	CREEPER("creeper",  30, new int[] {2, 6, 7, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1.0F, 0.0F, () -> Ingredient.fromItems(Items.CREEPER_HEAD)),
 	SUNGLASS("sunglass",  30, new int[] {2, 6, 7, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1.0F, 0.0F, () -> Ingredient.fromItems(Items.GLASS)),

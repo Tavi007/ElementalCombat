@@ -23,11 +23,11 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class BiomeArmor extends  ArmorItem {
+public class BiomeDependentArmor extends  ArmorItem {
 	
 	int tickCounter = 0;
 	
-	public BiomeArmor(IArmorMaterial materialIn, EquipmentSlotType slot, Properties p_i48534_3_) {
+	public BiomeDependentArmor(IArmorMaterial materialIn, EquipmentSlotType slot, Properties p_i48534_3_) {
 		super(materialIn, slot, p_i48534_3_);
 	}
 	

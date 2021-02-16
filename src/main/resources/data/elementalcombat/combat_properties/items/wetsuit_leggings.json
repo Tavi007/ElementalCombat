@@ -7,6 +7,6 @@
 	
 	"defense_element":{
 		"water":4,
-		"ice":4
+		"thunder":-4
 	}
 }

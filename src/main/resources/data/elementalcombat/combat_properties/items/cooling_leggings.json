@@ -3,11 +3,10 @@
 	"attack_element":"",
 	
 	"defense_style":{
-		"explosion":4
 	},
 	
 	"defense_element":{
-		"ice":4,
-		"fire":-4
+		"fire":4,
+		"ice":-4
 	}
 }
