@@ -88,15 +88,15 @@ public class AttackData {
 		currentEnchantments.forEach((ench, value) -> {
 			//sword
 			if(ench.getName().equals(Enchantments.FIRE_ASPECT.getName())) {this.setElement("fire");}
-			if(ench.getName().equals(EnchantmentList.ICE_ASPECT.get().getName())) {this.setElement("ice");}
-			if(ench.getName().equals(EnchantmentList.WATER_ASPECT.get().getName())) {this.setElement("water");}
-			if(ench.getName().equals(EnchantmentList.THUNDER_ASPECT.get().getName())) {this.setElement("thunder");}
-			if(ench.getName().equals(EnchantmentList.DARKNESS_ASPECT.get().getName())) {this.setElement("darkness");}
-			if(ench.getName().equals(EnchantmentList.LIGHT_ASPECT.get().getName())) {this.setElement("light");}
+			else if(ench.getName().equals(EnchantmentList.ICE_ASPECT.get().getName())) {this.setElement("ice");}
+			else if(ench.getName().equals(EnchantmentList.WATER_ASPECT.get().getName())) {this.setElement("water");}
+			else if(ench.getName().equals(EnchantmentList.THUNDER_ASPECT.get().getName())) {this.setElement("thunder");}
+			else if(ench.getName().equals(EnchantmentList.DARKNESS_ASPECT.get().getName())) {this.setElement("darkness");}
+			else if(ench.getName().equals(EnchantmentList.LIGHT_ASPECT.get().getName())) {this.setElement("light");}
 			//bow
-			if(ench.getName().equals(Enchantments.FLAME.getName())) {this.setElement("fire");}
+			else if(ench.getName().equals(Enchantments.FLAME.getName())) {this.setElement("fire");}
 			//trident
-			if(ench.getName().equals(Enchantments.CHANNELING.getName())) {this.setElement("thunder");}
+			else if(ench.getName().equals(Enchantments.CHANNELING.getName())) {this.setElement("thunder");}
 		});
 
 		this.areEnchantmentChangesApplied = true;
