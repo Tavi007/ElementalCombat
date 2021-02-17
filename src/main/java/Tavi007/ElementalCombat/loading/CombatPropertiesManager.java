@@ -68,9 +68,8 @@ public class CombatPropertiesManager extends JsonReloadListener
 					DamageSourceCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), DamageSourceCombatProperties.class);
 					builderDamageSource.put(rl, combatProperties);
 				}
-				else if(rl.getPath().contains("combat_properties_text_mapping")){
+				else if(rl.equals(new ResourceLocation(ElementalCombat.MOD_ID, "combat_properties_text_mapping"))){
 					this.mapping = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), CombatPropertiesTextMapping.class);
-					
 				}
 				ElementalCombat.LOGGER.info(rl.toString() + " succesfully loaded.");
 			}
