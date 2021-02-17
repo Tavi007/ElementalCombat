@@ -200,7 +200,7 @@ public class ServerEvents {
 
 			// plays a healing sound 
 			SoundEvent sound = SoundEvents.ENTITY_PLAYER_LEVELUP; //need better sound
-			target.getEntityWorld().playSound(null, target.getPosition(), sound, SoundCategory.MASTER, 1.0f, 0.5f);
+			target.getEntityWorld().playSound(null, target.getPosition(), sound, SoundCategory.MASTER, 1.0f, 2.0f);
 		}
 
 		event.setAmount(damageAmount);

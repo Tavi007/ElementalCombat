@@ -71,16 +71,16 @@ public class ItemList {
 	// armor
 	// single pieces
 	public static final RegistryObject<Item> SUNGLASSES 			= ITEMS.register("sunglasses", () -> new ArmorItem(ArmorMaterial.SUNGLASS, EquipmentSlotType.HEAD, singleStack));
-	public static final RegistryObject<Item> NIGHTVISION_GOOGLES	= ITEMS.register("nightvision_googles", () -> new MirrorArmor(ArmorMaterial.IRON, EquipmentSlotType.HEAD, singleStack));
+	public static final RegistryObject<Item> NIGHTVISION_GOOGLES	= ITEMS.register("nightvision_googles", () -> new ArmorItem(ArmorMaterial.IRON, EquipmentSlotType.HEAD, singleStack));
 	
 	public static final RegistryObject<Item> WETSUIT_CHESTPLATE		= ITEMS.register("wetsuit_chestplate", () -> new ArmorItem(ArmorMaterial.RUBBER, EquipmentSlotType.CHEST, singleStack));
 	public static final RegistryObject<Item> DAYNIGHT_CHESTPLATE 	= ITEMS.register("daynight_chestplate", () -> new DayNightArmor(ArmorMaterial.CLOCK, EquipmentSlotType.CHEST, singleStack));
 
 	public static final RegistryObject<Item> WETSUIT_LEGGINGS 		= ITEMS.register("wetsuit_leggings", () -> new ArmorItem(ArmorMaterial.RUBBER, EquipmentSlotType.LEGS, singleStack));
-	public static final RegistryObject<Item> COOLING_LEGGINGS 		= ITEMS.register("cooling_leggings", () -> new MirrorArmor(ArmorMaterial.IRON, EquipmentSlotType.LEGS, singleStack));
+	public static final RegistryObject<Item> COOLING_LEGGINGS 		= ITEMS.register("cooling_leggings", () -> new ArmorItem(ArmorMaterial.IRON, EquipmentSlotType.LEGS, singleStack));
 	
 	public static final RegistryObject<Item> RUBBER_BOOTS 			= ITEMS.register("rubber_boots", () -> new ArmorItem(ArmorMaterial.RUBBER, EquipmentSlotType.FEET, singleStack));
-	public static final RegistryObject<Item> HEAVY_BOOTS			= ITEMS.register("heavy_boots", () -> new MirrorArmor(ArmorMaterial.IRON, EquipmentSlotType.FEET, singleStack));
+	public static final RegistryObject<Item> HEAVY_BOOTS			= ITEMS.register("heavy_boots", () -> new ArmorItem(ArmorMaterial.IRON, EquipmentSlotType.FEET, singleStack));
 	
 	// full sets
 	public static final RegistryObject<Item> CREEPER_CHESTPLATE = ITEMS.register("creeper_chestplate", () -> new ArmorItem(ArmorMaterial.CREEPER, EquipmentSlotType.CHEST, singleStack));
