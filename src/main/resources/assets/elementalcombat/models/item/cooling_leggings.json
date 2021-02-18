@@ -2,6 +2,6 @@
     "parent": "minecraft:item/generated",
     "textures": 
 	{
-        "layer0": "elementalcombat:item/biome_chestplate"
+        "layer0": "elementalcombat:item/cooling_leggings"
     }
 }
