@@ -2,6 +2,6 @@
     "parent": "minecraft:item/generated",
     "textures": 
 	{
-        "layer0": "elementalcombat:item/haevy_boots"
+        "layer0": "elementalcombat:item/heavy_boots"
     }
 }

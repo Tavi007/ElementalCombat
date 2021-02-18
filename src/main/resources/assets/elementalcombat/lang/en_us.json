@@ -45,10 +45,10 @@
 	"item.elementalcombat.creeper_leggings" : "Creeper Leggings",
 	"item.elementalcombat.creeper_chestplate" : "Creeper Chestplate",
 	
-	"item.elementalcombat.biome_boots" : "Biome Boots",
-	"item.elementalcombat.biome_leggings" : "Biome Leggings",
-	"item.elementalcombat.biome_chestplate" : "Biome Chestplate",
-	"item.elementalcombat.biome_helmet" : "Biome Helmet",
+	"item.elementalcombat.hiking_boots" : "Hiking Boots",
+	"item.elementalcombat.hiking_shorts" : "Hiking Shorts",
+	"item.elementalcombat.hiking_vest" : "Hiking Vest",
+	"item.elementalcombat.hiking_hat" : "Hiking Hat",
 	
 	"item.elementalcombat.mirror_boots" : "Mirror Boots",
 	"item.elementalcombat.mirror_leggings" : "Mirror Leggings",
@@ -64,6 +64,9 @@
 	"item.elementalcombat.wetsuit_leggings" : "Wetsuit Leggings",
 	"item.elementalcombat.wetsuit_chestplate" : "Wetsuit Chestplate",
 	"item.elementalcombat.sunglasses" : "Sunglasses",
+	"item.elementalcombat.ofuda" : "Ofuda",
+	"item.elementalcombat.cooling_leggings" : "Cooling Leggings",
+	"item.elementalcombat.heavy_boots" : "Heavy Boots",
 	"item.elementalcombat.daynight_chestplate" : "Day & Night Chestplate",
 	
 	"enchantment.elementalcombat.ice_protection" : "Ice Resistance",
