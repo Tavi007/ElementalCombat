@@ -71,7 +71,7 @@ public class ItemList {
 	// armor
 	// single pieces
 	public static final RegistryObject<Item> SUNGLASSES 			= ITEMS.register("sunglasses", () -> new ArmorItem(ArmorMaterial.SUNGLASS, EquipmentSlotType.HEAD, singleStack));
-	public static final RegistryObject<Item> NIGHTVISION_GOOGLES	= ITEMS.register("nightvision_googles", () -> new ArmorItem(ArmorMaterial.IRON, EquipmentSlotType.HEAD, singleStack));
+	public static final RegistryObject<Item> OFUDA					= ITEMS.register("ofuda", () -> new ArmorItem(ArmorMaterial.PAPER, EquipmentSlotType.HEAD, singleStack));
 	
 	public static final RegistryObject<Item> WETSUIT_CHESTPLATE		= ITEMS.register("wetsuit_chestplate", () -> new ArmorItem(ArmorMaterial.RUBBER, EquipmentSlotType.CHEST, singleStack));
 	public static final RegistryObject<Item> DAYNIGHT_CHESTPLATE 	= ITEMS.register("daynight_chestplate", () -> new DayNightArmor(ArmorMaterial.CLOCK, EquipmentSlotType.CHEST, singleStack));
