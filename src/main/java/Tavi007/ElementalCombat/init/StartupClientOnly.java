@@ -37,6 +37,24 @@ public class StartupClientOnly {
 			return entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack ? 1.0F : 0.0F;
 		});
 
+		ItemModelsProperties.registerProperty(ItemList.DAYNIGHT_CHESTPLATE.get(), new ResourceLocation(ElementalCombat.MOD_ID + ":isday"), (stack, world, entity) -> {
+			if(entity != null) {
+				if(entity.world != null) {
+					long time = entity.world.getDayTime();
+					if (time >= 2000 && time<=10000) {
+						return 1.0F;
+					}
+					else if (time >= 14000 && time<=22000) {
+						return 0.0F;
+					}
+					else {
+						return 0.5F;
+					}
+				}
+			}
+			return 0.0F;
+		});
+
 
 		ElementalCombat.LOGGER.info("ElementalCombat clientRegistries method registered.");	
 	}
