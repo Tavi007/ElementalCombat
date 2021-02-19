@@ -27,6 +27,7 @@ public class ItemList {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ElementalCombat.MOD_ID);
 
 	private static Properties singleStack = new Item.Properties().group(ElementalCombat.ELEMENTAL_COMBAT_GROUP).maxStackSize(1);
+	private static Properties singleStackWMaxDmg = new Item.Properties().group(ElementalCombat.ELEMENTAL_COMBAT_GROUP).maxStackSize(1);
 	private static Properties fullStack = new Item.Properties().group(ElementalCombat.ELEMENTAL_COMBAT_GROUP).maxStackSize(64);
 	
 	//essence
@@ -56,12 +57,12 @@ public class ItemList {
 	public static final RegistryObject<Item> DIAMOND_HALBERD 	= ITEMS.register("diamond_halberd", () -> new StyleSwitchingSword(ItemTier.DIAMOND, 5, -2.8F, halberdStyles, singleStack));
 	
 	// need balance changes
-	public static final RegistryObject<Item> WATER_STAFF 		= ITEMS.register("water_staff", () -> new SwordItem(ItemTier.DIAMOND, 6, -1.5F, singleStack));
-	public static final RegistryObject<Item> QUAKE_HAMMER 		= ITEMS.register("quake_hammer", () -> new SwordItem(ItemTier.DIAMOND, 14, -3.0F, singleStack));
-	public static final RegistryObject<Item> THORN_CLUB 		= ITEMS.register("thorn_club", () -> new SwordItem(ItemTier.DIAMOND, 14, -3.0F, singleStack));
-	public static final RegistryObject<Item> GUST_SWORD 		= ITEMS.register("gust_sword", () -> new SwordItem(ItemTier.DIAMOND, 7, -1.2F,singleStack));
-	public static final RegistryObject<Item> LIGHTNING_DAGGER 	= ITEMS.register("lightning_dagger", () -> new SwordItem(ItemTier.DIAMOND, 3, -0.6F, singleStack));
-	public static final RegistryObject<Item> VOID_AXE 			= ITEMS.register("void_axe", () -> new AxeItem(ItemTier.DIAMOND, 7, -1.2F, singleStack));
+	public static final RegistryObject<Item> WATER_STAFF 		= ITEMS.register("water_staff", () -> new SwordItem(ItemTier.WOOD, 5, -1.4F, singleStackWMaxDmg.maxDamage(1000)));
+	public static final RegistryObject<Item> QUAKE_HAMMER 		= ITEMS.register("quake_hammer", () -> new SwordItem(ItemTier.WOOD, 10, -3.0F, singleStackWMaxDmg.maxDamage(1000)));
+	public static final RegistryObject<Item> THORN_CLUB 		= ITEMS.register("thorn_club", () -> new SwordItem(ItemTier.WOOD, 8, -2.7F, singleStackWMaxDmg.maxDamage(1000)));
+	public static final RegistryObject<Item> GUST_SWORD 		= ITEMS.register("gust_sword", () -> new SwordItem(ItemTier.WOOD, 6, -2.0F, singleStackWMaxDmg.maxDamage(1000)));
+	public static final RegistryObject<Item> LIGHTNING_DAGGER 	= ITEMS.register("lightning_dagger", () -> new SwordItem(ItemTier.WOOD, 2, -0.6F, singleStackWMaxDmg.maxDamage(1000)));
+	public static final RegistryObject<Item> VOID_AXE 			= ITEMS.register("void_axe", () -> new AxeItem(ItemTier.DIAMOND, 5.0F, -3.0F, singleStack));
 	public static final RegistryObject<Item> LIGHT_BOW 			= ITEMS.register("light_bow", () -> new BowItem(singleStack));
 	
 	public static final String[] fireAndIceArray = new String[] {"fire", "ice"};

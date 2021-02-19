@@ -34,7 +34,7 @@ public class DayNightArmor extends  ArmorItem {
 	public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
 		float time = (float) world.getDayTime();
 		// time: 18000 = midnight; 6000 = noon; 12000 and 0 (or 24000) halfway points
-		int lightFactor = Math.round((float) Math.sin(time/12000 * Math.PI) * 75) ;
+		int lightFactor = Math.round((float) Math.sin(time/12000 * Math.PI) * 35) ;
 		DefenseData data = ElementalCombatAPI.getDefenseData(stack);
 		HashMap<String,Integer> elemFactors = data.getElementFactor();
 		if(lightFactor>=0) {
