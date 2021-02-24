@@ -62,14 +62,11 @@ public class StartupClientOnly {
 	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onParticleFactoryRegistration(ParticleFactoryRegisterEvent event) {
-		Minecraft.getInstance().particles.registerFactory(ParticleList.ELEMENT_WEAKNESS.get(), CombatParticle.Factory::new);
-		Minecraft.getInstance().particles.registerFactory(ParticleList.ELEMENT_RESISTANCE.get(), CombatParticle.Factory::new);
-		Minecraft.getInstance().particles.registerFactory(ParticleList.ELEMENT_IMMUNITY.get(), CombatParticle.Factory::new);
-		Minecraft.getInstance().particles.registerFactory(ParticleList.ELEMENT_ABSORPTION.get(), CombatParticle.Factory::new);
-
-		Minecraft.getInstance().particles.registerFactory(ParticleList.STYLE_WEAKNESS.get(), CombatParticle.Factory::new);
-		Minecraft.getInstance().particles.registerFactory(ParticleList.STYLE_RESISTANCE.get(), CombatParticle.Factory::new);
-		Minecraft.getInstance().particles.registerFactory(ParticleList.STYLE_IMMUNITY.get(), CombatParticle.Factory::new);
+		Minecraft.getInstance().particles.registerFactory(ParticleList.CRIT_ELEMENT.get(), CombatParticle.Factory::new);
+		Minecraft.getInstance().particles.registerFactory(ParticleList.CRIT_STYLE.get(), CombatParticle.Factory::new);
+		Minecraft.getInstance().particles.registerFactory(ParticleList.RESIST_ELEMENT.get(), CombatParticle.Factory::new);
+		Minecraft.getInstance().particles.registerFactory(ParticleList.RESIST_STYLE.get(), CombatParticle.Factory::new);
+		Minecraft.getInstance().particles.registerFactory(ParticleList.ABSORB.get(), CombatParticle.Factory::new);
 
 		ElementalCombat.LOGGER.info("ElementalCombat particles factory registered.");
 	}

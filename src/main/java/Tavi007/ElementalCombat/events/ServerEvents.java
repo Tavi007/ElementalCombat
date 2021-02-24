@@ -2,7 +2,6 @@ package Tavi007.ElementalCombat.events;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Random;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
@@ -16,6 +15,7 @@ import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
 import Tavi007.ElementalCombat.network.EntityMessage;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -27,8 +27,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -42,16 +40,14 @@ import net.minecraftforge.fml.network.PacketDistributor;
 public class ServerEvents {
 
 	@SubscribeEvent
-	public static void addReloadListenerEvent(AddReloadListenerEvent event)
-	{
+	public static void addReloadListenerEvent(AddReloadListenerEvent event) {
 		event.addListener(ElementalCombat.COMBAT_PROPERTIES_MANGER);
-		ElementalCombat.LOGGER.info("ReloadListener for combat data registered.");	
+		ElementalCombat.LOGGER.info("ReloadListener for combat data registered.");
 	}
 
 	@SubscribeEvent
-	public static void entityJoinWorld(EntityJoinWorldEvent event)
-	{
-		if(!event.getWorld().isRemote()){ // only server side should check
+	public static void entityJoinWorld(EntityJoinWorldEvent event) {
+		if(!event.getWorld().isRemote()) { // only server side should check
 			Entity entity = event.getEntity();
 
 			// for synchronization after switching dimensions
@@ -67,7 +63,7 @@ public class ServerEvents {
 			}
 
 			// for newly spawned projectiles.
-			else if(entity instanceof ProjectileEntity){
+			else if(entity instanceof ProjectileEntity) {
 				if(entity.ticksExisted == 0){
 					ProjectileEntity projectile = (ProjectileEntity) entity;
 					Entity  source = projectile.func_234616_v_();
@@ -100,8 +96,7 @@ public class ServerEvents {
 		}
 	}
 	
-	private static void addEssenceDropToList(String element, LivingEntity entity, Collection<ItemEntity> drops, int lootingLevel) {
-		
+	private static void addEssenceDropToList(String element, LivingEntity entity, Collection<ItemEntity> drops, int lootingLevel) {	
 		int numberOfDrops = 1 + lootingLevel;
 		
 		if (numberOfDrops > 0) {
@@ -142,8 +137,7 @@ public class ServerEvents {
 	}
 	
 	@SubscribeEvent
-	public static void elementifyLivingHurtEvent(LivingHurtEvent event)
-	{
+	public static void elementifyLivingHurtEvent(LivingHurtEvent event) {
 		DamageSource damageSource = event.getSource();
 		Entity immediateSource = damageSource.getImmediateSource();
 
@@ -155,7 +149,7 @@ public class ServerEvents {
 		// Get combat data from source
 		String sourceElement;
 		String sourceStyle;
-		if (immediateSource instanceof LivingEntity) {
+		if(immediateSource instanceof LivingEntity) {
 			AttackData atckCap = ElementalCombatAPI.getAttackDataWithActiveItem((LivingEntity) immediateSource);
 			sourceStyle = atckCap.getStyle();
 			sourceElement = atckCap.getElement();
@@ -185,11 +179,10 @@ public class ServerEvents {
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
 
 		// display particles
-		displayParticle(defenseStyleScaling, defenseElementScaling, target.getEyePosition(0), (ServerWorld) target.getEntityWorld());
+		displayParticle(defenseStyleScaling, defenseElementScaling, target);
 
 		// heals the target, if damage is lower than 0
-		if(damageAmount <= 0)
-		{
+		if(damageAmount <= 0) {
 			target.heal(-damageAmount);
 			event.setCanceled(true);
 			damageAmount = 0;
@@ -221,25 +214,14 @@ public class ServerEvents {
 		});
 	}
 
-	private static void displayParticle(float scalingStyle, float scalingElement, Vector3d position, ServerWorld world) {
-		final double POSITION_WOBBLE_AMOUNT = 0.01;
-		Random rand = new Random();
-		double xpos = position.x + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
-		double ypos = position.y + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
-		double zpos = position.z + POSITION_WOBBLE_AMOUNT * (rand.nextDouble() - 0.5);
+	@SuppressWarnings("resource")
+	private static void displayParticle(float scalingStyle, float scalingElement, LivingEntity entityHit) {
 
-		double xoff = 0.0; 
-		double yoff = 0.0; 
-		double zoff = 0.0; 
-		double speed = 0.2D;
-
-		if(scalingStyle == 0) {world.spawnParticle(ParticleList.STYLE_IMMUNITY.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
-		else if(scalingStyle > 0 && scalingStyle < 1) {world.spawnParticle(ParticleList.STYLE_RESISTANCE.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
-		else if(scalingStyle > 1) {world.spawnParticle(ParticleList.STYLE_WEAKNESS.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
-
-		if (scalingElement < 0) {world.spawnParticle(ParticleList.ELEMENT_ABSORPTION.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
-		else if(scalingElement == 0) {world.spawnParticle(ParticleList.ELEMENT_IMMUNITY.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
-		else if(scalingElement > 0 && scalingElement < 1) {world.spawnParticle(ParticleList.ELEMENT_RESISTANCE.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
-		else if(scalingElement > 1) {world.spawnParticle(ParticleList.ELEMENT_WEAKNESS.get(), xpos, ypos, zpos, 1, xoff, yoff, zoff, speed);}
+		if(scalingStyle < 1) {Minecraft.getInstance().particles.addParticleEmitter(entityHit, ParticleList.RESIST_STYLE.get());}
+		else if (scalingStyle > 1) {Minecraft.getInstance().particles.addParticleEmitter(entityHit, ParticleList.CRIT_STYLE.get());}
+		
+		if(scalingElement < 0) {Minecraft.getInstance().particles.addParticleEmitter(entityHit, ParticleList.ABSORB.get());}
+		else if (scalingElement >= 0 && scalingElement < 1) {Minecraft.getInstance().particles.addParticleEmitter(entityHit, ParticleList.RESIST_ELEMENT.get());}
+		else if (scalingElement > 1) {Minecraft.getInstance().particles.addParticleEmitter(entityHit, ParticleList.CRIT_ELEMENT.get());}
 	}
 }

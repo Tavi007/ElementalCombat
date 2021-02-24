@@ -20,7 +20,6 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
@@ -51,17 +50,12 @@ public class RenderEvents {
 		if(entityIn.hurtTime > 0) {
 			if (data.disableFlag) {
 				data.setHurtTime(entityIn.hurtTime);
-				entityIn.hurtTime = 0; //desync client and server hurtTime. Is this a problem?
-
-				//to do: add green overlay texture
-				//LayerRenderer<LivingEntity, EntityModel<LivingEntity>> layer = new ;
-				//event.getRenderer().addLayer(layer);
+				entityIn.hurtTime = 0; //desync client and server hurtTime.
 			}
 		}
 		else {
 			data.disableFlag = false;
 		}
-
 	}
 
 	@SubscribeEvent
@@ -134,8 +128,7 @@ public class RenderEvents {
 	static int counter=0;
 
 	@SubscribeEvent
-	public static void displayData(RenderGameOverlayEvent.Post event)
-	{
+	public static void displayData(RenderGameOverlayEvent.Post event) {
 		if(event.getType().equals(RenderGameOverlayEvent.ElementType.HOTBAR)) {
 			if(ClientConfig.isHUDEnabled()) {
 				// see Screen#renderToolTips in client.gui.screen
@@ -196,11 +189,7 @@ public class RenderEvents {
 							int screenWidth = (int) (event.getWindow().getScaledWidth()/scale);
 							posX = Math.max(12, screenWidth - listWidth - 12);
 						}
-
-						//							int l = -267386864;
-						//							int i1 = 1347420415;
-						//							int j1 = 1344798847;
-						//							int k1 = 400;
+						
 						Tessellator tessellator = Tessellator.getInstance();
 						BufferBuilder bufferbuilder = tessellator.getBuffer();
 						bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);

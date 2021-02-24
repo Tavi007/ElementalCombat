@@ -25,8 +25,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 public class PlayerEvents
 {
 	@SubscribeEvent
-	public static void livingEquipmentChange(LivingEquipmentChangeEvent event)
-	{
+	public static void livingEquipmentChange(LivingEquipmentChangeEvent event) {
 		//change defense properties
 		LivingEntity entity = event.getEntityLiving();
 		if(event.getSlot().getSlotType() == EquipmentSlotType.Group.ARMOR)
