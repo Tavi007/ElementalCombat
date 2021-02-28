@@ -13,6 +13,7 @@ import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import Tavi007.ElementalCombat.network.EntityMessage;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -130,6 +131,43 @@ public class ElementalCombatAPI
 		return (AttackData) projectileEntity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
 	}
 
+	///////////////////
+	// DamageSources //
+	///////////////////
+
+	/**
+	 * Returns the attack-combat data {@link AttackData} of the {@link DamageSource}.
+	 * @param damageSource A DamageSource.
+	 * @return the AttackData, containing the attack style and attack element.
+	 */
+	public static AttackData getAttackData(DamageSource damageSource) {
+		Entity immediateSource = damageSource.getImmediateSource();
+		
+		// Get combat data from source
+		String sourceElement;
+		String sourceStyle;
+		if(immediateSource instanceof LivingEntity) {
+			AttackData atckCap = ElementalCombatAPI.getAttackDataWithActiveItem((LivingEntity) immediateSource);
+			sourceStyle = atckCap.getStyle();
+			sourceElement = atckCap.getElement();
+		}
+		else if(immediateSource instanceof ProjectileEntity) {
+			AttackData atckCap = ElementalCombatAPI.getAttackData((ProjectileEntity) immediateSource);
+			sourceStyle = atckCap.getStyle();
+			sourceElement = atckCap.getElement();
+		}
+		else {
+			DamageSourceCombatProperties damageSourceProperties = ElementalCombatAPI.getDefaultProperties(damageSource);
+			sourceStyle = damageSourceProperties.getAttackStyle();
+			sourceElement = damageSourceProperties.getAttackElement();
+		}
+
+		//default values in case style or element is empty (which should not happen)
+		if (sourceStyle.isEmpty()) {sourceStyle = ServerConfig.getDefaultStyle();}
+		if (sourceElement.isEmpty()) {sourceElement = ServerConfig.getDefaultElement();}
+		
+		return new AttackData(sourceStyle, sourceElement);
+	}
 
 	/////////////////////
 	// Helperfunctions //

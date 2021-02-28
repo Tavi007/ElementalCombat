@@ -4,9 +4,7 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.ElementalCombatAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.ParticleList;
-import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
 import Tavi007.ElementalCombat.network.EntityMessage;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
@@ -75,43 +73,20 @@ public class ServerEvents {
 	@SubscribeEvent
 	public static void elementifyLivingHurtEvent(LivingHurtEvent event) {
 		DamageSource damageSource = event.getSource();
-		Entity immediateSource = damageSource.getImmediateSource();
 
 		// no modification. Entity should take normal damage and die eventually.
 		if(damageSource == DamageSource.OUT_OF_WORLD) {
 			return;	
 		}
 
-		// Get combat data from source
-		String sourceElement;
-		String sourceStyle;
-		if(immediateSource instanceof LivingEntity) {
-			AttackData atckCap = ElementalCombatAPI.getAttackDataWithActiveItem((LivingEntity) immediateSource);
-			sourceStyle = atckCap.getStyle();
-			sourceElement = atckCap.getElement();
-		}
-		else if(immediateSource instanceof ProjectileEntity) {
-			AttackData atckCap = ElementalCombatAPI.getAttackData((ProjectileEntity) immediateSource);
-			sourceStyle = atckCap.getStyle();
-			sourceElement = atckCap.getElement();
-		}
-		else {
-			DamageSourceCombatProperties damageSourceProperties = ElementalCombatAPI.getDefaultProperties(damageSource);
-			sourceStyle = damageSourceProperties.getAttackStyle();
-			sourceElement = damageSourceProperties.getAttackElement();
-		}
-
-		//default values in case style or element is empty (which should not happen)
-		if (sourceStyle.isEmpty()) {sourceStyle = ServerConfig.getDefaultStyle();}
-		if (sourceElement.isEmpty()) {sourceElement = ServerConfig.getDefaultElement();}
-
 		// compute new Damage value  
+		AttackData sourceData = ElementalCombatAPI.getAttackData(damageSource);
 		LivingEntity target = event.getEntityLiving();
 		float damageAmount = event.getAmount();
 		// Get the protection data from target
 		DefenseData defCap = ElementalCombatAPI.getDefenseData(target);
-		float defenseStyleScaling = Math.max(0.0f, DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceStyle));
-		float defenseElementScaling = DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceElement);
+		float defenseStyleScaling = Math.max(0.0f, DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceData.getStyle()));
+		float defenseElementScaling = DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceData.getElement());
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
 
 		// display particles
