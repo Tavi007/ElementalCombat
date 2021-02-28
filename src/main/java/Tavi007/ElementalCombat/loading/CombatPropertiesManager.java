@@ -27,7 +27,8 @@ public class CombatPropertiesManager extends JsonReloadListener
 	private Map<ResourceLocation, EntityCombatProperties> registeredEntityData = ImmutableMap.of();
 	private Map<ResourceLocation, ItemCombatProperties> registeredItemData = ImmutableMap.of();
 	private Map<ResourceLocation, BiomeCombatProperties> registeredBiomeData = ImmutableMap.of();
-	private Map<ResourceLocation, DamageSourceCombatProperties> registeredDamageSourceData = ImmutableMap.of();
+	private Map<ResourceLocation, AttackOnlyCombatProperties> registeredDamageSourceData = ImmutableMap.of();
+	private Map<ResourceLocation, AttackOnlyCombatProperties> registeredProjectileData = ImmutableMap.of();
 	private CombatPropertiesTextMapping mapping;
 	
 	private static ThreadLocal<Deque<CombatPropertiesContext>> dataContext = new ThreadLocal<Deque<CombatPropertiesContext>>();
@@ -40,7 +41,8 @@ public class CombatPropertiesManager extends JsonReloadListener
 		Builder<ResourceLocation, EntityCombatProperties> builderEntity = ImmutableMap.builder();
 		Builder<ResourceLocation, ItemCombatProperties> builderItem = ImmutableMap.builder();
 		Builder<ResourceLocation, BiomeCombatProperties> builderBiome = ImmutableMap.builder();
-		Builder<ResourceLocation, DamageSourceCombatProperties> builderDamageSource = ImmutableMap.builder();
+		Builder<ResourceLocation, AttackOnlyCombatProperties> builderDamageSource = ImmutableMap.builder();
+		Builder<ResourceLocation, AttackOnlyCombatProperties> builderProjectile = ImmutableMap.builder();
 
 		if (objectIn.remove(EMPTY_RESOURCELOCATION) != null) 
 		{
@@ -65,8 +67,12 @@ public class CombatPropertiesManager extends JsonReloadListener
 					builderBiome.put(rl, combatProperties);
 				}
 				else if(rl.getPath().contains("damage_sources/")){
-					DamageSourceCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), DamageSourceCombatProperties.class);
+					AttackOnlyCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), AttackOnlyCombatProperties.class);
 					builderDamageSource.put(rl, combatProperties);
+				}
+				else if(rl.getPath().contains("projectiles/")){
+					AttackOnlyCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), AttackOnlyCombatProperties.class);
+					builderProjectile.put(rl, combatProperties);
 				}
 				else if(rl.equals(new ResourceLocation(ElementalCombat.MOD_ID, "combat_properties_text_mapping"))){
 					this.mapping = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), CombatPropertiesTextMapping.class);
@@ -89,8 +95,11 @@ public class CombatPropertiesManager extends JsonReloadListener
 		builderBiome.put(EMPTY_RESOURCELOCATION, new BiomeCombatProperties());
 		this.registeredBiomeData = builderBiome.build();
 
-		builderDamageSource.put(EMPTY_RESOURCELOCATION, new DamageSourceCombatProperties());
+		builderDamageSource.put(EMPTY_RESOURCELOCATION, new AttackOnlyCombatProperties());
 		this.registeredDamageSourceData = builderDamageSource.build();
+
+		builderProjectile.put(EMPTY_RESOURCELOCATION, new AttackOnlyCombatProperties());
+		this.registeredProjectileData = builderProjectile.build();
 	}
 
 	@Nullable
@@ -120,18 +129,22 @@ public class CombatPropertiesManager extends JsonReloadListener
 	}
 
 	public EntityCombatProperties getEntityDataFromLocation(ResourceLocation rl){
-		return this.registeredEntityData.getOrDefault(rl, EntityCombatProperties.EMPTY);
+		return new EntityCombatProperties(this.registeredEntityData.getOrDefault(rl, EntityCombatProperties.EMPTY));
 	}
 
 	public ItemCombatProperties getItemDataFromLocation(ResourceLocation rl){
-		return this.registeredItemData.getOrDefault(rl, ItemCombatProperties.EMPTY);
+		return new ItemCombatProperties(this.registeredItemData.getOrDefault(rl, ItemCombatProperties.EMPTY));
 	}
 
 	public BiomeCombatProperties getBiomeDataFromLocation(ResourceLocation rl){
-		return this.registeredBiomeData.getOrDefault(rl, BiomeCombatProperties.EMPTY);
+		return new BiomeCombatProperties(this.registeredBiomeData.getOrDefault(rl, BiomeCombatProperties.EMPTY));
 	}
 
-	public DamageSourceCombatProperties getDamageSourceDataFromLocation(ResourceLocation rl){
-		return this.registeredDamageSourceData.getOrDefault(rl, DamageSourceCombatProperties.EMPTY);
+	public AttackOnlyCombatProperties getDamageSourceDataFromLocation(ResourceLocation rl){
+		return new AttackOnlyCombatProperties(this.registeredDamageSourceData.getOrDefault(rl, AttackOnlyCombatProperties.EMPTY));
+	}
+
+	public AttackOnlyCombatProperties getProjectileDataFromLocation(ResourceLocation rl){
+		return new AttackOnlyCombatProperties(this.registeredProjectileData.getOrDefault(rl, AttackOnlyCombatProperties.EMPTY));
 	}
 }

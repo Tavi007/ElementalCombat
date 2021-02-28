@@ -8,7 +8,7 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
-import Tavi007.ElementalCombat.loading.DamageSourceCombatProperties;
+import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import Tavi007.ElementalCombat.network.EntityMessage;
@@ -142,7 +142,7 @@ public class ElementalCombatAPI
 	 */
 	public static AttackData getAttackData(DamageSource damageSource) {
 		Entity immediateSource = damageSource.getImmediateSource();
-		
+
 		// Get combat data from source
 		String sourceElement;
 		String sourceStyle;
@@ -157,7 +157,7 @@ public class ElementalCombatAPI
 			sourceElement = atckCap.getElement();
 		}
 		else {
-			DamageSourceCombatProperties damageSourceProperties = ElementalCombatAPI.getDefaultProperties(damageSource);
+			AttackOnlyCombatProperties damageSourceProperties = ElementalCombatAPI.getDefaultProperties(damageSource);
 			sourceStyle = damageSourceProperties.getAttackStyle();
 			sourceElement = damageSourceProperties.getAttackElement();
 		}
@@ -165,7 +165,7 @@ public class ElementalCombatAPI
 		//default values in case style or element is empty (which should not happen)
 		if (sourceStyle.isEmpty()) {sourceStyle = ServerConfig.getDefaultStyle();}
 		if (sourceElement.isEmpty()) {sourceElement = ServerConfig.getDefaultElement();}
-		
+
 		return new AttackData(sourceStyle, sourceElement);
 	}
 
@@ -233,7 +233,7 @@ public class ElementalCombatAPI
 			return new EntityCombatProperties();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "entities/" + rlEntity.getPath());
-		return new EntityCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
+		return ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties);
 
 	}
 
@@ -248,7 +248,7 @@ public class ElementalCombatAPI
 			return new ItemCombatProperties();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlItem.getNamespace(), "items/" + rlItem.getPath());
-		return new ItemCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
+		return ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties);
 	}
 
 	/**
@@ -262,16 +262,16 @@ public class ElementalCombatAPI
 			return new BiomeCombatProperties();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlBiome.getNamespace(), "biomes/" + rlBiome.getPath()); ;
-		return new BiomeCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties));
+		return ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties);
 	}
 
 	/**
-	 * Returns a copy of the default {@link DamageSourceCombatProperties} of any {@link DamageSource}. 
+	 * Returns a copy of the default {@link AttackOnlyCombatProperties} of any {@link DamageSource}. 
 	 * This includes lightning, burning, drowning, suffocating in a wall and so on.
 	 * @param damageSource The DamageSource.
-	 * @return copy of DamageSourceCombatProperties.
+	 * @return copy of AttackOnlyCombatProperties.
 	 */
-	public static DamageSourceCombatProperties getDefaultProperties(DamageSource damageSource) {
+	public static AttackOnlyCombatProperties getDefaultProperties(DamageSource damageSource) {
 		ResourceLocation rlDamageSource=null;
 		// do other mods implement their own natural damageSource? If so, how could I get the mod id from it?
 		// for now do not use Namespace.
@@ -284,6 +284,18 @@ public class ElementalCombatAPI
 		else {
 			rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + damageSource.getDamageType().toLowerCase());
 		}
-		return new DamageSourceCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource));
+		return ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource);
+	}
+
+	/**
+	 * Returns a copy of the default {@link AttackOnlyCombatProperties} of any {@link ProjectileEntity}. 
+	 * This includes lightning, burning, drowning, suffocating in a wall and so on.
+	 * @param projectile The Projectile.
+	 * @return copy of AttackOnlyCombatProperties.
+	 */
+	public static AttackOnlyCombatProperties getDefaultProperties(ProjectileEntity projectile) {
+		ResourceLocation resourcelocation = projectile.getType().getRegistryName();
+		ResourceLocation rlDamageSource = new ResourceLocation(resourcelocation.getNamespace(), "projectiles/" + resourcelocation.getPath());
+		return ElementalCombat.COMBAT_PROPERTIES_MANGER.getProjectileDataFromLocation(rlDamageSource);
 	}
 }

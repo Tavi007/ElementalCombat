@@ -2,18 +2,18 @@ package Tavi007.ElementalCombat.loading;
 
 import Tavi007.ElementalCombat.config.ServerConfig;
 
-public class DamageSourceCombatProperties {
-	public static final DamageSourceCombatProperties EMPTY = new DamageSourceCombatProperties();
+public class AttackOnlyCombatProperties {
+	public static final AttackOnlyCombatProperties EMPTY = new AttackOnlyCombatProperties();
 
 	private final String attack_style;
 	private final String attack_element;
 	
-	public DamageSourceCombatProperties() {
+	public AttackOnlyCombatProperties() {
 		this.attack_style = "basic";
 		this.attack_element = "natural";
 	}
 	
-	public DamageSourceCombatProperties(String attack_style, String attack_element) {
+	public AttackOnlyCombatProperties(String attack_style, String attack_element) {
 		   if (attack_style.isEmpty()) {
 			   this.attack_style = ServerConfig.getDefaultStyle();
 		   }
@@ -28,7 +28,7 @@ public class DamageSourceCombatProperties {
 		   }
 	}
 	
-	public DamageSourceCombatProperties(DamageSourceCombatProperties properties) {
+	public AttackOnlyCombatProperties(AttackOnlyCombatProperties properties) {
 		this.attack_element = properties.getAttackElement();
 		this.attack_style = properties.getAttackStyle();
 	}
