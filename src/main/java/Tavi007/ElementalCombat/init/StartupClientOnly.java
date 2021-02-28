@@ -7,8 +7,6 @@ import Tavi007.ElementalCombat.particle.CombatParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,37 +22,6 @@ public class StartupClientOnly {
 	{
 		//key bindings
 		ClientRegistry.registerKeyBinding(TOGGLE_HUD);
-
-		//ItemProperties
-		ItemModelsProperties.registerProperty(ItemList.LIGHT_BOW.get(), new ResourceLocation("pull"), (stack, world, entity) -> {
-			if (entity == null) {
-				return 0.0F;
-			} else {
-				return entity.getActiveItemStack() != stack ? 0.0F : (float)(stack.getUseDuration() - entity.getItemInUseCount()) / 20.0F;
-			}
-		});
-		ItemModelsProperties.registerProperty(ItemList.LIGHT_BOW.get(), new ResourceLocation("pulling"), (stack, world, entity) -> {
-			return entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack ? 1.0F : 0.0F;
-		});
-
-		ItemModelsProperties.registerProperty(ItemList.DAYNIGHT_CHESTPLATE.get(), new ResourceLocation(ElementalCombat.MOD_ID + ":isday"), (stack, world, entity) -> {
-			if(entity != null) {
-				if(entity.world != null) {
-					long time = entity.world.getDayTime();
-					if (time >= 2000 && time<=10000) {
-						return 1.0F;
-					}
-					else if (time >= 14000 && time<=22000) {
-						return 0.0F;
-					}
-					else {
-						return 0.5F;
-					}
-				}
-			}
-			return 0.0F;
-		});
-
 
 		ElementalCombat.LOGGER.info("ElementalCombat clientRegistries method registered.");	
 	}

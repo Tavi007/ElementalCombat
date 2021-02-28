@@ -7,15 +7,11 @@ import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.interaction.HandleCuriosInventory;
 import Tavi007.ElementalCombat.interaction.HandleWailaRender;
-import Tavi007.ElementalCombat.init.BlockList;
 import Tavi007.ElementalCombat.init.EnchantmentList;
-import Tavi007.ElementalCombat.init.ItemList;
 import Tavi007.ElementalCombat.init.ParticleList;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
 import Tavi007.ElementalCombat.init.StartupCommon;
 import Tavi007.ElementalCombat.loading.CombatPropertiesManager;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,7 +31,6 @@ public class ElementalCombat
 	public static final String MOD_ID = "elementalcombat";
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	public static CombatPropertiesManager COMBAT_PROPERTIES_MANGER = new CombatPropertiesManager();
-	public static final ItemGroup ELEMENTAL_COMBAT_GROUP = new ElementalCombat.ElementalCombatItemGroup(MOD_ID);
     public static IEventBus MOD_EVENT_BUS;
 
 	public static final ResourceLocation simpleChannelRL = new ResourceLocation(MOD_ID, "channel");
@@ -52,9 +47,6 @@ public class ElementalCombat
 		
 		//register
 		ParticleList.PARTICLES.register(ElementalCombat.MOD_EVENT_BUS);
-		ItemList.ITEMS.register(ElementalCombat.MOD_EVENT_BUS);
-		BlockList.ITEMS.register(ElementalCombat.MOD_EVENT_BUS);
-		BlockList.BLOCKS.register(ElementalCombat.MOD_EVENT_BUS);
 		EnchantmentList.ENCHANTMENTS.register(ElementalCombat.MOD_EVENT_BUS);
 		MOD_EVENT_BUS.register(EnchantmentList.class);
 		
@@ -76,19 +68,5 @@ public class ElementalCombat
 	
 	public static void registerClientOnly() {
 		MOD_EVENT_BUS.register(StartupClientOnly.class);
-	}
-	
-	
-	public static class ElementalCombatItemGroup extends ItemGroup {
-
-		public ElementalCombatItemGroup(String name) {
-			super(name);
-		}
-
-		@Override
-		public ItemStack createIcon() {
-			return new ItemStack(ItemList.FIREANDICE_SWORD.get());
-		}
-		
 	}
 }
