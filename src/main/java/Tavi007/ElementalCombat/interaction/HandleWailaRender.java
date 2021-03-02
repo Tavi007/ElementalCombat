@@ -2,7 +2,8 @@ package Tavi007.ElementalCombat.interaction;
 
 import java.util.List;
 
-import Tavi007.ElementalCombat.ElementalCombatAPI;
+import Tavi007.ElementalCombat.api.AttackDataAPI;
+import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ClientConfig;
@@ -29,12 +30,12 @@ public class HandleWailaRender {
 			AttackData atckData = new AttackData();
 			DefenseData defData = new DefenseData();
 			if(entity instanceof LivingEntity) {
-				atckData = ElementalCombatAPI.getAttackDataWithActiveItem((LivingEntity) entity);
-				defData = ElementalCombatAPI.getDefenseData((LivingEntity) entity);
+				atckData = AttackDataAPI.getWithActiveItem((LivingEntity) entity);
+				defData = DefenseDataAPI.get((LivingEntity) entity);
 				
 			}
 			else if (entity instanceof ProjectileEntity) {
-				atckData = ElementalCombatAPI.getAttackData((ProjectileEntity) entity);
+				atckData = AttackDataAPI.get((ProjectileEntity) entity);
 			}
 
 			ticks++;

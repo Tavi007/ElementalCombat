@@ -3,7 +3,7 @@ package Tavi007.ElementalCombat.capabilities.defense;
 import java.util.HashMap;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.ElementalCombatAPI;
+import Tavi007.ElementalCombat.api.DefaultProperties;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
@@ -81,7 +81,7 @@ public class DefenseDataCapability {
 		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
 			if (event.getObject() instanceof LivingEntity) {
 				LivingEntity entity = (LivingEntity) event.getObject();
-				EntityCombatProperties entityProperties = ElementalCombatAPI.getDefaultProperties(entity);
+				EntityCombatProperties entityProperties = DefaultProperties.get(entity);
 
 				HashMap<String, Integer> styleMap = new HashMap<String, Integer>(entityProperties.getDefenseStyle());
 				HashMap<String, Integer> elementMap = new HashMap<String, Integer>(entityProperties.getDefenseElement());
@@ -89,7 +89,7 @@ public class DefenseDataCapability {
 				if(entityProperties.getBiomeDependency()) 
 				{
 					BlockPos blockPos = new BlockPos(entity.getPositionVec());
-					BiomeCombatProperties biomeProperties = ElementalCombatAPI.getDefaultProperties(entity.getEntityWorld().getBiome(blockPos));
+					BiomeCombatProperties biomeProperties = DefaultProperties.get(entity.getEntityWorld().getBiome(blockPos));
 					DefenseDataHelper.mergeMaps(elementMap, biomeProperties.getDefenseElement());					
 				}
 				final DefenseData defData = new DefenseData(styleMap, elementMap);
@@ -99,7 +99,7 @@ public class DefenseDataCapability {
 
 		@SubscribeEvent(priority = EventPriority.LOWEST)
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-			ItemCombatProperties itemProperties = ElementalCombatAPI.getDefaultProperties(event.getObject());
+			ItemCombatProperties itemProperties = DefaultProperties.get(event.getObject());
 			//default values
 			HashMap<String, Integer> styleMap = new HashMap<String, Integer>(itemProperties.getDefenseStyle());
 			HashMap<String, Integer> elementMap = new HashMap<String, Integer>(itemProperties.getDefenseElement());

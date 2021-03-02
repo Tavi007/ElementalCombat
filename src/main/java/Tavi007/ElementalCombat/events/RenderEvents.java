@@ -8,7 +8,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.ElementalCombatAPI;
+import Tavi007.ElementalCombat.api.AttackDataAPI;
+import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionData;
@@ -111,13 +112,13 @@ public class RenderEvents {
 		List<ITextComponent> toolTip = event.getToolTip();
 		if (item != null) {
 			//attack
-			AttackData atckData = new AttackData(ElementalCombatAPI.getAttackData(item));
+			AttackData atckData = new AttackData(AttackDataAPI.get(item));
 			if(!atckData.isEmpty()) {
 				toolTip.addAll(RenderHelper.getDisplayText(atckData));
 			}
 
 			//defense
-			DefenseData defData = new DefenseData(ElementalCombatAPI.getDefenseData(item));
+			DefenseData defData = new DefenseData(DefenseDataAPI.get(item));
 			if(!defData.isEmpty()) {
 				toolTip.addAll(RenderHelper.getDisplayText(defData));
 			}
@@ -136,10 +137,10 @@ public class RenderEvents {
 				if(mc.player != null) {
 					List<ITextComponent> list = new ArrayList<ITextComponent>();
 
-					AttackData atckData = ElementalCombatAPI.getAttackDataWithActiveItem(mc.player);
+					AttackData atckData = AttackDataAPI.getWithActiveItem(mc.player);
 					list.addAll(RenderHelper.getDisplayText(atckData));
 
-					DefenseData defData = ElementalCombatAPI.getDefenseData(mc.player);
+					DefenseData defData = DefenseDataAPI.get(mc.player);
 					if(!defData.isEmpty()) {
 						if(ClientConfig.iterateDefense()) {
 							ticks++;

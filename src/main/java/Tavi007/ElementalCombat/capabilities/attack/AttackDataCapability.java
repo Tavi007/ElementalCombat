@@ -1,9 +1,8 @@
 package Tavi007.ElementalCombat.capabilities.attack;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.ElementalCombatAPI;
+import Tavi007.ElementalCombat.api.DefaultProperties;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
-import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.EntityCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import net.minecraft.entity.Entity;
@@ -84,21 +83,22 @@ public class AttackDataCapability {
 		 */
 		@SubscribeEvent
 		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
-			if (event.getObject() instanceof LivingEntity) {
-				EntityCombatProperties entityProperties = ElementalCombatAPI.getDefaultProperties((LivingEntity) event.getObject());
+			Entity entity = event.getObject();
+			if (entity instanceof LivingEntity) {
+				EntityCombatProperties entityProperties = DefaultProperties.get((LivingEntity) entity);
 				final AttackData atck = new AttackData(entityProperties.getAttackStyle(), entityProperties.getAttackElement());
 				event.addCapability(ID, createProvider(atck));
 			}
-			else if (event.getObject() instanceof ProjectileEntity) {
-				AttackOnlyCombatProperties properties = ElementalCombatAPI.getDefaultProperties((ProjectileEntity) event.getObject());
-				final AttackData atck = new AttackData(properties.getAttackStyle(), properties.getAttackElement());
+			else if (entity instanceof ProjectileEntity) {
+				// fill with default values in EntityJoinWorld Event, because the shooter hasn't been set yet.
+				final AttackData atck = new AttackData();
 				event.addCapability(ID, createProvider(atck));
 			}
 		}
 
 		@SubscribeEvent
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-			ItemCombatProperties itemProperties = ElementalCombatAPI.getDefaultProperties(event.getObject());
+			ItemCombatProperties itemProperties = DefaultProperties.get(event.getObject());
 			final AttackData atck = new AttackData(itemProperties.getAttackStyle(), itemProperties.getAttackElement());
 			event.addCapability(ID, createProvider(atck));
 		}

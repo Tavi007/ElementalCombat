@@ -4,7 +4,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.ElementalCombatAPI;
+import Tavi007.ElementalCombat.api.AttackDataAPI;
+import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionData;
@@ -72,12 +73,12 @@ public class PackageHandlerOnClient {
 			Entity entity = clientWorld.getEntityByID(((EntityMessage) message).getId());
 			if (entity instanceof LivingEntity) {
 				LivingEntity livingEntity = (LivingEntity) entity;
-				ElementalCombatAPI.getAttackData(livingEntity).set(atckData);
+				AttackDataAPI.get(livingEntity).set(atckData);
 				if (message.isAdd()) {
-					ElementalCombatAPI.getDefenseData(livingEntity).add(defData);
+					DefenseDataAPI.get(livingEntity).add(defData);
 				}
 				else {
-					ElementalCombatAPI.getDefenseData(livingEntity).set(defData);
+					DefenseDataAPI.get(livingEntity).set(defData);
 				}
 			}
 		}

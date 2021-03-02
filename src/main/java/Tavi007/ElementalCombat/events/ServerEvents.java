@@ -1,10 +1,13 @@
 package Tavi007.ElementalCombat.events;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.ElementalCombatAPI;
+import Tavi007.ElementalCombat.api.AttackDataAPI;
+import Tavi007.ElementalCombat.api.DefaultProperties;
+import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.init.ParticleList;
+import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
 import Tavi007.ElementalCombat.network.EntityMessage;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
@@ -42,29 +45,31 @@ public class ServerEvents {
 			// for synchronization after switching dimensions
 			if (entity instanceof LivingEntity) {
 				LivingEntity livingEntity = (LivingEntity) entity;
-				DefenseData defData = ElementalCombatAPI.getDefenseData(livingEntity);
-				AttackData atckData = ElementalCombatAPI.getAttackData(livingEntity);
+				DefenseData defData = DefenseDataAPI.get(livingEntity);
+				AttackData atckData = AttackDataAPI.get(livingEntity);
 
 				if (livingEntity instanceof ServerPlayerEntity) {
 					EntityMessage messageToClient = new EntityMessage(atckData, defData, false, livingEntity.getEntityId());
 					ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 				}
 			}
-
-			// for newly spawned projectiles.
-			else if(entity instanceof ProjectileEntity) {
-				if(entity.ticksExisted == 0){
-					ProjectileEntity projectile = (ProjectileEntity) entity;
-					Entity  source = projectile.func_234616_v_();
-					if(source != null && source instanceof LivingEntity){
-						AttackData sourceData = ElementalCombatAPI.getAttackDataWithActiveItem((LivingEntity) source);
-
-						//copy elemental attack capability
-						//maybe also check type of projectile?
-						AttackData projectileData = ElementalCombatAPI.getAttackData(projectile);
-						projectileData.setElement(sourceData.getElement());
-						projectileData.setStyle("projectile");
-					}
+			else if(entity instanceof ProjectileEntity && entity.ticksExisted == 0) {
+				// fill with default values in here.
+				ProjectileEntity projectile = (ProjectileEntity) entity;
+				AttackData projectileData = AttackDataAPI.get(projectile);
+				AttackOnlyCombatProperties properties = DefaultProperties.get(projectile);
+				
+				// TODO: maybe change behavior here
+				if (!properties.isEmpty()) {
+					projectileData.setStyle(properties.getAttackStyle());
+					projectileData.setElement(properties.getAttackElement());
+				}
+				Entity source = projectile.func_234616_v_();
+				if(source != null && source instanceof LivingEntity) {
+					// set projectile element to attack element from (source) entity
+					AttackData sourceData = AttackDataAPI.getWithActiveItem((LivingEntity) source);
+					projectileData.setElement(sourceData.getElement());
+					projectileData.setStyle("projectile");
 				}
 			}
 		}
@@ -80,11 +85,11 @@ public class ServerEvents {
 		}
 
 		// compute new Damage value  
-		AttackData sourceData = ElementalCombatAPI.getAttackData(damageSource);
+		AttackData sourceData = AttackDataAPI.get(damageSource);
 		LivingEntity target = event.getEntityLiving();
 		float damageAmount = event.getAmount();
 		// Get the protection data from target
-		DefenseData defCap = ElementalCombatAPI.getDefenseData(target);
+		DefenseData defCap = DefenseDataAPI.get(target);
 		float defenseStyleScaling = Math.max(0.0f, DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceData.getStyle()));
 		float defenseElementScaling = DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceData.getElement());
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
@@ -92,7 +97,7 @@ public class ServerEvents {
 		// display particles
 		displayParticle(defenseStyleScaling, defenseElementScaling, target);
 
-		// heals the target, if damage is lower than 0
+		// heal the target, if damage is lower than 0
 		if(damageAmount <= 0) {
 			target.heal(-damageAmount);
 			event.setCanceled(true);
@@ -102,7 +107,7 @@ public class ServerEvents {
 			DisableDamageRenderMessage messageToClient = new DisableDamageRenderMessage(target.getEntityId());
 			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 
-			// plays a healing sound 
+			// play a healing sound 
 			SoundEvent sound = SoundEvents.ENTITY_PLAYER_LEVELUP; //need better sound
 			target.getEntityWorld().playSound(null, target.getPosition(), sound, SoundCategory.MASTER, 1.0f, 2.0f);
 		}

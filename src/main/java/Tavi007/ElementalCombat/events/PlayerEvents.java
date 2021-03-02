@@ -3,7 +3,9 @@ package Tavi007.ElementalCombat.events;
 import java.util.HashMap;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.ElementalCombatAPI;
+import Tavi007.ElementalCombat.api.AttackDataAPI;
+import Tavi007.ElementalCombat.api.DefaultProperties;
+import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ClientConfig;
@@ -31,8 +33,8 @@ public class PlayerEvents
 		if(event.getSlot().getSlotType() == EquipmentSlotType.Group.ARMOR)
 		{
 			// get data
-			DefenseData defDataItemFrom = ElementalCombatAPI.getDefenseData(event.getFrom());
-			DefenseData defDataItemTo = ElementalCombatAPI.getDefenseData(event.getTo());
+			DefenseData defDataItemFrom = DefenseDataAPI.get(event.getFrom());
+			DefenseData defDataItemTo = DefenseDataAPI.get(event.getTo());
 
 			// compute change
 			DefenseData newData = new DefenseData();
@@ -40,7 +42,7 @@ public class PlayerEvents
 			newData.add(defDataItemTo);
 
 			// apply change
-			ElementalCombatAPI.addDefenseData(entity, newData);
+			DefenseDataAPI.add(entity, newData);
 		}
 	}
 
@@ -51,7 +53,7 @@ public class PlayerEvents
 	public static void playerLoggedOut(PlayerLoggedOutEvent event) {
 		PlayerEntity entity = event.getPlayer();
 		if (entity != null) {
-			DefenseData defCapEntity = ElementalCombatAPI.getDefenseData(entity);
+			DefenseData defCapEntity = DefenseDataAPI.get(entity);
 			defCapEntity.clear();
 		}
 	}
@@ -66,13 +68,13 @@ public class PlayerEvents
 	@SubscribeEvent
 	public static void onItemCrafted(ItemCraftedEvent event) {
 		ItemStack stack = event.getCrafting();
-		ItemCombatProperties itemProperties = ElementalCombatAPI.getDefaultProperties(stack);
+		ItemCombatProperties itemProperties = DefaultProperties.get(stack);
 
-		DefenseData defData = ElementalCombatAPI.getDefenseData(stack);
+		DefenseData defData = DefenseDataAPI.get(stack);
 		defData.setElementFactor(new HashMap<String, Integer>(itemProperties.getDefenseElement()));
 		defData.setElementFactor(new HashMap<String, Integer>(itemProperties.getDefenseStyle()));
 		
-		AttackData atckData = ElementalCombatAPI.getAttackData(stack);
+		AttackData atckData = AttackDataAPI.get(stack);
 		final AttackData atck = new AttackData(itemProperties.getAttackStyle(), itemProperties.getAttackElement());
 		atckData.set(atck);
 	}

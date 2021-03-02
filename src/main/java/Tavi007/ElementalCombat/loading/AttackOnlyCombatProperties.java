@@ -9,8 +9,8 @@ public class AttackOnlyCombatProperties {
 	private final String attack_element;
 	
 	public AttackOnlyCombatProperties() {
-		this.attack_style = "basic";
-		this.attack_element = "natural";
+		this.attack_style = ServerConfig.getDefaultStyle();
+		this.attack_element = ServerConfig.getDefaultElement();
 	}
 	
 	public AttackOnlyCombatProperties(String attack_style, String attack_element) {
@@ -35,4 +35,8 @@ public class AttackOnlyCombatProperties {
 
 	public String getAttackStyle() {return this.attack_style;}
 	public String getAttackElement() {return this.attack_element;}
+	
+	public boolean isEmpty() {
+		return attack_style.equals(ServerConfig.getDefaultStyle()) && attack_element.equals(ServerConfig.getDefaultElement());
+	}
 }
