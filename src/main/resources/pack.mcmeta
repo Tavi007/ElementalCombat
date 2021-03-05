@@ -1,7 +1,6 @@
 {
     "pack": {
         "description": "Elemental Combat default values for entities and items",
-        "pack_format": 5,
-	"_comment": "Supported mods (by default): Nothing yet lol"
+        "pack_format": 5
     }
 }
