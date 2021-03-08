@@ -74,6 +74,26 @@ dependencies {
 	
     compileOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}:api")
     runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}")
+	
+    compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
+}
+
+repositories {
+    mavenCentral()
+    maven { 
+        name = "curios"
+		url = "https://maven.theillusivec4.top/" 
+	}
+    maven {
+		name = "hwyla"
+		url = "https://maven.tehnut.info" 
+	}
+    maven {
+        // location of the maven that hosts JEI files
+        name = "jei"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
 }
 
 jar {
@@ -90,17 +110,25 @@ jar {
     }
 }
 
-repositories {
-    mavenCentral()
-    maven { 
-        name = "curios"
-		url = "https://maven.theillusivec4.top/" 
-	}
-    maven {
-		name = "hwyla"
-		url = "https://maven.tehnut.info" 
-	}
+jar.finalizedBy('reobfJar')
+
+// API jar
+task apiJar(type: Jar) {
+    classifier = 'api'
+    include 'Tavi007/ElementalCombat/api/**/*'
+    include 'Tavi007/ElementalCombat/config/**/*'
+    include 'Tavi007/ElementalCombat/util/**/*'
+    from sourceSets.main.allSource
+    from sourceSets.main.output
 }
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allJava
+}
+
+tasks.build.dependsOn apiJar, sourcesJar
+
 
 jar.finalizedBy('reobfJar') 
 
@@ -108,6 +136,8 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact jar
+            artifact sourcesJar
+            artifact apiJar
         }
     }
     repositories {
