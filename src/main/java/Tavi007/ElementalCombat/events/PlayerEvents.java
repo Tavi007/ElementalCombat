@@ -1,16 +1,13 @@
 package Tavi007.ElementalCombat.events;
 
-import java.util.HashMap;
-
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.AttackDataAPI;
-import Tavi007.ElementalCombat.api.DefaultProperties;
+import Tavi007.ElementalCombat.api.DefaultPropertiesAPI;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
-import Tavi007.ElementalCombat.capabilities.attack.AttackData;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.api.attack.AttackData;
+import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
-import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -68,14 +65,11 @@ public class PlayerEvents
 	@SubscribeEvent
 	public static void onItemCrafted(ItemCraftedEvent event) {
 		ItemStack stack = event.getCrafting();
-		ItemCombatProperties itemProperties = DefaultProperties.get(stack);
 
 		DefenseData defData = DefenseDataAPI.get(stack);
-		defData.setElementFactor(new HashMap<String, Integer>(itemProperties.getDefenseElement()));
-		defData.setElementFactor(new HashMap<String, Integer>(itemProperties.getDefenseStyle()));
+		defData.set(new DefenseData(DefaultPropertiesAPI.getDefenseData(stack)));
 		
 		AttackData atckData = AttackDataAPI.get(stack);
-		final AttackData atck = new AttackData(itemProperties.getAttackStyle(), itemProperties.getAttackElement());
-		atckData.set(atck);
+		atckData.set(new AttackData(DefaultPropertiesAPI.getAttackData(stack)));
 	}
 }

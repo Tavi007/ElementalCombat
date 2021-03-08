@@ -1,10 +1,8 @@
-package Tavi007.ElementalCombat.capabilities.attack;
+package Tavi007.ElementalCombat.api.attack;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.api.DefaultProperties;
+import Tavi007.ElementalCombat.api.DefaultPropertiesAPI;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
-import Tavi007.ElementalCombat.loading.EntityCombatProperties;
-import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -85,8 +83,7 @@ public class AttackDataCapability {
 		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
 			Entity entity = event.getObject();
 			if (entity instanceof LivingEntity) {
-				EntityCombatProperties entityProperties = DefaultProperties.get((LivingEntity) entity);
-				final AttackData atck = new AttackData(entityProperties.getAttackStyle(), entityProperties.getAttackElement());
+				final AttackData atck = new AttackData(DefaultPropertiesAPI.getAttackData((LivingEntity) entity));
 				event.addCapability(ID, createProvider(atck));
 			}
 			else if (entity instanceof ProjectileEntity) {
@@ -98,8 +95,7 @@ public class AttackDataCapability {
 
 		@SubscribeEvent
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-			ItemCombatProperties itemProperties = DefaultProperties.get(event.getObject());
-			final AttackData atck = new AttackData(itemProperties.getAttackStyle(), itemProperties.getAttackElement());
+			final AttackData atck = new AttackData(DefaultPropertiesAPI.getAttackData(event.getObject()));
 			event.addCapability(ID, createProvider(atck));
 		}
 	}

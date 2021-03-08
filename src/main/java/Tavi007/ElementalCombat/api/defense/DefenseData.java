@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.capabilities.defense;
+package Tavi007.ElementalCombat.api.defense;
 
 import java.util.HashMap;
 import java.util.Map;

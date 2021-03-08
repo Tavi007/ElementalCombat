@@ -3,8 +3,8 @@ package Tavi007.ElementalCombat.util;
 import java.util.HashMap;
 import java.util.Set;
 
-import Tavi007.ElementalCombat.capabilities.attack.AttackData;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.api.attack.AttackData;
+import Tavi007.ElementalCombat.api.defense.DefenseData;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.StringNBT;
 

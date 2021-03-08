@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.capabilities.attack;
+package Tavi007.ElementalCombat.api.attack;
 
 import java.util.Map;
 

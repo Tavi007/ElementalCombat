@@ -1,9 +1,8 @@
 package Tavi007.ElementalCombat.api;
 
-import Tavi007.ElementalCombat.capabilities.attack.AttackData;
-import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
+import Tavi007.ElementalCombat.api.attack.AttackData;
+import Tavi007.ElementalCombat.api.attack.AttackDataCapability;
 import Tavi007.ElementalCombat.config.ServerConfig;
-import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -102,28 +101,16 @@ public class AttackDataAPI {
 		Entity immediateSource = damageSource.getImmediateSource();
 
 		// Get combat data from source
-		String sourceElement;
-		String sourceStyle;
+		AttackData atckCap;
 		if(immediateSource instanceof LivingEntity) {
-			AttackData atckCap = getWithActiveItem((LivingEntity) immediateSource);
-			sourceStyle = atckCap.getStyle();
-			sourceElement = atckCap.getElement();
+			atckCap = getWithActiveItem((LivingEntity) immediateSource);
 		}
 		else if(immediateSource instanceof ProjectileEntity) {
-			AttackData atckCap = get((ProjectileEntity) immediateSource);
-			sourceStyle = atckCap.getStyle();
-			sourceElement = atckCap.getElement();
+			atckCap = get((ProjectileEntity) immediateSource);
 		}
 		else {
-			AttackOnlyCombatProperties damageSourceProperties = DefaultProperties.get(damageSource);
-			sourceStyle = damageSourceProperties.getAttackStyle();
-			sourceElement = damageSourceProperties.getAttackElement();
+			atckCap = DefaultPropertiesAPI.getAttackData(damageSource);
 		}
-
-		//default values in case style or element is empty (which should not happen)
-		if (sourceStyle.isEmpty()) {sourceStyle = ServerConfig.getDefaultStyle();}
-		if (sourceElement.isEmpty()) {sourceElement = ServerConfig.getDefaultElement();}
-
-		return new AttackData(sourceStyle, sourceElement);
+		return new AttackData(atckCap);
 	}
 }

@@ -2,12 +2,11 @@ package Tavi007.ElementalCombat.events;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.AttackDataAPI;
-import Tavi007.ElementalCombat.api.DefaultProperties;
+import Tavi007.ElementalCombat.api.DefaultPropertiesAPI;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
-import Tavi007.ElementalCombat.capabilities.attack.AttackData;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.api.attack.AttackData;
+import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.init.ParticleList;
-import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
 import Tavi007.ElementalCombat.network.EntityMessage;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
@@ -57,12 +56,11 @@ public class ServerEvents {
 				// fill with default values in here.
 				ProjectileEntity projectile = (ProjectileEntity) entity;
 				AttackData projectileData = AttackDataAPI.get(projectile);
-				AttackOnlyCombatProperties properties = DefaultProperties.get(projectile);
+				AttackData defaultData = DefaultPropertiesAPI.getAttackData(projectile);
 				
 				// TODO: maybe change behavior here
-				if (!properties.isEmpty()) {
-					projectileData.setStyle(properties.getAttackStyle());
-					projectileData.setElement(properties.getAttackElement());
+				if (!defaultData.isEmpty()) {
+					projectileData.set(defaultData);
 				}
 				Entity source = projectile.func_234616_v_();
 				if(source != null && source instanceof LivingEntity) {

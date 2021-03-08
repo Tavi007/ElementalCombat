@@ -1,14 +1,8 @@
-package Tavi007.ElementalCombat.capabilities.defense;
-
-import java.util.HashMap;
+package Tavi007.ElementalCombat.api.defense;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.api.DefaultProperties;
+import Tavi007.ElementalCombat.api.DefaultPropertiesAPI;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
-import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
-import Tavi007.ElementalCombat.loading.EntityCombatProperties;
-import Tavi007.ElementalCombat.loading.ItemCombatProperties;
-import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -81,30 +75,20 @@ public class DefenseDataCapability {
 		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
 			if (event.getObject() instanceof LivingEntity) {
 				LivingEntity entity = (LivingEntity) event.getObject();
-				EntityCombatProperties entityProperties = DefaultProperties.get(entity);
-
-				HashMap<String, Integer> styleMap = new HashMap<String, Integer>(entityProperties.getDefenseStyle());
-				HashMap<String, Integer> elementMap = new HashMap<String, Integer>(entityProperties.getDefenseElement());
+				final DefenseData defData = DefaultPropertiesAPI.getDefenseData(entity);
+				
 				// player spawn is usually biome independent
-				if(entityProperties.getBiomeDependency()) 
-				{
+				if(DefaultPropertiesAPI.isBiomeDependent(entity)) {
 					BlockPos blockPos = new BlockPos(entity.getPositionVec());
-					BiomeCombatProperties biomeProperties = DefaultProperties.get(entity.getEntityWorld().getBiome(blockPos));
-					DefenseDataHelper.mergeMaps(elementMap, biomeProperties.getDefenseElement());					
+					defData.add(DefaultPropertiesAPI.getDefenseData(entity.getEntityWorld().getBiome(blockPos)));					
 				}
-				final DefenseData defData = new DefenseData(styleMap, elementMap);
 				event.addCapability(ID, createProvider(defData));
 			}
 		}
 
 		@SubscribeEvent(priority = EventPriority.LOWEST)
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-			ItemCombatProperties itemProperties = DefaultProperties.get(event.getObject());
-			//default values
-			HashMap<String, Integer> styleMap = new HashMap<String, Integer>(itemProperties.getDefenseStyle());
-			HashMap<String, Integer> elementMap = new HashMap<String, Integer>(itemProperties.getDefenseElement());
-
-			final DefenseData defData = new DefenseData(styleMap, elementMap);
+			final DefenseData defData = DefaultPropertiesAPI.getDefenseData(event.getObject());
 			event.addCapability(ID, createProvider(defData));
 		}
 	}

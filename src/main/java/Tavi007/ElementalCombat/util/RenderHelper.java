@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import Tavi007.ElementalCombat.api.DefaultProperties;
-import Tavi007.ElementalCombat.capabilities.attack.AttackData;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.api.attack.AttackData;
+import Tavi007.ElementalCombat.api.defense.DefenseData;
+import Tavi007.ElementalCombat.api.DefaultPropertiesAPI;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -16,8 +16,8 @@ public class RenderHelper {
 	public static List<ITextComponent> getDisplayText(AttackData atckData) {
 		List<ITextComponent> list = new ArrayList<ITextComponent>();
 		list.add(new StringTextComponent("Attack:"));
-		list.add(new StringTextComponent("" + TextFormatting.GRAY + " - " + DefaultProperties.getMappedString(atckData.getElement()) + " " + 
-				DefaultProperties.getMappedString(atckData.getStyle()) + TextFormatting.RESET));
+		list.add(new StringTextComponent("" + TextFormatting.GRAY + " - " + DefaultPropertiesAPI.getMappedString(atckData.getElement()) + " " + 
+				DefaultPropertiesAPI.getMappedString(atckData.getStyle()) + TextFormatting.RESET));
 		return list;
 	}
 
@@ -71,6 +71,6 @@ public class RenderHelper {
 		if (percentage > 100) {textFormatting = TextFormatting.GREEN;}
 
 		//make string
-		return "" + TextFormatting.GRAY + " - " + DefaultProperties.getMappedString(key) + " " + textFormatting + String.valueOf(percentage)+ "%" + TextFormatting.RESET;
+		return "" + TextFormatting.GRAY + " - " + DefaultPropertiesAPI.getMappedString(key) + " " + textFormatting + String.valueOf(percentage)+ "%" + TextFormatting.RESET;
 	}
 }
