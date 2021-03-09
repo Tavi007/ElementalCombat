@@ -1,17 +1,14 @@
 package Tavi007.ElementalCombat.api.defense;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.api.DefaultPropertiesAPI;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
 import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -71,24 +68,15 @@ public class DefenseDataCapability {
 		 *
 		 * @param event The event
 		 */
-		@SubscribeEvent
+		@SubscribeEvent(priority = EventPriority.LOWEST)
 		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
-			if (event.getObject() instanceof LivingEntity) {
-				LivingEntity entity = (LivingEntity) event.getObject();
-				final DefenseData defData = DefaultPropertiesAPI.getDefenseData(entity);
-				
-				// player spawn is usually biome independent
-				if(DefaultPropertiesAPI.isBiomeDependent(entity)) {
-					BlockPos blockPos = new BlockPos(entity.getPositionVec());
-					defData.add(DefaultPropertiesAPI.getDefenseData(entity.getEntityWorld().getBiome(blockPos)));					
-				}
-				event.addCapability(ID, createProvider(defData));
-			}
+			final DefenseData defData = new DefenseData();
+			event.addCapability(ID, createProvider(defData));
 		}
 
 		@SubscribeEvent(priority = EventPriority.LOWEST)
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-			final DefenseData defData = new DefenseData(DefaultPropertiesAPI.getDefenseData(event.getObject()));
+			final DefenseData defData = new DefenseData();
 			event.addCapability(ID, createProvider(defData));
 		}
 	}

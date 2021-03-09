@@ -22,7 +22,11 @@ public class AttackDataAPI {
 	 * @return the AttackData, containing the attack style and attack element.
 	 */
 	public static AttackData get(LivingEntity entity) {
-		return (AttackData) entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+		AttackData attackData = (AttackData) entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+		if(!attackData.isInitialized()) {
+			attackData.initialize(entity);
+		}
+		return attackData;
 	}
 
 	/**
@@ -31,25 +35,25 @@ public class AttackDataAPI {
 	 * @return the AttackData, containing the attack style and attack element.
 	 */
 	public static AttackData getWithActiveItem(LivingEntity entity) {
-		AttackData atckData = new AttackData();
+		AttackData attackData = new AttackData();
 		if(entity.getHeldItemMainhand().isEmpty()){
 			//use data from livingEntity
-			atckData.set(get(entity));
+			attackData.set(get(entity));
 		}
 		else {
 			//use data from held item
-			atckData.set(get(entity.getHeldItemMainhand()));
+			attackData.set(get(entity.getHeldItemMainhand()));
 
 			//maybe mix and match with entity data? a wither skeleton will only use data from the stone sword...
 			AttackData atckDataEntity = get(entity);
-			if (atckData.getStyle().equals(ServerConfig.getDefaultStyle())) {
-				atckData.setStyle(atckDataEntity.getStyle());
+			if (attackData.getStyle().equals(ServerConfig.getDefaultStyle())) {
+				attackData.setStyle(atckDataEntity.getStyle());
 			}
-			if (atckData.getElement().equals(ServerConfig.getDefaultElement())) {
-				atckData.setElement(atckDataEntity.getElement());
+			if (attackData.getElement().equals(ServerConfig.getDefaultElement())) {
+				attackData.setElement(atckDataEntity.getElement());
 			}
 		}
-		return atckData;
+		return attackData;
 	}
 
 	///////////////
@@ -68,6 +72,9 @@ public class AttackDataAPI {
 		}
 		else {
 			AttackData attackData = (AttackData) stack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+			if(!attackData.isInitialized()) {
+				attackData.initialize(stack);
+			}
 			if (!attackData.areEnchantmentChangesApplied()) {
 				attackData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
 			}
@@ -85,7 +92,11 @@ public class AttackDataAPI {
 	 * @return the AttackData, containing the attack style and attack element.
 	 */
 	public static AttackData get(ProjectileEntity projectileEntity) {
-		return (AttackData) projectileEntity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+		AttackData attackData = (AttackData) projectileEntity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+		if(!attackData.isInitialized()) {
+			attackData.initialize(projectileEntity);
+		}
+		return attackData;
 	}
 
 	///////////////////

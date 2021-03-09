@@ -3,14 +3,19 @@ package Tavi007.ElementalCombat.api.defense;
 import java.util.HashMap;
 import java.util.Map;
 
+import Tavi007.ElementalCombat.api.DefaultPropertiesAPI;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 
 public class DefenseData {
 
 	private HashMap<String, Integer> styleFactor = new HashMap<String, Integer>();
 	private HashMap<String, Integer> elementFactor = new HashMap<String, Integer>();
 
+	private boolean isInitialized = false;
 	// for itemstack
 	private HashMap<String, Integer> enchantmentData = new HashMap<String, Integer>();
 	private boolean areEnchantmentChangesApplied = false;
@@ -106,4 +111,20 @@ public class DefenseData {
 		}
 		this.areEnchantmentChangesApplied = true;
 	}
+	
+	public void initialize(ItemStack stack) {
+		isInitialized = true;
+		this.set(DefaultPropertiesAPI.getDefenseData(stack));
+	}
+	
+	public void initialize(LivingEntity entity) {
+		isInitialized = true;
+		this.set(DefaultPropertiesAPI.getDefenseData(entity));
+		if(DefaultPropertiesAPI.isBiomeDependent(entity)) {
+			BlockPos blockPos = new BlockPos(entity.getPositionVec());
+			this.add(DefaultPropertiesAPI.getDefenseData(entity.getEntityWorld().getBiome(blockPos)));					
+		}
+	}
+	
+	public boolean isInitialized() {return isInitialized;}
 }

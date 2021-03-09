@@ -1,11 +1,8 @@
 package Tavi007.ElementalCombat.api.attack;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.api.DefaultPropertiesAPI;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -17,6 +14,7 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -79,23 +77,15 @@ public class AttackDataCapability {
 		 *
 		 * @param event The event
 		 */
-		@SubscribeEvent
+		@SubscribeEvent(priority = EventPriority.LOWEST)
 		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
-			Entity entity = event.getObject();
-			if (entity instanceof LivingEntity) {
-				final AttackData atck = new AttackData(DefaultPropertiesAPI.getAttackData((LivingEntity) entity));
-				event.addCapability(ID, createProvider(atck));
-			}
-			else if (entity instanceof ProjectileEntity) {
-				// fill with default values in EntityJoinWorld Event, because the shooter hasn't been set yet.
-				final AttackData atck = new AttackData();
-				event.addCapability(ID, createProvider(atck));
-			}
+			final AttackData atck = new AttackData();
+			event.addCapability(ID, createProvider(atck));
 		}
 
-		@SubscribeEvent
+		@SubscribeEvent(priority = EventPriority.LOWEST)
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-			final AttackData atck = new AttackData(DefaultPropertiesAPI.getAttackData(event.getObject()));
+			final AttackData atck = new AttackData();
 			event.addCapability(ID, createProvider(atck));
 		}
 	}

@@ -19,7 +19,11 @@ public class DefenseDataAPI {
 	 * @return the DefenseData, containing the style defense-mapping and element defense-mapping.
 	 */
 	public static DefenseData get(LivingEntity entity) {
-		return (DefenseData) entity.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
+		DefenseData defenseData = (DefenseData) entity.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
+		if(!defenseData.isInitialized()) {
+			defenseData.initialize(entity);
+		}
+		return defenseData;
 	}
 
 
@@ -34,6 +38,9 @@ public class DefenseDataAPI {
 		}
 		else {
 			DefenseData defenseData = (DefenseData) stack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
+			if(!defenseData.isInitialized()) {
+				defenseData.initialize(stack);
+			}
 			if (!defenseData.areEnchantmentChangesApplied()) {
 				defenseData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
 			}
