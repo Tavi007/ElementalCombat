@@ -88,7 +88,7 @@ public class DefenseDataCapability {
 
 		@SubscribeEvent(priority = EventPriority.LOWEST)
 		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-			final DefenseData defData = DefaultPropertiesAPI.getDefenseData(event.getObject());
+			final DefenseData defData = new DefenseData(DefaultPropertiesAPI.getDefenseData(event.getObject()));
 			event.addCapability(ID, createProvider(defData));
 		}
 	}

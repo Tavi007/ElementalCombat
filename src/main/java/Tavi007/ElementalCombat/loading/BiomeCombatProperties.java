@@ -3,8 +3,6 @@ package Tavi007.ElementalCombat.loading;
 import java.util.HashMap;
 
 public class BiomeCombatProperties {
-	public static final BiomeCombatProperties EMPTY = new BiomeCombatProperties();
-	
 	private final HashMap<String, Integer> defense_element;
 	
 	public BiomeCombatProperties() {

@@ -6,8 +6,6 @@ import Tavi007.ElementalCombat.config.ServerConfig;
 
 public class ItemCombatProperties 
 {
-	   public static final ItemCombatProperties EMPTY = new ItemCombatProperties();
-
 	   private final HashMap<String, Integer> defense_style;
 	   private final HashMap<String, Integer> defense_element;
 

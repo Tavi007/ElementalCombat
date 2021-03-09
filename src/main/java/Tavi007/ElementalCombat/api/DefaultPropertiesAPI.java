@@ -34,7 +34,7 @@ public class DefaultPropertiesAPI {
 			return new AttackData();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "entities/" + rlEntity.getPath());
-		EntityCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties);
+		EntityCombatProperties property = new EntityCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
 		return new AttackData(property.getAttackStyle(), property.getAttackElement());
 	}
 
@@ -49,7 +49,7 @@ public class DefaultPropertiesAPI {
 			return new AttackData();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlItem.getNamespace(), "items/" + rlItem.getPath());
-		ItemCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties);
+		ItemCombatProperties property = new ItemCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
 		return new AttackData(property.getAttackStyle(), property.getAttackElement());
 	}
 
@@ -72,7 +72,7 @@ public class DefaultPropertiesAPI {
 		else {
 			rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + damageSource.getDamageType().toLowerCase());
 		}
-		AttackOnlyCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource);
+		AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource));
 		return new AttackData(property.getAttackStyle(), property.getAttackElement());
 	}
 
@@ -85,7 +85,7 @@ public class DefaultPropertiesAPI {
 	public static AttackData getAttackData(ProjectileEntity projectile) {
 		ResourceLocation resourcelocation = projectile.getType().getRegistryName();
 		ResourceLocation rlDamageSource = new ResourceLocation(resourcelocation.getNamespace(), "projectiles/" + resourcelocation.getPath());
-		AttackOnlyCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getProjectileDataFromLocation(rlDamageSource);
+		AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getProjectileDataFromLocation(rlDamageSource));
 		return new AttackData(property.getAttackStyle(), property.getAttackElement());
 	}
 	
@@ -104,7 +104,7 @@ public class DefaultPropertiesAPI {
 			return new DefenseData();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "entities/" + rlEntity.getPath());
-		EntityCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties);
+		EntityCombatProperties property = new EntityCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
 		return new DefenseData(property.getDefenseStyle(), property.getDefenseElement());
 	}
 
@@ -119,7 +119,7 @@ public class DefaultPropertiesAPI {
 			return new DefenseData();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlItem.getNamespace(), "items/" + rlItem.getPath());
-		ItemCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties);
+		ItemCombatProperties property = new ItemCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
 		return new DefenseData(property.getDefenseStyle(), property.getDefenseElement());
 		
 	}
@@ -136,7 +136,7 @@ public class DefaultPropertiesAPI {
 			return defData;
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlBiome.getNamespace(), "biomes/" + rlBiome.getPath()); ;
-		BiomeCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties);
+		BiomeCombatProperties property = new BiomeCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties));
 		defData.setElementFactor(property.getDefenseElement());
 		return defData;
 	}

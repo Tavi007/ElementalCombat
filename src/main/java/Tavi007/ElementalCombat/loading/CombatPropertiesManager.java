@@ -129,22 +129,22 @@ public class CombatPropertiesManager extends JsonReloadListener
 	}
 
 	public EntityCombatProperties getEntityDataFromLocation(ResourceLocation rl){
-		return new EntityCombatProperties(this.registeredEntityData.getOrDefault(rl, EntityCombatProperties.EMPTY));
+		return new EntityCombatProperties(this.registeredEntityData.getOrDefault(rl, new EntityCombatProperties()));
 	}
 
 	public ItemCombatProperties getItemDataFromLocation(ResourceLocation rl){
-		return new ItemCombatProperties(this.registeredItemData.getOrDefault(rl, ItemCombatProperties.EMPTY));
+		return new ItemCombatProperties(this.registeredItemData.getOrDefault(rl, new ItemCombatProperties()));
 	}
 
 	public BiomeCombatProperties getBiomeDataFromLocation(ResourceLocation rl){
-		return new BiomeCombatProperties(this.registeredBiomeData.getOrDefault(rl, BiomeCombatProperties.EMPTY));
+		return new BiomeCombatProperties(this.registeredBiomeData.getOrDefault(rl, new BiomeCombatProperties()));
 	}
 
 	public AttackOnlyCombatProperties getDamageSourceDataFromLocation(ResourceLocation rl){
-		return new AttackOnlyCombatProperties(this.registeredDamageSourceData.getOrDefault(rl, AttackOnlyCombatProperties.EMPTY));
+		return new AttackOnlyCombatProperties(this.registeredDamageSourceData.getOrDefault(rl, new AttackOnlyCombatProperties()));
 	}
 
 	public AttackOnlyCombatProperties getProjectileDataFromLocation(ResourceLocation rl){
-		return new AttackOnlyCombatProperties(this.registeredProjectileData.getOrDefault(rl, AttackOnlyCombatProperties.EMPTY));
+		return new AttackOnlyCombatProperties(this.registeredProjectileData.getOrDefault(rl, new AttackOnlyCombatProperties()));
 	}
 }

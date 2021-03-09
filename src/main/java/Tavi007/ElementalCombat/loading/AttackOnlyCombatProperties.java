@@ -3,8 +3,6 @@ package Tavi007.ElementalCombat.loading;
 import Tavi007.ElementalCombat.config.ServerConfig;
 
 public class AttackOnlyCombatProperties {
-	public static final AttackOnlyCombatProperties EMPTY = new AttackOnlyCombatProperties();
-
 	private final String attack_style;
 	private final String attack_element;
 	
