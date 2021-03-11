@@ -2,57 +2,94 @@ package Tavi007.ElementalCombat.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import Tavi007.ElementalCombat.api.attack.AttackData;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
+import Tavi007.ElementalCombat.config.ClientConfig;
+import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.DefaultPropertiesAPI;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
 public class RenderHelper {
 	
-	public static List<ITextComponent> getDisplayText(AttackData atckData) {
-		List<ITextComponent> list = new ArrayList<ITextComponent>();
-		list.add(new StringTextComponent("Attack:"));
-		list.add(new StringTextComponent("" + TextFormatting.GRAY + " - " + DefaultPropertiesAPI.getMappedString(atckData.getElement()) + " " + 
-				DefaultPropertiesAPI.getMappedString(atckData.getStyle()) + TextFormatting.RESET));
-		return list;
-	}
-
-	public static List<ITextComponent> getDisplayText(DefenseData defData) {
-		List<ITextComponent> list = new ArrayList<ITextComponent>();
-		list.add(new StringTextComponent("Defense:"));
-		list.addAll(toDisplayText(defData.getStyleFactor()));
-		list.addAll(toDisplayText(defData.getElementFactor()));
-		return list;
-	}
-
-	public static List<ITextComponent> getIteratingDisplayText(DefenseData defData, int counter) {
-		List<ITextComponent> list = new ArrayList<ITextComponent>();
-		list.add(new StringTextComponent("Defense:"));
+	public static final int iconSize = 8;
+	
+	private static int iteratorCounter=0;
+	
+	public static void tickIteratorCounter() {
+		iteratorCounter++;
 		
-		Object[] elementKeys = defData.getElementFactor().keySet().toArray();
-		if(elementKeys.length > 0) {
-			String key = (String) elementKeys[counter % elementKeys.length];
-			list.add(new StringTextComponent(toPercentageString(key, defData.getElementFactor().get(key) )));
+		if(iteratorCounter == Integer.MAX_VALUE || iteratorCounter < 0) {
+			iteratorCounter = 0;
 		}
-		Object[] styleKeys = defData.getStyleFactor().keySet().toArray();
-		if(styleKeys.length > 0) {
-			String key = (String) styleKeys[counter % styleKeys.length];
-			list.add(new StringTextComponent(toPercentageString(key, defData.getStyleFactor().get(key) )));
-		}
-		
-		return list;
 	}
 	
-	private static List<ITextComponent> toDisplayText(HashMap<String, Integer> map){
-		List<ITextComponent> list = new ArrayList<ITextComponent>();
-		map.forEach((key, factor) -> {
-			list.add(new StringTextComponent(toPercentageString(key, factor)));
-		});
-		return list;
+	public static int getInteratorCounter() {
+		return iteratorCounter;
+	}
+	
+	public static void render(AttackData attackData, MatrixStack matrixStack, float posX, float posY) {
+		Minecraft mc = Minecraft.getInstance();
+		
+		// caption
+		if(ClientConfig.textShadow()) {
+			mc.fontRenderer.drawStringWithShadow(matrixStack, "Attack:", posX, posY, TextFormatting.GRAY.getColor());
+		}
+		else {
+			mc.fontRenderer.drawStringWithShadow(matrixStack, "Attack:", posX, posY, TextFormatting.GRAY.getColor());
+		}
+		posY += mc.fontRenderer.FONT_HEIGHT;
+		posX += 2;
+
+		// icon element
+		mc.getTextureManager().bindTexture(new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + attackData.getElement() + ".png"));
+		AbstractGui.blit(matrixStack, (int) posX, (int) posY, 0, 0, iconSize, iconSize, iconSize, iconSize);
+		posX += iconSize;
+
+		// icon style
+		mc.getTextureManager().bindTexture(new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + attackData.getStyle() + ".png"));
+		AbstractGui.blit(matrixStack, (int) posX, (int) posY, 0, 0, iconSize, iconSize, iconSize, iconSize);
+
+		// reset to default texture
+		mc.getTextureManager().bindTexture(AbstractGui.GUI_ICONS_LOCATION);
+	}
+
+	public static void render(DefenseData defData, MatrixStack matrixStack, float posX, float posY) {
+		Minecraft mc = Minecraft.getInstance();
+		
+		// caption
+		if(ClientConfig.textShadow()) {
+			mc.fontRenderer.drawStringWithShadow(matrixStack, "Defense:", posX, posY, TextFormatting.GRAY.getColor());
+		}
+		else {
+			mc.fontRenderer.drawStringWithShadow(matrixStack, "Defense:", posX, posY, TextFormatting.GRAY.getColor());
+		}
+		posY += mc.fontRenderer.FONT_HEIGHT;
+		posX += 2;
+		
+		// icon
+		LinkedHashMap<String, Integer> map = new LinkedHashMap<String, Integer>();
+		map.putAll(defData.getElementFactor());
+		map.putAll(defData.getStyleFactor());
+		String key = (new ArrayList<String>(map.keySet())).get(iteratorCounter % map.size());
+		mc.getTextureManager().bindTexture(new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + key + ".png"));
+		AbstractGui.blit(matrixStack, (int) posX, (int) posY, 0, 0, iconSize, iconSize, iconSize, iconSize);
+		
+		// value
+		posX += iconSize + 2;
+		renderPercentage(key, map.get(key), matrixStack, posX, posY);
+
+		// reset to default texture
+		mc.getTextureManager().bindTexture(AbstractGui.GUI_ICONS_LOCATION);
 	}
 	
 	/**
@@ -61,7 +98,7 @@ public class RenderHelper {
 	 * @param factor The corresponding value to the key from the element or style defense mapping.
 	 * @return A formatted String ready to be displayed.
 	 */
-	private static String toPercentageString(String key, Integer factor) {
+	private static void renderPercentage(String key, Integer factor, MatrixStack matrixStack, float posX, float posY) {
 		//get color
 		Integer percentage = Math.round(DefenseDataHelper.getPercentage(factor)*100);
 		TextFormatting textFormatting = TextFormatting.GRAY;
@@ -70,7 +107,13 @@ public class RenderHelper {
 		if (percentage == 100) {textFormatting = TextFormatting.YELLOW;}
 		if (percentage > 100) {textFormatting = TextFormatting.GREEN;}
 
-		//make string
-		return "" + TextFormatting.GRAY + " - " + DefaultPropertiesAPI.getMappedString(key) + " " + textFormatting + String.valueOf(percentage)+ "%" + TextFormatting.RESET;
+		// write text
+		Minecraft mc = Minecraft.getInstance();
+		if(ClientConfig.textShadow()) {
+			mc.fontRenderer.drawStringWithShadow(matrixStack, String.valueOf(percentage) + "%" , posX, posY, textFormatting.getColor());
+		}
+		else {
+			mc.fontRenderer.drawStringWithShadow(matrixStack, String.valueOf(percentage) + "%" , posX, posY, textFormatting.getColor());
+		}
 	}
 }

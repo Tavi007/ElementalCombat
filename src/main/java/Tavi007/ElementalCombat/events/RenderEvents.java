@@ -17,6 +17,7 @@ import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.RenderHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
@@ -26,10 +27,13 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IReorderingProcessor;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -96,9 +100,9 @@ public class RenderEvents {
 					//What if other mods implements their own version of an hurt sound?
 					//Also what if the on_fire sound gets disabled, even so I still took fire damage?
 					if( event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT.getRegistryName()) || 
-						event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_DROWN.getRegistryName()) ||
-						event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_ON_FIRE.getRegistryName()) ||
-						event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH.getRegistryName()) ) {
+							event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_DROWN.getRegistryName()) ||
+							event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_ON_FIRE.getRegistryName()) ||
+							event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH.getRegistryName()) ) {
 						event.setResult(null); 
 					}
 				}
@@ -108,129 +112,111 @@ public class RenderEvents {
 
 	@SubscribeEvent
 	public static void addTooltipInformation(ItemTooltipEvent event) {
-		ItemStack item = event.getItemStack();
-		List<ITextComponent> toolTip = event.getToolTip();
-		if (item != null) {
-			//attack
-			AttackData atckData = new AttackData(AttackDataAPI.get(item));
-			if(!atckData.isEmpty()) {
-				toolTip.addAll(RenderHelper.getDisplayText(atckData));
-			}
-
-			//defense
-			DefenseData defData = new DefenseData(DefenseDataAPI.get(item));
-			if(!defData.isEmpty()) {
-				toolTip.addAll(RenderHelper.getDisplayText(defData));
-			}
-		}
+		
+		
+				ItemStack item = event.getItemStack();
+				List<ITextComponent> toolTip = event.getToolTip();
+				if (item != null) {
+					//attack
+					AttackData atckData = new AttackData(AttackDataAPI.get(item));
+					if(!atckData.isEmpty()) {
+						toolTip.add(new StringTextComponent("Attack: "));
+						toolTip.add(new StringTextComponent(" "));
+					}
+		
+					//defense
+					DefenseData defData = new DefenseData(DefenseDataAPI.get(item));
+					if(!defData.isEmpty()) {
+						toolTip.add(new StringTextComponent("Defense:    "));
+						toolTip.add(new StringTextComponent(" "));
+					}
+				}
 	}
 
-	static int ticks=0;
-	static int counter=0;
+	private static int ticks=0;
 
 	@SubscribeEvent
 	public static void displayData(RenderGameOverlayEvent.Post event) {
 		if(event.getType().equals(RenderGameOverlayEvent.ElementType.HOTBAR)) {
+			
+			//for iterating the defenseData
+			ticks++;
+			if(ticks>1.5*ClientConfig.iterationSpeed()) {  
+				ticks = 0;
+				RenderHelper.tickIteratorCounter();
+			}
+			
 			if(ClientConfig.isHUDEnabled()) {
 				// see Screen#renderToolTips in client.gui.screen
 				Minecraft mc = Minecraft.getInstance();
 				if(mc.player != null) {
-					List<ITextComponent> list = new ArrayList<ITextComponent>();
+					MatrixStack matrixStack = event.getMatrixStack();
+					float scale = (float) ClientConfig.scale();
+					AttackData attackData = AttackDataAPI.getWithActiveItem(mc.player);
+					DefenseData defenseData = DefenseDataAPI.get(mc.player);
+					
+					// the width of the box.
+					int listWidth = 45;
 
-					AttackData atckData = AttackDataAPI.getWithActiveItem(mc.player);
-					list.addAll(RenderHelper.getDisplayText(atckData));
-
-					DefenseData defData = DefenseDataAPI.get(mc.player);
-					if(!defData.isEmpty()) {
-						if(ClientConfig.iterateDefense()) {
-							ticks++;
-							if(ticks>1.5*ClientConfig.iterationSpeed()) { //this event triggers slightly more often than the waila tooltip 
-								ticks = 0;
-								counter++;
-							}
-							if(counter>100) {
-								counter = 0;
-							}
-							list.addAll(RenderHelper.getIteratingDisplayText(defData, counter));
-						}
-						else {
-							list.addAll(RenderHelper.getDisplayText(defData));
-						}
+					// computes the height of the list
+					int listHeight = mc.fontRenderer.FONT_HEIGHT + RenderHelper.iconSize;
+					if(!defenseData.isEmpty()) {
+						listHeight += mc.fontRenderer.FONT_HEIGHT + RenderHelper.iconSize + 1;
 					}
 
-					if (!list.isEmpty()) {
-						MatrixStack matrixStack = event.getMatrixStack();
-
-						matrixStack.push();
-						float scale = (float) ClientConfig.scale();
-						matrixStack.scale(scale, scale, scale);
-
-						List<? extends IReorderingProcessor> orderedList = Lists.transform(list, ITextComponent::func_241878_f);
-						// computes the width of the widest line.
-						int listWidth = 0;
-						for(IReorderingProcessor ireorderingprocessor : orderedList) {
-							int textWidth = mc.fontRenderer.func_243245_a(ireorderingprocessor);
-							listWidth = Math.max(textWidth, listWidth);
-						}
-
-						// computes the height of the list
-						int listHeight = 8;
-						if (orderedList.size() > 1) {
-							listHeight += 2 + (orderedList.size() - 1) * (mc.fontRenderer.FONT_HEIGHT+1);
-						}
-
-						// moves the coords so the text and box appear correct
-						int posX = 12;
-						int posY = 12;
-						if(!ClientConfig.isTop()) {
-							int screenHeight = (int) (event.getWindow().getScaledHeight()/scale);
-							posY = Math.max(12, screenHeight - listHeight - 12);
-						}
-						if(!ClientConfig.isLeft()) {
-							int screenWidth = (int) (event.getWindow().getScaledWidth()/scale);
-							posX = Math.max(12, screenWidth - listWidth - 12);
-						}
-						
-						Tessellator tessellator = Tessellator.getInstance();
-						BufferBuilder bufferbuilder = tessellator.getBuffer();
-						bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-						Matrix4f matrix4f = matrixStack.getLast().getMatrix();
-						// draw background box
-						func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 4, posX + listWidth + 3, posY - 3, 400, -267386864, -267386864);
-						func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY + listHeight + 3, posX + listWidth + 3, posY + listHeight + 4, 400, -267386864, -267386864);
-						func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + listWidth + 3, posY + listHeight + 3, 400, -267386864, -267386864);
-						func_238462_a_(matrix4f, bufferbuilder, posX - 4, posY - 3, posX - 3, posY + listHeight + 3, 400, -267386864, -267386864);
-						func_238462_a_(matrix4f, bufferbuilder, posX + listWidth + 3, posY - 3, posX + listWidth + 4, posY + listHeight + 3, 400, -267386864, -267386864);
-						func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3 + 1, posX - 3 + 1, posY + listHeight + 3 - 1, 400, 1347420415, 1344798847);
-						func_238462_a_(matrix4f, bufferbuilder, posX + listWidth + 2, posY - 3 + 1, posX + listWidth + 3, posY + listHeight + 3 - 1, 400, 1347420415, 1344798847);
-						func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + listWidth + 3, posY - 3 + 1, 400, 1347420415, 1347420415);
-						func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY + listHeight + 2, posX + listWidth + 3, posY + listHeight + 3, 400, 1344798847, 1344798847);
-						RenderSystem.enableDepthTest();
-						RenderSystem.disableTexture();
-						RenderSystem.enableBlend();
-						RenderSystem.defaultBlendFunc();
-						RenderSystem.shadeModel(7425);
-						bufferbuilder.finishDrawing();
-						WorldVertexBufferUploader.draw(bufferbuilder);
-						RenderSystem.shadeModel(7424);
-						RenderSystem.disableBlend();
-						RenderSystem.enableTexture();
-						IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-						matrixStack.translate(0.0D, 0.0D, 400.0D);
-
-						// write the list on top of the background
-						for(int i = 0; i < orderedList.size(); ++i) {
-							IReorderingProcessor ireorderingprocessor1 = orderedList.get(i);
-							if (ireorderingprocessor1 != null) {
-								mc.fontRenderer.func_238416_a_(ireorderingprocessor1, (float)posX, (float)posY, -1, ClientConfig.textShadow(), matrix4f, irendertypebuffer$impl, false, 0, 15728880);
-							}
-							//next line
-							posY += 10;
-						}
-						irendertypebuffer$impl.finish();
-						matrixStack.pop();
+					// moves the coords so the text and box appear correct
+					int posX = 12;
+					int posY = 12;
+					if(!ClientConfig.isTop()) {
+						int screenHeight = (int) (event.getWindow().getScaledHeight()/scale);
+						posY = Math.max(12, screenHeight - listHeight - 12);
+					}
+					if(!ClientConfig.isLeft()) {
+						int screenWidth = (int) (event.getWindow().getScaledWidth()/scale);
+						posX = Math.max(12, screenWidth - listWidth - 12);
 					}
 
+					
+					matrixStack.push();
+					matrixStack.scale(scale, scale, scale);
+					
+					// draw background box
+					Tessellator tessellator = Tessellator.getInstance();
+					BufferBuilder bufferbuilder = tessellator.getBuffer();
+					bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+					Matrix4f matrix4f = matrixStack.getLast().getMatrix();
+					func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 4, posX + listWidth + 3, posY - 3, 400, -267386864, -267386864);
+					func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY + listHeight + 3, posX + listWidth + 3, posY + listHeight + 4, 400, -267386864, -267386864);
+					func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + listWidth + 3, posY + listHeight + 3, 400, -267386864, -267386864);
+					func_238462_a_(matrix4f, bufferbuilder, posX - 4, posY - 3, posX - 3, posY + listHeight + 3, 400, -267386864, -267386864);
+					func_238462_a_(matrix4f, bufferbuilder, posX + listWidth + 3, posY - 3, posX + listWidth + 4, posY + listHeight + 3, 400, -267386864, -267386864);
+					func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3 + 1, posX - 3 + 1, posY + listHeight + 3 - 1, 400, 1347420415, 1344798847);
+					func_238462_a_(matrix4f, bufferbuilder, posX + listWidth + 2, posY - 3 + 1, posX + listWidth + 3, posY + listHeight + 3 - 1, 400, 1347420415, 1344798847);
+					func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + listWidth + 3, posY - 3 + 1, 400, 1347420415, 1347420415);
+					func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY + listHeight + 2, posX + listWidth + 3, posY + listHeight + 3, 400, 1344798847, 1344798847);
+					RenderSystem.enableDepthTest();
+					RenderSystem.disableTexture();
+					RenderSystem.enableBlend();
+					RenderSystem.defaultBlendFunc();
+					RenderSystem.shadeModel(7425);
+					bufferbuilder.finishDrawing();
+					WorldVertexBufferUploader.draw(bufferbuilder);
+					RenderSystem.shadeModel(7424);
+					RenderSystem.disableBlend();
+					RenderSystem.enableTexture();
+					IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+					matrixStack.translate(0.0D, 0.0D, 400.0D);
+
+					// render attackData
+					RenderHelper.render(attackData, matrixStack, posX, posY);
+
+					// render defenseData
+					if(!defenseData.isEmpty()) {
+						posY += mc.fontRenderer.FONT_HEIGHT + RenderHelper.iconSize + 2;
+						RenderHelper.render(defenseData, matrixStack, posX, posY);
+					}
+					irendertypebuffer$impl.finish();
+					matrixStack.pop();
 				}
 			}
 		}

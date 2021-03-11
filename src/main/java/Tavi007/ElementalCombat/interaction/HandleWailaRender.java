@@ -1,5 +1,6 @@
 package Tavi007.ElementalCombat.interaction;
 
+import java.awt.Rectangle;
 import java.util.List;
 
 import Tavi007.ElementalCombat.api.AttackDataAPI;
@@ -8,6 +9,7 @@ import Tavi007.ElementalCombat.api.attack.AttackData;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.RenderHelper;
+import mcp.mobius.waila.api.event.WailaRenderEvent;
 import mcp.mobius.waila.api.event.WailaTooltipEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -21,9 +23,7 @@ public class HandleWailaRender {
 	static int counter=0;
 	
 	@SubscribeEvent
-	public static void onWailaRender(WailaTooltipEvent event) {
-		List<ITextComponent> toolTip = event.getCurrentTip();
-		
+	public static void onWailaRender(WailaRenderEvent.Pre event) {	
 		// check entity
 		Entity entity = event.getAccessor().getEntity();
 		if (entity != null) {
@@ -38,20 +38,14 @@ public class HandleWailaRender {
 				atckData = AttackDataAPI.get((ProjectileEntity) entity);
 			}
 
-			ticks++;
-			if(ticks>ClientConfig.iterationSpeed()) { 
-				ticks = 0;
-				counter++;
-			}
-			if(counter>100) {
-				counter = 0;
-			}
 			
-			// add the text
-			toolTip.addAll(RenderHelper.getDisplayText(atckData));
-			if(!defData.isEmpty()) {
-				toolTip.addAll(RenderHelper.getIteratingDisplayText(defData, counter));
-			}
+			// increase box and render information
+			Rectangle box = event.getPosition();
+			
+//			RenderHelper.render(atckData);
+//			if(!defData.isEmpty()) {
+//				RenderHelper.render(defData);
+//			}
 		}
 	}
 }
