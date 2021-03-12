@@ -22,6 +22,8 @@ public class HandleWailaRender {
 
 	static float attackPosY;
 	static float defensePosY;
+	
+	static final int extraWidth = 6;
 
 	@SubscribeEvent
 	public static void onWailaRenderPre(WailaRenderEvent.Pre event) {	
@@ -31,7 +33,6 @@ public class HandleWailaRender {
 			if(entity instanceof LivingEntity) {
 				attackData = AttackDataAPI.getWithActiveItem((LivingEntity) entity);
 				defenseData = DefenseDataAPI.get((LivingEntity) entity);
-
 			}
 			else if (entity instanceof ProjectileEntity) {
 				attackData = AttackDataAPI.get((ProjectileEntity) entity);
@@ -44,7 +45,7 @@ public class HandleWailaRender {
 			if(!defenseData.isEmpty()) {
 				defensePosY = box.height;
 				box.height += RenderHelper.maxLineHeight;
-				box.width = Math.max(box.width, RenderHelper.maxLineWidth);
+				box.width = Math.max(box.width, RenderHelper.maxLineWidth + extraWidth*2);
 			}
 		}
 	}
@@ -55,10 +56,10 @@ public class HandleWailaRender {
 		MatrixStack matrixStack = new MatrixStack();
 
 		if(attackData != null) {
-			RenderHelper.render(attackData, matrixStack, box.x + 6, attackPosY);
+			RenderHelper.render(attackData, matrixStack, box.x + extraWidth, attackPosY);
 		}
 		if(defenseData != null && !defenseData.isEmpty()) {
-			RenderHelper.render(defenseData, matrixStack, box.x + 6, defensePosY);
+			RenderHelper.render(defenseData, matrixStack, box.x + extraWidth, defensePosY);
 		}
 
 		attackData = null;

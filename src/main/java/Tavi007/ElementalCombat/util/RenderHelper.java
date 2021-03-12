@@ -17,7 +17,7 @@ import net.minecraft.util.text.TextFormatting;
 public class RenderHelper {
 
 	public static final int iconSize = 8;
-	public static final int maxLineHeight = Math.max(Minecraft.getInstance().fontRenderer.FONT_HEIGHT, iconSize);
+	public static final int maxLineHeight = Minecraft.getInstance().fontRenderer.FONT_HEIGHT;
 	public static final int maxLineWidth = Minecraft.getInstance().fontRenderer.getStringWidth("Defense: -999%") + iconSize + 2;
 
 	private static int iteratorCounter=0;
@@ -81,7 +81,7 @@ public class RenderHelper {
 
 		// value
 		posX -= mc.fontRenderer.getStringWidth("Defense: ");
-		renderPercentage(key, map.get(key), matrixStack, posX, posY);
+		renderPercentage(map.get(key), matrixStack, posX, posY);
 
 		// reset to default texture
 		mc.getTextureManager().bindTexture(AbstractGui.GUI_ICONS_LOCATION);
@@ -93,7 +93,7 @@ public class RenderHelper {
 	 * @param factor The corresponding value to the key from the element or style defense mapping.
 	 * @return A formatted String ready to be displayed.
 	 */
-	private static void renderPercentage(String key, Integer factor, MatrixStack matrixStack, float posX, float posY) {
+	private static void renderPercentage(Integer factor, MatrixStack matrixStack, float posX, float posY) {
 		//get color
 		Integer percentage = Math.round(DefenseDataHelper.getPercentage(factor)*100);
 		TextFormatting textFormatting = TextFormatting.GRAY;
@@ -114,5 +114,16 @@ public class RenderHelper {
 		else {
 			mc.fontRenderer.drawStringWithShadow(matrixStack, percentageString, posX, posY, textFormatting.getColor());
 		}
+	}
+	
+	public static String getPercentageStringTooltip(Integer factor) {
+		Integer percentage = Math.round(DefenseDataHelper.getPercentage(factor)*100);
+		TextFormatting textFormatting = TextFormatting.GRAY;
+		if (percentage < 0) {textFormatting = TextFormatting.RED;}
+		if (percentage > 0 && percentage < 100) {textFormatting = TextFormatting.BLUE;}
+		if (percentage == 100) {textFormatting = TextFormatting.YELLOW;}
+		if (percentage > 100) {textFormatting = TextFormatting.GREEN;}
+
+		return "-        " + textFormatting + String.valueOf(percentage) + "%" + TextFormatting.RESET;
 	}
 }

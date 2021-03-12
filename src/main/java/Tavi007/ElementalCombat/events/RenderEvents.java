@@ -1,5 +1,6 @@
 package Tavi007.ElementalCombat.events;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -104,50 +105,53 @@ public class RenderEvents {
 			}
 		}
 	}
-	
-	
-	static AttackData attackData;
-	static DefenseData defenseData;
 
-	static float attackPosY;
-	static float defensePosY;
+	// fires before RenderTooltipEvent.PostText
+	static int tooltipIndexAttack;
+	static List<Integer> tooltipIndexDefense = new ArrayList<Integer>();
 	@SubscribeEvent
-	public static void ontTooltipRenderPre(RenderTooltipEvent.Pre event) {
-		ItemStack item = event.getStack();
-		Minecraft mc = Minecraft.getInstance();
-		if (item != null) {
-			float posY = event.getY() + event.getLines().size() * mc.fontRenderer.FONT_HEIGHT;
-			
-			
-			//attack
-			attackData = new AttackData(AttackDataAPI.get(item));
-			if(!attackData.isEmpty()) {
-				attackPosY = posY;
-				posY += RenderHelper.maxLineHeight;
-			}
-
-			//defense
-			defenseData = new DefenseData(DefenseDataAPI.get(item));
-			if(!defenseData.isEmpty()) {
-				defensePosY = posY;
-				posY += RenderHelper.maxLineHeight;
-			}
+	public static void ontTooltip(ItemTooltipEvent event) {
+		ItemStack stack = event.getItemStack();
+		AttackData attackData = AttackDataAPI.get(stack);
+		DefenseData defenseData = DefenseDataAPI.get(stack);
+		
+		List<ITextComponent> tooltip = event.getToolTip();
+		if(!attackData.isEmpty()) {
+			tooltip.add(new StringTextComponent("Attack: "));
+			tooltipIndexAttack = tooltip.size();
+		}
+		if(!defenseData.isEmpty()) {
+			tooltip.add(new StringTextComponent("Defense: "));
+			defenseData.getElementFactor().forEach( (key, value) -> {
+				tooltip.add(new StringTextComponent(RenderHelper.getPercentageStringTooltip(value)));
+				tooltipIndexDefense.add(tooltip.size());
+			});
+			defenseData.getElementFactor().forEach( (key, value) -> {
+				tooltip.add(new StringTextComponent(RenderHelper.getPercentageStringTooltip(value)));
+				tooltipIndexDefense.add(tooltip.size());
+			});
 		}
 	}
+	
+	// fires after ItemTooltipEvent
 	@SubscribeEvent
-	public static void ontTooltipRenderPost(RenderTooltipEvent.PostBackground event) {
-		if(attackData != null) {
-			RenderHelper.render(attackData, event.getMatrixStack(), event.getX() + 6, attackPosY);
+	public static void ontTooltipRenderPost(RenderTooltipEvent.PostText event) {
+		ItemStack stack = event.getStack();
+		AttackData attackData = AttackDataAPI.get(stack);
+		DefenseData defenseData = DefenseDataAPI.get(stack);
+		
+		if(!attackData.isEmpty()) {
+			
 		}
-		if(defenseData != null && !defenseData.isEmpty()) {
-			RenderHelper.render(defenseData, event.getMatrixStack(), event.getX() + 6, defensePosY);
+		if(!defenseData.isEmpty()) {
+			
 		}
-
-		attackData = null;
-		defenseData = null;
+		tooltipIndexDefense.clear();
 	}
-	
-	
+
+
+
+
 	private static int ticks=0;
 	@SubscribeEvent
 	public static void displayData(RenderGameOverlayEvent.Post event) {
