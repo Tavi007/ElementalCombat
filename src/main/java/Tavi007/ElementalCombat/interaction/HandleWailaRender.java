@@ -1,51 +1,68 @@
 package Tavi007.ElementalCombat.interaction;
 
 import java.awt.Rectangle;
-import java.util.List;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.api.attack.AttackData;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
-import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.RenderHelper;
 import mcp.mobius.waila.api.event.WailaRenderEvent;
-import mcp.mobius.waila.api.event.WailaTooltipEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class HandleWailaRender {
 
-	static int ticks=0;
-	static int counter=0;
-	
+	static AttackData attackData;
+	static DefenseData defenseData;
+
+	static float attackPosY;
+	static float defensePosY;
+
 	@SubscribeEvent
-	public static void onWailaRender(WailaRenderEvent.Pre event) {	
+	public static void onWailaRenderPre(WailaRenderEvent.Pre event) {	
 		// check entity
 		Entity entity = event.getAccessor().getEntity();
 		if (entity != null) {
-			AttackData atckData = new AttackData();
-			DefenseData defData = new DefenseData();
 			if(entity instanceof LivingEntity) {
-				atckData = AttackDataAPI.getWithActiveItem((LivingEntity) entity);
-				defData = DefenseDataAPI.get((LivingEntity) entity);
-				
+				attackData = AttackDataAPI.getWithActiveItem((LivingEntity) entity);
+				defenseData = DefenseDataAPI.get((LivingEntity) entity);
+
 			}
 			else if (entity instanceof ProjectileEntity) {
-				atckData = AttackDataAPI.get((ProjectileEntity) entity);
+				attackData = AttackDataAPI.get((ProjectileEntity) entity);
 			}
 
-			
 			// increase box and render information
 			Rectangle box = event.getPosition();
-			
-//			RenderHelper.render(atckData);
-//			if(!defData.isEmpty()) {
-//				RenderHelper.render(defData);
-//			}
+			attackPosY = box.height;
+			box.height += RenderHelper.maxLineHeight;
+			if(!defenseData.isEmpty()) {
+				defensePosY = box.height;
+				box.height += RenderHelper.maxLineHeight;
+				box.width = Math.max(box.width, RenderHelper.maxLineWidth);
+			}
 		}
 	}
+
+	@SubscribeEvent
+	public static void onWailaRenderPost(WailaRenderEvent.Post event) {	
+		Rectangle box = event.getPosition();
+		MatrixStack matrixStack = new MatrixStack();
+
+		if(attackData != null) {
+			RenderHelper.render(attackData, matrixStack, box.x + 6, attackPosY);
+		}
+		if(defenseData != null && !defenseData.isEmpty()) {
+			RenderHelper.render(defenseData, matrixStack, box.x + 6, defensePosY);
+		}
+
+		attackData = null;
+		defenseData = null;
+	}
+
 }

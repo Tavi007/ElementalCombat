@@ -1,9 +1,7 @@
 package Tavi007.ElementalCombat.events;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -17,7 +15,6 @@ import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.RenderHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
@@ -26,18 +23,16 @@ import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -109,43 +104,62 @@ public class RenderEvents {
 			}
 		}
 	}
+	
+	
+	static AttackData attackData;
+	static DefenseData defenseData;
 
+	static float attackPosY;
+	static float defensePosY;
 	@SubscribeEvent
-	public static void addTooltipInformation(ItemTooltipEvent event) {
-		
-		
-				ItemStack item = event.getItemStack();
-				List<ITextComponent> toolTip = event.getToolTip();
-				if (item != null) {
-					//attack
-					AttackData atckData = new AttackData(AttackDataAPI.get(item));
-					if(!atckData.isEmpty()) {
-						toolTip.add(new StringTextComponent("Attack: "));
-						toolTip.add(new StringTextComponent(" "));
-					}
-		
-					//defense
-					DefenseData defData = new DefenseData(DefenseDataAPI.get(item));
-					if(!defData.isEmpty()) {
-						toolTip.add(new StringTextComponent("Defense:    "));
-						toolTip.add(new StringTextComponent(" "));
-					}
-				}
+	public static void ontTooltipRenderPre(RenderTooltipEvent.Pre event) {
+		ItemStack item = event.getStack();
+		Minecraft mc = Minecraft.getInstance();
+		if (item != null) {
+			float posY = event.getY() + event.getLines().size() * mc.fontRenderer.FONT_HEIGHT;
+			
+			
+			//attack
+			attackData = new AttackData(AttackDataAPI.get(item));
+			if(!attackData.isEmpty()) {
+				attackPosY = posY;
+				posY += RenderHelper.maxLineHeight;
+			}
+
+			//defense
+			defenseData = new DefenseData(DefenseDataAPI.get(item));
+			if(!defenseData.isEmpty()) {
+				defensePosY = posY;
+				posY += RenderHelper.maxLineHeight;
+			}
+		}
 	}
+	@SubscribeEvent
+	public static void ontTooltipRenderPost(RenderTooltipEvent.PostBackground event) {
+		if(attackData != null) {
+			RenderHelper.render(attackData, event.getMatrixStack(), event.getX() + 6, attackPosY);
+		}
+		if(defenseData != null && !defenseData.isEmpty()) {
+			RenderHelper.render(defenseData, event.getMatrixStack(), event.getX() + 6, defensePosY);
+		}
 
+		attackData = null;
+		defenseData = null;
+	}
+	
+	
 	private static int ticks=0;
-
 	@SubscribeEvent
 	public static void displayData(RenderGameOverlayEvent.Post event) {
 		if(event.getType().equals(RenderGameOverlayEvent.ElementType.HOTBAR)) {
-			
+
 			//for iterating the defenseData
 			ticks++;
 			if(ticks>1.5*ClientConfig.iterationSpeed()) {  
 				ticks = 0;
 				RenderHelper.tickIteratorCounter();
 			}
-			
+
 			if(ClientConfig.isHUDEnabled()) {
 				// see Screen#renderToolTips in client.gui.screen
 				Minecraft mc = Minecraft.getInstance();
@@ -154,14 +168,14 @@ public class RenderEvents {
 					float scale = (float) ClientConfig.scale();
 					AttackData attackData = AttackDataAPI.getWithActiveItem(mc.player);
 					DefenseData defenseData = DefenseDataAPI.get(mc.player);
-					
+
 					// the width of the box.
-					int listWidth = 45;
+					int listWidth = RenderHelper.maxLineWidth;
 
 					// computes the height of the list
-					int listHeight = mc.fontRenderer.FONT_HEIGHT + RenderHelper.iconSize;
+					int listHeight = RenderHelper.maxLineHeight;
 					if(!defenseData.isEmpty()) {
-						listHeight += mc.fontRenderer.FONT_HEIGHT + RenderHelper.iconSize + 1;
+						listHeight += RenderHelper.maxLineHeight;
 					}
 
 					// moves the coords so the text and box appear correct
@@ -176,10 +190,10 @@ public class RenderEvents {
 						posX = Math.max(12, screenWidth - listWidth - 12);
 					}
 
-					
+
 					matrixStack.push();
 					matrixStack.scale(scale, scale, scale);
-					
+
 					// draw background box
 					Tessellator tessellator = Tessellator.getInstance();
 					BufferBuilder bufferbuilder = tessellator.getBuffer();
@@ -212,7 +226,7 @@ public class RenderEvents {
 
 					// render defenseData
 					if(!defenseData.isEmpty()) {
-						posY += mc.fontRenderer.FONT_HEIGHT + RenderHelper.iconSize + 2;
+						posY += RenderHelper.maxLineHeight;
 						RenderHelper.render(defenseData, matrixStack, posX, posY);
 					}
 					irendertypebuffer$impl.finish();
