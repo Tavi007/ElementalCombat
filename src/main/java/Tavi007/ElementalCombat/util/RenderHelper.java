@@ -11,14 +11,18 @@ import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
 public class RenderHelper {
 
+	private static final FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 	public static final int iconSize = 8;
-	public static final int maxLineHeight = Minecraft.getInstance().fontRenderer.FONT_HEIGHT;
-	public static final int maxLineWidth = Minecraft.getInstance().fontRenderer.getStringWidth("Defense: -999%") + iconSize + 2;
+	public static final int widthAttack = fontRenderer.getStringWidth("Attack: ");
+	public static final int widthDefense = fontRenderer.getStringWidth("Defense: ");
+	public static final int maxLineHeight = fontRenderer.FONT_HEIGHT;
+	public static final int maxLineWidth = fontRenderer.getStringWidth("Defense: -999%") + iconSize + 2;
 
 	private static int iteratorCounter=0;
 
@@ -47,16 +51,11 @@ public class RenderHelper {
 		posX += mc.fontRenderer.getStringWidth("Attack: ");
 
 		// icon element
-		mc.getTextureManager().bindTexture(new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + attackData.getElement() + ".png"));
-		AbstractGui.blit(matrixStack, (int) posX, (int) posY, 0, 0, iconSize, iconSize, iconSize, iconSize);
+		renderIcon(attackData.getElement(), matrixStack, posX, posY);
 		posX += iconSize + 1;
 
 		// icon style
-		mc.getTextureManager().bindTexture(new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + attackData.getStyle() + ".png"));
-		AbstractGui.blit(matrixStack, (int) posX, (int) posY, 0, 0, iconSize, iconSize, iconSize, iconSize);
-
-		// reset to default texture
-		mc.getTextureManager().bindTexture(AbstractGui.GUI_ICONS_LOCATION);
+		renderIcon(attackData.getStyle(), matrixStack, posX, posY);
 	}
 
 	public static void render(DefenseData defData, MatrixStack matrixStack, float posX, float posY) {
@@ -76,14 +75,16 @@ public class RenderHelper {
 		map.putAll(defData.getElementFactor());
 		map.putAll(defData.getStyleFactor());
 		String key = (new ArrayList<String>(map.keySet())).get(iteratorCounter % map.size());
-		mc.getTextureManager().bindTexture(new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + key + ".png"));
-		AbstractGui.blit(matrixStack, (int) posX, (int) posY, 0, 0, iconSize, iconSize, iconSize, iconSize);
-
+		renderIcon(key, matrixStack, posX, posY);
 		// value
 		posX -= mc.fontRenderer.getStringWidth("Defense: ");
 		renderPercentage(map.get(key), matrixStack, posX, posY);
-
-		// reset to default texture
+	}
+	
+	public static void renderIcon(String name, MatrixStack matrixStack, float posX, float posY) {
+		Minecraft mc = Minecraft.getInstance();
+		mc.getTextureManager().bindTexture(new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + name + ".png"));
+		AbstractGui.blit(matrixStack, (int) posX, (int) posY, 0, 0, iconSize, iconSize, iconSize, iconSize);
 		mc.getTextureManager().bindTexture(AbstractGui.GUI_ICONS_LOCATION);
 	}
 

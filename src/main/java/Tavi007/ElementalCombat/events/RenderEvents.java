@@ -136,15 +136,23 @@ public class RenderEvents {
 	// fires after ItemTooltipEvent
 	@SubscribeEvent
 	public static void ontTooltipRenderPost(RenderTooltipEvent.PostText event) {
+		Minecraft mc = Minecraft.getInstance();
+		MatrixStack matrixStack = event.getMatrixStack();
 		ItemStack stack = event.getStack();
 		AttackData attackData = AttackDataAPI.get(stack);
 		DefenseData defenseData = DefenseDataAPI.get(stack);
 		
+		int startX = event.getX();
+		int startY = event.getY();
 		if(!attackData.isEmpty()) {
-			
+			int posX = startX + RenderHelper.widthAttack;
+			int posY = startY + tooltipIndexAttack*mc.fontRenderer.FONT_HEIGHT;
+			RenderHelper.render(attackData, matrixStack, posX, posY);
 		}
 		if(!defenseData.isEmpty()) {
-			
+//			int posX = startX + RenderHelper.widthDefense;
+//			int posY = startY + tooltipIndexDefense.get(0)*mc.fontRenderer.FONT_HEIGHT;
+//			RenderHelper.render(defenseData, matrixStack, posX, posY);
 		}
 		tooltipIndexDefense.clear();
 	}
