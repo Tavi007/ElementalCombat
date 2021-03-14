@@ -155,15 +155,4 @@ public class DefaultPropertiesAPI {
 		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "entities/" + rlEntity.getPath());
 		return ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties).getBiomeDependency();
 	}
-	
-	/**
-	 * Returns the mapped String, which is defined in the combat_properties_mapping.json.
-	 * Always use this function, when you want to display the data.
-	 * If the key (and therefore a mapped value) does not exist, return the capitalized key.
-	 * @param key They key (aka the value on the left side in the .json)
-	 * @return the corresponding String (aka the value on the right side in the .json)
-	 */
-	public static String getMappedString(String key) {
-		return ElementalCombat.COMBAT_PROPERTIES_MANGER.getPropertiesMapping().getValue(key);
-	}
 }
