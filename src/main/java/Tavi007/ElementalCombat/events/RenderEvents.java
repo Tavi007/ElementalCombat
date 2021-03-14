@@ -107,8 +107,9 @@ public class RenderEvents {
 	}
 
 	// fires before RenderTooltipEvent.PostText
+	// add all the text to tooltip
 	static int tooltipIndexAttack;
-	static List<Integer> tooltipIndexDefense = new ArrayList<Integer>();
+	static int tooltipIndexDefense;
 	@SubscribeEvent
 	public static void ontTooltip(ItemTooltipEvent event) {
 		ItemStack stack = event.getItemStack();
@@ -122,18 +123,13 @@ public class RenderEvents {
 		}
 		if(!defenseData.isEmpty()) {
 			tooltip.add(new StringTextComponent("Defense: "));
-			defenseData.getElementFactor().forEach( (key, value) -> {
-				tooltip.add(new StringTextComponent(RenderHelper.getPercentageStringTooltip(value)));
-				tooltipIndexDefense.add(tooltip.size());
-			});
-			defenseData.getElementFactor().forEach( (key, value) -> {
-				tooltip.add(new StringTextComponent(RenderHelper.getPercentageStringTooltip(value)));
-				tooltipIndexDefense.add(tooltip.size());
-			});
+			tooltipIndexDefense = tooltip.size();
+			
 		}
 	}
 	
 	// fires after ItemTooltipEvent
+	// render only icons here (because strings wont't get rendered anymore)
 	@SubscribeEvent
 	public static void ontTooltipRenderPost(RenderTooltipEvent.PostText event) {
 		Minecraft mc = Minecraft.getInstance();
@@ -145,16 +141,16 @@ public class RenderEvents {
 		int startX = event.getX();
 		int startY = event.getY();
 		if(!attackData.isEmpty()) {
-			int posX = startX + RenderHelper.widthAttack;
+			int posX = startX;
 			int posY = startY + tooltipIndexAttack*mc.fontRenderer.FONT_HEIGHT;
-			RenderHelper.render(attackData, matrixStack, posX, posY);
+			RenderHelper.renderIcon(attackData.getElement(), matrixStack, posX, posY);
+			RenderHelper.renderIcon(attackData.getStyle(), matrixStack, posX, posY);
 		}
 		if(!defenseData.isEmpty()) {
-//			int posX = startX + RenderHelper.widthDefense;
-//			int posY = startY + tooltipIndexDefense.get(0)*mc.fontRenderer.FONT_HEIGHT;
-//			RenderHelper.render(defenseData, matrixStack, posX, posY);
+			int posX = startX;
+			int posY = startY + tooltipIndexDefense*mc.fontRenderer.FONT_HEIGHT;
+			RenderHelper.render(defenseData, matrixStack, posX, posY);
 		}
-		tooltipIndexDefense.clear();
 	}
 
 
