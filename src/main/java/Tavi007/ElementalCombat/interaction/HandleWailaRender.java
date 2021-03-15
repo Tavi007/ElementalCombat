@@ -1,57 +1,57 @@
 package Tavi007.ElementalCombat.interaction;
 
-import java.util.List;
+import java.awt.Rectangle;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.api.attack.AttackData;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
-import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.RenderHelper;
+import mcp.mobius.waila.api.event.WailaRenderEvent;
 import mcp.mobius.waila.api.event.WailaTooltipEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class HandleWailaRender {
 
-	static int ticks=0;
-	static int counter=0;
-	
+	static AttackData attackData;
+	static DefenseData defenseData;
+
+	static int attackTooltipId;
+	static int defenseTooltipId;
+
 	@SubscribeEvent
-	public static void onWailaRender(WailaTooltipEvent event) {
-		List<ITextComponent> toolTip = event.getCurrentTip();
-		
+	public static void onWailaTooltip(WailaTooltipEvent event) {	
 		// check entity
 		Entity entity = event.getAccessor().getEntity();
 		if (entity != null) {
-			AttackData atckData = new AttackData();
-			DefenseData defData = new DefenseData();
 			if(entity instanceof LivingEntity) {
-				atckData = AttackDataAPI.getWithActiveItem((LivingEntity) entity);
-				defData = DefenseDataAPI.get((LivingEntity) entity);
-				
-			}
-			else if (entity instanceof ProjectileEntity) {
-				atckData = AttackDataAPI.get((ProjectileEntity) entity);
-			}
-
-			ticks++;
-			if(ticks>ClientConfig.iterationSpeed()) { 
-				ticks = 0;
-				counter++;
-			}
-			if(counter>100) {
-				counter = 0;
-			}
-			
-			// add the text
-			toolTip.addAll(RenderHelper.getDisplayText(atckData));
-			if(!defData.isEmpty()) {
-				toolTip.addAll(RenderHelper.getIteratingDisplayText(defData, counter));
+				attackData = AttackDataAPI.getWithActiveItem((LivingEntity) entity);
+				attackTooltipId = event.getCurrentTip().size();
+				defenseData = DefenseDataAPI.get((LivingEntity) entity);
+				defenseTooltipId = attackTooltipId + 1;
+				RenderHelper.addTooltip(event.getCurrentTip(), attackData, defenseData);
 			}
 		}
+		else {
+			attackData = null;
+			defenseData = null;
+		}
 	}
+
+	@SubscribeEvent
+	public static void onWailaRenderPost(WailaRenderEvent.Post event) {	
+		MatrixStack matrixStack = new MatrixStack();
+		Rectangle box = event.getPosition();
+		if(attackData != null) {
+			RenderHelper.renderAttackIcons(attackData, matrixStack, box.x + 5, box.y + 6 + attackTooltipId*RenderHelper.maxLineHeight);
+		}
+		if(defenseData != null && !defenseData.isEmpty()) {
+			RenderHelper.renderDefenseIcons(defenseData, matrixStack, box.x + 5, box.y + 6 + defenseTooltipId*RenderHelper.maxLineHeight);
+		}
+	}
+
 }
