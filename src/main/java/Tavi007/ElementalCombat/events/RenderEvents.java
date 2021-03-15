@@ -137,10 +137,10 @@ public class RenderEvents {
 		DefenseData defenseData = DefenseDataAPI.get(stack);
 		
 		if(!attackData.isEmpty()) {
-			RenderHelper.renderAttackIcons(attackData, matrixStack, event.getX(), event.getY() + 3 + tooltipIndexAttack*RenderHelper.maxLineHeight);
+			RenderHelper.renderAttackIcons(attackData, matrixStack, event.getX(), event.getY() + 2 + tooltipIndexAttack*RenderHelper.maxLineHeight);
 		}
 		if(!defenseData.isEmpty()) {
-			RenderHelper.renderDefenseIcons(defenseData, matrixStack, event.getX(), event.getY() + 3 + tooltipIndexDefense*RenderHelper.maxLineHeight);
+			RenderHelper.renderDefenseIcons(defenseData, matrixStack, event.getX(), event.getY() + 2 + tooltipIndexDefense*RenderHelper.maxLineHeight);
 		}
 	}
 
@@ -225,13 +225,13 @@ public class RenderEvents {
 					List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
 					RenderHelper.addTooltip(tooltip, attackData, defenseData);
 					for(int i=0; i<tooltip.size(); i++) {
-						mc.fontRenderer.drawString(matrixStack, tooltip.get(i).getString(), posX, posY + i*RenderHelper.maxLineHeight, TextFormatting.GRAY.getColor());
+						mc.fontRenderer.drawStringWithShadow(matrixStack, tooltip.get(i).getString(), posX, posY + i*RenderHelper.maxLineHeight, TextFormatting.GRAY.getColor());
 					}
 					
-					// render attackData
+					// render attackData icons
 					RenderHelper.renderAttackIcons(attackData, matrixStack, posX, posY);
 
-					// render defenseData
+					// render defenseData icons
 					if(!defenseData.isEmpty()) {
 						posY += RenderHelper.maxLineHeight;
 						RenderHelper.renderDefenseIcons(defenseData, matrixStack, posX, posY);

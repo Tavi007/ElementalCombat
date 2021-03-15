@@ -25,14 +25,14 @@ public class RenderHelper {
 	private static final FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 	private static final TextureManager textureManager = Minecraft.getInstance().textureManager;
 	
-	private static final String textAttack = "Attack:";
-	private static final String textDefense = "Defense:";
+	private static final String textAttack = "Attack: ";
+	private static final String textDefense = "Defense: ";
 	private static final int iconSize = 8;
 	
 	private static final int widthAttack = fontRenderer.getStringWidth(textAttack);
 	private static final int widthDefense = fontRenderer.getStringWidth(textDefense);
 	public static final int maxLineHeight = fontRenderer.FONT_HEIGHT + 1;
-	public static final int maxLineWidth = fontRenderer.getStringWidth(textDefense + "-999%") + iconSize + 2;
+	public static final int maxLineWidth = fontRenderer.getStringWidth(textDefense + " -999%") + iconSize + 2;
 
 	private static int iteratorCounter=0;
 
@@ -62,9 +62,9 @@ public class RenderHelper {
 		if (attackData != null) {
 			tooltip.add(new StringTextComponent(textAttack));
 		}
-		if (defenseData != null) {
+		if (defenseData != null && !defenseData.isEmpty()) {
 			int factor = getCurrentDefenseFactor(defenseData);
-			tooltip.add(new StringTextComponent(textDefense + "     " + getPercentage(factor)));
+			tooltip.add(new StringTextComponent(textDefense + "   " + getPercentage(factor)));
 		}
 	}
 	
@@ -88,7 +88,7 @@ public class RenderHelper {
 	// posX and posY are the start coords of the "Attack: "- String. Calculation will be relative from there on out.
 	public static void renderAttackIcons(AttackData data, MatrixStack matrixStack, int posX, int posY) {
 		renderIcon(data.getElement(), matrixStack, posX + widthAttack, posY);
-		renderIcon(data.getStyle(), matrixStack, posX + widthAttack + iconSize, posY);
+		renderIcon(data.getStyle(), matrixStack, posX + widthAttack + iconSize + 2, posY);
 	}
 
 	// posX and posY are the start coords of the "Defense: "- String. Calculation will be relative from there on out.

@@ -29,9 +29,10 @@ public class HandleWailaRender {
 		Entity entity = event.getAccessor().getEntity();
 		if (entity != null) {
 			if(entity instanceof LivingEntity) {
-				attackData = AttackDataAPI.getWithActiveItem((LivingEntity) entity);
+				LivingEntity livingEntity = (LivingEntity) entity;
 				attackTooltipId = event.getCurrentTip().size();
-				defenseData = DefenseDataAPI.get((LivingEntity) entity);
+				attackData = AttackDataAPI.getWithActiveItem(livingEntity);
+				defenseData = DefenseDataAPI.get(livingEntity);
 				defenseTooltipId = attackTooltipId + 1;
 				RenderHelper.addTooltip(event.getCurrentTip(), attackData, defenseData);
 			}
@@ -47,10 +48,10 @@ public class HandleWailaRender {
 		MatrixStack matrixStack = new MatrixStack();
 		Rectangle box = event.getPosition();
 		if(attackData != null) {
-			RenderHelper.renderAttackIcons(attackData, matrixStack, box.x + 5, box.y + 6 + attackTooltipId*RenderHelper.maxLineHeight);
+			RenderHelper.renderAttackIcons(attackData, matrixStack, box.x + 6, box.y + 6 + attackTooltipId*RenderHelper.maxLineHeight);
 		}
 		if(defenseData != null && !defenseData.isEmpty()) {
-			RenderHelper.renderDefenseIcons(defenseData, matrixStack, box.x + 5, box.y + 6 + defenseTooltipId*RenderHelper.maxLineHeight);
+			RenderHelper.renderDefenseIcons(defenseData, matrixStack, box.x + 6, box.y + 6 + defenseTooltipId*RenderHelper.maxLineHeight);
 		}
 	}
 
