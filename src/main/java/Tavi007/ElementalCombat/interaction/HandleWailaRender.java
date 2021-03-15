@@ -10,9 +10,9 @@ import Tavi007.ElementalCombat.api.attack.AttackData;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.util.RenderHelper;
 import mcp.mobius.waila.api.event.WailaRenderEvent;
+import mcp.mobius.waila.api.event.WailaTooltipEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class HandleWailaRender {
@@ -20,50 +20,38 @@ public class HandleWailaRender {
 	static AttackData attackData;
 	static DefenseData defenseData;
 
-	static float attackPosY;
-	static float defensePosY;
-	
-	static final int extraWidth = 6;
+	static int attackTooltipId;
+	static int defenseTooltipId;
 
 	@SubscribeEvent
-	public static void onWailaRenderPre(WailaRenderEvent.Pre event) {	
+	public static void onWailaTooltip(WailaTooltipEvent event) {	
 		// check entity
 		Entity entity = event.getAccessor().getEntity();
 		if (entity != null) {
 			if(entity instanceof LivingEntity) {
 				attackData = AttackDataAPI.getWithActiveItem((LivingEntity) entity);
+				attackTooltipId = event.getCurrentTip().size();
 				defenseData = DefenseDataAPI.get((LivingEntity) entity);
+				defenseTooltipId = attackTooltipId + 1;
+				RenderHelper.addTooltip(event.getCurrentTip(), attackData, defenseData);
 			}
-			else if (entity instanceof ProjectileEntity) {
-				attackData = AttackDataAPI.get((ProjectileEntity) entity);
-			}
-
-			// increase box and render information
-			Rectangle box = event.getPosition();
-			attackPosY = box.height;
-			box.height += RenderHelper.maxLineHeight;
-			if(!defenseData.isEmpty()) {
-				defensePosY = box.height;
-				box.height += RenderHelper.maxLineHeight;
-				box.width = Math.max(box.width, RenderHelper.maxLineWidth + extraWidth*2);
-			}
+		}
+		else {
+			attackData = null;
+			defenseData = null;
 		}
 	}
 
 	@SubscribeEvent
 	public static void onWailaRenderPost(WailaRenderEvent.Post event) {	
-		Rectangle box = event.getPosition();
 		MatrixStack matrixStack = new MatrixStack();
-
+		Rectangle box = event.getPosition();
 		if(attackData != null) {
-			RenderHelper.render(attackData, matrixStack, box.x + extraWidth, attackPosY);
+			RenderHelper.renderAttackIcons(attackData, matrixStack, box.x + 5, box.y + 6 + attackTooltipId*RenderHelper.maxLineHeight);
 		}
 		if(defenseData != null && !defenseData.isEmpty()) {
-			RenderHelper.render(defenseData, matrixStack, box.x + extraWidth, defensePosY);
+			RenderHelper.renderDefenseIcons(defenseData, matrixStack, box.x + 5, box.y + 6 + defenseTooltipId*RenderHelper.maxLineHeight);
 		}
-
-		attackData = null;
-		defenseData = null;
 	}
 
 }

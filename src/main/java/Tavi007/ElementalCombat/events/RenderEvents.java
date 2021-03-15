@@ -28,7 +28,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -106,50 +106,41 @@ public class RenderEvents {
 		}
 	}
 
+	
 	// fires before RenderTooltipEvent.PostText
 	// add all the text to tooltip
 	static int tooltipIndexAttack;
 	static int tooltipIndexDefense;
 	@SubscribeEvent
 	public static void ontTooltip(ItemTooltipEvent event) {
+		List<ITextComponent> tooltip = event.getToolTip();
 		ItemStack stack = event.getItemStack();
 		AttackData attackData = AttackDataAPI.get(stack);
-		DefenseData defenseData = DefenseDataAPI.get(stack);
-		
-		List<ITextComponent> tooltip = event.getToolTip();
 		if(!attackData.isEmpty()) {
-			tooltip.add(new StringTextComponent("Attack: "));
 			tooltipIndexAttack = tooltip.size();
+			RenderHelper.addTooltip(tooltip, attackData, null);
 		}
+		DefenseData defenseData = DefenseDataAPI.get(stack);
 		if(!defenseData.isEmpty()) {
-			tooltip.add(new StringTextComponent("Defense: "));
 			tooltipIndexDefense = tooltip.size();
-			
+			RenderHelper.addTooltip(tooltip, null, defenseData);
 		}
 	}
 	
 	// fires after ItemTooltipEvent
 	// render only icons here (because strings wont't get rendered anymore)
 	@SubscribeEvent
-	public static void ontTooltipRenderPost(RenderTooltipEvent.PostText event) {
-		Minecraft mc = Minecraft.getInstance();
+	public static void onTooltipRenderPost(RenderTooltipEvent.PostText event) {
 		MatrixStack matrixStack = event.getMatrixStack();
 		ItemStack stack = event.getStack();
 		AttackData attackData = AttackDataAPI.get(stack);
 		DefenseData defenseData = DefenseDataAPI.get(stack);
 		
-		int startX = event.getX();
-		int startY = event.getY();
 		if(!attackData.isEmpty()) {
-			int posX = startX;
-			int posY = startY + tooltipIndexAttack*mc.fontRenderer.FONT_HEIGHT;
-			RenderHelper.renderIcon(attackData.getElement(), matrixStack, posX, posY);
-			RenderHelper.renderIcon(attackData.getStyle(), matrixStack, posX, posY);
+			RenderHelper.renderAttackIcons(attackData, matrixStack, event.getX(), event.getY() + 3 + tooltipIndexAttack*RenderHelper.maxLineHeight);
 		}
 		if(!defenseData.isEmpty()) {
-			int posX = startX;
-			int posY = startY + tooltipIndexDefense*mc.fontRenderer.FONT_HEIGHT;
-			RenderHelper.render(defenseData, matrixStack, posX, posY);
+			RenderHelper.renderDefenseIcons(defenseData, matrixStack, event.getX(), event.getY() + 3 + tooltipIndexDefense*RenderHelper.maxLineHeight);
 		}
 	}
 
@@ -163,7 +154,7 @@ public class RenderEvents {
 
 			//for iterating the defenseData
 			ticks++;
-			if(ticks>1.5*ClientConfig.iterationSpeed()) {  
+			if(ticks>ClientConfig.iterationSpeed()) {  
 				ticks = 0;
 				RenderHelper.tickIteratorCounter();
 			}
@@ -228,16 +219,23 @@ public class RenderEvents {
 					RenderSystem.enableTexture();
 					IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
 					matrixStack.translate(0.0D, 0.0D, 400.0D);
+					irendertypebuffer$impl.finish();
 
+					//fill and render tooltip
+					List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
+					RenderHelper.addTooltip(tooltip, attackData, defenseData);
+					for(int i=0; i<tooltip.size(); i++) {
+						mc.fontRenderer.drawString(matrixStack, tooltip.get(i).getString(), posX, posY + i*RenderHelper.maxLineHeight, TextFormatting.GRAY.getColor());
+					}
+					
 					// render attackData
-					RenderHelper.render(attackData, matrixStack, posX, posY);
+					RenderHelper.renderAttackIcons(attackData, matrixStack, posX, posY);
 
 					// render defenseData
 					if(!defenseData.isEmpty()) {
 						posY += RenderHelper.maxLineHeight;
-						RenderHelper.render(defenseData, matrixStack, posX, posY);
+						RenderHelper.renderDefenseIcons(defenseData, matrixStack, posX, posY);
 					}
-					irendertypebuffer$impl.finish();
 					matrixStack.pop();
 				}
 			}
