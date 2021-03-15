@@ -105,7 +105,6 @@ public class RenderEvents {
 			}
 		}
 	}
-
 	
 	// fires before RenderTooltipEvent.PostText
 	// add all the text to tooltip
@@ -144,21 +143,15 @@ public class RenderEvents {
 		}
 	}
 
-
-
-
-	private static int ticks=0;
+	static int ticks = 0;
 	@SubscribeEvent
 	public static void displayData(RenderGameOverlayEvent.Post event) {
 		if(event.getType().equals(RenderGameOverlayEvent.ElementType.HOTBAR)) {
-
-			//for iterating the defenseData
 			ticks++;
-			if(ticks>ClientConfig.iterationSpeed()) {  
+			if(ticks >= ClientConfig.iterationSpeed()*2.5) {  
 				ticks = 0;
 				RenderHelper.tickIteratorCounter();
 			}
-
 			if(ClientConfig.isHUDEnabled()) {
 				// see Screen#renderToolTips in client.gui.screen
 				Minecraft mc = Minecraft.getInstance();

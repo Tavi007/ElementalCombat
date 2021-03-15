@@ -40,8 +40,8 @@ public class ClientConfig
 				.comment("The multiplier of the combat data HUD size.")
 				.defineInRange("scale", 1.0D, 0.25D, 4.0D);
 		iterationSpeed = builder
-				.comment("The number of ticks until the defense data iterates in any HUD element.")
-				.defineInRange("ticks", 20, 10, 100);
+				.comment("The number of ticks until the defense data iterates in any HUD element. 20 ticks are about 1 second.")
+				.defineInRange("ticks", 20, 1, 100);
 	}
 
 	public static boolean isHUDEnabled() {
