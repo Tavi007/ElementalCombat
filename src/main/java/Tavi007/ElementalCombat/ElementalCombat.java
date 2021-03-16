@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.interaction.HandleCuriosInventory;
-import Tavi007.ElementalCombat.interaction.HandleWailaRender;
 import Tavi007.ElementalCombat.init.EnchantmentList;
 import Tavi007.ElementalCombat.init.ParticleList;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
@@ -55,9 +54,6 @@ public class ElementalCombat
 		MOD_EVENT_BUS.register(StartupCommon.class);
 		if(ModList.get().isLoaded("curios")) {
 			MinecraftForge.EVENT_BUS.register(HandleCuriosInventory.class);
-		}
-		if(ModList.get().isLoaded("waila")) {
-			MinecraftForge.EVENT_BUS.register(HandleWailaRender.class);
 		}
 		
 		//register client only stuff

@@ -28,7 +28,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -217,9 +216,7 @@ public class RenderEvents {
 					//fill and render tooltip
 					List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
 					RenderHelper.addTooltip(tooltip, attackData, defenseData);
-					for(int i=0; i<tooltip.size(); i++) {
-						mc.fontRenderer.drawStringWithShadow(matrixStack, tooltip.get(i).getString(), posX, posY + i*RenderHelper.maxLineHeight, TextFormatting.GRAY.getColor());
-					}
+					RenderHelper.renderTooltip(tooltip, matrixStack, posX, posY);
 					
 					// render attackData icons
 					RenderHelper.renderAttackIcons(attackData, matrixStack, posX, posY);

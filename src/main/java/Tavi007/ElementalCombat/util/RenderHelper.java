@@ -58,6 +58,13 @@ public class RenderHelper {
 	}
 	
 	// Tooltip stuff
+	public static void renderTooltip(List<ITextComponent> tooltip, MatrixStack matrixStack, int x, int y) {
+		for(int i=0; i<tooltip.size(); i++) {
+			fontRenderer.drawStringWithShadow(matrixStack, tooltip.get(i).getString(), x, y + i*RenderHelper.maxLineHeight, TextFormatting.GRAY.getColor());
+		}
+		
+	}
+	
 	public static void addTooltip(List<ITextComponent> tooltip, @Nullable AttackData attackData, @Nullable DefenseData defenseData) {
 		if (attackData != null) {
 			tooltip.add(new StringTextComponent(textAttack));

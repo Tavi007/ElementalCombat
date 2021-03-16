@@ -1,6 +1,8 @@
 package Tavi007.ElementalCombat.interaction;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -16,13 +18,32 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
 
 public class WailaTooltipRenderer implements ITooltipRenderer {
 
 	@Override
 	public Dimension getSize(CompoundNBT data, ICommonAccessor accessor) {
 		if(ClientConfig.isHWYLAActive()) {
-			return new Dimension(RenderHelper.maxLineWidth, RenderHelper.maxLineHeight*2);
+			if(accessor.getEntity() != null && accessor.getEntity() instanceof LivingEntity) {
+				LivingEntity living = (LivingEntity) accessor.getEntity();
+				int height = RenderHelper.maxLineHeight;
+				if(!DefenseDataAPI.get(living).isEmpty()) {
+					height += RenderHelper.maxLineHeight;
+				}
+				return new Dimension(RenderHelper.maxLineWidth, height);	
+			}
+			else if (accessor.getStack() != null) {
+				ItemStack stack = accessor.getStack();
+				int height = 0;
+				if(!AttackDataAPI.get(stack).isEmpty()) {
+					height += RenderHelper.maxLineHeight;
+				}
+				if (!DefenseDataAPI.get(stack).isEmpty()) {
+					height += RenderHelper.maxLineHeight;
+				}
+				return new Dimension(RenderHelper.maxLineWidth, height);	
+			}
 		}
 		return new Dimension();
 	}
@@ -30,7 +51,7 @@ public class WailaTooltipRenderer implements ITooltipRenderer {
 	@Override
 	public void draw(CompoundNBT data, ICommonAccessor accessor, int x, int y) {
 		if(ClientConfig.isHWYLAActive()) {
-			
+
 			AttackData attackData;
 			DefenseData defenseData;
 			// check entity
@@ -40,26 +61,31 @@ public class WailaTooltipRenderer implements ITooltipRenderer {
 				LivingEntity livingEntity = (LivingEntity) entity;
 				attackData = AttackDataAPI.getWithActiveItem(livingEntity);
 				defenseData = DefenseDataAPI.get(livingEntity);
-//				RenderHelper.addTooltip(event.getCurrentTip(), attackData, defenseData);
 			}
 			else if(stack != null) {
 				attackData = AttackDataAPI.get(stack);
 				defenseData = DefenseDataAPI.get(stack);
-//				RenderHelper.addTooltip(event.getCurrentTip(), attackData, defenseData);
 			}
 			else {
 				attackData = null;
 				defenseData = null;
 			}
 
+			//rendering starts here
 			MatrixStack matrixStack = new MatrixStack();
+			List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
+			RenderHelper.addTooltip(tooltip, attackData, defenseData);
+			RenderHelper.renderTooltip(tooltip, matrixStack, x, y);
+			
 			if(attackData != null) {
-				RenderHelper.renderAttackIcons(attackData, matrixStack, x, y);
+				RenderHelper.renderAttackIcons(attackData, matrixStack, x, y);	
+				y += RenderHelper.maxLineHeight;
+
 			}
 			if(defenseData != null && !defenseData.isEmpty()) {
-				RenderHelper.renderDefenseIcons(defenseData, matrixStack, x, y + RenderHelper.maxLineHeight);
+				RenderHelper.renderDefenseIcons(defenseData, matrixStack, x, y);
 			}
-			
+
 		}
 	}
 
