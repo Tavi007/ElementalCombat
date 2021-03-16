@@ -19,6 +19,7 @@ public class ClientConfig
 	public final BooleanValue isLeft;
 	public final DoubleValue scale;
 	public final IntValue iterationSpeed;
+	public final BooleanValue activeHWYLA;
 
 	static
 	{
@@ -42,6 +43,9 @@ public class ClientConfig
 		iterationSpeed = builder
 				.comment("The number of ticks until the defense data iterates in any HUD element. 20 ticks are about 1 second.")
 				.defineInRange("ticks", 20, 1, 100);
+		activeHWYLA = builder
+				.comment("Activate/Deactivate WAILA/HWYLA plugin.")
+				.define("activateWaila", true);
 	}
 
 	public static boolean isHUDEnabled() {
@@ -67,5 +71,9 @@ public class ClientConfig
 
 	public static int iterationSpeed() {
 		return CLIENT.iterationSpeed.get();
+	}
+
+	public static boolean isHWYLAActive() {
+		return CLIENT.activeHWYLA.get();
 	}
 }
