@@ -1,12 +1,12 @@
 {
-	"attack_style":"magic",
-	"attack_element":"thunder",
+	"attack_style":"",
+	"attack_element":"darkness",
 	
 	"defense_stlye":{
 	},
 	
 	"defense_element":{
-		"water":25
+		"water":-25
 	},
 	
 	"biome_dependency":false

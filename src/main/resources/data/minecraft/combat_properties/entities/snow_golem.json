@@ -1,14 +1,14 @@
 {
 	"attack_style":"",
-	"attack_element":"",
+	"attack_element":"ice",
 	
 	"defense_stlye":{
-		"magic":-25
 	},
 	
 	"defense_element":{
-		"normal":12
+		"ice":12,
+		"fire":-12
 	},
 	
-	"biome_dependency":true
+	"biome_dependency":false
 }

@@ -7,7 +7,8 @@
 	
 	"defense_element":{
 		"fire":25,
-		"ice":-25
+		"ice":-25,
+		"wind":-12
 	},
 	
 	"biome_dependency":false

@@ -7,6 +7,7 @@
 	
 	"defense_element":{
 		"wind":-12,
+		"earth":6,
 		"light":-12
 	},
 	

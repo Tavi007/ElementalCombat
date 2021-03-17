@@ -1,13 +1,14 @@
 {
-	"attack_style":"",
-	"attack_element":"earth",
+	"attack_style":"projectile",
+	"attack_element":"",
 	
 	"defense_stlye":{
+		"projectile":12,
 	},
 	
 	"defense_element":{
-		"earth":12,
-		"wind":-4
+		"darkness":12,
+		"light":-12
 	},
 	
 	"biome_dependency":false
