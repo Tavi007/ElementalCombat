@@ -1,14 +1,13 @@
 {
 	"attack_style":"",
-	"attack_element":"darkness",
+	"attack_element":"",
 	
 	"defense_stlye":{
 	},
 	
 	"defense_element":{
-		"darkness":12,
-		"light":-25,
-		"fire":12
+		"wind":-12,
+		"flora":-25
 	},
 	
 	"biome_dependency":false
