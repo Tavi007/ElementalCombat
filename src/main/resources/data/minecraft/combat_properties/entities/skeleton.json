@@ -2,7 +2,7 @@
 	"attack_style":"projectile",
 	"attack_element":"",
 	
-	"defense_stlye":{
+	"defense_style":{
 		"projectile":12,
 	},
 	
