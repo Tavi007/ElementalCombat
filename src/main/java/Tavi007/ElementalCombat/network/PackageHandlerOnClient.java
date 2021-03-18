@@ -11,6 +11,9 @@ import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
 import Tavi007.ElementalCombat.init.StartupCommon;
+import Tavi007.ElementalCombat.init.ParticleList;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -63,9 +66,30 @@ public class PackageHandlerOnClient {
 		}
 		ctx.enqueueWork(() -> processMessage(clientWorld.get(), message));
 	}
-	
-	private static void processMessage(ClientWorld clientWorld, CombatDataMessage message)
-	{
+
+	public static void onCreateEmitterMessageReceived(final CreateEmitterMessage message, Supplier<NetworkEvent.Context> ctxSupplier) {
+		NetworkEvent.Context ctx = ctxSupplier.get();
+		LogicalSide sideReceived = ctx.getDirection().getReceptionSide();
+		ctx.setPacketHandled(true);
+
+		if (sideReceived != LogicalSide.CLIENT) {
+			ElementalCombat.LOGGER.warn("CreateEmitterMessageReceived received on wrong side: " + ctx.getDirection().getReceptionSide());
+			return;
+		}
+		if (!message.isMessageValid()) {
+			ElementalCombat.LOGGER.warn("CreateEmitterMessageReceived was invalid " + message.toString());
+			return;
+		}
+
+		Optional<ClientWorld> clientWorld = LogicalSidedProvider.CLIENTWORLD.get(sideReceived);
+		if (!clientWorld.isPresent()) {
+			ElementalCombat.LOGGER.warn("CreateEmitterMessageReceived context could not provide a ClientWorld.");
+			return;
+		}
+		ctx.enqueueWork(() -> processMessage(clientWorld.get(), message));
+	}
+
+	private static void processMessage(ClientWorld clientWorld, CombatDataMessage message) {
 		AttackData atckData = message.getAttackData();
 		DefenseData defData = message.getDefenseData();
 
@@ -83,14 +107,36 @@ public class PackageHandlerOnClient {
 			}
 		}
 	}
-	
-	private static void processMessage(ClientWorld clientWorld, DisableDamageRenderMessage message)
-	{
+
+	private static void processMessage(ClientWorld clientWorld, DisableDamageRenderMessage message) {
 		Entity entity = clientWorld.getEntityByID((message.getId()));
 		if(entity instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity) entity;
 			ImmersionData data = (ImmersionData) livingEntity.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
 			data.disableFlag = true;
+		}
+	}
+
+	@SuppressWarnings("resource")
+	private static void processMessage(ClientWorld clientWorld, CreateEmitterMessage message) {
+		ParticleManager particles = Minecraft.getInstance().particles;
+		Entity entity = clientWorld.getEntityByID(message.getEntityId());
+		switch (message.getParticleName()) {
+		case "critical_element":
+			particles.addParticleEmitter(entity, ParticleList.CRIT_ELEMENT.get());
+			break;
+		case "resistent_element":
+			particles.addParticleEmitter(entity, ParticleList.RESIST_ELEMENT.get());
+			break;
+		case "absorb":
+			particles.addParticleEmitter(entity, ParticleList.ABSORB.get());
+			break;
+		case "critical_style":
+			particles.addParticleEmitter(entity, ParticleList.CRIT_STYLE.get());
+			break;
+		case "resistent_style":
+			particles.addParticleEmitter(entity, ParticleList.RESIST_STYLE.get());
+			break;
 		}
 	}
 

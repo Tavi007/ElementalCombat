@@ -7,6 +7,7 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.attack.AttackDataCapability;
 import Tavi007.ElementalCombat.api.defense.DefenseDataCapability;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
+import Tavi007.ElementalCombat.network.CreateEmitterMessage;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
 import Tavi007.ElementalCombat.network.EntityMessage;
 import Tavi007.ElementalCombat.network.PackageHandlerOnClient;
@@ -20,6 +21,7 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 public class StartupCommon {
 	private static final byte ENTITYDATA_MESSAGE_TO_CLIENT_ID = 1; 
 	private static final byte DISABLERENDER_MESSAGE_TO_CLIENT_ID = 2; 
+	private static final byte CREATEEMITTER_MESSAGE_TO_CLIENT_ID = 3; 
 	public static final String MESSAGE_PROTOCOL_VERSION = "1.0"; 
 	
 	@SubscribeEvent
@@ -42,6 +44,11 @@ public class StartupCommon {
 		ElementalCombat.simpleChannel.registerMessage(DISABLERENDER_MESSAGE_TO_CLIENT_ID, DisableDamageRenderMessage.class,
 				DisableDamageRenderMessage::encode, DisableDamageRenderMessage::decode,
 				PackageHandlerOnClient::onDisableDamageRenderMessageReceived,
+	            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+		ElementalCombat.simpleChannel.registerMessage(CREATEEMITTER_MESSAGE_TO_CLIENT_ID, CreateEmitterMessage.class,
+				CreateEmitterMessage::encode, CreateEmitterMessage::decode,
+				PackageHandlerOnClient::onCreateEmitterMessageReceived,
 	            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		
 		ElementalCombat.LOGGER.info("setup method registered.");

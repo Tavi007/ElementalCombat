@@ -1,16 +1,18 @@
 package Tavi007.ElementalCombat.events;
 
+import java.util.function.Supplier;
+
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.DefaultPropertiesAPI;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.api.attack.AttackData;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
-import Tavi007.ElementalCombat.init.ParticleList;
+import Tavi007.ElementalCombat.network.CreateEmitterMessage;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
 import Tavi007.ElementalCombat.network.EntityMessage;
+import Tavi007.ElementalCombat.network.ServerPlayerSupplier;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -19,6 +21,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -57,7 +61,7 @@ public class ServerEvents {
 				ProjectileEntity projectile = (ProjectileEntity) entity;
 				AttackData projectileData = AttackDataAPI.get(projectile);
 				AttackData defaultData = DefaultPropertiesAPI.getAttackData(projectile);
-				
+
 				// TODO: maybe change behavior here
 				if (!defaultData.isEmpty()) {
 					projectileData.set(defaultData);
@@ -72,7 +76,7 @@ public class ServerEvents {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void elementifyLivingHurtEvent(LivingHurtEvent event) {
 		DamageSource damageSource = event.getSource();
@@ -93,7 +97,13 @@ public class ServerEvents {
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
 
 		// display particles
-		displayParticle(defenseStyleScaling, defenseElementScaling, target);
+		if(defenseStyleScaling < 1) {sendParticleMessage(target, "resistent_style");}
+		else if (defenseStyleScaling > 1) {sendParticleMessage(target, "critical_style");}
+
+		if(defenseElementScaling < 0) {sendParticleMessage(target, "absorb");}
+		else if (defenseElementScaling >= 0 && 
+				defenseElementScaling < 1) {sendParticleMessage(target, "resistent_element");}
+		else if (defenseElementScaling > 1) {sendParticleMessage(target, "critical_element");}
 
 		// heal the target, if damage is lower than 0
 		if(damageAmount <= 0) {
@@ -113,14 +123,21 @@ public class ServerEvents {
 		event.setAmount(damageAmount);
 	}
 
-	@SuppressWarnings("resource")
-	private static void displayParticle(float scalingStyle, float scalingElement, LivingEntity entityHit) {
-
-		if(scalingStyle < 1) {Minecraft.getInstance().particles.addParticleEmitter(entityHit, ParticleList.RESIST_STYLE.get());}
-		else if (scalingStyle > 1) {Minecraft.getInstance().particles.addParticleEmitter(entityHit, ParticleList.CRIT_STYLE.get());}
+	private static void sendParticleMessage(LivingEntity entity, String name) {
+		//define message
+		CreateEmitterMessage messageToClient = new CreateEmitterMessage(entity.getEntityId(), name);
 		
-		if(scalingElement < 0) {Minecraft.getInstance().particles.addParticleEmitter(entityHit, ParticleList.ABSORB.get());}
-		else if (scalingElement >= 0 && scalingElement < 1) {Minecraft.getInstance().particles.addParticleEmitter(entityHit, ParticleList.RESIST_ELEMENT.get());}
-		else if (scalingElement > 1) {Minecraft.getInstance().particles.addParticleEmitter(entityHit, ParticleList.CRIT_ELEMENT.get());}
+		//send message to nearby players
+		ServerWorld world = (ServerWorld) entity.world;
+		for(int j = 0; j < world.getPlayers().size(); ++j) {
+			ServerPlayerEntity serverplayerentity = world.getPlayers().get(j);
+			BlockPos blockpos = serverplayerentity.getPosition();
+			if (blockpos.withinDistance(entity.getPositionVec(), 32.0D)) {
+				Supplier<ServerPlayerEntity> supplier = new ServerPlayerSupplier(serverplayerentity);
+				ElementalCombat.simpleChannel.send(PacketDistributor.PLAYER.with(supplier), messageToClient);
+			}
+		}
 	}
+
+
 }
