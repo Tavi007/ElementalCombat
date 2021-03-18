@@ -9,7 +9,7 @@ import Tavi007.ElementalCombat.api.defense.DefenseDataCapability;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
 import Tavi007.ElementalCombat.network.CreateEmitterMessage;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
-import Tavi007.ElementalCombat.network.EntityMessage;
+import Tavi007.ElementalCombat.network.EntityCombatDataMessage;
 import Tavi007.ElementalCombat.network.PackageHandlerOnClient;
 import Tavi007.ElementalCombat.network.PackageHandlerOnServer;
 
@@ -36,19 +36,19 @@ public class StartupCommon {
 				PackageHandlerOnClient::isThisProtocolAcceptedByClient,
 				PackageHandlerOnServer::isThisProtocolAcceptedByServer);
 		
-		ElementalCombat.simpleChannel.registerMessage(ENTITYDATA_MESSAGE_TO_CLIENT_ID, EntityMessage.class,
-				EntityMessage::encode, EntityMessage::decode,
-				PackageHandlerOnClient::onCombatMessageReceived,
+		ElementalCombat.simpleChannel.registerMessage(ENTITYDATA_MESSAGE_TO_CLIENT_ID, EntityCombatDataMessage.class,
+				EntityCombatDataMessage::encode, EntityCombatDataMessage::decode,
+				PackageHandlerOnClient::onMessageReceived,
 	            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 
 		ElementalCombat.simpleChannel.registerMessage(DISABLERENDER_MESSAGE_TO_CLIENT_ID, DisableDamageRenderMessage.class,
 				DisableDamageRenderMessage::encode, DisableDamageRenderMessage::decode,
-				PackageHandlerOnClient::onDisableDamageRenderMessageReceived,
+				PackageHandlerOnClient::onMessageReceived,
 	            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 
 		ElementalCombat.simpleChannel.registerMessage(CREATEEMITTER_MESSAGE_TO_CLIENT_ID, CreateEmitterMessage.class,
 				CreateEmitterMessage::encode, CreateEmitterMessage::decode,
-				PackageHandlerOnClient::onCreateEmitterMessageReceived,
+				PackageHandlerOnClient::onMessageReceived,
 	            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		
 		ElementalCombat.LOGGER.info("setup method registered.");

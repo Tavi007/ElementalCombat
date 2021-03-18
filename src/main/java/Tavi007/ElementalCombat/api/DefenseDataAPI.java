@@ -4,7 +4,7 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.attack.AttackData;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.api.defense.DefenseDataCapability;
-import Tavi007.ElementalCombat.network.EntityMessage;
+import Tavi007.ElementalCombat.network.EntityCombatDataMessage;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -65,7 +65,7 @@ public class DefenseDataAPI {
 		defData.add(dataToAdd);
 
 		if (livingEntity instanceof ServerPlayerEntity) {
-			EntityMessage messageToClient = new EntityMessage(atckData, dataToAdd, true, livingEntity.getEntityId());
+			EntityCombatDataMessage messageToClient = new EntityCombatDataMessage(atckData, dataToAdd, true, livingEntity.getEntityId());
 			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 		}
 	}

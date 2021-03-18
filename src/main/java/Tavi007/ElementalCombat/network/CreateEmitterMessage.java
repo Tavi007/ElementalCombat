@@ -3,14 +3,13 @@ package Tavi007.ElementalCombat.network;
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.network.PacketBuffer;
 
-public class CreateEmitterMessage {
+public class CreateEmitterMessage extends MessageToClient {
 
-	private boolean messageIsValid;
 	private int entityId;
 	private String particleName;
 	
 	private CreateEmitterMessage() {
-		messageIsValid = false;
+		super();
 		entityId = 0;
 		particleName = "";
 	};
@@ -19,10 +18,6 @@ public class CreateEmitterMessage {
 		this.entityId = entityId;
 		this.particleName = particleName;
 		messageIsValid = true;
-	}
-	
-	public boolean isMessageValid() {
-		return messageIsValid;
 	}
 
 	public int getEntityId() {
