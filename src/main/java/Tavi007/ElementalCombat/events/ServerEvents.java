@@ -6,11 +6,11 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.DefaultPropertiesAPI;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
+import Tavi007.ElementalCombat.api.NetworkAPI;
 import Tavi007.ElementalCombat.api.attack.AttackData;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.network.CreateEmitterMessage;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
-import Tavi007.ElementalCombat.network.EntityCombatDataMessage;
 import Tavi007.ElementalCombat.network.ServerPlayerSupplier;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.entity.Entity;
@@ -47,14 +47,7 @@ public class ServerEvents {
 
 			// for synchronization after switching dimensions
 			if (entity instanceof LivingEntity) {
-				LivingEntity livingEntity = (LivingEntity) entity;
-				DefenseData defData = DefenseDataAPI.get(livingEntity);
-				AttackData atckData = AttackDataAPI.get(livingEntity);
-
-				if (livingEntity instanceof ServerPlayerEntity) {
-					EntityCombatDataMessage messageToClient = new EntityCombatDataMessage(atckData, defData, false, livingEntity.getEntityId());
-					ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
-				}
+				NetworkAPI.syncMessageForClients((LivingEntity) entity);
 			}
 			else if(entity instanceof ProjectileEntity && entity.ticksExisted == 0) {
 				// fill with default values in here.

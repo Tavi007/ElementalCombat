@@ -28,7 +28,7 @@ public class AttackDataAPI {
 		}
 		return attackData;
 	}
-
+	
 	/**
 	 * Returns the attack-combat data {@link AttackData} of the {@link LivingEntity}, but the held itemstack data will be applied aswell. 
 	 * @param entity A LivingEntity.
@@ -54,6 +54,15 @@ public class AttackDataAPI {
 			}
 		}
 		return attackData;
+	}
+
+	/**
+	 * Returns the attack-combat data {@link AttackData} of the {@link LivingEntity}. Also send message to clients for syncronization.
+	 * @param livingEntity A LivingEntity.
+	 * @return the AttackData, containing the attack style and attack element.
+	 */
+	public static void set(LivingEntity livingEntity, AttackData toSet) {
+		NetworkAPI.setAttackMessageForClients(livingEntity, get(livingEntity));
 	}
 
 	///////////////
