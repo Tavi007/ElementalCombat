@@ -57,12 +57,12 @@ public class AttackDataAPI {
 	}
 
 	/**
-	 * Returns the attack-combat data {@link AttackData} of the {@link LivingEntity}. Also send message to clients for syncronization.
+	 * Set the attack-combat data {@link AttackData} of the {@link LivingEntity}. Also sends message to clients for syncronization.
 	 * @param livingEntity A LivingEntity.
-	 * @return the AttackData, containing the attack style and attack element.
+	 * @param attackDataToSet The AttackData to be set as the attack values of the LivingEntity.
 	 */
-	public static void set(LivingEntity livingEntity, AttackData toSet) {
-		NetworkAPI.setAttackMessageForClients(livingEntity, get(livingEntity));
+	public static void set(LivingEntity livingEntity, AttackData attackDataToSet) {
+		NetworkAPI.syncAttackMessageForClients(livingEntity, attackDataToSet);
 	}
 
 	///////////////
