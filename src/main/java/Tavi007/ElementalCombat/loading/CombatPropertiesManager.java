@@ -53,7 +53,7 @@ public class CombatPropertiesManager extends JsonReloadListener
 			try (net.minecraft.resources.IResource res = resourceManagerIn.getResource(getPreparedPath(rl));)
 			{
 				//check if entity/item/biome/damageSource gets loaded
-				if(rl.getPath().contains("entities/")){
+				if(rl.getPath().contains("mobs/")){
 					EntityCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), EntityCombatProperties.class);
 					builderEntity.put(rl, combatProperties);
 				}
