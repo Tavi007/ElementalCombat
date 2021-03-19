@@ -21,10 +21,12 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'snapshot', version: "${version_mcp}"
+    //mappings channel: 'official', version: "${version_mc}"
+	mappings channel: 'snapshot', version: "${version_mcp}"
+	
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+	
     runs {
         client {
             workingDirectory project.file('run')
