@@ -2,7 +2,7 @@ package Tavi007.ElementalCombat.api.attack;
 
 import java.util.Map;
 
-import Tavi007.ElementalCombat.api.DefaultPropertiesAPI;
+import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.EnchantmentList;
 import net.minecraft.enchantment.Enchantment;
@@ -114,17 +114,17 @@ public class AttackData {
 	
 	public void initialize(ItemStack stack) {
 		isInitialized = true;
-		this.set(DefaultPropertiesAPI.getAttackData(stack));
+		this.set(BasePropertiesAPI.getAttackData(stack));
 	}
 	
 	public void initialize(LivingEntity entity) {
 		isInitialized = true;
-		this.set(DefaultPropertiesAPI.getAttackData(entity));
+		this.set(BasePropertiesAPI.getAttackData(entity));
 	}
 	
 	public void initialize(ProjectileEntity entity) {
 		isInitialized = true;
-		this.set(DefaultPropertiesAPI.getAttackData(entity));
+		this.set(BasePropertiesAPI.getAttackData(entity));
 	}
 	
 	public boolean isInitialized() {return isInitialized;}

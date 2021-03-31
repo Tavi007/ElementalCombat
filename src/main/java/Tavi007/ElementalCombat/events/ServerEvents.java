@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.AttackDataAPI;
-import Tavi007.ElementalCombat.api.DefaultPropertiesAPI;
+import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.api.NetworkAPI;
 import Tavi007.ElementalCombat.api.attack.AttackData;
@@ -53,7 +53,7 @@ public class ServerEvents {
 				// fill with default values in here.
 				ProjectileEntity projectile = (ProjectileEntity) entity;
 				AttackData projectileData = AttackDataAPI.get(projectile);
-				AttackData defaultData = DefaultPropertiesAPI.getAttackData(projectile);
+				AttackData defaultData = BasePropertiesAPI.getAttackData(projectile);
 
 				// TODO: maybe change behavior here
 				if (!defaultData.isEmpty()) {

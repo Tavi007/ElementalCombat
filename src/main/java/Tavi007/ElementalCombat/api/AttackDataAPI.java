@@ -129,7 +129,7 @@ public class AttackDataAPI {
 			atckCap = get((ProjectileEntity) immediateSource);
 		}
 		else {
-			atckCap = DefaultPropertiesAPI.getAttackData(damageSource);
+			atckCap = BasePropertiesAPI.getAttackData(damageSource);
 		}
 		return new AttackData(atckCap);
 	}

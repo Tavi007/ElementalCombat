@@ -14,7 +14,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 
-public class DefaultPropertiesAPI {
+public class BasePropertiesAPI {
 	
 	////////////////
 	// Attackdata //
