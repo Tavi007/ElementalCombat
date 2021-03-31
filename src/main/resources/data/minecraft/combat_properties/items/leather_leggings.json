@@ -3,7 +3,7 @@
 	"attack_element":"",
 	
 	"defense_style":{
-		"slash":10
+		"hit":10
 	},
 	
 	"defense_element":{
