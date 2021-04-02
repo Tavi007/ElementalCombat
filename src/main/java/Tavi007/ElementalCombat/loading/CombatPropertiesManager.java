@@ -24,7 +24,7 @@ public class CombatPropertiesManager extends JsonReloadListener
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
 	
-	private Map<ResourceLocation, EntityCombatProperties> registeredEntityData = ImmutableMap.of();
+	private Map<ResourceLocation, MobCombatProperties> registeredEntityData = ImmutableMap.of();
 	private Map<ResourceLocation, ItemCombatProperties> registeredItemData = ImmutableMap.of();
 	private Map<ResourceLocation, BiomeCombatProperties> registeredBiomeData = ImmutableMap.of();
 	private Map<ResourceLocation, AttackOnlyCombatProperties> registeredDamageSourceData = ImmutableMap.of();
@@ -37,7 +37,7 @@ public class CombatPropertiesManager extends JsonReloadListener
 	}
 
 	protected void apply(Map<ResourceLocation, JsonElement> objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn) {
-		Builder<ResourceLocation, EntityCombatProperties> builderEntity = ImmutableMap.builder();
+		Builder<ResourceLocation, MobCombatProperties> builderMob = ImmutableMap.builder();
 		Builder<ResourceLocation, ItemCombatProperties> builderItem = ImmutableMap.builder();
 		Builder<ResourceLocation, BiomeCombatProperties> builderBiome = ImmutableMap.builder();
 		Builder<ResourceLocation, AttackOnlyCombatProperties> builderDamageSource = ImmutableMap.builder();
@@ -54,8 +54,8 @@ public class CombatPropertiesManager extends JsonReloadListener
 			{
 				//check if entity/item/biome/damageSource gets loaded
 				if(rl.getPath().contains("mobs/")){
-					EntityCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), EntityCombatProperties.class);
-					builderEntity.put(rl, combatProperties);
+					MobCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), MobCombatProperties.class);
+					builderMob.put(rl, combatProperties);
 				}
 				else if(rl.getPath().contains("items/")){
 					ItemCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), ItemCombatProperties.class);
@@ -82,8 +82,8 @@ public class CombatPropertiesManager extends JsonReloadListener
 		});
 
 		//not sure if empty resourceLocation is necessary...
-		builderEntity.put(EMPTY_RESOURCELOCATION, new EntityCombatProperties());
-		this.registeredEntityData = builderEntity.build();
+		builderMob.put(EMPTY_RESOURCELOCATION, new MobCombatProperties());
+		this.registeredEntityData = builderMob.build();
 
 		builderItem.put(EMPTY_RESOURCELOCATION, new ItemCombatProperties());
 		this.registeredItemData = builderItem.build();
@@ -120,8 +120,8 @@ public class CombatPropertiesManager extends JsonReloadListener
 		return ret;
 	}
 
-	public EntityCombatProperties getEntityDataFromLocation(ResourceLocation rl){
-		return new EntityCombatProperties(this.registeredEntityData.getOrDefault(rl, new EntityCombatProperties()));
+	public MobCombatProperties getEntityDataFromLocation(ResourceLocation rl){
+		return new MobCombatProperties(this.registeredEntityData.getOrDefault(rl, new MobCombatProperties()));
 	}
 
 	public ItemCombatProperties getItemDataFromLocation(ResourceLocation rl){

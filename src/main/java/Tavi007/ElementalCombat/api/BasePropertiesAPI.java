@@ -5,7 +5,7 @@ import Tavi007.ElementalCombat.api.attack.AttackData;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
-import Tavi007.ElementalCombat.loading.EntityCombatProperties;
+import Tavi007.ElementalCombat.loading.MobCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -31,7 +31,7 @@ public class BasePropertiesAPI {
 			return new AttackData();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "entities/" + rlEntity.getPath());
-		EntityCombatProperties property = new EntityCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
+		MobCombatProperties property = new MobCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
 		return new AttackData(property.getAttackStyle(), property.getAttackElement());
 	}
 
@@ -101,7 +101,7 @@ public class BasePropertiesAPI {
 			return new DefenseData();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "entities/" + rlEntity.getPath());
-		EntityCombatProperties property = new EntityCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
+		MobCombatProperties property = new MobCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
 		return new DefenseData(property.getDefenseStyle(), property.getDefenseElement());
 	}
 
