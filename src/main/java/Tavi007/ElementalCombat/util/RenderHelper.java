@@ -91,22 +91,22 @@ public class RenderHelper {
 	
 	public static void addTooltip(List<ITextComponent> tooltip, boolean inTwoRows, @Nullable AttackData attackData, @Nullable DefenseData defenseData) {
 		if (attackData != null) {
-			tooltip.add(new StringTextComponent(textAttack));
+			tooltip.add(new StringTextComponent(TextFormatting.GRAY + textAttack));
 		}
 		if (defenseData != null && !defenseData.isEmpty()) {
 			if(inTwoRows) {
 				if(!defenseData.getElementFactor().isEmpty()) {
 					int factor = getCurrentElementDefenseFactor(defenseData);
-					tooltip.add(new StringTextComponent(textDefense + "   " + getPercentage(factor)));
+					tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor)));
 				}
 				if(!defenseData.getStyleFactor().isEmpty()) {
 					int factor = getCurrentStyleDefenseFactor(defenseData);
-					tooltip.add(new StringTextComponent(textDefense + "   " + getPercentage(factor)));
+					tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor)));
 				}
 			}
 			else {
 				int factor = getCurrentDefenseFactor(defenseData);
-				tooltip.add(new StringTextComponent(textDefense + "   " + getPercentage(factor)));
+				tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor)));
 			}
 		}
 	}
