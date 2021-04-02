@@ -116,12 +116,12 @@ public class RenderEvents {
 		AttackData attackData = AttackDataAPI.get(stack);
 		if(!attackData.isEmpty()) {
 			tooltipIndexAttack = tooltip.size();
-			RenderHelper.addTooltip(tooltip, attackData, null);
+			RenderHelper.addTooltip(tooltip, false, attackData, null);
 		}
 		DefenseData defenseData = DefenseDataAPI.get(stack);
 		if(!defenseData.isEmpty()) {
 			tooltipIndexDefense = tooltip.size();
-			RenderHelper.addTooltip(tooltip, null, defenseData);
+			RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseTooltip(), null, defenseData);
 		}
 	}
 	
@@ -138,7 +138,7 @@ public class RenderEvents {
 			RenderHelper.renderAttackIcons(attackData, matrixStack, event.getX(), event.getY() + 2 + tooltipIndexAttack*RenderHelper.maxLineHeight);
 		}
 		if(!defenseData.isEmpty()) {
-			RenderHelper.renderDefenseIcons(defenseData, matrixStack, event.getX(), event.getY() + 2 + tooltipIndexDefense*RenderHelper.maxLineHeight);
+			RenderHelper.renderDefenseIcons(defenseData, ClientConfig.isDoubleRowDefenseTooltip(), matrixStack, event.getX(), event.getY() + 2 + tooltipIndexDefense*RenderHelper.maxLineHeight);
 		}
 	}
 
@@ -167,6 +167,9 @@ public class RenderEvents {
 					int listHeight = RenderHelper.maxLineHeight;
 					if(!defenseData.isEmpty()) {
 						listHeight += RenderHelper.maxLineHeight;
+						if(ClientConfig.isDoubleRowDefenseHUD() && !defenseData.getElementFactor().isEmpty() && !defenseData.getStyleFactor().isEmpty()) {
+							listHeight += RenderHelper.maxLineHeight;
+						}
 					}
 
 					// moves the coords so the text and box appear correct
@@ -215,7 +218,7 @@ public class RenderEvents {
 
 					//fill and render tooltip
 					List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
-					RenderHelper.addTooltip(tooltip, attackData, defenseData);
+					RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseHUD(), attackData, defenseData);
 					RenderHelper.renderTooltip(tooltip, matrixStack, posX, posY);
 					
 					// render attackData icons
@@ -224,7 +227,7 @@ public class RenderEvents {
 					// render defenseData icons
 					if(!defenseData.isEmpty()) {
 						posY += RenderHelper.maxLineHeight;
-						RenderHelper.renderDefenseIcons(defenseData, matrixStack, posX, posY);
+						RenderHelper.renderDefenseIcons(defenseData, ClientConfig.isDoubleRowDefenseHUD(), matrixStack, posX, posY);
 					}
 					matrixStack.pop();
 				}

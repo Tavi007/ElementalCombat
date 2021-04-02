@@ -56,6 +56,30 @@ public class RenderHelper {
 		map.putAll(data.getStyleFactor());
 		return (new ArrayList<Integer>(map.values())).get(iteratorCounter % map.size());
 	}
+
+	private static String getCurrentElementDefenseName(DefenseData data) {
+		DefenseData onlyElement = new DefenseData();
+		onlyElement.setElementFactor(data.getElementFactor());
+		return getCurrentDefenseName(onlyElement);
+	}
+
+	private static int getCurrentElementDefenseFactor(DefenseData data) {
+		DefenseData onlyElement = new DefenseData();
+		onlyElement.setElementFactor(data.getElementFactor());
+		return getCurrentDefenseFactor(onlyElement);
+	}
+
+	private static String getCurrentStyleDefenseName(DefenseData data) {
+		DefenseData onlyStyle = new DefenseData();
+		onlyStyle.setStyleFactor(data.getStyleFactor());
+		return getCurrentDefenseName(onlyStyle);
+	}
+
+	private static int getCurrentStyleDefenseFactor(DefenseData data) {
+		DefenseData onlyStyle = new DefenseData();
+		onlyStyle.setStyleFactor(data.getStyleFactor());
+		return getCurrentDefenseFactor(onlyStyle);
+	}
 	
 	// Tooltip stuff
 	public static void renderTooltip(List<ITextComponent> tooltip, MatrixStack matrixStack, int x, int y) {
@@ -65,13 +89,25 @@ public class RenderHelper {
 		
 	}
 	
-	public static void addTooltip(List<ITextComponent> tooltip, @Nullable AttackData attackData, @Nullable DefenseData defenseData) {
+	public static void addTooltip(List<ITextComponent> tooltip, boolean inTwoRows, @Nullable AttackData attackData, @Nullable DefenseData defenseData) {
 		if (attackData != null) {
 			tooltip.add(new StringTextComponent(textAttack));
 		}
 		if (defenseData != null && !defenseData.isEmpty()) {
-			int factor = getCurrentDefenseFactor(defenseData);
-			tooltip.add(new StringTextComponent(textDefense + "   " + getPercentage(factor)));
+			if(inTwoRows) {
+				if(!defenseData.getElementFactor().isEmpty()) {
+					int factor = getCurrentElementDefenseFactor(defenseData);
+					tooltip.add(new StringTextComponent(textDefense + "   " + getPercentage(factor)));
+				}
+				if(!defenseData.getStyleFactor().isEmpty()) {
+					int factor = getCurrentStyleDefenseFactor(defenseData);
+					tooltip.add(new StringTextComponent(textDefense + "   " + getPercentage(factor)));
+				}
+			}
+			else {
+				int factor = getCurrentDefenseFactor(defenseData);
+				tooltip.add(new StringTextComponent(textDefense + "   " + getPercentage(factor)));
+			}
 		}
 	}
 	
@@ -99,8 +135,19 @@ public class RenderHelper {
 	}
 
 	// posX and posY are the start coords of the "Defense: "- String. Calculation will be relative from there on out.
-	public static void renderDefenseIcons(DefenseData data, MatrixStack matrixStack, int posX, int posY) {
-		renderIcon(getCurrentDefenseName(data), matrixStack, posX + widthDefense, posY);
+	public static void renderDefenseIcons(DefenseData data, boolean inTwoRows, MatrixStack matrixStack, int posX, int posY) {
+		if(inTwoRows) {
+			if(!data.getElementFactor().isEmpty()) {
+				renderIcon(getCurrentElementDefenseName(data), matrixStack, posX + widthDefense, posY);
+				posY+=maxLineHeight;
+			}
+			if(!data.getStyleFactor().isEmpty()) {
+				renderIcon(getCurrentStyleDefenseName(data), matrixStack, posX + widthDefense, posY);
+			}
+		}
+		else {
+			renderIcon(getCurrentDefenseName(data), matrixStack, posX + widthDefense, posY);
+		}
 	}
 	
 	public static void renderIcon(String name, MatrixStack matrixStack, int posX, int posY) {

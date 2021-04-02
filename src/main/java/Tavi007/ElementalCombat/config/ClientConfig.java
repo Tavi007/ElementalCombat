@@ -7,7 +7,6 @@ import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
-//@Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Bus.MOD)
 public class ClientConfig
 {
 	public static final ForgeConfigSpec CONFIG_SPEC;
@@ -15,11 +14,15 @@ public class ClientConfig
 
 	private static boolean enableHUD = true;
 	
-	public final BooleanValue isTop;
-	public final BooleanValue isLeft;
-	public final DoubleValue scale;
-	public final IntValue iterationSpeed;
-	public final BooleanValue activeHWYLA;
+	private final BooleanValue isTop;
+	private final BooleanValue isLeft;
+	private final DoubleValue scale;
+	private final IntValue iterationSpeed;
+
+	private final BooleanValue doubleRowDefenseHUD;
+	private final BooleanValue doubleRowDefenseTooltip;
+	private final BooleanValue activeHWYLA;
+	private final BooleanValue doubleRowDefenseHWYLA;
 
 	static
 	{
@@ -43,9 +46,18 @@ public class ClientConfig
 		iterationSpeed = builder
 				.comment("The number of ticks until the defense data iterates in any HUD element. 20 ticks are about 1 second.")
 				.defineInRange("ticks", 20, 1, 100);
+		doubleRowDefenseHUD = builder
+				.comment("If true, displays the defense values of the HUD in two rows (split in element and style).")
+				.define("doubleRowDefenseHUD", true);
+		doubleRowDefenseTooltip = builder
+				.comment("If true, displays the defense values of the item tooltip in two rows (split in element and style).")
+				.define("doubleRowDefenseTooltip", true);
 		activeHWYLA = builder
 				.comment("Activate/Deactivate WAILA/HWYLA plugin.")
 				.define("activateWaila", true);
+		doubleRowDefenseHWYLA = builder
+				.comment("If true, displays the defense values of the WAILA/HWYLA tooltip in two rows (split in element and style).")
+				.define("doubleRowDefenseHWYLA", true);
 	}
 
 	public static boolean isHUDEnabled() {
@@ -73,7 +85,19 @@ public class ClientConfig
 		return CLIENT.iterationSpeed.get();
 	}
 
+	public static boolean isDoubleRowDefenseHUD() {
+		return CLIENT.doubleRowDefenseHUD.get();
+	}
+
+	public static boolean isDoubleRowDefenseTooltip() {
+		return CLIENT.doubleRowDefenseTooltip.get();
+	}
+
 	public static boolean isHWYLAActive() {
 		return CLIENT.activeHWYLA.get();
+	}
+
+	public static boolean isDoubleRowDefenseHWYLA() {
+		return CLIENT.doubleRowDefenseHWYLA.get();
 	}
 }

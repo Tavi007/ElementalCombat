@@ -39,8 +39,13 @@ public class WailaTooltipRenderer implements ITooltipRenderer {
 				if(!AttackDataAPI.get(stack).isEmpty()) {
 					height += RenderHelper.maxLineHeight;
 				}
-				if (!DefenseDataAPI.get(stack).isEmpty()) {
+				DefenseData defenseData = DefenseDataAPI.get(stack);
+				if (!defenseData.isEmpty()) {
 					height += RenderHelper.maxLineHeight;
+					if(ClientConfig.isDoubleRowDefenseHWYLA() && !defenseData.getElementFactor().isEmpty() && !defenseData.getStyleFactor().isEmpty()) {
+						height += RenderHelper.maxLineHeight;
+					}
+					
 				}
 				return new Dimension(RenderHelper.maxLineWidth, height);	
 			}
@@ -74,7 +79,7 @@ public class WailaTooltipRenderer implements ITooltipRenderer {
 			//rendering starts here
 			MatrixStack matrixStack = new MatrixStack();
 			List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
-			RenderHelper.addTooltip(tooltip, attackData, defenseData);
+			RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseHWYLA(), attackData, defenseData);
 			RenderHelper.renderTooltip(tooltip, matrixStack, x, y);
 			
 			if(attackData != null) {
@@ -83,7 +88,7 @@ public class WailaTooltipRenderer implements ITooltipRenderer {
 
 			}
 			if(defenseData != null && !defenseData.isEmpty()) {
-				RenderHelper.renderDefenseIcons(defenseData, matrixStack, x, y);
+				RenderHelper.renderDefenseIcons(defenseData, ClientConfig.isDoubleRowDefenseHWYLA(), matrixStack, x, y);
 			}
 
 		}
