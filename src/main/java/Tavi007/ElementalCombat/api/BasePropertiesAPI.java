@@ -30,7 +30,7 @@ public class BasePropertiesAPI {
 		if (rlEntity == null) {
 			return new AttackData();
 		}
-		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "entities/" + rlEntity.getPath());
+		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "mobs/" + rlEntity.getPath());
 		MobCombatProperties property = new MobCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
 		return new AttackData(property.getAttackStyle(), property.getAttackElement());
 	}
@@ -100,7 +100,7 @@ public class BasePropertiesAPI {
 		if (rlEntity == null) {
 			return new DefenseData();
 		}
-		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "entities/" + rlEntity.getPath());
+		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "mobs/" + rlEntity.getPath());
 		MobCombatProperties property = new MobCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
 		return new DefenseData(property.getDefenseStyle(), property.getDefenseElement());
 	}
