@@ -28,8 +28,12 @@ public class WailaTooltipRenderer implements ITooltipRenderer {
 			if(accessor.getEntity() != null && accessor.getEntity() instanceof LivingEntity) {
 				LivingEntity living = (LivingEntity) accessor.getEntity();
 				int height = RenderHelper.maxLineHeight;
-				if(!DefenseDataAPI.get(living).isEmpty()) {
+				DefenseData defenseData = DefenseDataAPI.get(living);
+				if (!defenseData.isEmpty()) {
 					height += RenderHelper.maxLineHeight;
+					if(ClientConfig.isDoubleRowDefenseHWYLA() && !defenseData.getElementFactor().isEmpty() && !defenseData.getStyleFactor().isEmpty()) {
+						height += RenderHelper.maxLineHeight;
+					}
 				}
 				return new Dimension(RenderHelper.maxLineWidth, height);	
 			}
