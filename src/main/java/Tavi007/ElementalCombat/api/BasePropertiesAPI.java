@@ -152,7 +152,7 @@ public class BasePropertiesAPI {
 		if (rlEntity == null) {
 			return false;
 		}
-		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "entities/" + rlEntity.getPath());
+		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "mobs/" + rlEntity.getPath());
 		return ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties).getBiomeDependency();
 	}
 }
