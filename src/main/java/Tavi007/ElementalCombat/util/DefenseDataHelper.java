@@ -3,6 +3,7 @@ package Tavi007.ElementalCombat.util;
 import java.util.HashMap;
 
 import Tavi007.ElementalCombat.api.defense.DefenseData;
+import Tavi007.ElementalCombat.api.defense.DefenseLayer;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.EnchantmentList;
 import net.minecraft.enchantment.Enchantments;
@@ -15,7 +16,7 @@ public class DefenseDataHelper {
 	 * @param enchantments A map with the enchantment names and their level.
 	 * @return The DefenseData of all the enchantment summed up.
 	 */
-	public static DefenseData getEnchantmentData(HashMap<String, Integer> enchantments) {
+	public static DefenseLayer getEnchantmentData(HashMap<String, Integer> enchantments) {
 		HashMap<String, Integer> defElement = new HashMap<String, Integer>();
 		HashMap<String, Integer> defStyle = new HashMap<String, Integer>();
 		enchantments.forEach( (key, level) -> {
@@ -64,68 +65,7 @@ public class DefenseDataHelper {
 				}
 			}
 		});
-		return new DefenseData(defStyle, defElement);
-	}
-
-
-	/**
-	 * Merges an additional Map into the base map. If both maps contains the same key, the highest value will persist.
-	 * @param baseMap The base mapping. Additional values will be written into this one.
-	 * @param additionalMap The additional mapping.
-	 */
-	public static void mergeMaps(HashMap<String, Integer> baseMap, HashMap<String, Integer> additionalMap){
-		additionalMap.forEach((key, value)->{
-			if(!baseMap.containsKey(key)) {
-				baseMap.put(key, value);
-			}
-			else if(baseMap.get(key) > value) {
-				baseMap.put(key, value);
-			}
-		});	
-	}
-	
-	/**
-	 * Merges an additional Map into the base map. If both maps contains the same key, the value will be summed up.
-	 * @param baseMap The base mapping. Additional values will be written into this one.
-	 * @param additionalMap The additional mapping.
-	 */
-	public static void sumMaps(HashMap<String, Integer> baseMap, HashMap<String, Integer> additionalMap){
-		additionalMap.forEach((key, value)->{
-			if(!baseMap.containsKey(key)) {
-				baseMap.put(key, value);
-			}
-			else {
-				int newValue = baseMap.get(key) + value;
-				if (newValue == 0) {
-					baseMap.remove(key);
-				}
-				else{
-					baseMap.put(key, newValue);
-				}
-			}
-		});	
-	}
-	
-	/**
-	 * Merges an additional Map into the base map. The additional values will be subtracted from the base map.
-	 * @param baseMap The base mapping. The additional value will be written into this one.
-	 * @param additionalMap The additional mapping.
-	 */
-	public static void substractMaps(HashMap<String, Integer> baseMap, HashMap<String, Integer> additionalMap){
-		additionalMap.forEach((key, value)->{
-			if(!baseMap.containsKey(key)) {
-				baseMap.put(key, -value);
-			}
-			else {
-				int newValue = baseMap.get(key) - value;
-				if (newValue == 0) {
-					baseMap.remove(key);
-				}
-				else{
-					baseMap.put(key, newValue);
-				}
-			}
-		});	
+		return new DefenseLayer(defStyle, defElement);
 	}
 
 	/**
