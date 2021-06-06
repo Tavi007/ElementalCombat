@@ -3,6 +3,7 @@ package Tavi007.ElementalCombat.api;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.attack.AttackData;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
+import Tavi007.ElementalCombat.api.defense.DefenseLayer;
 import Tavi007.ElementalCombat.network.EntityCombatDataMessage;
 import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -29,7 +30,7 @@ public class NetworkAPI {
 	 * @param livingEntity A LivingEntity.
 	 * @param defenseDataToAdd The DefenseData to be added to the defense values of the LivingEntity (on the client).
 	 */
-	public static void addDefenseMessageForClients(LivingEntity livingEntity, DefenseData defenseDataToAdd) {
+	public static void addDefenseLayerMessageForClients(LivingEntity livingEntity, DefenseLayer layerToAdd, String name) {
 		if(livingEntity.isServerWorld()) {
 			AttackData attackData = AttackDataAPI.get(livingEntity);
 			EntityCombatDataMessage messageToClient = new EntityCombatDataMessage(attackData, defenseDataToAdd, true, livingEntity.getEntityId());

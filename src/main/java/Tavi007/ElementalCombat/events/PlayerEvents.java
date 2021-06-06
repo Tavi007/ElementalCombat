@@ -3,11 +3,12 @@ package Tavi007.ElementalCombat.events;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
+import Tavi007.ElementalCombat.api.defense.DefenseLayer;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
@@ -21,7 +22,6 @@ public class PlayerEvents
 	@SubscribeEvent
 	public static void livingEquipmentChange(LivingEquipmentChangeEvent event) {
 		//change defense properties
-		LivingEntity entity = event.getEntityLiving();
 		if(event.getSlot().getSlotType() == EquipmentSlotType.Group.ARMOR)
 		{
 			// get data
@@ -29,12 +29,12 @@ public class PlayerEvents
 			DefenseData defDataItemTo = DefenseDataAPI.get(event.getTo());
 
 			// compute change
-			DefenseData newData = new DefenseData();
-			newData.substract(defDataItemFrom);
-			newData.add(defDataItemTo);
+			DefenseLayer layer = new DefenseLayer();
+			layer.subtractLayer(defDataItemFrom.toLayer());
+			layer.addLayer(defDataItemTo.toLayer());
 
 			// apply change
-			DefenseDataAPI.add(entity, newData);
+			DefenseDataAPI.get(event.getEntityLiving()).addLayer(layer, new ResourceLocation("minecraft", "armor"));
 		}
 	}
 
@@ -52,7 +52,7 @@ public class PlayerEvents
 	
 	@SubscribeEvent
 	public static void onKeyInput(KeyInputEvent event) {
-		if(StartupClientOnly.TOGGLE_HUD.isKeyDown()){
+		if(StartupClientOnly.TOGGLE_HUD.isKeyDown()) {
 			ClientConfig.toogleHUD();
 		}
 	}

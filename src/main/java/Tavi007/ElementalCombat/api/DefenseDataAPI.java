@@ -2,9 +2,11 @@ package Tavi007.ElementalCombat.api;
 
 import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.api.defense.DefenseDataCapability;
+import Tavi007.ElementalCombat.api.defense.DefenseLayer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class DefenseDataAPI {
 
@@ -53,12 +55,12 @@ public class DefenseDataAPI {
 	 * @param dataToAdd The additional DefenseData.
 	 * @param livingEntity The LivingEntity. 
 	 */
-	public static void add(LivingEntity livingEntity, DefenseData dataToAdd) {
+	public static void addLayer(LivingEntity livingEntity, DefenseLayer dataToAdd, ResourceLocation location) {
 		if (dataToAdd.isEmpty()) return;
 		DefenseData defData = get(livingEntity);
-		defData.add(dataToAdd);
+		defData.addLayer(dataToAdd, location);
 		if(livingEntity.isServerWorld()) {
-			NetworkAPI.addDefenseMessageForClients(livingEntity, dataToAdd);
+			NetworkAPI.addDefenseLayerMessageForClients(livingEntity, dataToAdd, location);
 		}
 	}
 
@@ -67,14 +69,9 @@ public class DefenseDataAPI {
 	 * @param dataToAdd The additional DefenseData.
 	 * @param stack The ItemStack. 
 	 */
-	public static void add(ItemStack stack, DefenseData dataToAdd) {
+	public static void addLayer(ItemStack stack, DefenseLayer dataToAdd, ResourceLocation location) {
 		if (dataToAdd.isEmpty()) return;
 		DefenseData defDataItem = get(stack);
-		defDataItem.add(dataToAdd);
+		defDataItem.addLayer(dataToAdd, location);
 	}
-	
-	/**
-	 * No set-method for DefenseData available, because it will only lead to synchronization problem down the line.
-	 * Always try to apply a change relative to the current data.
-	 */
 }

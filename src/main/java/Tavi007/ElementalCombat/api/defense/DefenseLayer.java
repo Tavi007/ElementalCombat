@@ -59,7 +59,12 @@ public class DefenseLayer {
 	public void mergeElement(HashMap<String, Integer> map) {
 		elementFactor.merge(map);
 	}
-
+	
+	//Other
+	public boolean isEmpty() {
+		return styleFactor.isEmpty() && elementFactor.isEmpty();
+	}
+	
 	private class DefenseMap {
 		private HashMap<String, Integer> map;
 
@@ -120,6 +125,10 @@ public class DefenseLayer {
 					map.put(key, value);
 				}
 			});	
+		}
+		
+		public boolean isEmpty() {
+			return map.isEmpty();
 		}
 	}
 }
