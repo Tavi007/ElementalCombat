@@ -6,6 +6,7 @@ import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.api.defense.DefenseLayer;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
@@ -24,17 +25,14 @@ public class PlayerEvents
 		//change defense properties
 		if(event.getSlot().getSlotType() == EquipmentSlotType.Group.ARMOR)
 		{
-			// get data
-			DefenseData defDataItemFrom = DefenseDataAPI.get(event.getFrom());
-			DefenseData defDataItemTo = DefenseDataAPI.get(event.getTo());
-
-			// compute change
 			DefenseLayer layer = new DefenseLayer();
-			layer.subtractLayer(defDataItemFrom.toLayer());
-			layer.addLayer(defDataItemTo.toLayer());
-
-			// apply change
-			DefenseDataAPI.get(event.getEntityLiving()).addLayer(layer, new ResourceLocation("minecraft", "armor"));
+			LivingEntity entity = event.getEntityLiving();
+			entity.getArmorInventoryList().forEach( stack -> {
+				DefenseData data = DefenseDataAPI.get(stack);
+				layer.addLayer(data.toLayer());
+			});
+			//DefenseDataAPI.get(event.getEntityLiving()).putLayer(layer, new ResourceLocation("minecraft", "armor"));
+			DefenseDataAPI.putLayer(event.getEntityLiving(), layer, new ResourceLocation("minecraft", "armor"));
 		}
 	}
 

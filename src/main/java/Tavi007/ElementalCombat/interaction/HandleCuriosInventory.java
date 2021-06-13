@@ -21,6 +21,8 @@ public class HandleCuriosInventory {
 		layer.addLayer(defDataItemTo.toLayer());
 
 		// apply change
-		DefenseDataAPI.get(event.getEntityLiving()).addLayer(layer, new ResourceLocation(Curios.MODID, "armor"));
+		DefenseData data = DefenseDataAPI.get(event.getEntityLiving());
+		ResourceLocation rl = new ResourceLocation(Curios.MODID, "armor");
+		data.getLayer(rl).addLayer(layer);
 	}
 }

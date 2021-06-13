@@ -66,7 +66,7 @@ public class DefenseLayer {
 	}
 	
 	private class DefenseMap {
-		private HashMap<String, Integer> map;
+		private HashMap<String, Integer> map = new HashMap<String, Integer>();
 
 		public HashMap<String, Integer> getMap() {
 			return map;

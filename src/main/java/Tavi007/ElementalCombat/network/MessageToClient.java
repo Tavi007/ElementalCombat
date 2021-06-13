@@ -11,4 +11,8 @@ public class MessageToClient {
 	public boolean isMessageValid() {
 		return messageIsValid;
 	}
+	
+	public void verify() {
+		messageIsValid = true;
+	}
 }

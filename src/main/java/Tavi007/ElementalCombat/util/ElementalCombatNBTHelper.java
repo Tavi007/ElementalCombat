@@ -57,7 +57,7 @@ public class ElementalCombatNBTHelper {
 	public static DefenseData readDefenseDataFromNBT(CompoundNBT nbt) {
 		DefenseData data = new DefenseData();
 		fromNBTToLayers(nbt.getCompound("defense_layer")).forEach((rl, layer) -> {
-			data.addLayer(layer, rl);
+			data.putLayer(layer, rl);
 		});
 		return data;
 	}

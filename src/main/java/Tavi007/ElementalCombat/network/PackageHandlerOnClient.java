@@ -7,7 +7,7 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.api.attack.AttackData;
-import Tavi007.ElementalCombat.api.defense.DefenseData;
+import Tavi007.ElementalCombat.api.defense.DefenseLayer;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
 import Tavi007.ElementalCombat.init.StartupCommon;
@@ -49,28 +49,32 @@ public class PackageHandlerOnClient {
 		else if(message instanceof DisableDamageRenderMessage) {
 			ctx.enqueueWork(() -> processMessage(clientWorld.get(), (DisableDamageRenderMessage) message));
 		}
-		else if(message instanceof EntityCombatDataMessage) {
-			ctx.enqueueWork(() -> processMessage(clientWorld.get(), (EntityCombatDataMessage) message));
+		else if(message instanceof EntityAttackDataMessage) {
+			ctx.enqueueWork(() -> processMessage(clientWorld.get(), (EntityAttackDataMessage) message));
+		}
+		else if(message instanceof EntityDefenseLayerMessage) {
+			ctx.enqueueWork(() -> processMessage(clientWorld.get(), (EntityDefenseLayerMessage) message));
 		}
 	}
 
-	private static void processMessage(ClientWorld clientWorld, EntityCombatDataMessage message) {
+	private static void processMessage(ClientWorld clientWorld, EntityAttackDataMessage message) {
 		AttackData atckData = message.getAttackData();
-		DefenseData defData = message.getDefenseData();
-
 		Entity entity = clientWorld.getEntityByID(message.getId());
 		if (entity instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity) entity;
 			AttackDataAPI.get(livingEntity).set(atckData);
-			if (message.isAdd()) {
-				DefenseDataAPI.get(livingEntity).add(defData);
-			}
-			else {
-				DefenseDataAPI.get(livingEntity).set(defData);
-			}
 		}
 	}
 
+	private static void processMessage(ClientWorld clientWorld, EntityDefenseLayerMessage message) {
+		DefenseLayer defLayer = message.getDefenseLayer();
+		Entity entity = clientWorld.getEntityByID(message.getId());
+		if (entity instanceof LivingEntity) {
+			LivingEntity livingEntity = (LivingEntity) entity;
+			DefenseDataAPI.get(livingEntity).putLayer(defLayer, message.getLocation());;
+		}
+	}
+	
 	private static void processMessage(ClientWorld clientWorld, DisableDamageRenderMessage message) {
 		Entity entity = clientWorld.getEntityByID((message.getId()));
 		if(entity instanceof LivingEntity) {
