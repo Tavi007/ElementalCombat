@@ -31,7 +31,6 @@ public class PlayerEvents
 				DefenseData data = DefenseDataAPI.get(stack);
 				layer.addLayer(data.toLayer());
 			});
-			//DefenseDataAPI.get(event.getEntityLiving()).putLayer(layer, new ResourceLocation("minecraft", "armor"));
 			DefenseDataAPI.putLayer(event.getEntityLiving(), layer, new ResourceLocation("minecraft", "armor"));
 		}
 	}

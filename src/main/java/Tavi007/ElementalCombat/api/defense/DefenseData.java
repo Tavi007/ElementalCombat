@@ -96,7 +96,7 @@ public class DefenseData {
 			}
 		});
 		DefenseLayer layer = new DefenseLayer(defStyle, defElement);
-		if (layer.isEmpty()) {
+		if (!layer.isEmpty()) {
 			defenseLayers.put(new ResourceLocation("minecraft","enchantment"), layer);
 		}
 		areEnchantmentChangesApplied = true;
@@ -127,6 +127,10 @@ public class DefenseData {
 	
 	public boolean isEmpty() {
 		return getStyleFactor().isEmpty() && getElementFactor().isEmpty();
+	}
+	
+	public String toString() {
+		return toLayer().toString();
 	}
 	
 

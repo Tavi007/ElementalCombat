@@ -65,6 +65,11 @@ public class DefenseLayer {
 		return styleFactor.isEmpty() && elementFactor.isEmpty();
 	}
 	
+	public String toString() {
+		return "Element: " + elementFactor.toString() + "\n" +
+				"Style: " + styleFactor.toString();
+	}
+	
 	private class DefenseMap {
 		private HashMap<String, Integer> map = new HashMap<String, Integer>();
 
@@ -129,6 +134,10 @@ public class DefenseLayer {
 		
 		public boolean isEmpty() {
 			return map.isEmpty();
+		}
+		
+		public String toString() {
+			return map.toString();
 		}
 	}
 }

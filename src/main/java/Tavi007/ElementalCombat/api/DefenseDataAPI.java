@@ -50,7 +50,6 @@ public class DefenseDataAPI {
 	/////////////////////
 	
 	public static void putLayer(LivingEntity livingEntity, DefenseLayer dataToAdd, ResourceLocation location) {
-		if (dataToAdd.isEmpty()) return;
 		DefenseData defData = get(livingEntity);
 		defData.putLayer(dataToAdd, location);
 		if(livingEntity.isServerWorld()) {
@@ -64,7 +63,6 @@ public class DefenseDataAPI {
 	 * @param stack The ItemStack. 
 	 */
 	public static void putLayer(ItemStack stack, DefenseLayer dataToAdd, ResourceLocation location) {
-		if (dataToAdd.isEmpty()) return;
 		DefenseData defDataItem = get(stack);
 		defDataItem.putLayer(dataToAdd, location);
 	}
