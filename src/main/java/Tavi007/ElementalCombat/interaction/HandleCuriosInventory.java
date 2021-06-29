@@ -5,7 +5,6 @@ import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.api.defense.DefenseLayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import top.theillusivec4.curios.Curios;
 import top.theillusivec4.curios.api.event.CurioChangeEvent;
 
 public class HandleCuriosInventory {
@@ -22,7 +21,7 @@ public class HandleCuriosInventory {
 
 		// apply change
 		DefenseData data = DefenseDataAPI.get(event.getEntityLiving());
-		ResourceLocation rl = new ResourceLocation(Curios.MODID, "armor");
+		ResourceLocation rl = new ResourceLocation("curios", "armor");
 		data.getLayer(rl).addLayer(layer);
 	}
 }
