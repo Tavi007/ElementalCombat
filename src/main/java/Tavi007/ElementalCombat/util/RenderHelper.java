@@ -10,6 +10,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 
 import Tavi007.ElementalCombat.api.attack.AttackData;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
+import Tavi007.ElementalCombat.api.defense.DefenseLayer;
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -59,25 +60,25 @@ public class RenderHelper {
 
 	private static String getCurrentElementDefenseName(DefenseData data) {
 		DefenseData onlyElement = new DefenseData();
-		onlyElement.setElementFactor(data.getElementFactor());
+		onlyElement.putLayer(new DefenseLayer(new HashMap<String, Integer>(), data.getElementFactor()), new ResourceLocation(ElementalCombat.MOD_ID, "render"));
 		return getCurrentDefenseName(onlyElement);
 	}
 
 	private static int getCurrentElementDefenseFactor(DefenseData data) {
 		DefenseData onlyElement = new DefenseData();
-		onlyElement.setElementFactor(data.getElementFactor());
+		onlyElement.putLayer(new DefenseLayer(new HashMap<String, Integer>(), data.getElementFactor()), new ResourceLocation(ElementalCombat.MOD_ID, "render"));
 		return getCurrentDefenseFactor(onlyElement);
 	}
 
 	private static String getCurrentStyleDefenseName(DefenseData data) {
 		DefenseData onlyStyle = new DefenseData();
-		onlyStyle.setStyleFactor(data.getStyleFactor());
+		onlyStyle.putLayer(new DefenseLayer(data.getStyleFactor(), new HashMap<String, Integer>()), new ResourceLocation(ElementalCombat.MOD_ID, "render"));
 		return getCurrentDefenseName(onlyStyle);
 	}
 
 	private static int getCurrentStyleDefenseFactor(DefenseData data) {
 		DefenseData onlyStyle = new DefenseData();
-		onlyStyle.setStyleFactor(data.getStyleFactor());
+		onlyStyle.putLayer(new DefenseLayer(data.getStyleFactor(), new HashMap<String, Integer>()), new ResourceLocation(ElementalCombat.MOD_ID, "render"));
 		return getCurrentDefenseFactor(onlyStyle);
 	}
 	
@@ -86,7 +87,6 @@ public class RenderHelper {
 		for(int i=0; i<tooltip.size(); i++) {
 			fontRenderer.drawStringWithShadow(matrixStack, tooltip.get(i).getString(), x, y + i*RenderHelper.maxLineHeight, TextFormatting.GRAY.getColor());
 		}
-		
 	}
 	
 	public static void addTooltip(List<ITextComponent> tooltip, boolean inTwoRows, @Nullable AttackData attackData, @Nullable DefenseData defenseData) {
@@ -103,8 +103,7 @@ public class RenderHelper {
 					int factor = getCurrentStyleDefenseFactor(defenseData);
 					tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor)));
 				}
-			}
-			else {
+			} else {
 				int factor = getCurrentDefenseFactor(defenseData);
 				tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor)));
 			}

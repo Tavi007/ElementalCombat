@@ -87,7 +87,7 @@ public class AttackData {
 	}
 
 	public boolean areEnchantmentChangesApplied() {
-		return this.areEnchantmentChangesApplied;
+		return areEnchantmentChangesApplied;
 	}
 
 	public void applyEnchantmentChanges(Map<Enchantment, Integer> currentEnchantments) {

@@ -3,128 +3,150 @@ package Tavi007.ElementalCombat.api.defense;
 import java.util.HashMap;
 import java.util.Map;
 
+import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
-import Tavi007.ElementalCombat.util.DefenseDataHelper;
+import Tavi007.ElementalCombat.config.ServerConfig;
+import Tavi007.ElementalCombat.init.EnchantmentList;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.ResourceLocation;
 
 public class DefenseData {
 
-	private HashMap<String, Integer> styleFactor = new HashMap<String, Integer>();
-	private HashMap<String, Integer> elementFactor = new HashMap<String, Integer>();
-
+	private HashMap<ResourceLocation, DefenseLayer> defenseLayers = new HashMap<ResourceLocation, DefenseLayer>();
 	private boolean isInitialized = false;
-	// for itemstack
-	private HashMap<String, Integer> enchantmentData = new HashMap<String, Integer>();
-	private boolean areEnchantmentChangesApplied = false;
 
+	// for itemstack
+	private boolean areEnchantmentChangesApplied = false;
+	
 	public DefenseData() {
 	}
-
-	public DefenseData(HashMap<String, Integer> styleFactor, HashMap<String, Integer> elementFactor) {
-		this.styleFactor = styleFactor;
-		this.elementFactor = elementFactor;
-	}
-
-	public DefenseData(HashMap<String, Integer> styleFactor, HashMap<String, Integer> elementFactor, HashMap<String, Integer> enchantmentData) {
-		this.styleFactor = styleFactor;
-		this.elementFactor = elementFactor;
-		this.enchantmentData = enchantmentData;
-	}
-
-	public DefenseData(DefenseData data) {
-		this.styleFactor = data.getStyleFactor();
-		this.elementFactor = data.getElementFactor();
-		this.enchantmentData = data.getEnchantmentData();
-		this.areEnchantmentChangesApplied = data.areEnchantmentChangesApplied();
-	}
-
-	public void clear() {
-		this.styleFactor = new HashMap<String, Integer>();
-		this.elementFactor = new HashMap<String, Integer>();
-		this.enchantmentData = new HashMap<String, Integer>();
-		this.areEnchantmentChangesApplied = false;
+	
+	public void set(DefenseData data) {
+		this.defenseLayers = data.defenseLayers;
+		this.isInitialized = data.isInitialized;
 	}
 	
-	public HashMap<String, Integer> getEnchantmentData() {
-		return this.enchantmentData;
+	public HashMap<ResourceLocation, DefenseLayer> getLayers() {
+		return defenseLayers;
 	}
 	
-	public void setEnchantmentData(HashMap<String, Integer> data) {
-		this.enchantmentData = data;
+	public DefenseLayer getLayer(ResourceLocation name) {
+		return defenseLayers.get(name);
 	}
 	
-	public boolean areEnchantmentChangesApplied() {return this.areEnchantmentChangesApplied;}
+	public void putLayer(DefenseLayer layer, ResourceLocation name) {
+		defenseLayers.put(name, layer);
+	}
+	
+	public boolean areEnchantmentChangesApplied() {
+		return areEnchantmentChangesApplied;
+	}
+
+	public void applyEnchantmentChanges(Map<Enchantment, Integer> enchantments) {
+
+		HashMap<String, Integer> defElement = new HashMap<String, Integer>();
+		HashMap<String, Integer> defStyle = new HashMap<String, Integer>();
+		enchantments.forEach( (key, level) -> {
+			if (level != 0) {
+				// elemental enchantments
+				if(key == Enchantments.FIRE_PROTECTION) {
+					defElement.put( "fire", level*ServerConfig.getEnchantmentScaling());
+					defElement.put( "ice", -level*ServerConfig.getEnchantmentScaling()/2);
+				}
+				else if(key == EnchantmentList.ICE_PROTECTION.get()) {
+					defElement.put("ice", level*ServerConfig.getEnchantmentScaling());
+					defElement.put("fire", -level*ServerConfig.getEnchantmentScaling()/2);
+				}
+				else if(key == EnchantmentList.WATER_PROTECTION.get()) {
+					defElement.put( "water", level*ServerConfig.getEnchantmentScaling());
+					defElement.put( "thunder", -level*ServerConfig.getEnchantmentScaling()/2);
+				}
+				else if(key == EnchantmentList.THUNDER_PROTECTION.get()) {
+					defElement.put( "thunder", level*ServerConfig.getEnchantmentScaling());
+					defElement.put( "water", -level*ServerConfig.getEnchantmentScaling()/2);
+				}
+				else if(key == EnchantmentList.DARKNESS_PROTECTION.get()) {
+					defElement.put( "darkness", level*ServerConfig.getEnchantmentScaling());
+					defElement.put( "light", -level*ServerConfig.getEnchantmentScaling()/2);
+				}
+				else if(key == EnchantmentList.LIGHT_PROTECTION.get()) {
+					defElement.put( "light", level*ServerConfig.getEnchantmentScaling());
+					defElement.put( "darkness", -level*ServerConfig.getEnchantmentScaling()/2);
+				}
+				else if(key == EnchantmentList.ELEMENT_PROTECTION.get()) {
+					defElement.put( "fire", level*ServerConfig.getEnchantmentScaling()/5);
+					defElement.put( "water", level*ServerConfig.getEnchantmentScaling()/5);
+					defElement.put( "ice", level*ServerConfig.getEnchantmentScaling()/5);
+					defElement.put( "thunder", level*ServerConfig.getEnchantmentScaling()/5);
+				}
+
+				// style enchantments
+				if(key == Enchantments.BLAST_PROTECTION) {
+					defStyle.put("explosion", level*ServerConfig.getEnchantmentScaling());
+				}
+				else if(key == Enchantments.PROJECTILE_PROTECTION) {
+					defStyle.put("projectile", level*ServerConfig.getEnchantmentScaling());
+				}
+				else if(key == EnchantmentList.MAGIC_PROTECTION.get()) {
+					defStyle.put("magic", level*ServerConfig.getEnchantmentScaling());
+				}
+			}
+		});
+		DefenseLayer layer = new DefenseLayer(defStyle, defElement);
+		if (!layer.isEmpty()) {
+			defenseLayers.put(new ResourceLocation("minecraft","enchantment"), layer);
+		}
+		areEnchantmentChangesApplied = true;
+	}
+	
+	public DefenseLayer toLayer() {
+		DefenseLayer layer = new DefenseLayer();
+		layer.addElement(getElementFactor());
+		layer.addStyle(getStyleFactor());
+		return layer;
+	}
 
 	public HashMap<String, Integer> getStyleFactor() {
-		return this.styleFactor;
-	}
-
-	public void setStyleFactor(HashMap<String, Integer> set) {this.styleFactor = set;}
-
-	public HashMap<String, Integer> getElementFactor() {return this.elementFactor;}
-
-	public void setElementFactor(HashMap<String, Integer> set) {this.elementFactor = set;}
-
-	public void set(DefenseData data) {
-		this.styleFactor = data.getStyleFactor();
-		this.elementFactor = data.getElementFactor();
-		this.enchantmentData = data.getEnchantmentData();
-	}
-
-	public void add(DefenseData data) {
-		DefenseDataHelper.sumMaps(this.styleFactor, data.getStyleFactor());
-		DefenseDataHelper.sumMaps(this.elementFactor, data.getElementFactor());
-	}
-
-	public void substract(DefenseData data) {
-		DefenseDataHelper.substractMaps(this.styleFactor, data.getStyleFactor());
-		DefenseDataHelper.substractMaps(this.elementFactor, data.getElementFactor());
-	}
-
-	public boolean isEmpty() {
-		return (this.styleFactor.isEmpty() && this.elementFactor.isEmpty());
-	}
-
-	public String toString() {
-		return "ElementFactor=" + this.elementFactor.toString() + "; " + "StyleFactor=" + this.styleFactor.toString();
-	}
-
-	public void applyEnchantmentChanges(Map<Enchantment, Integer> currentEnchantments) {
-		// change map
-		HashMap<String, Integer> newEnchantments = new HashMap<String, Integer>();		
-		currentEnchantments.forEach((ench, value) ->{
-			newEnchantments.put(ench.getName(), value);
+		HashMap<String, Integer> ret = new HashMap<String, Integer>();
+		defenseLayers.forEach((name, layer) -> {
+			ret.putAll(layer.getStyleFactor());
 		});
-
-		//compute difference
-		if(!newEnchantments.equals(this.enchantmentData) && !newEnchantments.isEmpty()) {
-			DefenseData diffData = DefenseDataHelper.getEnchantmentData(newEnchantments);
-			DefenseData oldData = DefenseDataHelper.getEnchantmentData(this.enchantmentData);
-			diffData.substract(oldData);
-			
-			//apply
-			this.add(diffData);
-			this.enchantmentData = newEnchantments;
-		}
-		this.areEnchantmentChangesApplied = true;
+		return ret;
 	}
 	
+	public HashMap<String, Integer> getElementFactor() {
+		HashMap<String, Integer> ret = new HashMap<String, Integer>();
+		defenseLayers.forEach((name, layer) -> {
+			ret.putAll(layer.getElementFactor());
+		});
+		return ret;
+	}
+	
+	public boolean isEmpty() {
+		return getStyleFactor().isEmpty() && getElementFactor().isEmpty();
+	}
+	
+	public String toString() {
+		return toLayer().toString();
+	}
+	
+
 	public void initialize(ItemStack stack) {
 		isInitialized = true;
-		this.set(BasePropertiesAPI.getDefenseData(stack));
+		putLayer(BasePropertiesAPI.getDefenseLayer(stack), new ResourceLocation(ElementalCombat.MOD_ID, "base"));
 	}
 	
 	public void initialize(LivingEntity entity) {
 		isInitialized = true;
-		this.set(BasePropertiesAPI.getDefenseData(entity));
-		if(BasePropertiesAPI.isBiomeDependent(entity)) {
-			BlockPos blockPos = new BlockPos(entity.getPositionVec());
-			this.add(BasePropertiesAPI.getDefenseData(entity.getEntityWorld().getBiome(blockPos)));					
-		}
+		putLayer(BasePropertiesAPI.getDefenseLayer(entity), new ResourceLocation(ElementalCombat.MOD_ID, "base"));
 	}
 	
 	public boolean isInitialized() {return isInitialized;}
+
+	public void clear() {
+		defenseLayers.clear();
+	}
 }

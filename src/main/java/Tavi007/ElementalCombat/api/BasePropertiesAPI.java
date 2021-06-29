@@ -3,6 +3,7 @@ package Tavi007.ElementalCombat.api;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.attack.AttackData;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
+import Tavi007.ElementalCombat.api.defense.DefenseLayer;
 import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.MobCombatProperties;
@@ -62,11 +63,9 @@ public class BasePropertiesAPI {
 		// for now do not use Namespace.
 		if(damageSource.isExplosion()) {
 			rlDamageSource = new ResourceLocation("minecraft", "damage_sources/explosion");
-		}
-		else if(damageSource.isMagicDamage()) {
+		} else if(damageSource.isMagicDamage()) {
 			rlDamageSource = new ResourceLocation("minecraft", "damage_sources/magic");
-		}
-		else {
+		} else {
 			rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + damageSource.getDamageType().toLowerCase());
 		}
 		AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource));
@@ -95,14 +94,14 @@ public class BasePropertiesAPI {
 	 * @param livingEntity The LivingEntity.
 	 * @return copy of DefenseData.
 	 */
-	public static DefenseData getDefenseData(LivingEntity livingEntity) {
+	public static DefenseLayer getDefenseLayer(LivingEntity livingEntity) {
 		ResourceLocation rlEntity = livingEntity.getType().getRegistryName();
 		if (rlEntity == null) {
-			return new DefenseData();
+			return new DefenseLayer();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "mobs/" + rlEntity.getPath());
 		MobCombatProperties property = new MobCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
-		return new DefenseData(property.getDefenseStyle(), property.getDefenseElement());
+		return new DefenseLayer(property.getDefenseStyle(), property.getDefenseElement());
 	}
 
 	/**
@@ -110,14 +109,14 @@ public class BasePropertiesAPI {
 	 * @param stack The ItemStack.
 	 * @return copy of DefenseData.
 	 */
-	public static DefenseData getDefenseData(ItemStack stack) {
+	public static DefenseLayer getDefenseLayer(ItemStack stack) {
 		ResourceLocation rlItem = stack.getItem().getRegistryName();
 		if (rlItem == null) {
-			return new DefenseData();
+			return new DefenseLayer();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlItem.getNamespace(), "items/" + rlItem.getPath());
 		ItemCombatProperties property = new ItemCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
-		return new DefenseData(property.getDefenseStyle(), property.getDefenseElement());
+		return new DefenseLayer(property.getDefenseStyle(), property.getDefenseElement());
 		
 	}
 
@@ -126,15 +125,15 @@ public class BasePropertiesAPI {
 	 * @param biome The Biome.
 	 * @return copy of DefenseData.
 	 */
-	public static DefenseData getDefenseData(Biome biome) {
-		DefenseData defData = new DefenseData();
+	public static DefenseLayer getDefenseLayer(Biome biome) {
+		DefenseLayer defData = new DefenseLayer();
 		ResourceLocation rlBiome = biome.getRegistryName();
 		if (rlBiome == null) {
 			return defData;
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlBiome.getNamespace(), "biomes/" + rlBiome.getPath()); ;
 		BiomeCombatProperties property = new BiomeCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties));
-		defData.setElementFactor(property.getDefenseElement());
+		defData.addElement(property.getDefenseElement());
 		return defData;
 	}
 	
