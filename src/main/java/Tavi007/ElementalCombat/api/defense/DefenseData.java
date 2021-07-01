@@ -5,6 +5,7 @@ import java.util.Map;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
+import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.EnchantmentList;
 import net.minecraft.enchantment.Enchantment;
@@ -141,7 +142,7 @@ public class DefenseData {
 	
 	public void initialize(LivingEntity entity) {
 		isInitialized = true;
-		putLayer(BasePropertiesAPI.getDefenseLayer(entity), new ResourceLocation(ElementalCombat.MOD_ID, "base"));
+		DefenseDataAPI.putLayer(entity, BasePropertiesAPI.getDefenseLayer(entity), new ResourceLocation(ElementalCombat.MOD_ID, "base"));
 	}
 	
 	public boolean isInitialized() {return isInitialized;}

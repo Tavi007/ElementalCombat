@@ -7,6 +7,7 @@ import Tavi007.ElementalCombat.api.defense.DefenseLayer;
 import Tavi007.ElementalCombat.network.EntityAttackDataMessage;
 import Tavi007.ElementalCombat.network.EntityDefenseLayerMessage;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.PacketDistributor;
 

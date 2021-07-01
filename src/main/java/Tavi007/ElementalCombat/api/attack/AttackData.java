@@ -2,6 +2,7 @@ package Tavi007.ElementalCombat.api.attack;
 
 import java.util.Map;
 
+import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.EnchantmentList;
@@ -119,7 +120,7 @@ public class AttackData {
 	
 	public void initialize(LivingEntity entity) {
 		isInitialized = true;
-		this.set(BasePropertiesAPI.getAttackData(entity));
+		AttackDataAPI.set(entity, BasePropertiesAPI.getAttackData(entity));
 	}
 	
 	public void initialize(ProjectileEntity entity) {
