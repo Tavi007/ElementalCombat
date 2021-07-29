@@ -142,7 +142,7 @@ public class DefenseData {
 	
 	public void initialize(LivingEntity entity) {
 		isInitialized = true;
-		DefenseDataAPI.putLayer(entity, BasePropertiesAPI.getDefenseLayer(entity), new ResourceLocation(ElementalCombat.MOD_ID, "base"));
+		putLayer(BasePropertiesAPI.getDefenseLayer(entity), new ResourceLocation(ElementalCombat.MOD_ID, "base"));
 	}
 	
 	public boolean isInitialized() {return isInitialized;}
