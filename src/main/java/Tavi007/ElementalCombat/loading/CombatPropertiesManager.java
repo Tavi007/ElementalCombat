@@ -14,17 +14,20 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.network.BasePropertiesMessage;
 import net.minecraft.client.resources.JsonReloadListener;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CombatPropertiesManager extends JsonReloadListener 
 {
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
 	
-	private Map<ResourceLocation, MobCombatProperties> registeredEntityData = ImmutableMap.of();
+	private Map<ResourceLocation, MobCombatProperties> registeredMobData = ImmutableMap.of();
 	private Map<ResourceLocation, ItemCombatProperties> registeredItemData = ImmutableMap.of();
 	private Map<ResourceLocation, BiomeCombatProperties> registeredBiomeData = ImmutableMap.of();
 	private Map<ResourceLocation, AttackOnlyCombatProperties> registeredDamageSourceData = ImmutableMap.of();
@@ -34,6 +37,34 @@ public class CombatPropertiesManager extends JsonReloadListener
 
 	public CombatPropertiesManager() {
 		super(GSON, "combat_properties");
+	}
+	
+	public void set(BasePropertiesMessage message) {
+		this.registeredMobData = message.getMobData();
+		this.registeredItemData = message.getItemData();
+		this.registeredBiomeData = message.getBiomeData();
+		this.registeredProjectileData = message.getProjectileData();
+		this.registeredDamageSourceData = message.getDamageSourceData();
+	}
+	
+	public Map<ResourceLocation, MobCombatProperties> getMobData() {
+		return this.registeredMobData;
+	}
+	
+	public Map<ResourceLocation, ItemCombatProperties> getItemData() {
+		return this.registeredItemData;
+	}
+	
+	public Map<ResourceLocation, BiomeCombatProperties> getBiomeData() {
+		return this.registeredBiomeData;
+	}
+	
+	public Map<ResourceLocation, AttackOnlyCombatProperties> getProjectileData() {
+		return this.registeredProjectileData;
+	}
+	
+	public Map<ResourceLocation, AttackOnlyCombatProperties> getDamageSourceData() {
+		return this.registeredDamageSourceData;
 	}
 
 	protected void apply(Map<ResourceLocation, JsonElement> objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn) {
@@ -83,7 +114,7 @@ public class CombatPropertiesManager extends JsonReloadListener
 
 		//not sure if empty resourceLocation is necessary...
 		builderMob.put(EMPTY_RESOURCELOCATION, new MobCombatProperties());
-		this.registeredEntityData = builderMob.build();
+		this.registeredMobData = builderMob.build();
 
 		builderItem.put(EMPTY_RESOURCELOCATION, new ItemCombatProperties());
 		this.registeredItemData = builderItem.build();
@@ -120,8 +151,8 @@ public class CombatPropertiesManager extends JsonReloadListener
 		return ret;
 	}
 
-	public MobCombatProperties getEntityDataFromLocation(ResourceLocation rl){
-		return new MobCombatProperties(this.registeredEntityData.getOrDefault(rl, new MobCombatProperties()));
+	public MobCombatProperties getMobDataFromLocation(ResourceLocation rl){
+		return new MobCombatProperties(this.registeredMobData.getOrDefault(rl, new MobCombatProperties()));
 	}
 
 	public ItemCombatProperties getItemDataFromLocation(ResourceLocation rl){

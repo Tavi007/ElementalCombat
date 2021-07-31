@@ -2,6 +2,7 @@ package Tavi007.ElementalCombat.events;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
+import Tavi007.ElementalCombat.api.NetworkAPI;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.api.defense.DefenseLayer;
 import Tavi007.ElementalCombat.config.ClientConfig;
@@ -12,6 +13,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -45,6 +47,10 @@ public class PlayerEvents
 			DefenseData defCapEntity = DefenseDataAPI.get(entity);
 			defCapEntity.clear();
 		}
+	}
+	@SubscribeEvent
+	public static void playerLoggedIn(PlayerLoggedInEvent event) {
+		NetworkAPI.syncJsonMessageForClients(event.getPlayer());
 	}
 	
 	@SubscribeEvent

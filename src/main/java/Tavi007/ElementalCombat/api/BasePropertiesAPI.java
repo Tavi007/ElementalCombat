@@ -32,7 +32,7 @@ public class BasePropertiesAPI {
 			return new AttackData();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "mobs/" + rlEntity.getPath());
-		MobCombatProperties property = new MobCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
+		MobCombatProperties property = new MobCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getMobDataFromLocation(rlProperties));
 		return new AttackData(property.getAttackStyle(), property.getAttackElement());
 	}
 
@@ -100,7 +100,7 @@ public class BasePropertiesAPI {
 			return new DefenseLayer();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "mobs/" + rlEntity.getPath());
-		MobCombatProperties property = new MobCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties));
+		MobCombatProperties property = new MobCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getMobDataFromLocation(rlProperties));
 		return new DefenseLayer(property.getDefenseStyle(), property.getDefenseElement());
 	}
 
@@ -152,6 +152,6 @@ public class BasePropertiesAPI {
 			return false;
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "mobs/" + rlEntity.getPath());
-		return ElementalCombat.COMBAT_PROPERTIES_MANGER.getEntityDataFromLocation(rlProperties).getBiomeDependency();
+		return ElementalCombat.COMBAT_PROPERTIES_MANGER.getMobDataFromLocation(rlProperties).getBiomeDependency();
 	}
 }

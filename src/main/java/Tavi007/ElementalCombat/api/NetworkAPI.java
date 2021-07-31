@@ -4,10 +4,12 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.attack.AttackData;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.api.defense.DefenseLayer;
+import Tavi007.ElementalCombat.network.BasePropertiesMessage;
 import Tavi007.ElementalCombat.network.EntityAttackDataMessage;
 import Tavi007.ElementalCombat.network.EntityDefenseLayerMessage;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.PacketDistributor;
 
@@ -50,6 +52,14 @@ public class NetworkAPI {
 			AttackDataAPI.get(livingEntity).set(AttackDataToSend);;
 			EntityAttackDataMessage attackMessageToClient = new EntityAttackDataMessage(AttackDataToSend, livingEntity.getEntityId());
 			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), attackMessageToClient);
+		}
+	}
+	
+	public static void syncJsonMessageForClients(PlayerEntity player) {
+		if(player.isServerWorld() && player instanceof ServerPlayerEntity) {
+			ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+			BasePropertiesMessage messageToClient = new BasePropertiesMessage(ElementalCombat.COMBAT_PROPERTIES_MANGER);
+			ElementalCombat.simpleChannel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), messageToClient);
 		}
 	}
 }

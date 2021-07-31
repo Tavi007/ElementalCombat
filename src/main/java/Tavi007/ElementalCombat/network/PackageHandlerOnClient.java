@@ -55,6 +55,9 @@ public class PackageHandlerOnClient {
 		else if(message instanceof EntityDefenseLayerMessage) {
 			ctx.enqueueWork(() -> processMessage(clientWorld.get(), (EntityDefenseLayerMessage) message));
 		}
+		else if(message instanceof BasePropertiesMessage) {
+			ctx.enqueueWork(() -> ElementalCombat.COMBAT_PROPERTIES_MANGER.set((BasePropertiesMessage) message));
+		}
 	}
 
 	private static void processMessage(ClientWorld clientWorld, EntityAttackDataMessage message) {
@@ -106,7 +109,6 @@ public class PackageHandlerOnClient {
 			break;
 		}
 	}
-
 	public static boolean isThisProtocolAcceptedByClient(String protocolVersion) {
 		return StartupCommon.MESSAGE_PROTOCOL_VERSION.equals(protocolVersion);
 	}

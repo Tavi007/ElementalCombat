@@ -1,10 +1,11 @@
 package Tavi007.ElementalCombat.loading;
 
 import Tavi007.ElementalCombat.config.ServerConfig;
+import net.minecraft.network.PacketBuffer;
 
 public class AttackOnlyCombatProperties {
-	private final String attack_style;
-	private final String attack_element;
+	private String attack_style;
+	private String attack_element;
 	
 	public AttackOnlyCombatProperties() {
 		this.attack_style = ServerConfig.getDefaultStyle();
@@ -36,5 +37,15 @@ public class AttackOnlyCombatProperties {
 	
 	public boolean isEmpty() {
 		return attack_style.equals(ServerConfig.getDefaultStyle()) && attack_element.equals(ServerConfig.getDefaultElement());
+	}
+	
+	public void writeToBuffer(PacketBuffer buf) {
+		buf.writeString(attack_style);
+		buf.writeString(attack_element);
+	}
+	
+	public void readFromBuffer(PacketBuffer buf) {
+		attack_style = buf.readString();
+		attack_element = buf.readString();
 	}
 }

@@ -1,9 +1,8 @@
 package Tavi007.ElementalCombat.network;
 
-import java.util.HashMap;
-
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.defense.DefenseLayer;
+import Tavi007.ElementalCombat.util.PacketBufferHelper;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 
@@ -46,8 +45,8 @@ public class EntityDefenseLayerMessage extends MessageToClient {
 		try {
 			retval.id =  buf.readInt();
 			retval.location = buf.readString();
-			retval.defenseLayerToSend.addElement(readMap(buf));
-			retval.defenseLayerToSend.addStyle(readMap(buf));
+			retval.defenseLayerToSend.addElement(PacketBufferHelper.readStringToInt(buf));
+			retval.defenseLayerToSend.addStyle(PacketBufferHelper.readStringToInt(buf));
 			
 		} catch (IllegalArgumentException | IndexOutOfBoundsException e) {
 			ElementalCombat.LOGGER.warn("Exception while reading EntityMessage: " + e);
@@ -62,27 +61,7 @@ public class EntityDefenseLayerMessage extends MessageToClient {
 		if (!isMessageValid()) return;
 		buf.writeInt(id);
 		buf.writeString(location);
-		writeMap(buf, defenseLayerToSend.getElementFactor());
-		writeMap(buf, defenseLayerToSend.getStyleFactor());
-	}
-
-	private void writeMap(PacketBuffer buf, HashMap<String,Integer> map) {
-		buf.writeInt(map.size());
-		map.forEach((key, value) -> {
-			buf.writeInt(value);
-			buf.writeString(key);
-		});
-	
-	}
-	
-	private static HashMap<String, Integer> readMap(PacketBuffer buf) {
-		HashMap<String, Integer> map = new HashMap<String, Integer>();
-		int size = buf.readInt();
-		for (int i=0; i<size; i++) {
-			int value = buf.readInt();
-			String key = buf.readString();
-			map.put(key, value);
-		}
-		return map;
+		PacketBufferHelper.writeStringToInt(buf, defenseLayerToSend.getElementFactor());
+		PacketBufferHelper.writeStringToInt(buf, defenseLayerToSend.getStyleFactor());
 	}
 }
