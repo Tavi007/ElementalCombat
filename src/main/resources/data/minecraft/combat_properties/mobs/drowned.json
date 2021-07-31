@@ -6,7 +6,8 @@
 	},
 	
 	"defense_element":{
-		"water":12
+		"water":12,
+		"thunder":-6
 	},
 	
 	"biome_dependency":true
