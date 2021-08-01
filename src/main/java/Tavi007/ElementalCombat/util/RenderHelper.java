@@ -18,6 +18,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
@@ -42,6 +43,24 @@ public class RenderHelper {
 		if(iteratorCounter == Integer.MAX_VALUE) {
 			iteratorCounter = 0;
 		}
+	}
+	
+	public static int getTooltipIndexAttack(List<? extends ITextProperties> list) {
+		for(int i=0; i<list.size(); i++) {
+			if(list.get(i).getString().contains(textAttack)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public static int getTooltipIndexDefense(List<? extends ITextProperties> list) {
+		for(int i=0; i<list.size(); i++) {
+			if(list.get(i).getString().contains(textDefense)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	private static String getCurrentDefenseName(DefenseData data) {

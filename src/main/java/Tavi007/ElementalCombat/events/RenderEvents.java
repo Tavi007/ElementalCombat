@@ -107,20 +107,16 @@ public class RenderEvents {
 	
 	// fires before RenderTooltipEvent.PostText
 	// add all the text to tooltip
-	static int tooltipIndexAttack;
-	static int tooltipIndexDefense;
 	@SubscribeEvent
 	public static void ontTooltip(ItemTooltipEvent event) {
 		List<ITextComponent> tooltip = event.getToolTip();
 		ItemStack stack = event.getItemStack();
 		AttackData attackData = AttackDataAPI.get(stack);
 		if(!attackData.isEmpty()) {
-			tooltipIndexAttack = tooltip.size();
 			RenderHelper.addTooltip(tooltip, false, attackData, null);
 		}
 		DefenseData defenseData = DefenseDataAPI.get(stack);
 		if(!defenseData.isEmpty()) {
-			tooltipIndexDefense = tooltip.size();
 			RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseTooltip(), null, defenseData);
 		}
 	}
@@ -133,11 +129,12 @@ public class RenderEvents {
 		ItemStack stack = event.getStack();
 		AttackData attackData = AttackDataAPI.get(stack);
 		DefenseData defenseData = DefenseDataAPI.get(stack);
-		
 		if(!attackData.isEmpty()) {
+			int tooltipIndexAttack = RenderHelper.getTooltipIndexAttack(event.getLines());
 			RenderHelper.renderAttackIcons(attackData, matrixStack, event.getX(), event.getY() + 2 + tooltipIndexAttack*RenderHelper.maxLineHeight);
 		}
 		if(!defenseData.isEmpty()) {
+			int tooltipIndexDefense = RenderHelper.getTooltipIndexDefense(event.getLines());
 			RenderHelper.renderDefenseIcons(defenseData, ClientConfig.isDoubleRowDefenseTooltip(), matrixStack, event.getX(), event.getY() + 2 + tooltipIndexDefense*RenderHelper.maxLineHeight);
 		}
 	}
