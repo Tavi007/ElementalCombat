@@ -26,19 +26,19 @@ public class CombatPropertiesManager extends JsonReloadListener
 {
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
-	
+
 	private Map<ResourceLocation, MobCombatProperties> registeredMobData = ImmutableMap.of();
 	private Map<ResourceLocation, ItemCombatProperties> registeredItemData = ImmutableMap.of();
 	private Map<ResourceLocation, BiomeCombatProperties> registeredBiomeData = ImmutableMap.of();
 	private Map<ResourceLocation, AttackOnlyCombatProperties> registeredDamageSourceData = ImmutableMap.of();
 	private Map<ResourceLocation, AttackOnlyCombatProperties> registeredProjectileData = ImmutableMap.of();
-	
+
 	private static ThreadLocal<Deque<CombatPropertiesContext>> dataContext = new ThreadLocal<Deque<CombatPropertiesContext>>();
 
 	public CombatPropertiesManager() {
 		super(GSON, "combat_properties");
 	}
-	
+
 	public void set(BasePropertiesMessage message) {
 		this.registeredMobData = message.getMobData();
 		this.registeredItemData = message.getItemData();
@@ -46,23 +46,23 @@ public class CombatPropertiesManager extends JsonReloadListener
 		this.registeredProjectileData = message.getProjectileData();
 		this.registeredDamageSourceData = message.getDamageSourceData();
 	}
-	
+
 	public Map<ResourceLocation, MobCombatProperties> getMobData() {
 		return this.registeredMobData;
 	}
-	
+
 	public Map<ResourceLocation, ItemCombatProperties> getItemData() {
 		return this.registeredItemData;
 	}
-	
+
 	public Map<ResourceLocation, BiomeCombatProperties> getBiomeData() {
 		return this.registeredBiomeData;
 	}
-	
+
 	public Map<ResourceLocation, AttackOnlyCombatProperties> getProjectileData() {
 		return this.registeredProjectileData;
 	}
-	
+
 	public Map<ResourceLocation, AttackOnlyCombatProperties> getDamageSourceData() {
 		return this.registeredDamageSourceData;
 	}
@@ -104,7 +104,6 @@ public class CombatPropertiesManager extends JsonReloadListener
 					AttackOnlyCombatProperties combatProperties = loadData(GSON, rl, json, res == null || !res.getPackName().equals("main"), AttackOnlyCombatProperties.class);
 					builderProjectile.put(rl, combatProperties);
 				}
-				ElementalCombat.LOGGER.info(rl.toString() + " succesfully loaded.");
 			}
 			catch (Exception exception)
 			{

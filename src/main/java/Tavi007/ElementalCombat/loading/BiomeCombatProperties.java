@@ -29,4 +29,10 @@ public class BiomeCombatProperties {
 	public void readFromBuffer(PacketBuffer buf) {
 		defense_element = PacketBufferHelper.readStringToInt(buf);
 	}
+	
+	@Override
+	public String toString() {
+		return "\nDefElement=" + defense_element.toString();
+	}
+
 }

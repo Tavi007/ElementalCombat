@@ -48,4 +48,11 @@ public class AttackOnlyCombatProperties {
 		attack_style = buf.readString();
 		attack_element = buf.readString();
 	}
+	
+	@Override
+	public String toString() {
+		return "\nAtckStyle=" + attack_style.toString()
+		+ "\nAtckElement=" + attack_element.toString();
+	}
+
 }

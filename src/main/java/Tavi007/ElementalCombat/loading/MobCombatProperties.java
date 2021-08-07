@@ -47,5 +47,14 @@ public class MobCombatProperties extends ItemCombatProperties  {
 		attack_element = buf.readString();
 		biome_dependency = buf.readBoolean();
 	}
+	
+	@Override
+	public String toString() {
+		return "\nDefStyle=" + defense_style.toString()
+		+ "\nDefElement=" + defense_element.toString()
+		+ "\nAtckStyle=" + attack_style.toString()
+		+ "\nAtckElement=" + attack_element.toString()
+		+ "\nBiomeDepend=" + biome_dependency;
+	}
 
 }

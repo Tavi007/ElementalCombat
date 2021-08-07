@@ -81,4 +81,13 @@ public class ItemCombatProperties
 		attack_style = buf.readString();
 		attack_element = buf.readString();
 	}
+	
+	@Override
+	public String toString() {
+		return "\nDefStyle=" + defense_style.toString()
+		+ "\nDefElement=" + defense_element.toString()
+		+ "\nAtckStyle=" + attack_style.toString()
+		+ "\nAtckElement=" + attack_element.toString();
+	}
+
 }
