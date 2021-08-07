@@ -47,11 +47,11 @@ public class CombatPropertiesManager extends JsonReloadListener
 		this.registeredProjectileData = message.getProjectileData();
 		this.registeredDamageSourceData = message.getDamageSourceData();
 		
-		logLoading("client", registeredMobData.size(), "mobs");
-		logLoading("client", registeredItemData.size(), "items");
-		logLoading("client", registeredBiomeData.size(), "biomes");
-		logLoading("client", registeredProjectileData.size(), "projectiles");
-		logLoading("client", registeredDamageSourceData.size(), "damage sources");
+		logLoading("client", registeredMobData.size()-1, "mobs");
+		logLoading("client", registeredItemData.size()-1, "items");
+		logLoading("client", registeredBiomeData.size()-1, "biomes");
+		logLoading("client", registeredProjectileData.size()-1, "projectiles");
+		logLoading("client", registeredDamageSourceData.size()-1, "damage sources");
 	}
 	
 	private void logLoading(String side, int size, String type) {
@@ -111,12 +111,12 @@ public class CombatPropertiesManager extends JsonReloadListener
 				Map<String, Integer> propertyCounter = counter.get(modid);
 				if(propertyCounter == null) {
 					propertyCounter = new HashMap<String, Integer>();
-					propertyCounter.put(type, 1);
+					propertyCounter.put(type, 0);
 					counter.put(modid, propertyCounter);
 				} else {
 					Integer count = propertyCounter.get(type);
 					if(count == null) {
-						propertyCounter.put(type, 1);
+						propertyCounter.put(type, 0);
 					} else {
 						propertyCounter.put(type, propertyCounter.get(type) + 1);
 					}
