@@ -114,7 +114,12 @@ public class CombatPropertiesManager extends JsonReloadListener
 					propertyCounter.put(type, 1);
 					counter.put(modid, propertyCounter);
 				} else {
-					propertyCounter.put(type, propertyCounter.get(type) + 1);
+					Integer count = propertyCounter.get(type);
+					if(count == null) {
+						propertyCounter.put(type, 1);
+					} else {
+						propertyCounter.put(type, propertyCounter.get(type) + 1);
+					}
 				}
 			}
 			catch (Exception exception)
