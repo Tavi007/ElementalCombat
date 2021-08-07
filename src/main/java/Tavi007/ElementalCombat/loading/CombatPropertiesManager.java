@@ -47,24 +47,8 @@ public class CombatPropertiesManager extends JsonReloadListener
 		this.registeredDamageSourceData = message.getDamageSourceData();
 	}
 
-	public Map<ResourceLocation, MobCombatProperties> getMobData() {
-		return this.registeredMobData;
-	}
-
-	public Map<ResourceLocation, ItemCombatProperties> getItemData() {
-		return this.registeredItemData;
-	}
-
-	public Map<ResourceLocation, BiomeCombatProperties> getBiomeData() {
-		return this.registeredBiomeData;
-	}
-
-	public Map<ResourceLocation, AttackOnlyCombatProperties> getProjectileData() {
-		return this.registeredProjectileData;
-	}
-
-	public Map<ResourceLocation, AttackOnlyCombatProperties> getDamageSourceData() {
-		return this.registeredDamageSourceData;
+	public BasePropertiesMessage createSyncMessage() {
+		return new BasePropertiesMessage(registeredMobData, registeredItemData, registeredBiomeData, registeredProjectileData, registeredDamageSourceData);
 	}
 
 	protected void apply(Map<ResourceLocation, JsonElement> objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn) {

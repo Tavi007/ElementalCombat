@@ -58,7 +58,7 @@ public class NetworkAPI {
 	public static void syncJsonMessageForClients(PlayerEntity player) {
 		if(player.isServerWorld() && player instanceof ServerPlayerEntity) {
 			ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
-			BasePropertiesMessage messageToClient = new BasePropertiesMessage(ElementalCombat.COMBAT_PROPERTIES_MANGER);
+			BasePropertiesMessage messageToClient = ElementalCombat.COMBAT_PROPERTIES_MANGER.createSyncMessage();
 			ElementalCombat.simpleChannel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), messageToClient);
 		}
 	}
