@@ -8,11 +8,15 @@ import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.MobCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 public class BasePropertiesAPI {
@@ -121,14 +125,19 @@ public class BasePropertiesAPI {
 	}
 
 	/**
-	 * Returns a copy of the default {@link DefenseData} of any {@link Biome}.
-	 * @param biome The Biome.
+	 * Returns a copy of the default {@link DefenseData} of a Biome at position {@link BlockPos}.
+	 * @param world A World.
+	 * @param position The BlockPos
 	 * @return copy of DefenseData.
 	 */
-	public static DefenseLayer getDefenseLayer(Biome biome) {
+	public static DefenseLayer getDefenseLayer(World world, BlockPos position) {
 		DefenseLayer defData = new DefenseLayer();
+		Biome biome = world.getBiome(position);
 		ResourceLocation rlBiome = biome.getRegistryName();
 		if (rlBiome == null) {
+			rlBiome = world.func_241828_r().getRegistry(Registry.BIOME_KEY).getKey(biome);
+		}
+		if(rlBiome == null) { 
 			return defData;
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlBiome.getNamespace(), "biomes/" + rlBiome.getPath()); ;
