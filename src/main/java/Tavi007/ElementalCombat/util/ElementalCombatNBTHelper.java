@@ -19,8 +19,10 @@ public class ElementalCombatNBTHelper {
 	 * @param data The AttackData.
 	 */
 	public static void writeAttackDataToNBT(CompoundNBT nbt, AttackData data) {
-		nbt.put("attack_element", StringNBT.valueOf(data.getElement()));
-		nbt.put("attack_style", StringNBT.valueOf(data.getStyle()));
+		CompoundNBT nbtInner = new CompoundNBT();
+		nbtInner.put("attack_element", StringNBT.valueOf(data.getElement()));
+		nbtInner.put("attack_style", StringNBT.valueOf(data.getStyle()));
+		nbt.put("elementalcombat_attack", nbtInner);
 	}
 	
 	/**
@@ -31,10 +33,9 @@ public class ElementalCombatNBTHelper {
 	 */
 	public static AttackData readAttackDataFromNBT(CompoundNBT nbt) {
 		AttackData data = new AttackData();
-		StringNBT styleNBT = (StringNBT) ((CompoundNBT) nbt).get("attack_style");
-		StringNBT elementNBT = (StringNBT) ((CompoundNBT) nbt).get("attack_element");
-		data.setStyle(styleNBT.getString());
-		data.setElement(elementNBT.getString());
+		CompoundNBT nbtInner = nbt.getCompound("elementalcombat_attack");
+		data.setElement(nbtInner.getString("attack_element"));
+		data.setStyle(nbtInner.getString("attack_style"));
 		return data;
 	}
 
@@ -44,7 +45,7 @@ public class ElementalCombatNBTHelper {
 	 * @param data The DefenseData.
 	 */
 	public static void writeDefenseDataToNBT(CompoundNBT nbt, DefenseData data) {
-		nbt.put("defense_layer", fromLayersToNBT(data.getLayers()));
+		nbt.put("elementalcombat_defense", fromLayersToNBT(data.getLayers()));
 	}
 
 	
@@ -56,7 +57,7 @@ public class ElementalCombatNBTHelper {
 	 */
 	public static DefenseData readDefenseDataFromNBT(CompoundNBT nbt) {
 		DefenseData data = new DefenseData();
-		fromNBTToLayers(nbt.getCompound("defense_layer")).forEach((rl, layer) -> {
+		fromNBTToLayers(nbt.getCompound("elementalcombat_defense")).forEach((rl, layer) -> {
 			data.putLayer(layer, rl);
 		});
 		return data;
