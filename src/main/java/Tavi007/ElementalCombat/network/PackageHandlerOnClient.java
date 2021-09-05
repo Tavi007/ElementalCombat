@@ -17,6 +17,8 @@ import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -42,7 +44,7 @@ public class PackageHandlerOnClient {
 			ElementalCombat.LOGGER.warn(message.getClass().getName() + " context could not provide a ClientWorld.");
 			return;
 		}
-		
+
 		if(message instanceof CreateEmitterMessage) {
 			ctx.enqueueWork(() -> processMessage(clientWorld.get(), (CreateEmitterMessage) message));
 		}
@@ -77,7 +79,7 @@ public class PackageHandlerOnClient {
 			DefenseDataAPI.get(livingEntity).putLayer(defLayer, message.getLocation());;
 		}
 	}
-	
+
 	private static void processMessage(ClientWorld clientWorld, DisableDamageRenderMessage message) {
 		Entity entity = clientWorld.getEntityByID((message.getId()));
 		if(entity instanceof LivingEntity) {
@@ -90,23 +92,36 @@ public class PackageHandlerOnClient {
 	@SuppressWarnings("resource")
 	private static void processMessage(ClientWorld clientWorld, CreateEmitterMessage message) {
 		ParticleManager particles = Minecraft.getInstance().particles;
+
+
 		Entity entity = clientWorld.getEntityByID(message.getEntityId());
+		IParticleData particle = ParticleTypes.CRIT;
 		switch (message.getParticleName()) {
 		case "critical_element":
-			particles.addParticleEmitter(entity, ParticleList.CRIT_ELEMENT.get());
+			particle = ParticleList.CRIT_ELEMENT.get();
 			break;
 		case "resistent_element":
-			particles.addParticleEmitter(entity, ParticleList.RESIST_ELEMENT.get());
+			particle = ParticleList.RESIST_ELEMENT.get();
 			break;
 		case "absorb":
-			particles.addParticleEmitter(entity, ParticleList.ABSORB.get());
+			particle = ParticleList.ABSORB.get();
 			break;
 		case "critical_style":
-			particles.addParticleEmitter(entity, ParticleList.CRIT_STYLE.get());
+			particle = ParticleList.CRIT_STYLE.get();
 			break;
 		case "resistent_style":
-			particles.addParticleEmitter(entity, ParticleList.RESIST_STYLE.get());
-			break;
+			particle = ParticleList.RESIST_STYLE.get();
+			break; 
+		}
+		for (int i = 0; i<message.getAmount(); i++) {
+			double vy = Math.random()*0.7 - 0.2;
+			double vx = Math.random()-0.5;
+			double vz = Math.random()-0.5;
+			
+			double scale = Math.sqrt(vx*vx + vy*vy + vz*vz) * 0.2;
+			particles.addParticle(particle,
+					entity.getPosX(), entity.getPosY() + entity.getEyeHeight(), entity.getPosZ(),
+					vx*scale, vz*scale, vz*scale);
 		}
 	}
 	public static boolean isThisProtocolAcceptedByClient(String protocolVersion) {

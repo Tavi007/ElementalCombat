@@ -90,13 +90,19 @@ public class ServerEvents {
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
 
 		// display particles
-		if(defenseStyleScaling < 1) {sendParticleMessage(target, "resistent_style");}
-		else if (defenseStyleScaling > 1) {sendParticleMessage(target, "critical_style");}
+		if(defenseStyleScaling < 1) {
+			sendParticleMessage(target, "resistent_style", Math.max(10, 1+Math.round((1-defenseStyleScaling)*10)));
+		} else if (defenseStyleScaling > 1) {
+			sendParticleMessage(target, "critical_style", Math.max(10, 1+Math.round((defenseStyleScaling-1)*10)));
+		}
 
-		if(defenseElementScaling < 0) {sendParticleMessage(target, "absorb");}
-		else if (defenseElementScaling >= 0 && 
-				defenseElementScaling < 1) {sendParticleMessage(target, "resistent_element");}
-		else if (defenseElementScaling > 1) {sendParticleMessage(target, "critical_element");}
+		if(defenseElementScaling < 0) {
+			sendParticleMessage(target, "absorb", Math.max(10, 1+Math.round(-defenseElementScaling*10)));
+		} else if (defenseElementScaling >= 0 && defenseElementScaling < 1) {
+			sendParticleMessage(target, "resistent_element", Math.max(10, 1+Math.round((1-defenseElementScaling)*10)));
+		} else if (defenseElementScaling > 1) {
+			sendParticleMessage(target, "critical_element", Math.max(10, 1+Math.round((defenseElementScaling-1)*10)));
+		}
 
 		// heal the target, if damage is lower than 0
 		if(damageAmount <= 0) {
@@ -116,10 +122,10 @@ public class ServerEvents {
 		event.setAmount(damageAmount);
 	}
 
-	private static void sendParticleMessage(LivingEntity entity, String name) {
+	private static void sendParticleMessage(LivingEntity entity, String name, int amount) {
 		//define message
-		CreateEmitterMessage messageToClient = new CreateEmitterMessage(entity.getEntityId(), name);
-		
+		CreateEmitterMessage messageToClient = new CreateEmitterMessage(entity.getEntityId(), name, amount);
+
 		//send message to nearby players
 		ServerWorld world = (ServerWorld) entity.world;
 		for(int j = 0; j < world.getPlayers().size(); ++j) {
