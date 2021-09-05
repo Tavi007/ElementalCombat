@@ -114,14 +114,13 @@ public class PackageHandlerOnClient {
 			break; 
 		}
 		for (int i = 0; i<message.getAmount(); i++) {
-			double vy = Math.random()*0.7 - 0.2;
-			double vx = Math.random()-0.5;
-			double vz = Math.random()-0.5;
+			double vy = Math.random() - 0.2;
+			double vx = Math.sin(Math.random()*2*Math.PI)*0.5;
+			double vz = Math.cos(Math.random()*2*Math.PI)*0.5;
 			
-			double scale = Math.sqrt(vx*vx + vy*vy + vz*vz) * 0.2;
 			particles.addParticle(particle,
 					entity.getPosX(), entity.getPosY() + entity.getEyeHeight(), entity.getPosZ(),
-					vx*scale, vz*scale, vz*scale);
+					vx, vy, vz);
 		}
 	}
 	public static boolean isThisProtocolAcceptedByClient(String protocolVersion) {
