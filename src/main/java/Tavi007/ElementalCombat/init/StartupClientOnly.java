@@ -3,8 +3,8 @@ package Tavi007.ElementalCombat.init;
 import org.lwjgl.glfw.GLFW;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.client.CombatParticle;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.CritParticle;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
@@ -29,11 +29,11 @@ public class StartupClientOnly {
 	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onParticleFactoryRegistration(ParticleFactoryRegisterEvent event) {		
-		Minecraft.getInstance().particles.registerFactory(ParticleList.CRIT_ELEMENT.get(), CritParticle.DamageIndicatorFactory::new);
-		Minecraft.getInstance().particles.registerFactory(ParticleList.CRIT_STYLE.get(), CritParticle.DamageIndicatorFactory::new);
-		Minecraft.getInstance().particles.registerFactory(ParticleList.RESIST_ELEMENT.get(), CritParticle.DamageIndicatorFactory::new);
-		Minecraft.getInstance().particles.registerFactory(ParticleList.RESIST_STYLE.get(), CritParticle.DamageIndicatorFactory::new);
-		Minecraft.getInstance().particles.registerFactory(ParticleList.ABSORB.get(), CritParticle.DamageIndicatorFactory::new);
+		Minecraft.getInstance().particles.registerFactory(ParticleList.CRIT_ELEMENT.get(), CombatParticle.Factory::new);
+		Minecraft.getInstance().particles.registerFactory(ParticleList.CRIT_STYLE.get(), CombatParticle.Factory::new);
+		Minecraft.getInstance().particles.registerFactory(ParticleList.RESIST_ELEMENT.get(), CombatParticle.Factory::new);
+		Minecraft.getInstance().particles.registerFactory(ParticleList.RESIST_STYLE.get(), CombatParticle.Factory::new);
+		Minecraft.getInstance().particles.registerFactory(ParticleList.ABSORB.get(), CombatParticle.Factory::new);
 
 		ElementalCombat.LOGGER.info("ElementalCombat particles factory registered.");
 	}

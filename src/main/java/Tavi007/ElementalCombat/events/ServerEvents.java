@@ -90,19 +90,20 @@ public class ServerEvents {
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
 
 		// display particles
-		int maxParticle = 10;
+		int maxParticle = 12;
+		int amountScale = 16;
 		if(defenseStyleScaling < 1) {
-			sendParticleMessage(target, "resistent_style", Math.max(maxParticle, 1+Math.round((1-defenseStyleScaling)*maxParticle)));
+			sendParticleMessage(target, "resistent_style", Math.min(maxParticle, 1+Math.round((1-defenseStyleScaling)*amountScale)));
 		} else if (defenseStyleScaling > 1) {
-			sendParticleMessage(target, "critical_style", Math.max(maxParticle, 1+Math.round((defenseStyleScaling-1)*maxParticle)));
+			sendParticleMessage(target, "critical_style", Math.min(maxParticle, 1+Math.round((defenseStyleScaling-1)*amountScale)));
 		}
 
 		if(defenseElementScaling < 0) {
-			sendParticleMessage(target, "absorb", Math.max(maxParticle, 1+Math.round(-defenseElementScaling*maxParticle)));
+			sendParticleMessage(target, "absorb", Math.min(maxParticle, 1+Math.round(-defenseElementScaling*amountScale)));
 		} else if (defenseElementScaling >= 0 && defenseElementScaling < 1) {
-			sendParticleMessage(target, "resistent_element", Math.max(maxParticle, 1+Math.round((1-defenseElementScaling)*maxParticle)));
+			sendParticleMessage(target, "resistent_element", Math.min(maxParticle, 1+Math.round((1-defenseElementScaling)*amountScale)));
 		} else if (defenseElementScaling > 1) {
-			sendParticleMessage(target, "critical_element", Math.max(maxParticle, 1+Math.round((defenseElementScaling-1)*maxParticle)));
+			sendParticleMessage(target, "critical_element", Math.min(maxParticle, 1+Math.round((defenseElementScaling-1)*amountScale)));
 		}
 
 		// heal the target, if damage is lower than 0
