@@ -108,7 +108,7 @@ public class RenderEvents {
 	// fires before RenderTooltipEvent.PostText
 	// add all the text to tooltip
 	@SubscribeEvent
-	public static void ontTooltip(ItemTooltipEvent event) {
+	public static void onTooltip(ItemTooltipEvent event) {
 		List<ITextComponent> tooltip = event.getToolTip();
 		ItemStack stack = event.getItemStack();
 		AttackData attackData = AttackDataAPI.get(stack);
@@ -141,7 +141,7 @@ public class RenderEvents {
 
 	static int ticks = 0;
 	@SubscribeEvent
-	public static void displayData(RenderGameOverlayEvent.Post event) {
+	public static void displayElementalCombatHUD(RenderGameOverlayEvent.Post event) {
 		if(event.getType().equals(RenderGameOverlayEvent.ElementType.HOTBAR)) {
 			ticks++;
 			if(ticks >= ClientConfig.iterationSpeed()*2.5) {  
