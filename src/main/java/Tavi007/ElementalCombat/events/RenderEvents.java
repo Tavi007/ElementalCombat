@@ -112,7 +112,7 @@ public class RenderEvents {
 		List<ITextComponent> tooltip = event.getToolTip();
 		ItemStack stack = event.getItemStack();
 		AttackData attackData = AttackDataAPI.get(stack);
-		if(!attackData.isEmpty()) {
+		if(!attackData.isDefault()) {
 			RenderHelper.addTooltip(tooltip, false, attackData, null);
 		}
 		DefenseData defenseData = DefenseDataAPI.get(stack);
@@ -129,7 +129,7 @@ public class RenderEvents {
 		ItemStack stack = event.getStack();
 		AttackData attackData = AttackDataAPI.get(stack);
 		DefenseData defenseData = DefenseDataAPI.get(stack);
-		if(!attackData.isEmpty()) {
+		if(!attackData.isDefault()) {
 			int tooltipIndexAttack = RenderHelper.getTooltipIndexAttack(event.getLines());
 			RenderHelper.renderAttackIcons(attackData, matrixStack, event.getX(), event.getY() + 2 + tooltipIndexAttack*RenderHelper.maxLineHeight);
 		}

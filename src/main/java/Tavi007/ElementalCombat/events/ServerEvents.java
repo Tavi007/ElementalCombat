@@ -56,7 +56,7 @@ public class ServerEvents {
 				AttackData defaultData = BasePropertiesAPI.getAttackData(projectile);
 
 				// TODO: maybe change behavior here
-				if (!defaultData.isEmpty()) {
+				if (!defaultData.isDefault()) {
 					projectileData.set(defaultData);
 				}
 				Entity source = projectile.func_234616_v_();

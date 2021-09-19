@@ -40,7 +40,7 @@ public class WailaTooltipRenderer implements ITooltipRenderer {
 			else if (accessor.getStack() != null) {
 				ItemStack stack = accessor.getStack();
 				int height = 0;
-				if(!AttackDataAPI.get(stack).isEmpty()) {
+				if(!AttackDataAPI.get(stack).isDefault()) {
 					height += RenderHelper.maxLineHeight;
 				}
 				DefenseData defenseData = DefenseDataAPI.get(stack);

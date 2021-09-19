@@ -108,7 +108,7 @@ public class AttackData {
 		this.areEnchantmentChangesApplied = true;
 	}
 
-	public boolean isEmpty() {
+	public boolean isDefault() {
 		return (element.isEmpty() || element.equals(ServerConfig.getDefaultElement())) && (style.isEmpty() || style.equals(ServerConfig.getDefaultStyle()));
 	}
 	
