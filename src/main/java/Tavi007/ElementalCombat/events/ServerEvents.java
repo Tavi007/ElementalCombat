@@ -53,18 +53,12 @@ public class ServerEvents {
 				// fill with default values in here.
 				ProjectileEntity projectile = (ProjectileEntity) entity;
 				AttackData projectileData = AttackDataAPI.get(projectile);
-				AttackData defaultData = BasePropertiesAPI.getAttackData(projectile);
-
-				// TODO: maybe change behavior here
-				if (!defaultData.isDefault()) {
-					projectileData.set(defaultData);
-				}
+				projectileData.set(BasePropertiesAPI.getAttackData(projectile));
 				Entity source = projectile.func_234616_v_();
 				if(source != null && source instanceof LivingEntity) {
 					// set projectile element to attack element from (source) entity
 					AttackData sourceData = AttackDataAPI.getWithActiveItem((LivingEntity) source);
 					projectileData.setElement(sourceData.getElement());
-					projectileData.setStyle("projectile");
 				}
 			}
 		}
