@@ -28,9 +28,9 @@ public class RenderHelper {
 	private static final TextureManager textureManager = Minecraft.getInstance().textureManager;
 	
 	private static final String textAttack              = "Attack: ";
-	private static final String textSeperatorOnlyAttack = "-------------";
+	private static final String textSeperatorOnlyAttack = "---------";
 	private static final String textDefense   = "Defense: ";
-	private static final String textSeperator = "--------------------";
+	private static final String textSeperator = "---------------";
 	private static final int iconSize = 8;
 	
 	private static final int widthAttack = fontRenderer.getStringWidth(textAttack);

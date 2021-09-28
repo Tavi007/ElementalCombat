@@ -117,8 +117,8 @@ public class RenderEvents {
 		ItemStack stack = event.getItemStack();
 		AttackData attackData = AttackDataAPI.get(stack);
 		DefenseData defenseData = DefenseDataAPI.get(stack);
-		boolean hasData = !(attackData.isDefault() || defenseData.isEmpty());
-		boolean hasDefenseData = defenseData.isEmpty();
+		boolean hasData = !(attackData.isDefault() && defenseData.isEmpty());
+		boolean hasDefenseData = !defenseData.isEmpty();
 		if(hasData) {
 			RenderHelper.addTooltipSeperator(tooltip, hasDefenseData);
 		}
@@ -127,9 +127,6 @@ public class RenderEvents {
 		}
 		if(hasDefenseData) {
 			RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseTooltip(), null, defenseData);
-		}
-		if(hasData) {
-			RenderHelper.addTooltipSeperator(tooltip, hasDefenseData);
 		}
 	}
 	
