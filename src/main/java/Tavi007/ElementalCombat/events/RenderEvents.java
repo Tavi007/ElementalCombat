@@ -28,6 +28,8 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -107,17 +109,27 @@ public class RenderEvents {
 	
 	// fires before RenderTooltipEvent.PostText
 	// add all the text to tooltip
+	
+	
 	@SubscribeEvent
 	public static void onTooltip(ItemTooltipEvent event) {
 		List<ITextComponent> tooltip = event.getToolTip();
 		ItemStack stack = event.getItemStack();
 		AttackData attackData = AttackDataAPI.get(stack);
+		DefenseData defenseData = DefenseDataAPI.get(stack);
+		boolean hasData = !(attackData.isDefault() || defenseData.isEmpty());
+		boolean hasDefenseData = defenseData.isEmpty();
+		if(hasData) {
+			RenderHelper.addTooltipSeperator(tooltip, hasDefenseData);
+		}
 		if(!attackData.isDefault()) {
 			RenderHelper.addTooltip(tooltip, false, attackData, null);
 		}
-		DefenseData defenseData = DefenseDataAPI.get(stack);
-		if(!defenseData.isEmpty()) {
+		if(hasDefenseData) {
 			RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseTooltip(), null, defenseData);
+		}
+		if(hasData) {
+			RenderHelper.addTooltipSeperator(tooltip, hasDefenseData);
 		}
 	}
 	

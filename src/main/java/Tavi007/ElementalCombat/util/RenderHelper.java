@@ -27,8 +27,10 @@ public class RenderHelper {
 	private static final FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 	private static final TextureManager textureManager = Minecraft.getInstance().textureManager;
 	
-	private static final String textAttack = "Attack: ";
-	private static final String textDefense = "Defense: ";
+	private static final String textAttack              = "Attack: ";
+	private static final String textSeperatorOnlyAttack = "-------------";
+	private static final String textDefense   = "Defense: ";
+	private static final String textSeperator = "--------------------";
 	private static final int iconSize = 8;
 	
 	private static final int widthAttack = fontRenderer.getStringWidth(textAttack);
@@ -105,6 +107,14 @@ public class RenderHelper {
 	public static void renderTooltip(List<ITextComponent> tooltip, MatrixStack matrixStack, int x, int y) {
 		for(int i=0; i<tooltip.size(); i++) {
 			fontRenderer.drawStringWithShadow(matrixStack, tooltip.get(i).getString(), x, y + i*RenderHelper.maxLineHeight, TextFormatting.GRAY.getColor());
+		}
+	}
+	
+	public static void addTooltipSeperator(List<ITextComponent> tooltip, boolean hasDefenseData) {
+		if(hasDefenseData) {
+			tooltip.add(new StringTextComponent(TextFormatting.GRAY + textSeperator + TextFormatting.RESET));
+		} else {
+			tooltip.add(new StringTextComponent(TextFormatting.GRAY + textSeperatorOnlyAttack + TextFormatting.RESET));
 		}
 	}
 	
