@@ -1,6 +1,5 @@
 package Tavi007.ElementalCombat.client;
 
-import net.minecraft.client.particle.CritParticle;
 import net.minecraft.client.particle.IAnimatedSprite;
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.IParticleRenderType;
