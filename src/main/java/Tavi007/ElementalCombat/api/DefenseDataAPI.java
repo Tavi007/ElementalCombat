@@ -51,7 +51,7 @@ public class DefenseDataAPI {
 	
 	public static void putLayer(LivingEntity livingEntity, DefenseLayer dataToAdd, ResourceLocation location) {
 		DefenseData defData = get(livingEntity);
-		defData.putLayer(dataToAdd, location);
+		defData.putLayer(location, dataToAdd);
 		if(livingEntity.isServerWorld()) {
 			NetworkAPI.syncDefenseLayerMessageForClients(livingEntity, dataToAdd, location);
 		}
@@ -64,6 +64,6 @@ public class DefenseDataAPI {
 	 */
 	public static void putLayer(ItemStack stack, DefenseLayer dataToAdd, ResourceLocation location) {
 		DefenseData defDataItem = get(stack);
-		defDataItem.putLayer(dataToAdd, location);
+		defDataItem.putLayer(location, dataToAdd);
 	}
 }

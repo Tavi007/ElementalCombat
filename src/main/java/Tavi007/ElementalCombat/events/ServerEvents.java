@@ -18,6 +18,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -53,12 +54,12 @@ public class ServerEvents {
 				// fill with default values in here.
 				ProjectileEntity projectile = (ProjectileEntity) entity;
 				AttackData projectileData = AttackDataAPI.get(projectile);
-				projectileData.set(BasePropertiesAPI.getAttackData(projectile));
+				projectileData.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(projectile));
 				Entity source = projectile.func_234616_v_();
 				if(source != null && source instanceof LivingEntity) {
 					// set projectile element to attack element from (source) entity
-					AttackData sourceData = AttackDataAPI.getWithActiveItem((LivingEntity) source);
-					projectileData.setElement(sourceData.getElement());
+					AttackData sourceData = AttackDataAPI.get((LivingEntity) source);
+					projectileData.putLayer(new ResourceLocation("mob"), sourceData.toLayer());
 				}
 			}
 		}

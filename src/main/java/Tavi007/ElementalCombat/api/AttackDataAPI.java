@@ -2,13 +2,14 @@ package Tavi007.ElementalCombat.api;
 
 import Tavi007.ElementalCombat.api.attack.AttackData;
 import Tavi007.ElementalCombat.api.attack.AttackDataCapability;
-import Tavi007.ElementalCombat.config.ServerConfig;
+import Tavi007.ElementalCombat.api.attack.AttackLayer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 
 public class AttackDataAPI {
 	
@@ -34,35 +35,28 @@ public class AttackDataAPI {
 	 * @param entity A LivingEntity.
 	 * @return the AttackData, containing the attack style and attack element.
 	 */
-	public static AttackData getWithActiveItem(LivingEntity entity) {
-		AttackData attackData = new AttackData();
-		if(entity.getHeldItemMainhand().isEmpty()){
-			//use data from livingEntity
-			attackData.set(get(entity));
-		}
-		else {
-			//use data from held item
-			attackData.set(get(entity.getHeldItemMainhand()));
-
-			//maybe mix and match with entity data? a wither skeleton will only use data from the stone sword...
-			AttackData atckDataEntity = get(entity);
-			if (attackData.getStyle().equals(ServerConfig.getDefaultStyle())) {
-				attackData.setStyle(atckDataEntity.getStyle());
-			}
-			if (attackData.getElement().equals(ServerConfig.getDefaultElement())) {
-				attackData.setElement(atckDataEntity.getElement());
-			}
-		}
-		return attackData;
+	public static AttackData updateItemLayer(LivingEntity entity) {
+		AttackData attackDataEntity = get(entity);
+		AttackData attackDataItem = get(entity.getActiveItemStack());
+		attackDataEntity.putLayer(new ResourceLocation("item"), attackDataItem.toLayer());
+		return attackDataEntity;
 	}
+
+	/////////////////////
+	// Helperfunctions //
+	/////////////////////
 
 	/**
 	 * Set the attack-combat data {@link AttackData} of the {@link LivingEntity}. Also sends message to clients for syncronization.
 	 * @param livingEntity A LivingEntity.
 	 * @param attackDataToSet The AttackData to be set as the attack values of the LivingEntity.
 	 */
-	public static void set(LivingEntity livingEntity, AttackData attackDataToSet) {
-		NetworkAPI.syncAttackMessageForClients(livingEntity, attackDataToSet);
+	public static void putLayer(LivingEntity livingEntity, AttackLayer layer, ResourceLocation location) {
+		AttackData atckData = get(livingEntity);
+		atckData.putLayer(location, layer);
+		if(livingEntity.isServerWorld()) {
+			NetworkAPI.syncAttackLayerMessageForClients(livingEntity, layer, location);
+		}
 	}
 
 	///////////////
@@ -121,16 +115,16 @@ public class AttackDataAPI {
 		Entity immediateSource = damageSource.getImmediateSource();
 
 		// Get combat data from source
-		AttackData atckCap;
 		if(immediateSource instanceof LivingEntity) {
-			atckCap = getWithActiveItem((LivingEntity) immediateSource);
+			return get((LivingEntity) immediateSource);
 		}
 		else if(immediateSource instanceof ProjectileEntity) {
-			atckCap = get((ProjectileEntity) immediateSource);
+			return get((ProjectileEntity) immediateSource);
 		}
 		else {
-			atckCap = BasePropertiesAPI.getAttackData(damageSource);
+			AttackData data = new AttackData();
+			data.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(damageSource));
+			return data;
 		}
-		return new AttackData(atckCap);
 	}
 }

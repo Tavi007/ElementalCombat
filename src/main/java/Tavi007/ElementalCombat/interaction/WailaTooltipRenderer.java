@@ -68,7 +68,7 @@ public class WailaTooltipRenderer implements ITooltipRenderer {
 			ItemStack stack = accessor.getStack();
 			if (entity != null && entity instanceof LivingEntity) {
 				LivingEntity livingEntity = (LivingEntity) entity;
-				attackData = AttackDataAPI.getWithActiveItem(livingEntity);
+				attackData = AttackDataAPI.get(livingEntity);
 				defenseData = DefenseDataAPI.get(livingEntity);
 			}
 			else if(stack != null) {

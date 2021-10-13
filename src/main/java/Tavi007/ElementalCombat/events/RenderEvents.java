@@ -28,8 +28,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -163,7 +161,7 @@ public class RenderEvents {
 				if(mc.player != null) {
 					MatrixStack matrixStack = event.getMatrixStack();
 					float scale = (float) ClientConfig.scale();
-					AttackData attackData = AttackDataAPI.getWithActiveItem(mc.player);
+					AttackData attackData = AttackDataAPI.get(mc.player);
 					DefenseData defenseData = DefenseDataAPI.get(mc.player);
 
 					// the width of the box.

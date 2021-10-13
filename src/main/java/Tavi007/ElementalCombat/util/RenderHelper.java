@@ -81,25 +81,25 @@ public class RenderHelper {
 
 	private static String getCurrentElementDefenseName(DefenseData data) {
 		DefenseData onlyElement = new DefenseData();
-		onlyElement.putLayer(new DefenseLayer(new HashMap<String, Integer>(), data.getElementFactor()), new ResourceLocation(ElementalCombat.MOD_ID, "render"));
+		onlyElement.putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "render"), new DefenseLayer(new HashMap<>(), data.getElementFactor()));
 		return getCurrentDefenseName(onlyElement);
 	}
 
 	private static int getCurrentElementDefenseFactor(DefenseData data) {
 		DefenseData onlyElement = new DefenseData();
-		onlyElement.putLayer(new DefenseLayer(new HashMap<String, Integer>(), data.getElementFactor()), new ResourceLocation(ElementalCombat.MOD_ID, "render"));
+		onlyElement.putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "render"), new DefenseLayer(new HashMap<>(), data.getElementFactor()));
 		return getCurrentDefenseFactor(onlyElement);
 	}
 
 	private static String getCurrentStyleDefenseName(DefenseData data) {
 		DefenseData onlyStyle = new DefenseData();
-		onlyStyle.putLayer(new DefenseLayer(data.getStyleFactor(), new HashMap<String, Integer>()), new ResourceLocation(ElementalCombat.MOD_ID, "render"));
+		onlyStyle.putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "render"), new DefenseLayer(data.getStyleFactor(), new HashMap<>()));
 		return getCurrentDefenseName(onlyStyle);
 	}
 
 	private static int getCurrentStyleDefenseFactor(DefenseData data) {
 		DefenseData onlyStyle = new DefenseData();
-		onlyStyle.putLayer(new DefenseLayer(data.getStyleFactor(), new HashMap<String, Integer>()), new ResourceLocation(ElementalCombat.MOD_ID, "render"));
+		onlyStyle.putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "render"), new DefenseLayer(data.getStyleFactor(), new HashMap<>()));
 		return getCurrentDefenseFactor(onlyStyle);
 	}
 	

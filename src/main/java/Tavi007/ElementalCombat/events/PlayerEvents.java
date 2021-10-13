@@ -2,6 +2,7 @@ package Tavi007.ElementalCombat.events;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
+import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.NetworkAPI;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.api.defense.DefenseLayer;
@@ -9,7 +10,6 @@ import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -24,16 +24,19 @@ public class PlayerEvents
 {
 	@SubscribeEvent
 	public static void livingEquipmentChange(LivingEquipmentChangeEvent event) {
+		LivingEntity entity = event.getEntityLiving();
 		//change defense properties
-		if(event.getSlot().getSlotType() == EquipmentSlotType.Group.ARMOR)
+		switch(event.getSlot().getSlotType())
 		{
-			DefenseLayer layer = new DefenseLayer();
-			LivingEntity entity = event.getEntityLiving();
+		case ARMOR:
+			DefenseLayer defenseLayer = new DefenseLayer();
 			entity.getArmorInventoryList().forEach( stack -> {
 				DefenseData data = DefenseDataAPI.get(stack);
-				layer.addLayer(data.toLayer());
+				defenseLayer.addLayer(data.toLayer());
 			});
-			DefenseDataAPI.putLayer(event.getEntityLiving(), layer, new ResourceLocation("minecraft", "armor"));
+			DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("armor"));
+		case HAND:
+			AttackDataAPI.updateItemLayer(entity);
 		}
 	}
 
@@ -52,7 +55,7 @@ public class PlayerEvents
 	public static void playerLoggedIn(PlayerLoggedInEvent event) {
 		NetworkAPI.syncJsonMessageForClients(event.getPlayer());
 	}
-	
+
 	@SubscribeEvent
 	public static void onKeyInput(KeyInputEvent event) {
 		if(StartupClientOnly.TOGGLE_HUD.isKeyDown()) {

@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class DefenseData {
 
-	private HashMap<ResourceLocation, DefenseLayer> defenseLayers = new HashMap<ResourceLocation, DefenseLayer>();
+	private HashMap<ResourceLocation, DefenseLayer> defenseLayers = new HashMap<>();
 	private boolean isInitialized = false;
 
 	// for itemstack
@@ -28,21 +28,40 @@ public class DefenseData {
 		this.defenseLayers = data.defenseLayers;
 		this.isInitialized = data.isInitialized;
 	}
+
+	public HashMap<String, Integer> getStyleFactor() {
+		HashMap<String, Integer> ret = new HashMap<String, Integer>();
+		defenseLayers.forEach((name, layer) -> {
+			ret.putAll(layer.getStyleFactor());
+		});
+		return ret;
+	}
 	
-	public HashMap<ResourceLocation, DefenseLayer> getLayers() {
-		return defenseLayers;
+	public HashMap<String, Integer> getElementFactor() {
+		HashMap<String, Integer> ret = new HashMap<String, Integer>();
+		defenseLayers.forEach((name, layer) -> {
+			ret.putAll(layer.getElementFactor());
+		});
+		return ret;
+	}
+	
+	public DefenseLayer toLayer() {
+		DefenseLayer layer = new DefenseLayer();
+		layer.addElement(getElementFactor());
+		layer.addStyle(getStyleFactor());
+		return layer;
 	}
 	
 	public DefenseLayer getLayer(ResourceLocation name) {
 		return defenseLayers.get(name);
 	}
 	
-	public void putLayer(DefenseLayer layer, ResourceLocation name) {
+	public void putLayer(ResourceLocation name, DefenseLayer layer) {
 		defenseLayers.put(name, layer);
 	}
 	
-	public boolean areEnchantmentChangesApplied() {
-		return areEnchantmentChangesApplied;
+	public boolean isEmpty() {
+		return getStyleFactor().isEmpty() && getElementFactor().isEmpty();
 	}
 
 	public void applyEnchantmentChanges(Map<Enchantment, Integer> enchantments) {
@@ -102,49 +121,24 @@ public class DefenseData {
 		areEnchantmentChangesApplied = true;
 	}
 	
-	public DefenseLayer toLayer() {
-		DefenseLayer layer = new DefenseLayer();
-		layer.addElement(getElementFactor());
-		layer.addStyle(getStyleFactor());
-		return layer;
-	}
-
-	public HashMap<String, Integer> getStyleFactor() {
-		HashMap<String, Integer> ret = new HashMap<String, Integer>();
-		defenseLayers.forEach((name, layer) -> {
-			ret.putAll(layer.getStyleFactor());
-		});
-		return ret;
-	}
-	
-	public HashMap<String, Integer> getElementFactor() {
-		HashMap<String, Integer> ret = new HashMap<String, Integer>();
-		defenseLayers.forEach((name, layer) -> {
-			ret.putAll(layer.getElementFactor());
-		});
-		return ret;
-	}
-	
-	public boolean isEmpty() {
-		return getStyleFactor().isEmpty() && getElementFactor().isEmpty();
-	}
-	
+	@Override
 	public String toString() {
 		return toLayer().toString();
 	}
 	
-
 	public void initialize(ItemStack stack) {
 		isInitialized = true;
-		putLayer(BasePropertiesAPI.getDefenseLayer(stack), new ResourceLocation(ElementalCombat.MOD_ID, "base"));
+		putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "base"), BasePropertiesAPI.getDefenseLayer(stack));
 	}
 	
 	public void initialize(LivingEntity entity) {
 		isInitialized = true;
-		putLayer(BasePropertiesAPI.getDefenseLayer(entity), new ResourceLocation(ElementalCombat.MOD_ID, "base"));
+		putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "base"), BasePropertiesAPI.getDefenseLayer(entity));
 	}
 	
 	public boolean isInitialized() {return isInitialized;}
+	public HashMap<ResourceLocation, DefenseLayer> getLayers() {return defenseLayers;}
+	public boolean areEnchantmentChangesApplied() {return areEnchantmentChangesApplied;}
 
 	public void clear() {
 		defenseLayers.clear();

@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
-import Tavi007.ElementalCombat.api.attack.AttackData;
+import Tavi007.ElementalCombat.api.attack.AttackLayer;
 import Tavi007.ElementalCombat.api.defense.DefenseLayer;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
@@ -19,6 +19,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -51,8 +52,8 @@ public class PackageHandlerOnClient {
 		else if(message instanceof DisableDamageRenderMessage) {
 			ctx.enqueueWork(() -> processMessage(clientWorld.get(), (DisableDamageRenderMessage) message));
 		}
-		else if(message instanceof EntityAttackDataMessage) {
-			ctx.enqueueWork(() -> processMessage(clientWorld.get(), (EntityAttackDataMessage) message));
+		else if(message instanceof EntityAttackLayerMessage) {
+			ctx.enqueueWork(() -> processMessage(clientWorld.get(), (EntityAttackLayerMessage) message));
 		}
 		else if(message instanceof EntityDefenseLayerMessage) {
 			ctx.enqueueWork(() -> processMessage(clientWorld.get(), (EntityDefenseLayerMessage) message));
@@ -62,12 +63,12 @@ public class PackageHandlerOnClient {
 		}
 	}
 
-	private static void processMessage(ClientWorld clientWorld, EntityAttackDataMessage message) {
-		AttackData atckData = message.getAttackData();
+	private static void processMessage(ClientWorld clientWorld, EntityAttackLayerMessage message) {
+		AttackLayer atckLayer = message.getAttackLayer();
 		Entity entity = clientWorld.getEntityByID(message.getId());
 		if (entity instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity) entity;
-			AttackDataAPI.get(livingEntity).set(atckData);
+			AttackDataAPI.get(livingEntity).putLayer(new ResourceLocation(message.getLocation()), atckLayer);
 		}
 	}
 
@@ -76,7 +77,7 @@ public class PackageHandlerOnClient {
 		Entity entity = clientWorld.getEntityByID(message.getId());
 		if (entity instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity) entity;
-			DefenseDataAPI.get(livingEntity).putLayer(defLayer, message.getLocation());;
+			DefenseDataAPI.get(livingEntity).putLayer(message.getLocation(), defLayer);
 		}
 	}
 

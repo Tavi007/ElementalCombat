@@ -10,7 +10,7 @@ import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
 import Tavi007.ElementalCombat.network.BasePropertiesMessage;
 import Tavi007.ElementalCombat.network.CreateEmitterMessage;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
-import Tavi007.ElementalCombat.network.EntityAttackDataMessage;
+import Tavi007.ElementalCombat.network.EntityAttackLayerMessage;
 import Tavi007.ElementalCombat.network.EntityDefenseLayerMessage;
 import Tavi007.ElementalCombat.network.PackageHandlerOnClient;
 import Tavi007.ElementalCombat.network.PackageHandlerOnServer;
@@ -40,8 +40,8 @@ public class StartupCommon {
 				PackageHandlerOnClient::isThisProtocolAcceptedByClient,
 				PackageHandlerOnServer::isThisProtocolAcceptedByServer);
 		
-		ElementalCombat.simpleChannel.registerMessage(ENTITY_ATTACKDATA_MESSAGE_TO_CLIENT_ID, EntityAttackDataMessage.class,
-				EntityAttackDataMessage::encode, EntityAttackDataMessage::decode,
+		ElementalCombat.simpleChannel.registerMessage(ENTITY_ATTACKDATA_MESSAGE_TO_CLIENT_ID, EntityAttackLayerMessage.class,
+				EntityAttackLayerMessage::encode, EntityAttackLayerMessage::decode,
 				PackageHandlerOnClient::onMessageReceived,
 	            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		

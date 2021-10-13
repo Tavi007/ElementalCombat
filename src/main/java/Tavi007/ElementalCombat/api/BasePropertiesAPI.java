@@ -2,6 +2,7 @@ package Tavi007.ElementalCombat.api;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.attack.AttackData;
+import Tavi007.ElementalCombat.api.attack.AttackLayer;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.api.defense.DefenseLayer;
 import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
@@ -29,14 +30,14 @@ public class BasePropertiesAPI {
 	 * @param livingEntity The LivingEntity.
 	 * @return copy of AttackData.
 	 */
-	public static AttackData getAttackData(LivingEntity livingEntity) {
+	public static AttackLayer getAttackData(LivingEntity livingEntity) {
 		ResourceLocation rlEntity = livingEntity.getType().getRegistryName();
 		if (rlEntity == null) {
-			return new AttackData();
+			return new AttackLayer();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "mobs/" + rlEntity.getPath());
 		MobCombatProperties property = new MobCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getMobDataFromLocation(rlProperties));
-		return new AttackData(property.getAttackStyle(), property.getAttackElement());
+		return new AttackLayer(property.getAttackStyle(), property.getAttackElement());
 	}
 
 	/**
@@ -44,14 +45,14 @@ public class BasePropertiesAPI {
 	 * @param stack The ItemStack.
 	 * @return copy of AttackData.
 	 */
-	public static AttackData getAttackData(ItemStack stack) {
+	public static AttackLayer getAttackData(ItemStack stack) {
 		ResourceLocation rlItem = stack.getItem().getRegistryName();
 		if (rlItem == null) {
-			return new AttackData();
+			return new AttackLayer();
 		}
 		ResourceLocation rlProperties = new ResourceLocation(rlItem.getNamespace(), "items/" + rlItem.getPath());
 		ItemCombatProperties property = new ItemCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
-		return new AttackData(property.getAttackStyle(), property.getAttackElement());
+		return new AttackLayer(property.getAttackStyle(), property.getAttackElement());
 	}
 
 	/**
@@ -60,7 +61,7 @@ public class BasePropertiesAPI {
 	 * @param damageSource The DamageSource.
 	 * @return copy of AttackData.
 	 */
-	public static AttackData getAttackData(DamageSource damageSource) {
+	public static AttackLayer getAttackData(DamageSource damageSource) {
 		ResourceLocation rlDamageSource = null;
 		// do other mods implement their own natural damageSource? If so, how could I get the mod id from it?
 		// for now do not use Namespace.
@@ -72,7 +73,7 @@ public class BasePropertiesAPI {
 			rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + damageSource.getDamageType().toLowerCase());
 		}
 		AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource));
-		return new AttackData(property.getAttackStyle(), property.getAttackElement());
+		return new AttackLayer(property.getAttackStyle(), property.getAttackElement());
 	}
 
 	/**
@@ -81,11 +82,11 @@ public class BasePropertiesAPI {
 	 * @param projectile The Projectile.
 	 * @return copy of AttackData.
 	 */
-	public static AttackData getAttackData(ProjectileEntity projectile) {
+	public static AttackLayer getAttackData(ProjectileEntity projectile) {
 		ResourceLocation resourcelocation = projectile.getType().getRegistryName();
-		ResourceLocation rlDamageSource = new ResourceLocation(resourcelocation.getNamespace(), "projectiles/" + resourcelocation.getPath());
-		AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getProjectileDataFromLocation(rlDamageSource));
-		return new AttackData(property.getAttackStyle(), property.getAttackElement());
+		ResourceLocation rlProjectile = new ResourceLocation(resourcelocation.getNamespace(), "projectiles/" + resourcelocation.getPath());
+		AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getProjectileDataFromLocation(rlProjectile));
+		return new AttackLayer(property.getAttackStyle(), property.getAttackElement());
 	}
 	
 	/////////////////

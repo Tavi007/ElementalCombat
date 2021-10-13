@@ -2,10 +2,11 @@ package Tavi007.ElementalCombat.api;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.attack.AttackData;
+import Tavi007.ElementalCombat.api.attack.AttackLayer;
 import Tavi007.ElementalCombat.api.defense.DefenseData;
 import Tavi007.ElementalCombat.api.defense.DefenseLayer;
 import Tavi007.ElementalCombat.network.BasePropertiesMessage;
-import Tavi007.ElementalCombat.network.EntityAttackDataMessage;
+import Tavi007.ElementalCombat.network.EntityAttackLayerMessage;
 import Tavi007.ElementalCombat.network.EntityDefenseLayerMessage;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,9 +22,12 @@ public class NetworkAPI {
 	 */
 	public static void syncMessageForClients(LivingEntity livingEntity) {
 		if(livingEntity.isServerWorld()) {
+			AttackDataAPI.updateItemLayer(livingEntity);
 			AttackData attackData = AttackDataAPI.get(livingEntity);
-			EntityAttackDataMessage attackMessageToClient = new EntityAttackDataMessage(attackData, livingEntity.getEntityId());
-			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), attackMessageToClient);
+			attackData.getLayers().forEach( (rl, layer) -> {
+				EntityAttackLayerMessage attackMessageToClient = new EntityAttackLayerMessage(layer, rl, livingEntity.getEntityId());
+				ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), attackMessageToClient);
+			});
 			DefenseData defenseData = DefenseDataAPI.get(livingEntity);
 			defenseData.getLayers().forEach( (rl, layer) -> {
 				EntityDefenseLayerMessage defenseMessageToClient = new EntityDefenseLayerMessage(layer, rl, livingEntity.getEntityId());
@@ -41,16 +45,16 @@ public class NetworkAPI {
 	 */
 	public static void syncDefenseLayerMessageForClients(LivingEntity livingEntity, DefenseLayer layer, ResourceLocation location) {
 		if(livingEntity.isServerWorld()) {
-			DefenseDataAPI.get(livingEntity).putLayer(layer, location);
+			DefenseDataAPI.get(livingEntity).putLayer(location, layer);
 			EntityDefenseLayerMessage defenseMessageToClient = new EntityDefenseLayerMessage(layer, location, livingEntity.getEntityId());
 			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), defenseMessageToClient);
 		}
 	}
 	
-	public static void syncAttackMessageForClients(LivingEntity livingEntity, AttackData AttackDataToSend) {
+	public static void syncAttackLayerMessageForClients(LivingEntity livingEntity, AttackLayer layer, ResourceLocation location) {
 		if(livingEntity.isServerWorld()) {
-			AttackDataAPI.get(livingEntity).set(AttackDataToSend);;
-			EntityAttackDataMessage attackMessageToClient = new EntityAttackDataMessage(AttackDataToSend, livingEntity.getEntityId());
+			AttackDataAPI.get(livingEntity).putLayer(location, layer);;
+			EntityAttackLayerMessage attackMessageToClient = new EntityAttackLayerMessage(layer, location, livingEntity.getEntityId());
 			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), attackMessageToClient);
 		}
 	}

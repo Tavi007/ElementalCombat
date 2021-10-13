@@ -2,11 +2,11 @@ package Tavi007.ElementalCombat.api.attack;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;
+import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
@@ -38,25 +38,15 @@ public class AttackDataCapability {
 
 			@Override
 			public INBT writeNBT(final Capability<AttackData> capability, final AttackData instance, final Direction side) {
-
-				String style = instance.getStyle();
-				String element = instance.getElement();
-
-				//fill nbt with data
 				CompoundNBT nbt = new CompoundNBT();
-				nbt.put("attack_element", StringNBT.valueOf(element));
-				nbt.put("attack_style", StringNBT.valueOf(style));
+				ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, instance);
 				return nbt;
 			}
 
 			@Override
 			public void readNBT(final Capability<AttackData> capability, final AttackData instance, final Direction side, final INBT nbt) {
-
-				StringNBT styleNBT = (StringNBT) ((CompoundNBT) nbt).get("attack_style");
-				StringNBT elementNBT = (StringNBT) ((CompoundNBT) nbt).get("attack_element");
-				//fill list with data
-				instance.setStyle(styleNBT.getString());
-				instance.setElement(elementNBT.getString());
+				AttackData data = ElementalCombatNBTHelper.readAttackDataFromNBT((CompoundNBT)nbt);
+				instance.set(data);
 			}
 		}, () -> new AttackData());
 	}

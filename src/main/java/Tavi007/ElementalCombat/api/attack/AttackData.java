@@ -1,5 +1,6 @@
 package Tavi007.ElementalCombat.api.attack;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
@@ -10,124 +11,114 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class AttackData {
 
-	private String style = ServerConfig.getDefaultStyle();
-	private String element = ServerConfig.getDefaultElement();
-
+	private HashMap<ResourceLocation, AttackLayer> attackLayers = new HashMap<>();
 	private boolean isInitialized = false;
 	
 	// for itemstack
 	private boolean areEnchantmentChangesApplied = false;
 
 	public AttackData() {
-	}
-
-	public AttackData(String style, String element) {
-		if(style.isEmpty()) {
-			this.style = ServerConfig.getDefaultStyle();
-		}
-		else {
-			this.style = style;
-		}
-		if(element.isEmpty()) {
-			this.element = ServerConfig.getDefaultElement();
-		}
-		else {
-			this.element = element;
-		}
-	}
-
-	public AttackData(AttackData data) {
-		this.style = data.getStyle();
-		this.element = data.getElement();
-	}
-
+	}	
+	
 	public void set(AttackData data) {
-		if(data.getStyle().isEmpty()) {
-			this.style = ServerConfig.getDefaultStyle();
-		}
-		else {
-			this.style = data.getStyle();
-		}
-		if(data.getElement().isEmpty()) {
-			this.element = ServerConfig.getDefaultElement();
-		}
-		else {
-			this.element = data.getElement();
-		}
+		attackLayers = data.getLayers();
 	}
-
-	public void set(String style, String element) {
-		this.style = style;
-		this.element = element;
-	}
-
-	public String getElement() {return this.element;}
-
-	public String getStyle() {return this.style;}
-
-	public void setElement(String element) {
-		if(element.isEmpty()) {
-			this.element = ServerConfig.getDefaultElement();
+	
+	public String getElement() {
+		for(ResourceLocation rl : attackLayers.keySet()) {
+			AttackLayer layer = attackLayers.get(rl);
+			String element = layer.getElement();
+			if(!element.equals(ServerConfig.getDefaultElement())) {
+				return element;
+			}
 		}
-		else {
-			this.element = element;
-		}
+		return ServerConfig.getDefaultElement();
 	}
-
-	public void setStyle(String style) {
-		if(style.isEmpty()) {
-			this.style = ServerConfig.getDefaultStyle();
+	
+	public String getStyle() {
+		for(ResourceLocation rl : attackLayers.keySet()) {
+			AttackLayer layer = attackLayers.get(rl);
+			String style = layer.getStyle();
+			if(!style.equals(ServerConfig.getDefaultStyle())) {
+				return style;
+			}
 		}
-		else {
-			this.style = style;
-		}
+		return ServerConfig.getDefaultStyle();
 	}
-
-	public boolean areEnchantmentChangesApplied() {
-		return areEnchantmentChangesApplied;
+	
+	public AttackLayer toLayer() {
+		return new AttackLayer(getStyle(), getElement());
 	}
-
-	public void applyEnchantmentChanges(Map<Enchantment, Integer> currentEnchantments) {
-		currentEnchantments.forEach((ench, value) -> {
-			//sword
-			if(ench.getName().equals(Enchantments.FIRE_ASPECT.getName())) {this.setElement("fire");}
-			else if(ench.getName().equals(EnchantmentList.ICE_ASPECT.get().getName())) {this.setElement("ice");}
-			else if(ench.getName().equals(EnchantmentList.WATER_ASPECT.get().getName())) {this.setElement("water");}
-			else if(ench.getName().equals(EnchantmentList.THUNDER_ASPECT.get().getName())) {this.setElement("thunder");}
-			else if(ench.getName().equals(EnchantmentList.DARKNESS_ASPECT.get().getName())) {this.setElement("darkness");}
-			else if(ench.getName().equals(EnchantmentList.LIGHT_ASPECT.get().getName())) {this.setElement("light");}
-			//bow
-			else if(ench.getName().equals(Enchantments.FLAME.getName())) {this.setElement("fire");}
-			//trident
-			else if(ench.getName().equals(Enchantments.CHANNELING.getName())) {this.setElement("thunder");}
-		});
-
-		this.areEnchantmentChangesApplied = true;
+	
+	public AttackLayer getLayer(ResourceLocation rl) {
+		return attackLayers.get(rl);
+	}
+	
+	public void putLayer(ResourceLocation rl, AttackLayer layer) {
+		attackLayers.put(rl, layer);
 	}
 
 	public boolean isDefault() {
-		return (element.isEmpty() || element.equals(ServerConfig.getDefaultElement())) && (style.isEmpty() || style.equals(ServerConfig.getDefaultStyle()));
+		return getElement().equals(ServerConfig.getDefaultElement())
+			&& getStyle().equals(ServerConfig.getDefaultStyle());
+	}
+	
+	public void applyEnchantmentChanges(Map<Enchantment, Integer> currentEnchantments) {
+		AttackLayer layer = new AttackLayer();
+		for (Enchantment ench : currentEnchantments.keySet()) {
+			if(ench.getName().equals(Enchantments.FIRE_ASPECT.getName())) {
+				layer.setElement("fire");
+				break;
+			} else if(ench.getName().equals(EnchantmentList.ICE_ASPECT.get().getName())) {
+				layer.setElement("ice");
+				break;
+			} else if(ench.getName().equals(EnchantmentList.WATER_ASPECT.get().getName())) {
+				layer.setElement("water");
+				break;
+			} else if(ench.getName().equals(EnchantmentList.THUNDER_ASPECT.get().getName())) {
+				layer.setElement("thunder");
+				break;
+			} else if(ench.getName().equals(EnchantmentList.DARKNESS_ASPECT.get().getName())) {
+				layer.setElement("darkness");
+				break;
+			} else if(ench.getName().equals(EnchantmentList.LIGHT_ASPECT.get().getName())) {
+				layer.setElement("light");
+				break;
+			} else if(ench.getName().equals(Enchantments.FLAME.getName())) {
+				layer.setElement("fire");
+				break;
+			} else if(ench.getName().equals(Enchantments.CHANNELING.getName())) {
+				layer.setElement("thunder");
+				break;
+			}
+		}
+		attackLayers.put(new ResourceLocation("enchantment"), layer);
+		areEnchantmentChangesApplied = true;
 	}
 	
 	public void initialize(ItemStack stack) {
+		AttackLayer base = BasePropertiesAPI.getAttackData(stack);
+		attackLayers.put(new ResourceLocation("base"), base);
 		isInitialized = true;
-		this.set(BasePropertiesAPI.getAttackData(stack));
 	}
 	
 	public void initialize(LivingEntity entity) {
+		AttackLayer base = BasePropertiesAPI.getAttackData(entity);
+		attackLayers.put(new ResourceLocation("base"), base);
 		isInitialized = true;
-		AttackData base = BasePropertiesAPI.getAttackData(entity);
-		style = base.getStyle();
-		element = base.getElement();
 	}
 	
 	public void initialize(ProjectileEntity entity) {
+		AttackLayer base = BasePropertiesAPI.getAttackData(entity);
+		attackLayers.put(new ResourceLocation("base"), base);
 		isInitialized = true;
-		this.set(BasePropertiesAPI.getAttackData(entity));
 	}
 	
 	public boolean isInitialized() {return isInitialized;}
+	public boolean areEnchantmentChangesApplied() {return areEnchantmentChangesApplied;}
+	public HashMap<ResourceLocation, AttackLayer> getLayers() {return attackLayers;}
 }
