@@ -35,11 +35,9 @@ public class AttackDataAPI {
 	 * @param entity A LivingEntity.
 	 * @return the AttackData, containing the attack style and attack element.
 	 */
-	public static AttackData updateItemLayer(LivingEntity entity) {
-		AttackData attackDataEntity = get(entity);
-		AttackData attackDataItem = get(entity.getActiveItemStack());
-		attackDataEntity.putLayer(new ResourceLocation("item"), attackDataItem.toLayer());
-		return attackDataEntity;
+	public static void updateItemLayer(LivingEntity entity) {
+		AttackData attackDataItem = get(entity.getHeldItemMainhand());
+		putLayer(entity, attackDataItem.toLayer(), new ResourceLocation("item"));
 	}
 
 	/////////////////////
