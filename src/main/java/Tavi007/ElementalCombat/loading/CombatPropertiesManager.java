@@ -59,7 +59,7 @@ public class CombatPropertiesManager extends JsonReloadListener
 	}
 
 	public BasePropertiesMessage createSyncMessage() {
-		return new BasePropertiesMessage(registeredMobData, registeredItemData, registeredBiomeData, registeredProjectileData, registeredDamageSourceData);
+		return new BasePropertiesMessage(registeredMobData, registeredItemData, registeredBiomeData, registeredDamageSourceData, registeredProjectileData);
 	}
 
 	protected void apply(Map<ResourceLocation, JsonElement> objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn) {
