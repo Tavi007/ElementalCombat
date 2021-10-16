@@ -24,11 +24,9 @@ public class HandleCuriosInventory {
 		DefenseData defDataItemFrom = DefenseDataHelper.get(event.getFrom());
 		DefenseData defDataItemTo = DefenseDataHelper.get(event.getTo());
 
-		// compute change
+		// compute new layer by applying the change
 		layer.subtractLayer(defDataItemFrom.toLayer());
 		layer.addLayer(defDataItemTo.toLayer());
-
-		// apply change
 		DefenseDataAPI.putLayer(entity, layer, rl);
 	}
 }
