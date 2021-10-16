@@ -1,10 +1,10 @@
 package Tavi007.ElementalCombat.api;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.api.attack.AttackData;
-import Tavi007.ElementalCombat.api.attack.AttackLayer;
-import Tavi007.ElementalCombat.api.defense.DefenseData;
-import Tavi007.ElementalCombat.api.defense.DefenseLayer;
+import Tavi007.ElementalCombat.capabilities.attack.AttackData;
+import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.MobCombatProperties;

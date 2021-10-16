@@ -3,16 +3,15 @@ package Tavi007.ElementalCombat.events;
 import java.util.function.Supplier;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
-import Tavi007.ElementalCombat.api.DefenseDataAPI;
-import Tavi007.ElementalCombat.api.NetworkAPI;
-import Tavi007.ElementalCombat.api.attack.AttackData;
-import Tavi007.ElementalCombat.api.defense.DefenseData;
+import Tavi007.ElementalCombat.capabilities.attack.AttackData;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.network.CreateEmitterMessage;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
 import Tavi007.ElementalCombat.network.ServerPlayerSupplier;
+import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
+import Tavi007.ElementalCombat.util.NetworkHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -48,17 +47,17 @@ public class ServerEvents {
 
 			// for synchronization after switching dimensions
 			if (entity instanceof LivingEntity) {
-				NetworkAPI.syncMessageForClients((LivingEntity) entity);
+				NetworkHelper.syncMessageForClients((LivingEntity) entity);
 			}
 			else if(entity instanceof ProjectileEntity && entity.ticksExisted == 0) {
 				// fill with default values in here.
 				ProjectileEntity projectile = (ProjectileEntity) entity;
-				AttackData projectileData = AttackDataAPI.get(projectile);
+				AttackData projectileData = AttackDataHelper.get(projectile);
 				projectileData.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(projectile));
 				Entity source = projectile.func_234616_v_();
 				if(source != null && source instanceof LivingEntity) {
 					// set projectile element to attack element from (source) entity
-					AttackData sourceData = AttackDataAPI.get((LivingEntity) source);
+					AttackData sourceData = AttackDataHelper.get((LivingEntity) source);
 					projectileData.putLayer(new ResourceLocation("mob"), sourceData.toLayer());
 				}
 			}
@@ -75,11 +74,11 @@ public class ServerEvents {
 		}
 
 		// compute new Damage value  
-		AttackData sourceData = AttackDataAPI.get(damageSource);
+		AttackData sourceData = AttackDataHelper.get(damageSource);
 		LivingEntity target = event.getEntityLiving();
 		float damageAmount = event.getAmount();
 		// Get the protection data from target
-		DefenseData defCap = DefenseDataAPI.get(target);
+		DefenseData defCap = DefenseDataHelper.get(target);
 		float defenseStyleScaling = Math.max(0.0f, DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceData.getStyle()));
 		float defenseElementScaling = DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceData.getElement());
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);

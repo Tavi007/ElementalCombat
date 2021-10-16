@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.api.defense;
+package Tavi007.ElementalCombat.capabilities.defense;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class DefenseData {
 
 	public HashMap<String, Integer> getStyleFactor() {
 		HashMap<String, Integer> ret = new HashMap<String, Integer>();
-		defenseLayers.forEach((name, layer) -> {
+		defenseLayers.forEach((rl, layer) -> {
 			ret.putAll(layer.getStyleFactor());
 		});
 		return ret;
@@ -39,7 +39,7 @@ public class DefenseData {
 	
 	public HashMap<String, Integer> getElementFactor() {
 		HashMap<String, Integer> ret = new HashMap<String, Integer>();
-		defenseLayers.forEach((name, layer) -> {
+		defenseLayers.forEach((rl, layer) -> {
 			ret.putAll(layer.getElementFactor());
 		});
 		return ret;
@@ -52,12 +52,20 @@ public class DefenseData {
 		return layer;
 	}
 	
-	public DefenseLayer getLayer(ResourceLocation name) {
-		return defenseLayers.get(name);
+	public DefenseLayer getLayer(ResourceLocation rl) {
+		if(defenseLayers.containsKey(rl)) {
+			return defenseLayers.get(rl);
+		} else {
+			return new DefenseLayer();
+		}
 	}
 	
-	public void putLayer(ResourceLocation name, DefenseLayer layer) {
-		defenseLayers.put(name, layer);
+	public void putLayer(ResourceLocation rl, DefenseLayer layer) {
+		if(layer.isEmpty()) {
+			defenseLayers.remove(rl);
+		} else {
+			defenseLayers.put(rl, layer);
+		}
 	}
 	
 	public boolean isEmpty() {

@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.api.defense;
+package Tavi007.ElementalCombat.capabilities.defense;
 
 import java.util.HashMap;
 
@@ -7,9 +7,15 @@ public class DefenseLayer {
 	private DefenseMap elementFactor = new DefenseMap();
 
 	public DefenseLayer() {}
+
 	public DefenseLayer(HashMap<String, Integer> style, HashMap<String, Integer> element) {
 		addStyle(style);
 		addElement(element);
+	}
+	
+	public DefenseLayer(DefenseLayer layer) {
+		addStyle(layer.getStyleFactor());
+		addElement(layer.getElementFactor());
 	}
 	
 	public HashMap<String, Integer> getStyleFactor() {

@@ -4,8 +4,8 @@ package Tavi007.ElementalCombat.init;
 import java.util.Optional;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.api.attack.AttackDataCapability;
-import Tavi007.ElementalCombat.api.defense.DefenseDataCapability;
+import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
 import Tavi007.ElementalCombat.network.BasePropertiesMessage;
 import Tavi007.ElementalCombat.network.CreateEmitterMessage;

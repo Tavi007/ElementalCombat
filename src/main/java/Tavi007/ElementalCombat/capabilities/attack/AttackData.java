@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.api.attack;
+package Tavi007.ElementalCombat.capabilities.attack;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,11 +55,19 @@ public class AttackData {
 	}
 	
 	public AttackLayer getLayer(ResourceLocation rl) {
-		return attackLayers.get(rl);
+		if(attackLayers.containsKey(rl)) {
+			return attackLayers.get(rl);
+		} else {
+			return new AttackLayer();
+		}
 	}
 	
 	public void putLayer(ResourceLocation rl, AttackLayer layer) {
-		attackLayers.put(rl, layer);
+		if(layer.isDefault()) {
+			attackLayers.remove(rl);
+		} else {
+			attackLayers.put(rl, layer);
+		}
 	}
 
 	public boolean isDefault() {

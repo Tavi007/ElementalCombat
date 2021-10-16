@@ -6,11 +6,11 @@ import java.util.List;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import Tavi007.ElementalCombat.api.AttackDataAPI;
-import Tavi007.ElementalCombat.api.DefenseDataAPI;
-import Tavi007.ElementalCombat.api.attack.AttackData;
-import Tavi007.ElementalCombat.api.defense.DefenseData;
+import Tavi007.ElementalCombat.capabilities.attack.AttackData;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ClientConfig;
+import Tavi007.ElementalCombat.util.AttackDataHelper;
+import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.RenderHelper;
 import mcp.mobius.waila.api.ICommonAccessor;
 import mcp.mobius.waila.api.ITooltipRenderer;
@@ -28,7 +28,7 @@ public class WailaTooltipRenderer implements ITooltipRenderer {
 			if(accessor.getEntity() != null && accessor.getEntity() instanceof LivingEntity) {
 				LivingEntity living = (LivingEntity) accessor.getEntity();
 				int height = RenderHelper.maxLineHeight;
-				DefenseData defenseData = DefenseDataAPI.get(living);
+				DefenseData defenseData = DefenseDataHelper.get(living);
 				if (!defenseData.isEmpty()) {
 					height += RenderHelper.maxLineHeight;
 					if(ClientConfig.isDoubleRowDefenseHWYLA() && !defenseData.getElementFactor().isEmpty() && !defenseData.getStyleFactor().isEmpty()) {
@@ -40,10 +40,10 @@ public class WailaTooltipRenderer implements ITooltipRenderer {
 			else if (accessor.getStack() != null) {
 				ItemStack stack = accessor.getStack();
 				int height = 0;
-				if(!AttackDataAPI.get(stack).isDefault()) {
+				if(!AttackDataHelper.get(stack).isDefault()) {
 					height += RenderHelper.maxLineHeight;
 				}
-				DefenseData defenseData = DefenseDataAPI.get(stack);
+				DefenseData defenseData = DefenseDataHelper.get(stack);
 				if (!defenseData.isEmpty()) {
 					height += RenderHelper.maxLineHeight;
 					if(ClientConfig.isDoubleRowDefenseHWYLA() && !defenseData.getElementFactor().isEmpty() && !defenseData.getStyleFactor().isEmpty()) {
@@ -68,12 +68,12 @@ public class WailaTooltipRenderer implements ITooltipRenderer {
 			ItemStack stack = accessor.getStack();
 			if (entity != null && entity instanceof LivingEntity) {
 				LivingEntity livingEntity = (LivingEntity) entity;
-				attackData = AttackDataAPI.get(livingEntity);
-				defenseData = DefenseDataAPI.get(livingEntity);
+				attackData = AttackDataHelper.get(livingEntity);
+				defenseData = DefenseDataHelper.get(livingEntity);
 			}
 			else if(stack != null) {
-				attackData = AttackDataAPI.get(stack);
-				defenseData = DefenseDataAPI.get(stack);
+				attackData = AttackDataHelper.get(stack);
+				defenseData = DefenseDataHelper.get(stack);
 			}
 			else {
 				attackData = null;

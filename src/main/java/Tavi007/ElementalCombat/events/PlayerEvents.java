@@ -2,12 +2,13 @@ package Tavi007.ElementalCombat.events;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
-import Tavi007.ElementalCombat.api.AttackDataAPI;
-import Tavi007.ElementalCombat.api.NetworkAPI;
-import Tavi007.ElementalCombat.api.defense.DefenseData;
-import Tavi007.ElementalCombat.api.defense.DefenseLayer;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
+import Tavi007.ElementalCombat.util.AttackDataHelper;
+import Tavi007.ElementalCombat.util.DefenseDataHelper;
+import Tavi007.ElementalCombat.util.NetworkHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -31,12 +32,12 @@ public class PlayerEvents
 		case ARMOR:
 			DefenseLayer defenseLayer = new DefenseLayer();
 			entity.getArmorInventoryList().forEach( stack -> {
-				DefenseData data = DefenseDataAPI.get(stack);
+				DefenseData data = DefenseDataHelper.get(stack);
 				defenseLayer.addLayer(data.toLayer());
 			});
 			DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("armor"));
 		case HAND:
-			AttackDataAPI.updateItemLayer(entity);
+			AttackDataHelper.updateItemLayer(entity);
 		}
 	}
 
@@ -47,13 +48,13 @@ public class PlayerEvents
 	public static void playerLoggedOut(PlayerLoggedOutEvent event) {
 		PlayerEntity entity = event.getPlayer();
 		if (entity != null) {
-			DefenseData defCapEntity = DefenseDataAPI.get(entity);
+			DefenseData defCapEntity = DefenseDataHelper.get(entity);
 			defCapEntity.clear();
 		}
 	}
 	@SubscribeEvent
 	public static void playerLoggedIn(PlayerLoggedInEvent event) {
-		NetworkAPI.syncJsonMessageForClients(event.getPlayer());
+		NetworkHelper.syncJsonMessageForClients(event.getPlayer());
 	}
 
 	@SubscribeEvent

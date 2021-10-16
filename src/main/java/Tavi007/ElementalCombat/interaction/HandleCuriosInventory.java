@@ -1,8 +1,9 @@
 package Tavi007.ElementalCombat.interaction;
 
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
-import Tavi007.ElementalCombat.api.defense.DefenseData;
-import Tavi007.ElementalCombat.api.defense.DefenseLayer;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
+import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -12,7 +13,7 @@ public class HandleCuriosInventory {
 	@SubscribeEvent
 	public static void onCurioChange(CurioChangeEvent event) {
 		LivingEntity entity = event.getEntityLiving();
-		DefenseData data = DefenseDataAPI.get(entity);
+		DefenseData data = DefenseDataHelper.get(entity);
 		ResourceLocation rl = new ResourceLocation("curios", "armor");
 		DefenseLayer layer = data.getLayer(rl);
 		if(layer == null) {
@@ -20,8 +21,8 @@ public class HandleCuriosInventory {
 		}
 		
 		// get data
-		DefenseData defDataItemFrom = DefenseDataAPI.get(event.getFrom());
-		DefenseData defDataItemTo = DefenseDataAPI.get(event.getTo());
+		DefenseData defDataItemFrom = DefenseDataHelper.get(event.getFrom());
+		DefenseData defDataItemTo = DefenseDataHelper.get(event.getTo());
 
 		// compute change
 		layer.subtractLayer(defDataItemFrom.toLayer());

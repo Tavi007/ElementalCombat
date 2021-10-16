@@ -115,9 +115,10 @@ jar {
 // API jar
 task apiJar(type: Jar) {
     classifier = 'api'
-    include 'Tavi007/ElementalCombat/api/**/*'
-    include 'Tavi007/ElementalCombat/config/**/*'
-    include 'Tavi007/ElementalCombat/util/**/*'
+    include 'Tavi007/ElementalCombat/api/*'
+    include 'Tavi007/ElementalCombat/capabilities/attack/AttackLayer.*'
+    include 'Tavi007/ElementalCombat/capabilities/defense/DefenseLayer.*'
+    include 'Tavi007/ElementalCombat/config/*'
     from sourceSets.main.allSource
     from sourceSets.main.output
 }

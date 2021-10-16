@@ -4,13 +4,13 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.api.AttackDataAPI;
-import Tavi007.ElementalCombat.api.DefenseDataAPI;
-import Tavi007.ElementalCombat.api.attack.AttackLayer;
-import Tavi007.ElementalCombat.api.defense.DefenseLayer;
+import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
 import Tavi007.ElementalCombat.init.StartupCommon;
+import Tavi007.ElementalCombat.util.AttackDataHelper;
+import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.init.ParticleList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
@@ -68,7 +68,7 @@ public class PackageHandlerOnClient {
 		Entity entity = clientWorld.getEntityByID(message.getId());
 		if (entity instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity) entity;
-			AttackDataAPI.get(livingEntity).putLayer(new ResourceLocation(message.getLocation()), atckLayer);
+			AttackDataHelper.get(livingEntity).putLayer(new ResourceLocation(message.getLocation()), atckLayer);
 		}
 	}
 
@@ -77,7 +77,7 @@ public class PackageHandlerOnClient {
 		Entity entity = clientWorld.getEntityByID(message.getId());
 		if (entity instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity) entity;
-			DefenseDataAPI.get(livingEntity).putLayer(message.getLocation(), defLayer);
+			DefenseDataHelper.get(livingEntity).putLayer(message.getLocation(), defLayer);
 		}
 	}
 

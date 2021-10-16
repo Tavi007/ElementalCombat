@@ -1,128 +1,131 @@
 package Tavi007.ElementalCombat.api;
 
-import Tavi007.ElementalCombat.api.attack.AttackData;
-import Tavi007.ElementalCombat.api.attack.AttackDataCapability;
-import Tavi007.ElementalCombat.api.attack.AttackLayer;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
+import javax.annotation.Nullable;
+
+import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
+import Tavi007.ElementalCombat.util.AttackDataHelper;
+import Tavi007.ElementalCombat.util.NetworkHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 
 public class AttackDataAPI {
-	
-	///////////////////
-	// Living Entity //
-	///////////////////
 
-	/**
-	 * Returns the attack-combat data {@link AttackData} of the {@link LivingEntity}.
-	 * @param entity A LivingEntity.
-	 * @return the AttackData, containing the attack style and attack element.
-	 */
-	public static AttackData get(LivingEntity entity) {
-		AttackData attackData = (AttackData) entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
-		if(!attackData.isInitialized()) {
-			attackData.initialize(entity);
-		}
-		return attackData;
-	}
+	//////////////////
+	// LivingEntity //
+	//////////////////
 	
 	/**
-	 * Returns the attack-combat data {@link AttackData} of the {@link LivingEntity}, but the held itemstack data will be applied aswell. 
+	 * Get acopy of the {@link AttackLayer} of the {@link LivingEntity} at the {@link ResourceLocation}.
+	 * Use {@link AttackDataAPI#putLayer(LivingEntity, AttackLayer, ResourceLocation)} to apply changes.
 	 * @param entity A LivingEntity.
-	 * @return the AttackData, containing the attack style and attack element.
+	 * @param location The ResourceLocation.
+	 * @return The AttackLayer, which may be null.
 	 */
-	public static void updateItemLayer(LivingEntity entity) {
-		AttackData attackDataItem = get(entity.getHeldItemMainhand());
-		putLayer(entity, attackDataItem.toLayer(), new ResourceLocation("item"));
+	public static AttackLayer getLayer(LivingEntity entity, ResourceLocation location) {
+		return new AttackLayer(AttackDataHelper.get(entity).getLayer(location));
 	}
 
-	/////////////////////
-	// Helperfunctions //
-	/////////////////////
+	/**
+	 * Set the {@link AttackLayer} of the {@link LivingEntity} at the {@link ResourceLocation}. This method will also update client side.
+	 * @param entity A LivingEntity.
+	 * @param location The ResourceLocation.
+	 * @param layer The attack layer to be set.
+	 */
+	public static void putLayer(LivingEntity entity, AttackLayer layer, ResourceLocation location) {
+		AttackDataHelper.get(entity).putLayer(location, layer);
+		if(entity.isServerWorld()) {
+			NetworkHelper.syncAttackLayerMessageForClients(entity, layer, location);
+		}
+	}
 
 	/**
-	 * Set the attack-combat data {@link AttackData} of the {@link LivingEntity}. Also sends message to clients for syncronization.
-	 * @param livingEntity A LivingEntity.
-	 * @param attackDataToSet The AttackData to be set as the attack values of the LivingEntity.
+	 * Delete the {@link AttackLayer} of the {@link LivingEntity} at the {@link ResourceLocation}. This method will also update client side.
+	 * @param entity A LivingEntity.
+	 * @param location The ResourceLocation.
 	 */
-	public static void putLayer(LivingEntity livingEntity, AttackLayer layer, ResourceLocation location) {
-		AttackData atckData = get(livingEntity);
-		atckData.putLayer(location, layer);
-		if(livingEntity.isServerWorld()) {
-			NetworkAPI.syncAttackLayerMessageForClients(livingEntity, layer, location);
+	public static void deleteLayer(LivingEntity entity, ResourceLocation location) {
+		AttackLayer layer = new AttackLayer();
+		AttackDataHelper.get(entity).putLayer(location, layer);
+		if(entity.isServerWorld()) {
+			NetworkHelper.syncAttackLayerMessageForClients(entity, layer, location);
 		}
+	}
+
+	//////////////////////
+	// ProjectileEntity //
+	//////////////////////
+	
+	/**
+	 * Get a copy of the {@link AttackLayer} of the {@link ProjectileEntity} at the {@link ResourceLocation}. 
+	 * Use {@link AttackDataAPI#putLayer(ProjectileEntity, AttackLayer, ResourceLocation)} to apply changes.
+	 * @param entity A ProjectileEntity.
+	 * @param location The ResourceLocation.
+	 * @return The AttackLayer, which may be null.
+	 */
+	public static AttackLayer getLayer(ProjectileEntity entity, ResourceLocation location) {
+		return new AttackLayer(AttackDataHelper.get(entity).getLayer(location));
+	}
+
+	/**
+	 * Set the {@link AttackLayer} of the {@link ProjectileEntity} at the {@link ResourceLocation}.
+	 * @param entity A ProjectileEntity.
+	 * @param location The ResourceLocation.
+	 * @param layer The attack layer to be set.
+	 */
+	public static void putLayer(ProjectileEntity entity, AttackLayer layer, ResourceLocation location) {
+		AttackDataHelper.get(entity).putLayer(location, layer);
+	}
+
+	/**
+	 * Delete the {@link AttackLayer} of the {@link ProjectileEntity} at the {@link ResourceLocation}.
+	 * @param entity A LivProjectileEntityingEntity.
+	 * @param location The ResourceLocation.
+	 */
+	public static void deleteLayer(ProjectileEntity entity, ResourceLocation location) {
+		AttackDataHelper.get(entity).putLayer(location, new AttackLayer());
 	}
 
 	///////////////
-	// ItemStack //
+	// Itemstack //
 	///////////////
-
+	
+	/**
+	 * Get a copy of the {@link AttackLayer} of the {@link ItemStack} at the {@link ResourceLocation}.
+	 * Use {@link AttackDataAPI#putLayer(ItemStack, AttackLayer, ResourceLocation, LivingEntity)} to apply changes.
+	 * @param stack A ItemStack.
+	 * @param location The ResourceLocation.
+	 * @return The AttackLayer, which may be null.
+	 */
+	public static AttackLayer getLayer(ItemStack stack, ResourceLocation location) {
+		return new AttackLayer(AttackDataHelper.get(stack).getLayer(location));
+	}
 
 	/**
-	 * Returns the attack-combat data {@link AttackData} of the {@link ItemStack}.
-	 * @param stack An ItemStack.
-	 * @return the AttackData, containing the attack style and attack element.
+	 * Set the {@link AttackLayer} of the {@link ItemStack} at the {@link ResourceLocation}. This method will also update client side.
+	 * @param stack A ItemStack.
+	 * @param location The ResourceLocation.
+	 * @param layer The attack layer to be set.
+	 * @param entity The LivingEntity, which might be holding the ItemStack. Needed to update 'item'-layer of the entity.
 	 */
-	public static AttackData get(ItemStack stack) {
-		if(stack.isEmpty()) {
-			return new AttackData();
-		}
-		else {
-			AttackData attackData = (AttackData) stack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
-			if(!attackData.isInitialized()) {
-				attackData.initialize(stack);
-			}
-			if (!attackData.areEnchantmentChangesApplied()) {
-				attackData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
-			}
-			return attackData;
+	public static void putLayer(ItemStack stack, AttackLayer layer, ResourceLocation location, @Nullable LivingEntity entity) {
+		AttackDataHelper.get(stack).putLayer(location, layer);
+		if(entity != null) {
+			AttackDataHelper.updateItemLayer(entity);
 		}
 	}
 
-	/////////////////
-	// Projectiles //
-	/////////////////
-
 	/**
-	 * Returns the attack-combat data {@link AttackData} of the {@link ProjectileEntity}.
-	 * @param projectileEntity A ProjectileEntity.
-	 * @return the AttackData, containing the attack style and attack element.
+	 * Delete the {@link AttackLayer} of the {@link ItemStack} at the {@link ResourceLocation}. This method will also update clients.
+	 * @param stack A ItemStack.
+	 * @param location The ResourceLocation.
 	 */
-	public static AttackData get(ProjectileEntity projectileEntity) {
-		AttackData attackData = (AttackData) projectileEntity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
-		if(!attackData.isInitialized()) {
-			attackData.initialize(projectileEntity);
-		}
-		return attackData;
-	}
-
-	///////////////////
-	// DamageSources //
-	///////////////////
-
-	/**
-	 * Returns the attack-combat data {@link AttackData} of the {@link DamageSource}.
-	 * @param damageSource A DamageSource.
-	 * @return the AttackData, containing the attack style and attack element.
-	 */
-	public static AttackData get(DamageSource damageSource) {
-		Entity immediateSource = damageSource.getImmediateSource();
-
-		// Get combat data from source
-		if(immediateSource instanceof LivingEntity) {
-			return get((LivingEntity) immediateSource);
-		}
-		else if(immediateSource instanceof ProjectileEntity) {
-			return get((ProjectileEntity) immediateSource);
-		}
-		else {
-			AttackData data = new AttackData();
-			data.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(damageSource));
-			return data;
+	public static void deleteLayer(ItemStack stack, ResourceLocation location, @Nullable LivingEntity entity) {
+		AttackLayer layer = new AttackLayer();
+		AttackDataHelper.get(stack).putLayer(location, layer);
+		if(entity != null) {
+			AttackDataHelper.updateItemLayer(entity);
 		}
 	}
 }

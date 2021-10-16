@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.api.defense;
+package Tavi007.ElementalCombat.capabilities.defense;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.SerializableCapabilityProvider;

@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.network;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.api.defense.DefenseLayer;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.util.PacketBufferHelper;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;

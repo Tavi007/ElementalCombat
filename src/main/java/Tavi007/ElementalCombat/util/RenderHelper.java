@@ -8,9 +8,9 @@ import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import Tavi007.ElementalCombat.api.attack.AttackData;
-import Tavi007.ElementalCombat.api.defense.DefenseData;
-import Tavi007.ElementalCombat.api.defense.DefenseLayer;
+import Tavi007.ElementalCombat.capabilities.attack.AttackData;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;

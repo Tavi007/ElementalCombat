@@ -7,13 +7,13 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.api.AttackDataAPI;
-import Tavi007.ElementalCombat.api.DefenseDataAPI;
-import Tavi007.ElementalCombat.api.attack.AttackData;
-import Tavi007.ElementalCombat.api.defense.DefenseData;
+import Tavi007.ElementalCombat.capabilities.attack.AttackData;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
 import Tavi007.ElementalCombat.config.ClientConfig;
+import Tavi007.ElementalCombat.util.AttackDataHelper;
+import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -113,8 +113,8 @@ public class RenderEvents {
 	public static void onTooltip(ItemTooltipEvent event) {
 		List<ITextComponent> tooltip = event.getToolTip();
 		ItemStack stack = event.getItemStack();
-		AttackData attackData = AttackDataAPI.get(stack);
-		DefenseData defenseData = DefenseDataAPI.get(stack);
+		AttackData attackData = AttackDataHelper.get(stack);
+		DefenseData defenseData = DefenseDataHelper.get(stack);
 		boolean hasData = !(attackData.isDefault() && defenseData.isEmpty());
 		boolean hasDefenseData = !defenseData.isEmpty();
 		if(hasData) {
@@ -134,8 +134,8 @@ public class RenderEvents {
 	public static void onTooltipRenderPost(RenderTooltipEvent.PostText event) {
 		MatrixStack matrixStack = event.getMatrixStack();
 		ItemStack stack = event.getStack();
-		AttackData attackData = AttackDataAPI.get(stack);
-		DefenseData defenseData = DefenseDataAPI.get(stack);
+		AttackData attackData = AttackDataHelper.get(stack);
+		DefenseData defenseData = DefenseDataHelper.get(stack);
 		if(!attackData.isDefault()) {
 			int tooltipIndexAttack = RenderHelper.getTooltipIndexAttack(event.getLines());
 			RenderHelper.renderAttackIcons(attackData, matrixStack, event.getX(), event.getY() + 2 + tooltipIndexAttack*RenderHelper.maxLineHeight);
@@ -161,8 +161,8 @@ public class RenderEvents {
 				if(mc.player != null) {
 					MatrixStack matrixStack = event.getMatrixStack();
 					float scale = (float) ClientConfig.scale();
-					AttackData attackData = AttackDataAPI.get(mc.player);
-					DefenseData defenseData = DefenseDataAPI.get(mc.player);
+					AttackData attackData = AttackDataHelper.get(mc.player);
+					DefenseData defenseData = DefenseDataHelper.get(mc.player);
 
 					// the width of the box.
 					int listWidth = RenderHelper.maxLineWidth;
