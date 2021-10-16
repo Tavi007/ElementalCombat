@@ -2,9 +2,11 @@ package Tavi007.ElementalCombat.api;
 
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
+import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 
 public class DefenseDataAPI {
@@ -59,6 +61,24 @@ public class DefenseDataAPI {
 			NetworkHelper.syncDefenseLayerMessageForClients(entity, layer, location);
 		}
 	}
+	
+	/**
+	 * Writes the defense data to the {@link CompoundNBT} of the {@link LivingEntity}.
+	 * @param entity A LivingEntity.
+	 * @param nbt The CompoundNBT.
+	 */
+	public static void writeToNBT(CompoundNBT nbt, LivingEntity entity) {
+		ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, DefenseDataHelper.get(entity));
+	}
+	
+	/**
+	 * Reads the defense data from the {@link CompoundNBT} and updates the {@link LivingEntity}.
+	 * @param entity A LivingEntity.
+	 * @param nbt The CompoundNBT.
+	 */
+	public static void readFromNBT(CompoundNBT nbt, LivingEntity entity) {
+		DefenseDataHelper.get(entity).set(ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt));
+	}
 
 	///////////////
 	// Itemstack //
@@ -104,5 +124,23 @@ public class DefenseDataAPI {
 	public static void deleteLayer(ItemStack stack, ResourceLocation location) {
 		DefenseLayer layer = new DefenseLayer();
 		DefenseDataHelper.get(stack).putLayer(location, layer);
+	}
+	
+	/**
+	 * Writes the defense data to the {@link CompoundNBT} of the {@link ItemStack}.
+	 * @param stack A ItemStack.
+	 * @param nbt The CompoundNBT.
+	 */
+	public static void writeToNBT(CompoundNBT nbt, ItemStack stack) {
+		ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, DefenseDataHelper.get(stack));
+	}
+	
+	/**
+	 * Reads the defense data from the {@link CompoundNBT} and updates the {@link ItemStack}.
+	 * @param stack A ItemStack.
+	 * @param nbt The CompoundNBT.
+	 */
+	public static void readFromNBT(CompoundNBT nbt, ItemStack stack) {
+		DefenseDataHelper.get(stack).set(ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt));
 	}
 }
