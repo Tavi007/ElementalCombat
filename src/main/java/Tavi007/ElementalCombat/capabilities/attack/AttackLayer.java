@@ -9,13 +9,13 @@ public class AttackLayer {
 	public AttackLayer() {}
 	
 	public AttackLayer(String style, String element) {
-		if(style.isEmpty()) {
+		if(style == null || style.isEmpty()) {
 			this.style = ServerConfig.getDefaultStyle();
 		}
 		else {
 			this.style = style;
 		}
-		if(element.isEmpty()) {
+		if(element == null || element.isEmpty()) {
 			this.element = ServerConfig.getDefaultElement();
 		}
 		else {
@@ -24,32 +24,21 @@ public class AttackLayer {
 	}
 
 	public AttackLayer(AttackLayer data) {
+		this(data.getStyle(), data.getElement());
+	}
+
+	public void set(AttackLayer data) {
 		this.style = data.getStyle();
 		this.element = data.getElement();
 	}
 
-	public void set(AttackLayer data) {
-		if(data.getStyle().isEmpty()) {
-			this.style = ServerConfig.getDefaultStyle();
-		}
-		else {
-			this.style = data.getStyle();
-		}
-		if(data.getElement().isEmpty()) {
-			this.element = ServerConfig.getDefaultElement();
-		}
-		else {
-			this.element = data.getElement();
-		}
-	}
-
 	public void set(String style, String element) {
-		this.style = style;
-		this.element = element;
+		AttackLayer layer = new AttackLayer(style, element);
+		set(layer);
 	}
 
 	public void setElement(String element) {
-		if(element.isEmpty()) {
+		if(element == null || element.isEmpty()) {
 			this.element = ServerConfig.getDefaultElement();
 		}
 		else {
@@ -58,7 +47,7 @@ public class AttackLayer {
 	}
 
 	public void setStyle(String style) {
-		if(style.isEmpty()) {
+		if(style == null || style.isEmpty()) {
 			this.style = ServerConfig.getDefaultStyle();
 		}
 		else {

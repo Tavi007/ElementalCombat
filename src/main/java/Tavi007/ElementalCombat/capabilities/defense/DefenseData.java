@@ -7,6 +7,7 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.EnchantmentList;
+import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
@@ -24,6 +25,11 @@ public class DefenseData {
 	public DefenseData() {
 	}
 	
+	@Override
+	public boolean equals(Object data) {
+		return true;
+	}
+	
 	public void set(DefenseData data) {
 		this.defenseLayers = data.defenseLayers;
 		this.isInitialized = data.isInitialized;
@@ -32,7 +38,7 @@ public class DefenseData {
 	public HashMap<String, Integer> getStyleFactor() {
 		HashMap<String, Integer> ret = new HashMap<String, Integer>();
 		defenseLayers.forEach((rl, layer) -> {
-			ret.putAll(layer.getStyleFactor());
+			DefenseDataHelper.sumMaps(ret, layer.getStyleFactor());
 		});
 		return ret;
 	}
@@ -40,10 +46,11 @@ public class DefenseData {
 	public HashMap<String, Integer> getElementFactor() {
 		HashMap<String, Integer> ret = new HashMap<String, Integer>();
 		defenseLayers.forEach((rl, layer) -> {
-			ret.putAll(layer.getElementFactor());
+			DefenseDataHelper.sumMaps(ret, layer.getElementFactor());
 		});
 		return ret;
 	}
+	
 	
 	public DefenseLayer toLayer() {
 		DefenseLayer layer = new DefenseLayer();
