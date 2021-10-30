@@ -19,16 +19,10 @@ public class DefenseDataHelper {
 		return defenseData;
 	}
 	
-	public static void sumMaps(HashMap<String, Integer> base, HashMap<String, Integer> additional) {
-		additional.forEach((key, value) -> {
-			if(base.containsKey(key)) {
-				base.put(key, value + base.get(key));
-			} else {
-				base.put(key, value);
-			}
-		});
+	public static void updateItemLayer(LivingEntity entity) {
+		
 	}
-	
+
 	public static DefenseData get(ItemStack stack) {
 		if(stack.isEmpty()) {
 			return new DefenseData();

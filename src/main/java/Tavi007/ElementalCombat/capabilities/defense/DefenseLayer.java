@@ -1,6 +1,8 @@
 package Tavi007.ElementalCombat.capabilities.defense;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 public class DefenseLayer {
 	private DefenseMap styleFactor = new DefenseMap();
@@ -17,6 +19,17 @@ public class DefenseLayer {
 		addStyle(layer.getStyleFactor());
 		addElement(layer.getElementFactor());
 	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if(object instanceof DefenseLayer) {
+			DefenseLayer other = (DefenseLayer) object;
+			return this.elementFactor.equals(other.elementFactor)
+					&& this.styleFactor.equals(other.styleFactor);
+		}
+		return false;
+	}
+	
 	
 	public HashMap<String, Integer> getStyleFactor() {
 		return styleFactor.getMap();
@@ -81,6 +94,26 @@ public class DefenseLayer {
 
 		public HashMap<String, Integer> getMap() {
 			return map;
+		}
+		
+		@Override
+		public boolean equals(Object object) {
+			if(object instanceof DefenseMap) {
+				DefenseMap other = (DefenseMap) object;
+				Set<String> keysThis = this.map.keySet();
+				Set<String> keysOther = other.map.keySet();
+				if(keysThis.size() == keysOther.size()) {
+					Iterator<String> iteratorThis = keysThis.iterator();
+					while(iteratorThis.hasNext()) {
+						String keyThis = iteratorThis.next();
+						if(!this.map.get(keyThis).equals(other.map.get(keyThis))) {
+							return false;
+						}
+					}
+					return true;
+				}
+			}
+			return false;
 		}
 
 		/**

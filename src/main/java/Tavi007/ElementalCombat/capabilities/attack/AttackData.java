@@ -1,7 +1,9 @@
 package Tavi007.ElementalCombat.capabilities.attack;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.config.ServerConfig;
@@ -124,6 +126,33 @@ public class AttackData {
 		AttackLayer base = BasePropertiesAPI.getAttackData(entity);
 		attackLayers.put(new ResourceLocation("base"), base);
 		isInitialized = true;
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if(object instanceof AttackData) {
+			AttackData other = (AttackData) object;
+			Set<ResourceLocation> keysThis = this.attackLayers.keySet();
+			Set<ResourceLocation> keysOther = other.attackLayers.keySet();
+			if(keysThis.size() == keysOther.size()) {
+				Iterator<ResourceLocation> iteratorThis = keysThis.iterator();
+				Iterator<ResourceLocation> iteratorOther = keysOther.iterator();
+				while(iteratorThis.hasNext()) {
+					ResourceLocation keyThis = iteratorThis.next();
+					ResourceLocation keyOther = iteratorOther.next();
+					if(!keyThis.equals(keyOther)) {
+						return false;
+					}
+					AttackLayer layerThis = this.attackLayers.get(keyThis);
+					AttackLayer layerOther = other.attackLayers.get(keyOther);
+					if(!layerThis.equals(layerOther)) {
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean isInitialized() {return isInitialized;}

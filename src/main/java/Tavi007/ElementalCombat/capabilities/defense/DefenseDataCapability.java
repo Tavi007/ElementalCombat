@@ -38,7 +38,7 @@ public class DefenseDataCapability {
 
 			@Override
 			public INBT writeNBT(final Capability<DefenseData> capability, final DefenseData instance, final Direction side) {
-				CompoundNBT nbt = new CompoundNBT();
+				DefenseDataNBT nbt = new DefenseDataNBT();
 				ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, instance);
 				return nbt;
 			}

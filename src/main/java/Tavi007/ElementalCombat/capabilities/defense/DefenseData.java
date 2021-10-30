@@ -1,13 +1,14 @@
 package Tavi007.ElementalCombat.capabilities.defense;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.EnchantmentList;
-import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
@@ -25,11 +26,6 @@ public class DefenseData {
 	public DefenseData() {
 	}
 	
-	@Override
-	public boolean equals(Object data) {
-		return true;
-	}
-	
 	public void set(DefenseData data) {
 		this.defenseLayers = data.defenseLayers;
 		this.isInitialized = data.isInitialized;
@@ -38,7 +34,7 @@ public class DefenseData {
 	public HashMap<String, Integer> getStyleFactor() {
 		HashMap<String, Integer> ret = new HashMap<String, Integer>();
 		defenseLayers.forEach((rl, layer) -> {
-			DefenseDataHelper.sumMaps(ret, layer.getStyleFactor());
+			ret.putAll(layer.getStyleFactor());
 		});
 		return ret;
 	}
@@ -46,11 +42,10 @@ public class DefenseData {
 	public HashMap<String, Integer> getElementFactor() {
 		HashMap<String, Integer> ret = new HashMap<String, Integer>();
 		defenseLayers.forEach((rl, layer) -> {
-			DefenseDataHelper.sumMaps(ret, layer.getElementFactor());
+			ret.putAll(layer.getElementFactor());
 		});
 		return ret;
 	}
-	
 	
 	public DefenseLayer toLayer() {
 		DefenseLayer layer = new DefenseLayer();
@@ -157,5 +152,27 @@ public class DefenseData {
 
 	public void clear() {
 		defenseLayers.clear();
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if(object instanceof DefenseData) {
+			DefenseData other = (DefenseData) object;
+			Set<ResourceLocation> keysThis = this.defenseLayers.keySet();
+			Set<ResourceLocation> keysOther = other.defenseLayers.keySet();
+			if(keysThis.size() == keysOther.size()) {
+				Iterator<ResourceLocation> iteratorThis = keysThis.iterator();
+				while(iteratorThis.hasNext()) {
+					ResourceLocation keyThis = iteratorThis.next();
+					DefenseLayer layerThis = this.defenseLayers.get(keyThis);
+					DefenseLayer layerOther = other.defenseLayers.get(keyThis);
+					if(!layerThis.equals(layerOther)) {
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 }
