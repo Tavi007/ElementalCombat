@@ -27,14 +27,14 @@ public class RenderHelper {
 	private static final FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 	private static final TextureManager textureManager = Minecraft.getInstance().textureManager;
 	
-	private static final String textAttack              = "Attack: ";
+	private static final String textAttack              = "Attack:";
 	private static final String textSeperatorOnlyAttack = "---------";
-	private static final String textDefense   = "Defense: ";
+	private static final String textDefense   = "Defense:";
 	private static final String textSeperator = "---------------";
 	private static final int iconSize = 8;
 	
-	private static final int widthAttack = fontRenderer.getStringWidth(textAttack);
-	private static final int widthDefense = fontRenderer.getStringWidth(textDefense);
+	private static final int widthAttack = fontRenderer.getStringWidth(textAttack) +2;
+	private static final int widthDefense = fontRenderer.getStringWidth(textDefense)+2;
 	public static final int maxLineHeight = fontRenderer.FONT_HEIGHT + 1;
 	public static final int maxLineWidth = fontRenderer.getStringWidth(textDefense + " -999%") + iconSize + 2;
 
