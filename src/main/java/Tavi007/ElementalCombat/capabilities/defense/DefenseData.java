@@ -7,10 +7,7 @@ import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
-import Tavi007.ElementalCombat.config.ServerConfig;
-import Tavi007.ElementalCombat.init.EnchantmentList;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -75,58 +72,12 @@ public class DefenseData {
 	}
 
 	public void applyEnchantmentChanges(Map<Enchantment, Integer> enchantments) {
-
-		HashMap<String, Integer> defElement = new HashMap<String, Integer>();
-		HashMap<String, Integer> defStyle = new HashMap<String, Integer>();
-		enchantments.forEach( (key, level) -> {
-			if (level != 0) {
-				// elemental enchantments
-				if(key == Enchantments.FIRE_PROTECTION) {
-					defElement.put( "fire", level*ServerConfig.getEnchantmentScaling());
-					defElement.put( "ice", -level*ServerConfig.getEnchantmentScaling()/2);
-				}
-				else if(key == EnchantmentList.ICE_PROTECTION.get()) {
-					defElement.put("ice", level*ServerConfig.getEnchantmentScaling());
-					defElement.put("fire", -level*ServerConfig.getEnchantmentScaling()/2);
-				}
-				else if(key == EnchantmentList.WATER_PROTECTION.get()) {
-					defElement.put( "water", level*ServerConfig.getEnchantmentScaling());
-					defElement.put( "thunder", -level*ServerConfig.getEnchantmentScaling()/2);
-				}
-				else if(key == EnchantmentList.THUNDER_PROTECTION.get()) {
-					defElement.put( "thunder", level*ServerConfig.getEnchantmentScaling());
-					defElement.put( "water", -level*ServerConfig.getEnchantmentScaling()/2);
-				}
-				else if(key == EnchantmentList.DARKNESS_PROTECTION.get()) {
-					defElement.put( "darkness", level*ServerConfig.getEnchantmentScaling());
-					defElement.put( "light", -level*ServerConfig.getEnchantmentScaling()/2);
-				}
-				else if(key == EnchantmentList.LIGHT_PROTECTION.get()) {
-					defElement.put( "light", level*ServerConfig.getEnchantmentScaling());
-					defElement.put( "darkness", -level*ServerConfig.getEnchantmentScaling()/2);
-				}
-				else if(key == EnchantmentList.ELEMENT_PROTECTION.get()) {
-					defElement.put( "fire", level*ServerConfig.getEnchantmentScaling()/5);
-					defElement.put( "water", level*ServerConfig.getEnchantmentScaling()/5);
-					defElement.put( "ice", level*ServerConfig.getEnchantmentScaling()/5);
-					defElement.put( "thunder", level*ServerConfig.getEnchantmentScaling()/5);
-				}
-
-				// style enchantments
-				if(key == Enchantments.BLAST_PROTECTION) {
-					defStyle.put("explosion", level*ServerConfig.getEnchantmentScaling());
-				}
-				else if(key == Enchantments.PROJECTILE_PROTECTION) {
-					defStyle.put("projectile", level*ServerConfig.getEnchantmentScaling());
-				}
-				else if(key == EnchantmentList.MAGIC_PROTECTION.get()) {
-					defStyle.put("magic", level*ServerConfig.getEnchantmentScaling());
-				}
-			}
+		DefenseData data = new DefenseData();
+		enchantments.forEach( (ench, level) -> {
+			data.putLayer(new ResourceLocation(ench.getName()), BasePropertiesAPI.getDefenseLayer(ench, level));
 		});
-		DefenseLayer layer = new DefenseLayer(defStyle, defElement);
-		if (!layer.isEmpty()) {
-			defenseLayers.put(new ResourceLocation("minecraft","enchantment"), layer);
+		if (!data.isEmpty()) {
+			defenseLayers.put(new ResourceLocation("enchantment"), data.toLayer());
 		}
 		areEnchantmentChangesApplied = true;
 	}
