@@ -79,6 +79,10 @@ public class RenderHelper {
 		return (new ArrayList<Integer>(map.values())).get(iteratorCounter % map.size());
 	}
 
+	private static boolean isCurrentDefenseFactorStyle(DefenseData data) {
+		return iteratorCounter >= data.getElementFactor().size() ;
+	}
+
 	private static String getCurrentElementDefenseName(DefenseData data) {
 		DefenseData onlyElement = new DefenseData();
 		onlyElement.putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "render"), new DefenseLayer(new HashMap<>(), data.getElementFactor()));
@@ -126,21 +130,22 @@ public class RenderHelper {
 			if(inTwoRows) {
 				if(!defenseData.getElementFactor().isEmpty()) {
 					int factor = getCurrentElementDefenseFactor(defenseData);
-					tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor)));
+					tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor, false)));
 				}
 				if(!defenseData.getStyleFactor().isEmpty()) {
 					int factor = getCurrentStyleDefenseFactor(defenseData);
-					tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor)));
+					tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor, true)));
 				}
 			} else {
 				int factor = getCurrentDefenseFactor(defenseData);
-				tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor)));
+				boolean isStyle = isCurrentDefenseFactorStyle(defenseData);
+				tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor, isStyle)));
 			}
 		}
 	}
 	
-	public static String getPercentage(Integer factor) {
-		Integer percentage = Math.round(DefenseDataHelper.getPercentage(factor)*100);
+	public static String getPercentage(Integer factor, boolean isStyle) {
+		Integer percentage = Math.round(DefenseDataHelper.getPercentage(factor, isStyle)*100);
 		TextFormatting textFormatting = TextFormatting.GRAY;
 		if (percentage < 0) {textFormatting = TextFormatting.RED;}
 		if (percentage > 0 && percentage < 100) {textFormatting = TextFormatting.BLUE;}

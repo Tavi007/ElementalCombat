@@ -32,19 +32,19 @@ public class DefenseData {
 	}
 
 	public HashMap<String, Integer> getStyleFactor() {
-		HashMap<String, Integer> ret = new HashMap<String, Integer>();
+		DefenseLayer sum = new DefenseLayer();
 		defenseLayers.forEach((rl, layer) -> {
-			ret.putAll(layer.getStyleFactor());
+			sum.addStyle(layer.getStyleFactor());
 		});
-		return ret;
+		return sum.getStyleFactor();
 	}
 	
 	public HashMap<String, Integer> getElementFactor() {
-		HashMap<String, Integer> ret = new HashMap<String, Integer>();
+		DefenseLayer sum = new DefenseLayer();
 		defenseLayers.forEach((rl, layer) -> {
-			ret.putAll(layer.getElementFactor());
+			sum.addElement(layer.getElementFactor());
 		});
-		return ret;
+		return sum.getElementFactor();
 	}
 	
 	public DefenseLayer toLayer() {

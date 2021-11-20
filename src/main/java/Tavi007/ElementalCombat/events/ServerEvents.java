@@ -79,8 +79,8 @@ public class ServerEvents {
 		float damageAmount = event.getAmount();
 		// Get the protection data from target
 		DefenseData defCap = DefenseDataHelper.get(target);
-		float defenseStyleScaling = Math.max(0.0f, DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceData.getStyle()));
-		float defenseElementScaling = DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceData.getElement());
+		float defenseStyleScaling =  DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceData.getStyle(), true);
+		float defenseElementScaling = DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceData.getElement(), false);
 		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
 
 		// display particles

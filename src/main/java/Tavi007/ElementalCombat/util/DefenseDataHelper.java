@@ -39,12 +39,16 @@ public class DefenseDataHelper {
 		}
 	}
 
-	public static float getScaling(HashMap<String, Integer> map, String key) {
+	public static float getScaling(HashMap<String, Integer> map, String key, boolean isStyle) {
 		Integer factor = map.getOrDefault(key, 0);
-		return 1.0f - getPercentage(factor);
+		return 1.0f - getPercentage(factor, isStyle);
 	}
 
-	public static float getPercentage(Integer factor) {
-		return ((float) factor)/ServerConfig.getMaxFactor();
+	public static float getPercentage(Integer factor, boolean isStyle) {
+		float percentage = ((float) factor)/ServerConfig.getMaxFactor();
+		if(isStyle) {
+			return Math.min(1.0f, percentage);
+		}
+		return percentage;
 	}
 }

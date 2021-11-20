@@ -44,8 +44,8 @@ public class ClientConfig
 				.comment("The multiplier of the combat data HUD size.")
 				.defineInRange("scale", 1.0D, 0.25D, 4.0D);
 		iterationSpeed = builder
-				.comment("The number of ticks until the defense data iterates in any HUD element. 20 ticks are about 1 second.")
-				.defineInRange("ticks", 20, 1, 100);
+				.comment("The number of ticks until the defense data iterates in any HUD element.")
+				.defineInRange("ticks", 30, 1, 200);
 		doubleRowDefenseHUD = builder
 				.comment("If true, displays the defense values of the HUD in two rows (split in element and style).")
 				.define("doubleRowDefenseHUD", true);
