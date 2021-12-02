@@ -15,7 +15,10 @@ import Tavi007.ElementalCombat.util.NetworkHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -54,12 +57,29 @@ public class ServerEvents {
 				ProjectileEntity projectile = (ProjectileEntity) entity;
 				AttackData projectileData = AttackDataHelper.get(projectile);
 				projectileData.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(projectile));
-				Entity source = projectile.func_234616_v_();
-				if(source != null && source instanceof LivingEntity) {
-					// set projectile element to attack element from (source) entity
-					AttackData sourceData = AttackDataHelper.get((LivingEntity) source);
-					projectileData.putLayer(new ResourceLocation("mob"), sourceData.toLayer());
-				}
+				addLayerFromSource(projectileData, projectile.func_234616_v_());
+				addLayerFromPotion(projectileData, projectile);
+			}
+		}
+	}
+	
+	private static void addLayerFromSource(AttackData projectileData, Entity source) {
+		if(source != null && source instanceof LivingEntity) {
+			AttackData sourceData = AttackDataHelper.get((LivingEntity) source);
+			projectileData.putLayer(new ResourceLocation("mob"), sourceData.toLayer());
+		}
+	}
+	
+	private static void addLayerFromPotion(AttackData projectileData, ProjectileEntity projectile) {
+		if(projectile instanceof ArrowEntity) {
+			CompoundNBT compound = new CompoundNBT();
+			((ArrowEntity) projectile).writeAdditional(compound);
+			if (compound.contains("Potion", 8)) {
+				AttackData potionLayer = new AttackData();
+				PotionUtils.getEffectsFromTag(compound).forEach(effect -> {
+					potionLayer.putLayer(new ResourceLocation(effect.getEffectName()), BasePropertiesAPI.getAttackLayer(effect));
+				});
+				projectileData.putLayer(new ResourceLocation("potion"), potionLayer.toLayer());
 			}
 		}
 	}
