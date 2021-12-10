@@ -37,6 +37,11 @@ public class AttackLayer {
 		}
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return "[" + element + " " + style +"]";
+	}
 
 	public void set(AttackLayer data) {
 		if(data.getStyle().isEmpty()) {

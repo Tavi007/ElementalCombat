@@ -81,10 +81,18 @@ public class DefenseData {
 		}
 		areEnchantmentChangesApplied = true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return toLayer().toString();
+		StringBuilder builder = new StringBuilder();
+		builder.append("isInitialized: " + isInitialized + "\n");
+		builder.append("areEnchantmentChangesApplied: " + areEnchantmentChangesApplied + "\n");
+		builder.append("as layer: " + toLayer().toString() + "\n");
+		builder.append("layers: \n");
+		defenseLayers.forEach((rl, layer) -> {
+			builder.append(rl.toString() + ":" + layer.toString() + "\n");
+		});
+		return builder.toString();
 	}
 	
 	public void initialize(ItemStack stack) {
