@@ -11,13 +11,12 @@ import net.minecraft.util.ResourceLocation;
 @WailaPlugin(ElementalCombat.MOD_ID)
 public class CombatPropertiesWailaPlugin implements IWailaPlugin {
 
-	static final ResourceLocation COMBAT_PROPERTIES = new ResourceLocation(ElementalCombat.MOD_ID, "combat_properties");
-	
-	@Override
-	public void register(IRegistrar registrar) {
-        registrar.registerComponentProvider(HUDHandlerEntities.INSTANCE, TooltipPosition.BODY, LivingEntity.class);
-		registrar.registerTooltipRenderer(COMBAT_PROPERTIES, new WailaTooltipRenderer());
-		ElementalCombat.LOGGER.info("Waila Plugin registered.");
-	}
+    static final ResourceLocation COMBAT_PROPERTIES = new ResourceLocation(ElementalCombat.MOD_ID, "combat_properties");
 
+    @Override
+    public void register(IRegistrar registrar) {
+        registrar.registerComponentProvider(HUDHandlerEntities.INSTANCE, TooltipPosition.BODY, LivingEntity.class);
+        registrar.registerTooltipRenderer(COMBAT_PROPERTIES, new WailaTooltipRenderer());
+        ElementalCombat.LOGGER.info("Waila Plugin registered.");
+    }
 }

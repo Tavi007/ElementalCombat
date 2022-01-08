@@ -6,15 +6,15 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class ServerPlayerSupplier implements Supplier<ServerPlayerEntity> {
 
-	ServerPlayerEntity entity;
-	
-	public ServerPlayerSupplier(ServerPlayerEntity entity) {
-		this.entity = entity;
-	}
-	
-	@Override
-	public ServerPlayerEntity get() {
-		return entity;
-	}
+    ServerPlayerEntity entity;
+
+    public ServerPlayerSupplier(ServerPlayerEntity entity) {
+        this.entity = entity;
+    }
+
+    @Override
+    public ServerPlayerEntity get() {
+        return entity;
+    }
 
 }

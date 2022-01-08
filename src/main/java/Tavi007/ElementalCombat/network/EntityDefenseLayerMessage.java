@@ -8,60 +8,59 @@ import net.minecraft.util.ResourceLocation;
 
 public class EntityDefenseLayerMessage extends MessageToClient {
 
-	private int id;
-	private String location;
-	private DefenseLayer defenseLayerToSend;
-	
-	public EntityDefenseLayerMessage(DefenseLayer defenseLayerToSend, ResourceLocation location, int id) {
-		this.messageIsValid = true;
-		this.defenseLayerToSend = defenseLayerToSend;
-		this.location = location.toString();
-		this.id = id;
-	}
+    private int id;
+    private String location;
+    private DefenseLayer defenseLayerToSend;
 
-	// for use by the message handler only.
-	public EntityDefenseLayerMessage(){
-		super();
-		id = 0;
-		location = "";
-		defenseLayerToSend = new DefenseLayer();
-	}
-	
-	public DefenseLayer getDefenseLayer() {
-		return defenseLayerToSend;
-	}
+    public EntityDefenseLayerMessage(DefenseLayer defenseLayerToSend, ResourceLocation location, int id) {
+        this.messageIsValid = true;
+        this.defenseLayerToSend = defenseLayerToSend;
+        this.location = location.toString();
+        this.id = id;
+    }
 
-	public int getId() {
-		return id;
-	}
-	
-	public ResourceLocation getLocation() {
-		return new ResourceLocation(location);
-	}
-	
-	public static EntityDefenseLayerMessage decode(PacketBuffer buf)
-	{
-		EntityDefenseLayerMessage retval = new EntityDefenseLayerMessage();
-		try {
-			retval.id =  buf.readInt();
-			retval.location = buf.readString();
-			retval.defenseLayerToSend.addElement(PacketBufferHelper.readStringToInt(buf));
-			retval.defenseLayerToSend.addStyle(PacketBufferHelper.readStringToInt(buf));
-			
-		} catch (IllegalArgumentException | IndexOutOfBoundsException e) {
-			ElementalCombat.LOGGER.warn("Exception while reading EntityMessage: " + e);
-			return retval;
-		}
-		retval.verify();
-		return retval;
-	}
+    // for use by the message handler only.
+    public EntityDefenseLayerMessage() {
+        super();
+        id = 0;
+        location = "";
+        defenseLayerToSend = new DefenseLayer();
+    }
 
-	public void encode(PacketBuffer buf)
-	{
-		if (!isMessageValid()) return;
-		buf.writeInt(id);
-		buf.writeString(location);
-		PacketBufferHelper.writeStringToInt(buf, defenseLayerToSend.getElementFactor());
-		PacketBufferHelper.writeStringToInt(buf, defenseLayerToSend.getStyleFactor());
-	}
+    public DefenseLayer getDefenseLayer() {
+        return defenseLayerToSend;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public ResourceLocation getLocation() {
+        return new ResourceLocation(location);
+    }
+
+    public static EntityDefenseLayerMessage decode(PacketBuffer buf) {
+        EntityDefenseLayerMessage retval = new EntityDefenseLayerMessage();
+        try {
+            retval.id = buf.readInt();
+            retval.location = buf.readString();
+            retval.defenseLayerToSend.addElement(PacketBufferHelper.readStringToInt(buf));
+            retval.defenseLayerToSend.addStyle(PacketBufferHelper.readStringToInt(buf));
+
+        } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
+            ElementalCombat.LOGGER.warn("Exception while reading EntityMessage: " + e);
+            return retval;
+        }
+        retval.verify();
+        return retval;
+    }
+
+    public void encode(PacketBuffer buf) {
+        if (!isMessageValid())
+            return;
+        buf.writeInt(id);
+        buf.writeString(location);
+        PacketBufferHelper.writeStringToInt(buf, defenseLayerToSend.getElementFactor());
+        PacketBufferHelper.writeStringToInt(buf, defenseLayerToSend.getStyleFactor());
+    }
 }

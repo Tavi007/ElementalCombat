@@ -5,17 +5,16 @@ import net.minecraft.nbt.CompoundNBT;
 
 public class AttackDataNBT extends CompoundNBT {
 
-	public AttackDataNBT() {
-		super();
-	}
-	
-	@Override
-	public boolean equals(Object object) {
-		if(object instanceof AttackDataNBT) {
-			AttackData data = ElementalCombatNBTHelper.readAttackDataFromNBT(this);
-			return data.equals(ElementalCombatNBTHelper.readAttackDataFromNBT((AttackDataNBT) object));
-		}
-		return false;
-	}
-	
+    public AttackDataNBT() {
+        super();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof AttackDataNBT) {
+            AttackData data = ElementalCombatNBTHelper.readAttackDataFromNBT(this);
+            return data.equals(ElementalCombatNBTHelper.readAttackDataFromNBT((AttackDataNBT) object));
+        }
+        return false;
+    }
 }

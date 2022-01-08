@@ -9,8 +9,8 @@ import com.google.gson.JsonParseException;
 
 import net.minecraft.util.ResourceLocation;
 
-public class CombatPropertiesContext 
-{
+public class CombatPropertiesContext {
+
     public final ResourceLocation name;
     private final boolean vanilla;
     public final boolean custom;
@@ -18,23 +18,21 @@ public class CombatPropertiesContext
     public int entryCount = 0;
     private HashSet<String> entryNames = Sets.newHashSet();
 
-    public CombatPropertiesContext(ResourceLocation name, boolean custom)
-    {
+    public CombatPropertiesContext(ResourceLocation name, boolean custom) {
         this.name = name;
         this.custom = custom;
         this.vanilla = "minecraft".equals(this.name.getNamespace());
     }
 
-    public String validateEntryName(@Nullable String name)
-    {
-        if (name != null && !this.entryNames.contains(name))
-        {
+    public String validateEntryName(@Nullable String name) {
+        if (name != null && !this.entryNames.contains(name)) {
             this.entryNames.add(name);
             return name;
         }
 
         if (!this.vanilla)
-            throw new JsonParseException("Elemental Data \"" + this.name.toString() + "\" Duplicate entry name \"" + name + "\" for pool #" + (this.poolCount - 1) + " entry #" + (this.entryCount-1));
+            throw new JsonParseException("Elemental Data \"" + this.name.toString() + "\" Duplicate entry name \"" + name + "\" for pool #"
+                + (this.poolCount - 1) + " entry #" + (this.entryCount - 1));
 
         int x = 0;
         while (this.entryNames.contains(name + "#" + x))

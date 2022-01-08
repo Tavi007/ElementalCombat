@@ -19,71 +19,71 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 public class ImmersionDataCapability {
-	@CapabilityInject(ImmersionData.class)
-	public static final Capability<ImmersionData> IMMERSION_DATA_CAPABILITY = null;
 
-	/**
-	 * The default {@link Direction} to use for this capability.
-	 */
-	public static final Direction DEFAULT_FACING = null;
+    @CapabilityInject(ImmersionData.class)
+    public static final Capability<ImmersionData> IMMERSION_DATA_CAPABILITY = null;
 
-	/**
-	 * The ID of this capability.
-	 */
-	public static final ResourceLocation ID = new ResourceLocation(ElementalCombat.MOD_ID, "hurt_overlay");
+    /**
+     * The default {@link Direction} to use for this capability.
+     */
+    public static final Direction DEFAULT_FACING = null;
 
-	public static void register() {
-		CapabilityManager.INSTANCE.register(ImmersionData.class, new Capability.IStorage<ImmersionData>() {
+    /**
+     * The ID of this capability.
+     */
+    public static final ResourceLocation ID = new ResourceLocation(ElementalCombat.MOD_ID, "hurt_overlay");
 
-			@Override
-			public INBT writeNBT(final Capability<ImmersionData> capability, final ImmersionData instance, final Direction side) {
+    public static void register() {
+        CapabilityManager.INSTANCE.register(ImmersionData.class, new Capability.IStorage<ImmersionData>() {
 
-				//fill nbt with data
-				CompoundNBT nbt = new CompoundNBT();
-				nbt.put("hurt_time", IntNBT.valueOf(instance.getHurtTime()));
-				nbt.put("disable_flag", ByteNBT.valueOf(instance.disableFlag));
-				return nbt;
-			}
+            @Override
+            public INBT writeNBT(final Capability<ImmersionData> capability, final ImmersionData instance, final Direction side) {
 
-			@Override
-			public void readNBT(final Capability<ImmersionData> capability, final ImmersionData instance, final Direction side, final INBT nbt) {
-				IntNBT timeNBT = (IntNBT) ((CompoundNBT) nbt).get("hurt_time");
-				ByteNBT redNBT = (ByteNBT) ((CompoundNBT) nbt).get("disable_flag");
-				
-				instance.setHurtTime(timeNBT.getInt());
-				if(redNBT.equals(ByteNBT.ONE)) {
-					instance.disableFlag = true;
-				}
-				else {
-					instance.disableFlag = false;
-				}
+                // fill nbt with data
+                CompoundNBT nbt = new CompoundNBT();
+                nbt.put("hurt_time", IntNBT.valueOf(instance.getHurtTime()));
+                nbt.put("disable_flag", ByteNBT.valueOf(instance.disableFlag));
+                return nbt;
+            }
 
-			}
-		}, () -> new ImmersionData());
-	}
+            @Override
+            public void readNBT(final Capability<ImmersionData> capability, final ImmersionData instance, final Direction side, final INBT nbt) {
+                IntNBT timeNBT = (IntNBT) ((CompoundNBT) nbt).get("hurt_time");
+                ByteNBT redNBT = (ByteNBT) ((CompoundNBT) nbt).get("disable_flag");
 
-	public static ICapabilityProvider createProvider(final ImmersionData atck) {
-		return new SerializableCapabilityProvider<>(IMMERSION_DATA_CAPABILITY, DEFAULT_FACING, atck);
-	}
+                instance.setHurtTime(timeNBT.getInt());
+                if (redNBT.equals(ByteNBT.ONE)) {
+                    instance.disableFlag = true;
+                } else {
+                    instance.disableFlag = false;
+                }
 
+            }
+        }, () -> new ImmersionData());
+    }
 
-	/**
-	 * Event handler for the {@link IElementalAttack} capability.
-	 */
-	@Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID)
-	private static class EventHandler {
+    public static ICapabilityProvider createProvider(final ImmersionData atck) {
+        return new SerializableCapabilityProvider<>(IMMERSION_DATA_CAPABILITY, DEFAULT_FACING, atck);
+    }
 
-		/**
-		 * Attach the {@link IElementalAttack} capability to all living entities.
-		 *
-		 * @param event The event
-		 */
-		@SubscribeEvent
-		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
-			if (event.getObject() instanceof LivingEntity) {
-				final ImmersionData ImmersionData = new ImmersionData();
-				event.addCapability(ID, createProvider(ImmersionData));
-			}
-		}
-	}
+    /**
+     * Event handler for the {@link IElementalAttack} capability.
+     */
+    @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID)
+    private static class EventHandler {
+
+        /**
+         * Attach the {@link IElementalAttack} capability to all living entities.
+         *
+         * @param event
+         *            The event
+         */
+        @SubscribeEvent
+        public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
+            if (event.getObject() instanceof LivingEntity) {
+                final ImmersionData ImmersionData = new ImmersionData();
+                event.addCapability(ID, createProvider(ImmersionData));
+            }
+        }
+    }
 }

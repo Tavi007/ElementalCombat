@@ -15,26 +15,29 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class StartupClientOnly {
 
-	public static final KeyBinding TOGGLE_HUD = new KeyBinding("Toggle HUD", KeyConflictContext.UNIVERSAL, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_J, "Elemental Combat");
+    public static final KeyBinding TOGGLE_HUD = new KeyBinding("Toggle HUD",
+        KeyConflictContext.UNIVERSAL,
+        InputMappings.Type.KEYSYM,
+        GLFW.GLFW_KEY_J,
+        "Elemental Combat");
 
-	@SubscribeEvent
-	public static void onClientSetupEvent(final FMLClientSetupEvent event)
-	{
-		//key bindings
-		ClientRegistry.registerKeyBinding(TOGGLE_HUD);
+    @SubscribeEvent
+    public static void onClientSetupEvent(final FMLClientSetupEvent event) {
+        // key bindings
+        ClientRegistry.registerKeyBinding(TOGGLE_HUD);
 
-		ElementalCombat.LOGGER.info("ElementalCombat clientRegistries method registered.");	
-	}
+        ElementalCombat.LOGGER.info("ElementalCombat clientRegistries method registered.");
+    }
 
-	@SuppressWarnings("resource")
-	@SubscribeEvent
-	public static void onParticleFactoryRegistration(ParticleFactoryRegisterEvent event) {		
-		Minecraft.getInstance().particles.registerFactory(ParticleList.CRIT_ELEMENT.get(), CombatParticle.Factory::new);
-		Minecraft.getInstance().particles.registerFactory(ParticleList.CRIT_STYLE.get(), CombatParticle.Factory::new);
-		Minecraft.getInstance().particles.registerFactory(ParticleList.RESIST_ELEMENT.get(), CombatParticle.Factory::new);
-		Minecraft.getInstance().particles.registerFactory(ParticleList.RESIST_STYLE.get(), CombatParticle.Factory::new);
-		Minecraft.getInstance().particles.registerFactory(ParticleList.ABSORB.get(), CombatParticle.Factory::new);
+    @SuppressWarnings("resource")
+    @SubscribeEvent
+    public static void onParticleFactoryRegistration(ParticleFactoryRegisterEvent event) {
+        Minecraft.getInstance().particles.registerFactory(ParticleList.CRIT_ELEMENT.get(), CombatParticle.Factory::new);
+        Minecraft.getInstance().particles.registerFactory(ParticleList.CRIT_STYLE.get(), CombatParticle.Factory::new);
+        Minecraft.getInstance().particles.registerFactory(ParticleList.RESIST_ELEMENT.get(), CombatParticle.Factory::new);
+        Minecraft.getInstance().particles.registerFactory(ParticleList.RESIST_STYLE.get(), CombatParticle.Factory::new);
+        Minecraft.getInstance().particles.registerFactory(ParticleList.ABSORB.get(), CombatParticle.Factory::new);
 
-		ElementalCombat.LOGGER.info("ElementalCombat particles factory registered.");
-	}
+        ElementalCombat.LOGGER.info("ElementalCombat particles factory registered.");
+    }
 }

@@ -22,80 +22,77 @@ import net.minecraft.util.text.ITextComponent;
 
 public class WailaTooltipRenderer implements ITooltipRenderer {
 
-	@Override
-	public Dimension getSize(CompoundNBT data, ICommonAccessor accessor) {
-		if(ClientConfig.isHWYLAActive()) {
-			if(accessor.getEntity() != null && accessor.getEntity() instanceof LivingEntity) {
-				LivingEntity living = (LivingEntity) accessor.getEntity();
-				int height = RenderHelper.maxLineHeight;
-				DefenseData defenseData = DefenseDataHelper.get(living);
-				if (!defenseData.isEmpty()) {
-					height += RenderHelper.maxLineHeight;
-					if(ClientConfig.isDoubleRowDefenseHWYLA() && !defenseData.getElementFactor().isEmpty() && !defenseData.getStyleFactor().isEmpty()) {
-						height += RenderHelper.maxLineHeight;
-					}
-				}
-				return new Dimension(RenderHelper.maxLineWidth, height);	
-			}
-			else if (accessor.getStack() != null) {
-				ItemStack stack = accessor.getStack();
-				int height = 0;
-				if(!AttackDataHelper.get(stack).isDefault()) {
-					height += RenderHelper.maxLineHeight;
-				}
-				DefenseData defenseData = DefenseDataHelper.get(stack);
-				if (!defenseData.isEmpty()) {
-					height += RenderHelper.maxLineHeight;
-					if(ClientConfig.isDoubleRowDefenseHWYLA() && !defenseData.getElementFactor().isEmpty() && !defenseData.getStyleFactor().isEmpty()) {
-						height += RenderHelper.maxLineHeight;
-					}
-					
-				}
-				return new Dimension(RenderHelper.maxLineWidth, height);	
-			}
-		}
-		return new Dimension();
-	}
+    @Override
+    public Dimension getSize(CompoundNBT data, ICommonAccessor accessor) {
+        if (ClientConfig.isHWYLAActive()) {
+            if (accessor.getEntity() != null && accessor.getEntity() instanceof LivingEntity) {
+                LivingEntity living = (LivingEntity) accessor.getEntity();
+                int height = RenderHelper.maxLineHeight;
+                DefenseData defenseData = DefenseDataHelper.get(living);
+                if (!defenseData.isEmpty()) {
+                    height += RenderHelper.maxLineHeight;
+                    if (ClientConfig.isDoubleRowDefenseHWYLA() && !defenseData.getElementFactor().isEmpty() && !defenseData.getStyleFactor().isEmpty()) {
+                        height += RenderHelper.maxLineHeight;
+                    }
+                }
+                return new Dimension(RenderHelper.maxLineWidth, height);
+            } else if (accessor.getStack() != null) {
+                ItemStack stack = accessor.getStack();
+                int height = 0;
+                if (!AttackDataHelper.get(stack).isDefault()) {
+                    height += RenderHelper.maxLineHeight;
+                }
+                DefenseData defenseData = DefenseDataHelper.get(stack);
+                if (!defenseData.isEmpty()) {
+                    height += RenderHelper.maxLineHeight;
+                    if (ClientConfig.isDoubleRowDefenseHWYLA() && !defenseData.getElementFactor().isEmpty() && !defenseData.getStyleFactor().isEmpty()) {
+                        height += RenderHelper.maxLineHeight;
+                    }
 
-	@Override
-	public void draw(CompoundNBT data, ICommonAccessor accessor, int x, int y) {
-		if(ClientConfig.isHWYLAActive()) {
+                }
+                return new Dimension(RenderHelper.maxLineWidth, height);
+            }
+        }
+        return new Dimension();
+    }
 
-			AttackData attackData;
-			DefenseData defenseData;
-			// check entity
-			Entity entity = accessor.getEntity();
-			ItemStack stack = accessor.getStack();
-			if (entity != null && entity instanceof LivingEntity) {
-				LivingEntity livingEntity = (LivingEntity) entity;
-				attackData = AttackDataHelper.get(livingEntity);
-				defenseData = DefenseDataHelper.get(livingEntity);
-			}
-			else if(stack != null) {
-				attackData = AttackDataHelper.get(stack);
-				defenseData = DefenseDataHelper.get(stack);
-			}
-			else {
-				attackData = null;
-				defenseData = null;
-			}
+    @Override
+    public void draw(CompoundNBT data, ICommonAccessor accessor, int x, int y) {
+        if (ClientConfig.isHWYLAActive()) {
 
-			//rendering starts here
-			MatrixStack matrixStack = new MatrixStack();
-			List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
-			RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseHWYLA(), attackData, defenseData);
-			RenderHelper.renderTooltip(tooltip, matrixStack, x, y);
-			
-			if(attackData != null) {
-				RenderHelper.renderAttackIcons(attackData, matrixStack, x, y);	
-				y += RenderHelper.maxLineHeight;
+            AttackData attackData;
+            DefenseData defenseData;
+            // check entity
+            Entity entity = accessor.getEntity();
+            ItemStack stack = accessor.getStack();
+            if (entity != null && entity instanceof LivingEntity) {
+                LivingEntity livingEntity = (LivingEntity) entity;
+                attackData = AttackDataHelper.get(livingEntity);
+                defenseData = DefenseDataHelper.get(livingEntity);
+            } else if (stack != null) {
+                attackData = AttackDataHelper.get(stack);
+                defenseData = DefenseDataHelper.get(stack);
+            } else {
+                attackData = null;
+                defenseData = null;
+            }
 
-			}
-			if(defenseData != null && !defenseData.isEmpty()) {
-				RenderHelper.renderDefenseIcons(defenseData, ClientConfig.isDoubleRowDefenseHWYLA(), matrixStack, x, y);
-			}
+            // rendering starts here
+            MatrixStack matrixStack = new MatrixStack();
+            List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
+            RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseHWYLA(), attackData, defenseData);
+            RenderHelper.renderTooltip(tooltip, matrixStack, x, y);
 
-		}
-	}
+            if (attackData != null) {
+                RenderHelper.renderAttackIcons(attackData, matrixStack, x, y);
+                y += RenderHelper.maxLineHeight;
+
+            }
+            if (defenseData != null && !defenseData.isEmpty()) {
+                RenderHelper.renderDefenseIcons(defenseData, ClientConfig.isDoubleRowDefenseHWYLA(), matrixStack, x, y);
+            }
+
+        }
+    }
 
 }

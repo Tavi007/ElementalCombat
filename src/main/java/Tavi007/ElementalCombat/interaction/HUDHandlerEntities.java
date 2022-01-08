@@ -8,17 +8,17 @@ import mcp.mobius.waila.api.IPluginConfig;
 import mcp.mobius.waila.api.RenderableTextComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.ITextComponent;
 
 public class HUDHandlerEntities implements IEntityComponentProvider {
-	
+
     static final IEntityComponentProvider INSTANCE = new HUDHandlerEntities();
 
-	@Override
-	public void appendBody(List<ITextComponent> tooltip, IEntityAccessor accessor, IPluginConfig config) {
-		if (accessor.getEntity() instanceof LivingEntity) {
-			CompoundNBT nbt = new CompoundNBT();
+    @Override
+    public void appendBody(List<ITextComponent> tooltip, IEntityAccessor accessor, IPluginConfig config) {
+        if (accessor.getEntity() instanceof LivingEntity) {
+            CompoundNBT nbt = new CompoundNBT();
             tooltip.add(new RenderableTextComponent(CombatPropertiesWailaPlugin.COMBAT_PROPERTIES, nbt));
-		}
-	}
+        }
+    }
 }

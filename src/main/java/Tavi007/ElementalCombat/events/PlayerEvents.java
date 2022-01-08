@@ -21,46 +21,46 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Bus.FORGE)
-public class PlayerEvents
-{
-	@SubscribeEvent
-	public static void livingEquipmentChange(LivingEquipmentChangeEvent event) {
-		LivingEntity entity = event.getEntityLiving();
-		//change defense properties
-		switch(event.getSlot().getSlotType())
-		{
-		case ARMOR:
-			DefenseLayer defenseLayer = new DefenseLayer();
-			entity.getArmorInventoryList().forEach( stack -> {
-				DefenseData data = DefenseDataHelper.get(stack);
-				defenseLayer.addLayer(data.toLayer());
-			});
-			DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("armor"));
-		case HAND:
-			AttackDataHelper.updateItemLayer(entity);
-		}
-	}
+public class PlayerEvents {
 
-	// every armor piece (curios and vanilla) will be re-applied on log in
-	// same goes for any auras (WIP)
-	// this is why, all this stuff need to be removed on log out.
-	@SubscribeEvent
-	public static void playerLoggedOut(PlayerLoggedOutEvent event) {
-		PlayerEntity entity = event.getPlayer();
-		if (entity != null) {
-			DefenseData defCapEntity = DefenseDataHelper.get(entity);
-			defCapEntity.clear();
-		}
-	}
-	@SubscribeEvent
-	public static void playerLoggedIn(PlayerLoggedInEvent event) {
-		NetworkHelper.syncJsonMessageForClients(event.getPlayer());
-	}
+    @SubscribeEvent
+    public static void livingEquipmentChange(LivingEquipmentChangeEvent event) {
+        LivingEntity entity = event.getEntityLiving();
+        // change defense properties
+        switch (event.getSlot().getSlotType()) {
+        case ARMOR:
+            DefenseLayer defenseLayer = new DefenseLayer();
+            entity.getArmorInventoryList().forEach(stack -> {
+                DefenseData data = DefenseDataHelper.get(stack);
+                defenseLayer.addLayer(data.toLayer());
+            });
+            DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("armor"));
+        case HAND:
+            AttackDataHelper.updateItemLayer(entity);
+        }
+    }
 
-	@SubscribeEvent
-	public static void onKeyInput(KeyInputEvent event) {
-		if(StartupClientOnly.TOGGLE_HUD.isKeyDown()) {
-			ClientConfig.toogleHUD();
-		}
-	}
+    // every armor piece (curios and vanilla) will be re-applied on log in
+    // same goes for any auras (WIP)
+    // this is why, all this stuff need to be removed on log out.
+    @SubscribeEvent
+    public static void playerLoggedOut(PlayerLoggedOutEvent event) {
+        PlayerEntity entity = event.getPlayer();
+        if (entity != null) {
+            DefenseData defCapEntity = DefenseDataHelper.get(entity);
+            defCapEntity.clear();
+        }
+    }
+
+    @SubscribeEvent
+    public static void playerLoggedIn(PlayerLoggedInEvent event) {
+        NetworkHelper.syncJsonMessageForClients(event.getPlayer());
+    }
+
+    @SubscribeEvent
+    public static void onKeyInput(KeyInputEvent event) {
+        if (StartupClientOnly.TOGGLE_HUD.isKeyDown()) {
+            ClientConfig.toogleHUD();
+        }
+    }
 }

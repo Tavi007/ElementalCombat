@@ -43,215 +43,252 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, value = Dist.CLIENT, bus = Bus.FORGE)
 public class RenderEvents {
 
-	@SubscribeEvent
-	public static void onRenderLivingEventPre(RenderLivingEvent.Pre<LivingEntity, EntityModel<LivingEntity>> event) {
-		LivingEntity entityIn = event.getEntity();
-		ImmersionData data = (ImmersionData) entityIn.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
-		if(entityIn.hurtTime > 0) {
-			if (data.disableFlag) {
-				data.setHurtTime(entityIn.hurtTime);
-				entityIn.hurtTime = 0; //desync client and server hurtTime.
-			}
-		}
-		else {
-			data.disableFlag = false;
-		}
-	}
+    @SubscribeEvent
+    public static void onRenderLivingEventPre(RenderLivingEvent.Pre<LivingEntity, EntityModel<LivingEntity>> event) {
+        LivingEntity entityIn = event.getEntity();
+        ImmersionData data = (ImmersionData) entityIn.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
+        if (entityIn.hurtTime > 0) {
+            if (data.disableFlag) {
+                data.setHurtTime(entityIn.hurtTime);
+                entityIn.hurtTime = 0; // desync client and server hurtTime.
+            }
+        } else {
+            data.disableFlag = false;
+        }
+    }
 
-	@SubscribeEvent
-	public static void onRenderLivingEventPost(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
-		LivingEntity entityIn = event.getEntity();
-		ImmersionData data = (ImmersionData) entityIn.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
-		if (data.disableFlag && data.getHurtTime() > 0) {
-			entityIn.hurtTime = data.getHurtTime();
-			data.setHurtTime(0);
-		}
-	}
+    @SubscribeEvent
+    public static void onRenderLivingEventPost(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
+        LivingEntity entityIn = event.getEntity();
+        ImmersionData data = (ImmersionData) entityIn.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
+        if (data.disableFlag && data.getHurtTime() > 0) {
+            entityIn.hurtTime = data.getHurtTime();
+            data.setHurtTime(0);
+        }
+    }
 
-	@SubscribeEvent
-	public static void onEntityViewRenderEvent(CameraSetup event) {
-		Minecraft mc = Minecraft.getInstance();
-		if(mc.player != null) {
-			if (mc.player.hurtTime > 0) {
-				ImmersionData data = (ImmersionData) mc.player.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
-				if(data.disableFlag) {
-					// Use the same calculation as in GameRenderer#hurtCameraEffect.
-					float f = (float) (mc.player.hurtTime - event.getRenderPartialTicks());
-					f = f / (float) mc.player.maxHurtTime;
-					f = MathHelper.sin(f * f * f * f * (float)Math.PI);
-					event.setRoll(f * 14.0F); // counter acts the screen shake. Only the hand is moving now.
-				}
-			}
-		}
-	}
+    @SubscribeEvent
+    public static void onEntityViewRenderEvent(CameraSetup event) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null) {
+            if (mc.player.hurtTime > 0) {
+                ImmersionData data = (ImmersionData) mc.player.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null)
+                    .orElse(new ImmersionData());
+                if (data.disableFlag) {
+                    // Use the same calculation as in GameRenderer#hurtCameraEffect.
+                    float f = (float) (mc.player.hurtTime - event.getRenderPartialTicks());
+                    f = f / (float) mc.player.maxHurtTime;
+                    f = MathHelper.sin(f * f * f * f * (float) Math.PI);
+                    event.setRoll(f * 14.0F); // counter acts the screen shake. Only the hand is moving now.
+                }
+            }
+        }
+    }
 
-	@SubscribeEvent
-	public static void onPlaySoundEvent(PlaySoundEvent event) {
-		Minecraft mc = Minecraft.getInstance();
-		if(mc.player != null) {
-			if (mc.player.hurtTime == mc.player.maxHurtTime) {
-				ImmersionData data = (ImmersionData) mc.player.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
-				if(data.disableFlag) {
-					//What if other mods implements their own version of an hurt sound?
-					//Also what if the on_fire sound gets disabled, even so I still took fire damage?
-					if( event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT.getRegistryName()) || 
-							event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_DROWN.getRegistryName()) ||
-							event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_ON_FIRE.getRegistryName()) ||
-							event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH.getRegistryName()) ) {
-						event.setResult(null); 
-					}
-				}
-			}
-		}
-	}
-	
-	// fires before RenderTooltipEvent.PostText
-	// add all the text to tooltip
-	
-	
-	@SubscribeEvent
-	public static void onTooltip(ItemTooltipEvent event) {
-		List<ITextComponent> tooltip = event.getToolTip();
-		ItemStack stack = event.getItemStack();
-		AttackData attackData = AttackDataHelper.get(stack);
-		DefenseData defenseData = DefenseDataHelper.get(stack);
-		boolean hasData = !(attackData.isDefault() && defenseData.isEmpty());
-		boolean hasDefenseData = !defenseData.isEmpty();
-		if(hasData) {
-			RenderHelper.addTooltipSeperator(tooltip, hasDefenseData);
-		}
-		if(!attackData.isDefault()) {
-			RenderHelper.addTooltip(tooltip, false, attackData, null);
-		}
-		if(hasDefenseData) {
-			RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseTooltip(), null, defenseData);
-		}
-	}
-	
-	// fires after ItemTooltipEvent
-	// render only icons here (because strings wont't get rendered anymore)
-	@SubscribeEvent
-	public static void onTooltipRenderPost(RenderTooltipEvent.PostText event) {
-		MatrixStack matrixStack = event.getMatrixStack();
-		ItemStack stack = event.getStack();
-		AttackData attackData = AttackDataHelper.get(stack);
-		DefenseData defenseData = DefenseDataHelper.get(stack);
-		if(!attackData.isDefault()) {
-			int tooltipIndexAttack = RenderHelper.getTooltipIndexAttack(event.getLines());
-			RenderHelper.renderAttackIcons(attackData, matrixStack, event.getX(), event.getY() + 2 + tooltipIndexAttack*RenderHelper.maxLineHeight);
-		}
-		if(!defenseData.isEmpty()) {
-			int tooltipIndexDefense = RenderHelper.getTooltipIndexDefense(event.getLines());
-			RenderHelper.renderDefenseIcons(defenseData, ClientConfig.isDoubleRowDefenseTooltip(), matrixStack, event.getX(), event.getY() + 2 + tooltipIndexDefense*RenderHelper.maxLineHeight);
-		}
-	}
+    @SubscribeEvent
+    public static void onPlaySoundEvent(PlaySoundEvent event) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null) {
+            if (mc.player.hurtTime == mc.player.maxHurtTime) {
+                ImmersionData data = (ImmersionData) mc.player.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null)
+                    .orElse(new ImmersionData());
+                if (data.disableFlag) {
+                    // What if other mods implements their own version of an hurt sound?
+                    // Also what if the on_fire sound gets disabled, even so I still took fire damage?
+                    if (event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT.getRegistryName()) ||
+                        event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_DROWN.getRegistryName()) ||
+                        event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_ON_FIRE.getRegistryName()) ||
+                        event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH.getRegistryName())) {
+                        event.setResult(null);
+                    }
+                }
+            }
+        }
+    }
 
-	static int ticks = 0;
-	@SubscribeEvent
-	public static void displayElementalCombatHUD(RenderGameOverlayEvent.Post event) {
-		if(event.getType().equals(RenderGameOverlayEvent.ElementType.HOTBAR)) {
-			ticks++;
-			if(ticks >= ClientConfig.iterationSpeed()*2.5) {  
-				ticks = 0;
-				RenderHelper.tickIteratorCounter();
-			}
-			if(ClientConfig.isHUDEnabled()) {
-				// see Screen#renderToolTips in client.gui.screen
-				Minecraft mc = Minecraft.getInstance();
-				if(mc.player != null) {
-					MatrixStack matrixStack = event.getMatrixStack();
-					float scale = (float) ClientConfig.scale();
-					AttackData attackData = AttackDataHelper.get(mc.player);
-					DefenseData defenseData = DefenseDataHelper.get(mc.player);
+    // fires before RenderTooltipEvent.PostText
+    // add all the text to tooltip
 
-					// the width of the box.
-					int listWidth = RenderHelper.maxLineWidth;
+    @SubscribeEvent
+    public static void onTooltip(ItemTooltipEvent event) {
+        List<ITextComponent> tooltip = event.getToolTip();
+        ItemStack stack = event.getItemStack();
+        AttackData attackData = AttackDataHelper.get(stack);
+        DefenseData defenseData = DefenseDataHelper.get(stack);
+        boolean hasData = !(attackData.isDefault() && defenseData.isEmpty());
+        boolean hasDefenseData = !defenseData.isEmpty();
+        if (hasData) {
+            RenderHelper.addTooltipSeperator(tooltip, hasDefenseData);
+        }
+        if (!attackData.isDefault()) {
+            RenderHelper.addTooltip(tooltip, false, attackData, null);
+        }
+        if (hasDefenseData) {
+            RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseTooltip(), null, defenseData);
+        }
+    }
 
-					// computes the height of the list
-					int listHeight = RenderHelper.maxLineHeight;
-					if(!defenseData.isEmpty()) {
-						listHeight += RenderHelper.maxLineHeight;
-						if(ClientConfig.isDoubleRowDefenseHUD() && !defenseData.getElementFactor().isEmpty() && !defenseData.getStyleFactor().isEmpty()) {
-							listHeight += RenderHelper.maxLineHeight;
-						}
-					}
+    // fires after ItemTooltipEvent
+    // render only icons here (because strings wont't get rendered anymore)
+    @SubscribeEvent
+    public static void onTooltipRenderPost(RenderTooltipEvent.PostText event) {
+        MatrixStack matrixStack = event.getMatrixStack();
+        ItemStack stack = event.getStack();
+        AttackData attackData = AttackDataHelper.get(stack);
+        DefenseData defenseData = DefenseDataHelper.get(stack);
+        if (!attackData.isDefault()) {
+            int tooltipIndexAttack = RenderHelper.getTooltipIndexAttack(event.getLines());
+            RenderHelper.renderAttackIcons(attackData, matrixStack, event.getX(), event.getY() + 2 + tooltipIndexAttack * RenderHelper.maxLineHeight);
+        }
+        if (!defenseData.isEmpty()) {
+            int tooltipIndexDefense = RenderHelper.getTooltipIndexDefense(event.getLines());
+            RenderHelper.renderDefenseIcons(defenseData,
+                ClientConfig.isDoubleRowDefenseTooltip(),
+                matrixStack,
+                event.getX(),
+                event.getY() + 2 + tooltipIndexDefense * RenderHelper.maxLineHeight);
+        }
+    }
 
-					// moves the coords so the text and box appear correct
-					int posX = 12;
-					int posY = 12;
-					if(!ClientConfig.isTop()) {
-						int screenHeight = (int) (event.getWindow().getScaledHeight()/scale);
-						posY = Math.max(12, screenHeight - listHeight - 12);
-					}
-					if(!ClientConfig.isLeft()) {
-						int screenWidth = (int) (event.getWindow().getScaledWidth()/scale);
-						posX = Math.max(12, screenWidth - listWidth - 12);
-					}
+    static int ticks = 0;
 
+    @SubscribeEvent
+    public static void displayElementalCombatHUD(RenderGameOverlayEvent.Post event) {
+        if (event.getType().equals(RenderGameOverlayEvent.ElementType.HOTBAR)) {
+            ticks++;
+            if (ticks >= ClientConfig.iterationSpeed() * 2.5) {
+                ticks = 0;
+                RenderHelper.tickIteratorCounter();
+            }
+            if (ClientConfig.isHUDEnabled()) {
+                // see Screen#renderToolTips in client.gui.screen
+                Minecraft mc = Minecraft.getInstance();
+                if (mc.player != null) {
+                    MatrixStack matrixStack = event.getMatrixStack();
+                    float scale = (float) ClientConfig.scale();
+                    AttackData attackData = AttackDataHelper.get(mc.player);
+                    DefenseData defenseData = DefenseDataHelper.get(mc.player);
 
-					matrixStack.push();
-					matrixStack.scale(scale, scale, scale);
+                    // the width of the box.
+                    int listWidth = RenderHelper.maxLineWidth;
 
-					// draw background box
-					Tessellator tessellator = Tessellator.getInstance();
-					BufferBuilder bufferbuilder = tessellator.getBuffer();
-					bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-					Matrix4f matrix4f = matrixStack.getLast().getMatrix();
-					func_238462_a_(matrix4f, bufferbuilder, posX - 3, 				posY - 4, 				posX + listWidth + 3, 	posY - 3, 					400, -267386864, -267386864);
-					func_238462_a_(matrix4f, bufferbuilder, posX - 3,			 	posY + listHeight + 1, 	posX + listWidth + 3, 	posY + listHeight + 2, 		400, -267386864, -267386864);
-					func_238462_a_(matrix4f, bufferbuilder, posX - 3, 				posY - 3, 				posX + listWidth + 3, 	posY + listHeight + 1, 		400, -267386864, -267386864);
-					func_238462_a_(matrix4f, bufferbuilder, posX - 4, 				posY - 3, 				posX - 3, 				posY + listHeight + 1, 		400, -267386864, -267386864);
-					func_238462_a_(matrix4f, bufferbuilder, posX + listWidth + 3, 	posY - 3, 				posX + listWidth + 4, 	posY + listHeight + 1, 		400, -267386864, -267386864);
-					func_238462_a_(matrix4f, bufferbuilder, posX - 3, 				posY - 3 + 1, 			posX - 3 + 1, 			posY + listHeight,		 	400, 1347420415, 1344798847);
-					func_238462_a_(matrix4f, bufferbuilder, posX + listWidth + 2, 	posY - 3 + 1, 			posX + listWidth + 3, 	posY + listHeight,		 	400, 1347420415, 1344798847);
-					func_238462_a_(matrix4f, bufferbuilder, posX - 3, 				posY - 3, 				posX + listWidth + 3, 	posY - 3 + 1, 				400, 1347420415, 1347420415);
-					func_238462_a_(matrix4f, bufferbuilder, posX - 3, 				posY + listHeight,	 	posX + listWidth + 3, 	posY + listHeight + 1, 		400, 1344798847, 1344798847);
-					RenderSystem.enableDepthTest();
-					RenderSystem.disableTexture();
-					RenderSystem.enableBlend();
-					RenderSystem.defaultBlendFunc();
-					RenderSystem.shadeModel(7425);
-					bufferbuilder.finishDrawing();
-					WorldVertexBufferUploader.draw(bufferbuilder);
-					RenderSystem.shadeModel(7424);
-					RenderSystem.disableBlend();
-					RenderSystem.enableTexture();
-					IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-					matrixStack.translate(0.0D, 0.0D, 400.0D);
-					irendertypebuffer$impl.finish();
+                    // computes the height of the list
+                    int listHeight = RenderHelper.maxLineHeight;
+                    if (!defenseData.isEmpty()) {
+                        listHeight += RenderHelper.maxLineHeight;
+                        if (ClientConfig.isDoubleRowDefenseHUD() && !defenseData.getElementFactor().isEmpty() && !defenseData.getStyleFactor().isEmpty()) {
+                            listHeight += RenderHelper.maxLineHeight;
+                        }
+                    }
 
-					//fill and render tooltip
-					List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
-					RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseHUD(), attackData, defenseData);
-					RenderHelper.renderTooltip(tooltip, matrixStack, posX, posY);
-					
-					// render attackData icons
-					RenderHelper.renderAttackIcons(attackData, matrixStack, posX, posY);
+                    // moves the coords so the text and box appear correct
+                    int posX = 12;
+                    int posY = 12;
+                    if (!ClientConfig.isTop()) {
+                        int screenHeight = (int) (event.getWindow().getScaledHeight() / scale);
+                        posY = Math.max(12, screenHeight - listHeight - 12);
+                    }
+                    if (!ClientConfig.isLeft()) {
+                        int screenWidth = (int) (event.getWindow().getScaledWidth() / scale);
+                        posX = Math.max(12, screenWidth - listWidth - 12);
+                    }
 
-					// render defenseData icons
-					if(!defenseData.isEmpty()) {
-						posY += RenderHelper.maxLineHeight;
-						RenderHelper.renderDefenseIcons(defenseData, ClientConfig.isDoubleRowDefenseHUD(), matrixStack, posX, posY);
-					}
-					matrixStack.pop();
-				}
-			}
-		}
-	}
+                    matrixStack.push();
+                    matrixStack.scale(scale, scale, scale);
 
-	//copied from Screen
-	protected static void func_238462_a_(Matrix4f p_238462_0_, BufferBuilder p_238462_1_, int p_238462_2_, int p_238462_3_, int p_238462_4_, int p_238462_5_, int p_238462_6_, int p_238462_7_, int p_238462_8_) {
-		float f = (float)(p_238462_7_ >> 24 & 255) / 255.0F;
-		float f1 = (float)(p_238462_7_ >> 16 & 255) / 255.0F;
-		float f2 = (float)(p_238462_7_ >> 8 & 255) / 255.0F;
-		float f3 = (float)(p_238462_7_ & 255) / 255.0F;
-		float f4 = (float)(p_238462_8_ >> 24 & 255) / 255.0F;
-		float f5 = (float)(p_238462_8_ >> 16 & 255) / 255.0F;
-		float f6 = (float)(p_238462_8_ >> 8 & 255) / 255.0F;
-		float f7 = (float)(p_238462_8_ & 255) / 255.0F;
-		p_238462_1_.pos(p_238462_0_, (float)p_238462_4_, (float)p_238462_3_, (float)p_238462_6_).color(f1, f2, f3, f).endVertex();
-		p_238462_1_.pos(p_238462_0_, (float)p_238462_2_, (float)p_238462_3_, (float)p_238462_6_).color(f1, f2, f3, f).endVertex();
-		p_238462_1_.pos(p_238462_0_, (float)p_238462_2_, (float)p_238462_5_, (float)p_238462_6_).color(f5, f6, f7, f4).endVertex();
-		p_238462_1_.pos(p_238462_0_, (float)p_238462_4_, (float)p_238462_5_, (float)p_238462_6_).color(f5, f6, f7, f4).endVertex();
-	}
+                    // draw background box
+                    Tessellator tessellator = Tessellator.getInstance();
+                    BufferBuilder bufferbuilder = tessellator.getBuffer();
+                    bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+                    Matrix4f matrix4f = matrixStack.getLast().getMatrix();
+                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 4, posX + listWidth + 3, posY - 3, 400, -267386864, -267386864);
+                    func_238462_a_(matrix4f,
+                        bufferbuilder,
+                        posX - 3,
+                        posY + listHeight + 1,
+                        posX + listWidth + 3,
+                        posY + listHeight + 2,
+                        400,
+                        -267386864,
+                        -267386864);
+                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + listWidth + 3, posY + listHeight + 1, 400, -267386864, -267386864);
+                    func_238462_a_(matrix4f, bufferbuilder, posX - 4, posY - 3, posX - 3, posY + listHeight + 1, 400, -267386864, -267386864);
+                    func_238462_a_(matrix4f,
+                        bufferbuilder,
+                        posX + listWidth + 3,
+                        posY - 3,
+                        posX + listWidth + 4,
+                        posY + listHeight + 1,
+                        400,
+                        -267386864,
+                        -267386864);
+                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3 + 1, posX - 3 + 1, posY + listHeight, 400, 1347420415, 1344798847);
+                    func_238462_a_(matrix4f,
+                        bufferbuilder,
+                        posX + listWidth + 2,
+                        posY - 3 + 1,
+                        posX + listWidth + 3,
+                        posY + listHeight,
+                        400,
+                        1347420415,
+                        1344798847);
+                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + listWidth + 3, posY - 3 + 1, 400, 1347420415, 1347420415);
+                    func_238462_a_(matrix4f,
+                        bufferbuilder,
+                        posX - 3,
+                        posY + listHeight,
+                        posX + listWidth + 3,
+                        posY + listHeight + 1,
+                        400,
+                        1344798847,
+                        1344798847);
+                    RenderSystem.enableDepthTest();
+                    RenderSystem.disableTexture();
+                    RenderSystem.enableBlend();
+                    RenderSystem.defaultBlendFunc();
+                    RenderSystem.shadeModel(7425);
+                    bufferbuilder.finishDrawing();
+                    WorldVertexBufferUploader.draw(bufferbuilder);
+                    RenderSystem.shadeModel(7424);
+                    RenderSystem.disableBlend();
+                    RenderSystem.enableTexture();
+                    IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+                    matrixStack.translate(0.0D, 0.0D, 400.0D);
+                    irendertypebuffer$impl.finish();
+
+                    // fill and render tooltip
+                    List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
+                    RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseHUD(), attackData, defenseData);
+                    RenderHelper.renderTooltip(tooltip, matrixStack, posX, posY);
+
+                    // render attackData icons
+                    RenderHelper.renderAttackIcons(attackData, matrixStack, posX, posY);
+
+                    // render defenseData icons
+                    if (!defenseData.isEmpty()) {
+                        posY += RenderHelper.maxLineHeight;
+                        RenderHelper.renderDefenseIcons(defenseData, ClientConfig.isDoubleRowDefenseHUD(), matrixStack, posX, posY);
+                    }
+                    matrixStack.pop();
+                }
+            }
+        }
+    }
+
+    // copied from Screen
+    protected static void func_238462_a_(Matrix4f p_238462_0_, BufferBuilder p_238462_1_, int p_238462_2_, int p_238462_3_, int p_238462_4_, int p_238462_5_,
+            int p_238462_6_, int p_238462_7_, int p_238462_8_) {
+        float f = (float) (p_238462_7_ >> 24 & 255) / 255.0F;
+        float f1 = (float) (p_238462_7_ >> 16 & 255) / 255.0F;
+        float f2 = (float) (p_238462_7_ >> 8 & 255) / 255.0F;
+        float f3 = (float) (p_238462_7_ & 255) / 255.0F;
+        float f4 = (float) (p_238462_8_ >> 24 & 255) / 255.0F;
+        float f5 = (float) (p_238462_8_ >> 16 & 255) / 255.0F;
+        float f6 = (float) (p_238462_8_ >> 8 & 255) / 255.0F;
+        float f7 = (float) (p_238462_8_ & 255) / 255.0F;
+        p_238462_1_.pos(p_238462_0_, (float) p_238462_4_, (float) p_238462_3_, (float) p_238462_6_).color(f1, f2, f3, f).endVertex();
+        p_238462_1_.pos(p_238462_0_, (float) p_238462_2_, (float) p_238462_3_, (float) p_238462_6_).color(f1, f2, f3, f).endVertex();
+        p_238462_1_.pos(p_238462_0_, (float) p_238462_2_, (float) p_238462_5_, (float) p_238462_6_).color(f5, f6, f7, f4).endVertex();
+        p_238462_1_.pos(p_238462_0_, (float) p_238462_4_, (float) p_238462_5_, (float) p_238462_6_).color(f5, f6, f7, f4).endVertex();
+    }
 }

@@ -37,122 +37,120 @@ import net.minecraftforge.fml.network.PacketDistributor;
 @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Bus.FORGE)
 public class ServerEvents {
 
-	@SubscribeEvent
-	public static void addReloadListenerEvent(AddReloadListenerEvent event) {
-		event.addListener(ElementalCombat.COMBAT_PROPERTIES_MANGER);
-		ElementalCombat.LOGGER.info("ReloadListener for combat data registered.");
-	}
+    @SubscribeEvent
+    public static void addReloadListenerEvent(AddReloadListenerEvent event) {
+        event.addListener(ElementalCombat.COMBAT_PROPERTIES_MANGER);
+        ElementalCombat.LOGGER.info("ReloadListener for combat data registered.");
+    }
 
-	@SubscribeEvent
-	public static void entityJoinWorld(EntityJoinWorldEvent event) {
-		if(!event.getWorld().isRemote()) { // only server side should check
-			Entity entity = event.getEntity();
+    @SubscribeEvent
+    public static void entityJoinWorld(EntityJoinWorldEvent event) {
+        if (!event.getWorld().isRemote()) { // only server side should check
+            Entity entity = event.getEntity();
 
-			// for synchronization after switching dimensions
-			if (entity instanceof LivingEntity) {
-				NetworkHelper.syncMessageForClients((LivingEntity) entity);
-			}
-			else if(entity instanceof ProjectileEntity && entity.ticksExisted == 0) {
-				// fill with default values in here.
-				ProjectileEntity projectile = (ProjectileEntity) entity;
-				AttackData projectileData = AttackDataHelper.get(projectile);
-				projectileData.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(projectile));
-				addLayerFromSource(projectileData, projectile.func_234616_v_());
-				addLayerFromPotion(projectileData, projectile);
-			}
-		}
-	}
-	
-	private static void addLayerFromSource(AttackData projectileData, Entity source) {
-		if(source != null && source instanceof LivingEntity) {
-			AttackData sourceData = AttackDataHelper.get((LivingEntity) source);
-			projectileData.putLayer(new ResourceLocation("mob"), sourceData.toLayer());
-		}
-	}
-	
-	private static void addLayerFromPotion(AttackData projectileData, ProjectileEntity projectile) {
-		if(projectile instanceof ArrowEntity) {
-			CompoundNBT compound = new CompoundNBT();
-			((ArrowEntity) projectile).writeAdditional(compound);
-			if (compound.contains("Potion", 8)) {
-				AttackData potionLayer = new AttackData();
-				PotionUtils.getEffectsFromTag(compound).forEach(effect -> {
-					potionLayer.putLayer(new ResourceLocation(effect.getEffectName()), BasePropertiesAPI.getAttackLayer(effect));
-				});
-				projectileData.putLayer(new ResourceLocation("potion"), potionLayer.toLayer());
-			}
-		}
-	}
+            // for synchronization after switching dimensions
+            if (entity instanceof LivingEntity) {
+                NetworkHelper.syncMessageForClients((LivingEntity) entity);
+            } else if (entity instanceof ProjectileEntity && entity.ticksExisted == 0) {
+                // fill with default values in here.
+                ProjectileEntity projectile = (ProjectileEntity) entity;
+                AttackData projectileData = AttackDataHelper.get(projectile);
+                projectileData.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(projectile));
+                addLayerFromSource(projectileData, projectile.func_234616_v_());
+                addLayerFromPotion(projectileData, projectile);
+            }
+        }
+    }
 
-	@SubscribeEvent
-	public static void elementifyLivingHurtEvent(LivingHurtEvent event) {
-		DamageSource damageSource = event.getSource();
+    private static void addLayerFromSource(AttackData projectileData, Entity source) {
+        if (source != null && source instanceof LivingEntity) {
+            AttackData sourceData = AttackDataHelper.get((LivingEntity) source);
+            projectileData.putLayer(new ResourceLocation("mob"), sourceData.toLayer());
+        }
+    }
 
-		// no modification. Entity should take normal damage and die eventually.
-		if(damageSource == DamageSource.OUT_OF_WORLD) {
-			return;	
-		}
+    private static void addLayerFromPotion(AttackData projectileData, ProjectileEntity projectile) {
+        if (projectile instanceof ArrowEntity) {
+            CompoundNBT compound = new CompoundNBT();
+            ((ArrowEntity) projectile).writeAdditional(compound);
+            if (compound.contains("Potion", 8)) {
+                AttackData potionLayer = new AttackData();
+                PotionUtils.getEffectsFromTag(compound).forEach(effect -> {
+                    potionLayer.putLayer(new ResourceLocation(effect.getEffectName()), BasePropertiesAPI.getAttackLayer(effect));
+                });
+                projectileData.putLayer(new ResourceLocation("potion"), potionLayer.toLayer());
+            }
+        }
+    }
 
-		// compute new Damage value  
-		AttackData sourceData = AttackDataHelper.get(damageSource);
-		LivingEntity target = event.getEntityLiving();
-		float damageAmount = event.getAmount();
-		// Get the protection data from target
-		DefenseData defCap = DefenseDataHelper.get(target);
-		float defenseStyleScaling =  DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceData.getStyle(), true);
-		float defenseElementScaling = DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceData.getElement(), false);
-		damageAmount = (float) (damageAmount*defenseStyleScaling*defenseElementScaling);
+    @SubscribeEvent
+    public static void elementifyLivingHurtEvent(LivingHurtEvent event) {
+        DamageSource damageSource = event.getSource();
 
-		// display particles
-		int maxParticle = 12;
-		int amountScale = 16;
-		if(defenseStyleScaling < 1) {
-			sendParticleMessage(target, "resistent_style", Math.min(maxParticle, 1+Math.round((1-defenseStyleScaling)*amountScale)));
-		} else if (defenseStyleScaling > 1) {
-			sendParticleMessage(target, "critical_style", Math.min(maxParticle, 1+Math.round((defenseStyleScaling-1)*amountScale)));
-		}
+        // no modification. Entity should take normal damage and die eventually.
+        if (damageSource == DamageSource.OUT_OF_WORLD) {
+            return;
+        }
 
-		if(defenseElementScaling < 0) {
-			sendParticleMessage(target, "absorb", Math.min(maxParticle, 1+Math.round(-defenseElementScaling*amountScale)));
-		} else if (defenseElementScaling >= 0 && defenseElementScaling < 1) {
-			sendParticleMessage(target, "resistent_element", Math.min(maxParticle, 1+Math.round((1-defenseElementScaling)*amountScale)));
-		} else if (defenseElementScaling > 1) {
-			sendParticleMessage(target, "critical_element", Math.min(maxParticle, 1+Math.round((defenseElementScaling-1)*amountScale)));
-		}
+        // compute new Damage value
+        AttackData sourceData = AttackDataHelper.get(damageSource);
+        LivingEntity target = event.getEntityLiving();
+        float damageAmount = event.getAmount();
+        // Get the protection data from target
+        DefenseData defCap = DefenseDataHelper.get(target);
+        float defenseStyleScaling = DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceData.getStyle(), true);
+        float defenseElementScaling = DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceData.getElement(), false);
+        damageAmount = (float) (damageAmount * defenseStyleScaling * defenseElementScaling);
 
-		// heal the target, if damage is lower than 0
-		if(damageAmount <= 0) {
-			target.heal(-damageAmount);
-			event.setCanceled(true);
-			damageAmount = 0;
+        // display particles
+        int maxParticle = 12;
+        int amountScale = 16;
+        if (defenseStyleScaling < 1) {
+            sendParticleMessage(target, "resistent_style", Math.min(maxParticle, 1 + Math.round((1 - defenseStyleScaling) * amountScale)));
+        } else if (defenseStyleScaling > 1) {
+            sendParticleMessage(target, "critical_style", Math.min(maxParticle, 1 + Math.round((defenseStyleScaling - 1) * amountScale)));
+        }
 
-			// send message to disable the hurt animation and sound.
-			DisableDamageRenderMessage messageToClient = new DisableDamageRenderMessage(target.getEntityId());
-			ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
+        if (defenseElementScaling < 0) {
+            sendParticleMessage(target, "absorb", Math.min(maxParticle, 1 + Math.round(-defenseElementScaling * amountScale)));
+        } else if (defenseElementScaling >= 0 && defenseElementScaling < 1) {
+            sendParticleMessage(target, "resistent_element", Math.min(maxParticle, 1 + Math.round((1 - defenseElementScaling) * amountScale)));
+        } else if (defenseElementScaling > 1) {
+            sendParticleMessage(target, "critical_element", Math.min(maxParticle, 1 + Math.round((defenseElementScaling - 1) * amountScale)));
+        }
 
-			// play a healing sound 
-			SoundEvent sound = SoundEvents.ENTITY_PLAYER_LEVELUP; //need better sound
-			target.getEntityWorld().playSound(null, target.getPosition(), sound, SoundCategory.MASTER, 1.0f, 2.0f);
-		}
+        // heal the target, if damage is lower than 0
+        if (damageAmount <= 0) {
+            target.heal(-damageAmount);
+            event.setCanceled(true);
+            damageAmount = 0;
 
-		event.setAmount(damageAmount);
-	}
+            // send message to disable the hurt animation and sound.
+            DisableDamageRenderMessage messageToClient = new DisableDamageRenderMessage(target.getEntityId());
+            ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 
-	private static void sendParticleMessage(LivingEntity entity, String name, int amount) {
-		//define message
-		CreateEmitterMessage messageToClient = new CreateEmitterMessage(entity.getEntityId(), name, amount);
+            // play a healing sound
+            SoundEvent sound = SoundEvents.ENTITY_PLAYER_LEVELUP; // need better sound
+            target.getEntityWorld().playSound(null, target.getPosition(), sound, SoundCategory.MASTER, 1.0f, 2.0f);
+        }
 
-		//send message to nearby players
-		ServerWorld world = (ServerWorld) entity.world;
-		for(int j = 0; j < world.getPlayers().size(); ++j) {
-			ServerPlayerEntity serverplayerentity = world.getPlayers().get(j);
-			BlockPos blockpos = serverplayerentity.getPosition();
-			if (blockpos.withinDistance(entity.getPositionVec(), 32.0D)) {
-				Supplier<ServerPlayerEntity> supplier = new ServerPlayerSupplier(serverplayerentity);
-				ElementalCombat.simpleChannel.send(PacketDistributor.PLAYER.with(supplier), messageToClient);
-			}
-		}
-	}
+        event.setAmount(damageAmount);
+    }
 
+    private static void sendParticleMessage(LivingEntity entity, String name, int amount) {
+        // define message
+        CreateEmitterMessage messageToClient = new CreateEmitterMessage(entity.getEntityId(), name, amount);
+
+        // send message to nearby players
+        ServerWorld world = (ServerWorld) entity.world;
+        for (int j = 0; j < world.getPlayers().size(); ++j) {
+            ServerPlayerEntity serverplayerentity = world.getPlayers().get(j);
+            BlockPos blockpos = serverplayerentity.getPosition();
+            if (blockpos.withinDistance(entity.getPositionVec(), 32.0D)) {
+                Supplier<ServerPlayerEntity> supplier = new ServerPlayerSupplier(serverplayerentity);
+                ElementalCombat.simpleChannel.send(PacketDistributor.PLAYER.with(supplier), messageToClient);
+            }
+        }
+    }
 
 }

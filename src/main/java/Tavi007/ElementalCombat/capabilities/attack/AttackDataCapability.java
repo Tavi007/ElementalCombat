@@ -20,63 +20,63 @@ import net.minecraftforge.fml.common.Mod;
 
 public class AttackDataCapability {
 
-	@CapabilityInject(AttackData.class)
-	public static final Capability<AttackData> ELEMENTAL_ATTACK_CAPABILITY = null;
+    @CapabilityInject(AttackData.class)
+    public static final Capability<AttackData> ELEMENTAL_ATTACK_CAPABILITY = null;
 
-	/**
-	 * The default {@link Direction} to use for this capability.
-	 */
-	public static final Direction DEFAULT_FACING = null;
+    /**
+     * The default {@link Direction} to use for this capability.
+     */
+    public static final Direction DEFAULT_FACING = null;
 
-	/**
-	 * The ID of this capability.
-	 */
-	public static final ResourceLocation ID = new ResourceLocation(ElementalCombat.MOD_ID, "attack_data");
+    /**
+     * The ID of this capability.
+     */
+    public static final ResourceLocation ID = new ResourceLocation(ElementalCombat.MOD_ID, "attack_data");
 
-	public static void register() {
-		CapabilityManager.INSTANCE.register(AttackData.class, new Capability.IStorage<AttackData>() {
+    public static void register() {
+        CapabilityManager.INSTANCE.register(AttackData.class, new Capability.IStorage<AttackData>() {
 
-			@Override
-			public INBT writeNBT(final Capability<AttackData> capability, final AttackData instance, final Direction side) {
-				AttackDataNBT nbt = new AttackDataNBT();
-				ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, instance);
-				return nbt;
-			}
+            @Override
+            public INBT writeNBT(final Capability<AttackData> capability, final AttackData instance, final Direction side) {
+                AttackDataNBT nbt = new AttackDataNBT();
+                ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, instance);
+                return nbt;
+            }
 
-			@Override
-			public void readNBT(final Capability<AttackData> capability, final AttackData instance, final Direction side, final INBT nbt) {
-				AttackData data = ElementalCombatNBTHelper.readAttackDataFromNBT((CompoundNBT)nbt);
-				instance.set(data);
-			}
-		}, () -> new AttackData());
-	}
+            @Override
+            public void readNBT(final Capability<AttackData> capability, final AttackData instance, final Direction side, final INBT nbt) {
+                AttackData data = ElementalCombatNBTHelper.readAttackDataFromNBT((CompoundNBT) nbt);
+                instance.set(data);
+            }
+        }, () -> new AttackData());
+    }
 
-	public static ICapabilityProvider createProvider(final AttackData atck) {
-		return new SerializableCapabilityProvider<>(ELEMENTAL_ATTACK_CAPABILITY, DEFAULT_FACING, atck);
-	}
+    public static ICapabilityProvider createProvider(final AttackData atck) {
+        return new SerializableCapabilityProvider<>(ELEMENTAL_ATTACK_CAPABILITY, DEFAULT_FACING, atck);
+    }
 
+    /**
+     * Event handler for the {@link IElementalAttack} capability.
+     */
+    @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID)
+    private static class EventHandler {
 
-	/**
-	 * Event handler for the {@link IElementalAttack} capability.
-	 */
-	@Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID)
-	private static class EventHandler {
+        /**
+         * Attach the {@link IElementalAttack} capability to all living entities.
+         *
+         * @param event
+         *            The event
+         */
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
+            final AttackData atck = new AttackData();
+            event.addCapability(ID, createProvider(atck));
+        }
 
-		/**
-		 * Attach the {@link IElementalAttack} capability to all living entities.
-		 *
-		 * @param event The event
-		 */
-		@SubscribeEvent(priority = EventPriority.LOWEST)
-		public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
-			final AttackData atck = new AttackData();
-			event.addCapability(ID, createProvider(atck));
-		}
-
-		@SubscribeEvent(priority = EventPriority.LOWEST)
-		public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-			final AttackData atck = new AttackData();
-			event.addCapability(ID, createProvider(atck));
-		}
-	}
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
+            final AttackData atck = new AttackData();
+            event.addCapability(ID, createProvider(atck));
+        }
+    }
 }
