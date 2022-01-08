@@ -1,7 +1,4 @@
 {
-	"attack_style":"",
-	"attack_element":"",
-	
 	"defense_style":{
 		"explosion":-5
 	},

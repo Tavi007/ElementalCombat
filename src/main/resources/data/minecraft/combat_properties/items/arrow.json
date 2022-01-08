@@ -1,10 +1,4 @@
 {
 	"attack_style":"projectile",
-	"attack_element":"normal",
-	
-	"defense_style":{
-	},
-	
-	"defense_element":{
-	}
+	"attack_element":"normal"
 }

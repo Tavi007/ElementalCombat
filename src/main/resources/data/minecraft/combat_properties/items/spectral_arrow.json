@@ -1,10 +1,4 @@
 {
 	"attack_style":"magic",
-	"attack_element":"light",
-	
-	"defense_style":{
-	},
-	
-	"defense_element":{
-	}
+	"attack_element":"light"
 }
