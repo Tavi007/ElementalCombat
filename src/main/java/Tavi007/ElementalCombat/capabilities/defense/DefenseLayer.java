@@ -128,18 +128,20 @@ public class DefenseLayer {
          *            The additional mapping.
          */
         public void add(HashMap<String, Integer> otherMap) {
-            otherMap.forEach((key, value) -> {
-                if (!map.containsKey(key)) {
-                    map.put(key, value);
-                } else {
-                    int newValue = map.get(key) + value;
-                    if (newValue == 0) {
-                        map.remove(key);
+            if (otherMap != null) {
+                otherMap.forEach((key, value) -> {
+                    if (!map.containsKey(key)) {
+                        map.put(key, value);
                     } else {
-                        map.put(key, newValue);
+                        int newValue = map.get(key) + value;
+                        if (newValue == 0) {
+                            map.remove(key);
+                        } else {
+                            map.put(key, newValue);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         /**
@@ -151,18 +153,20 @@ public class DefenseLayer {
          *            The additional mapping.
          */
         public void subtract(HashMap<String, Integer> otherMap) {
-            otherMap.forEach((key, value) -> {
-                if (!map.containsKey(key)) {
-                    map.put(key, value);
-                } else {
-                    int newValue = map.get(key) - value;
-                    if (newValue == 0) {
-                        map.remove(key);
+            if (otherMap != null) {
+                otherMap.forEach((key, value) -> {
+                    if (!map.containsKey(key)) {
+                        map.put(key, value);
                     } else {
-                        map.put(key, newValue);
+                        int newValue = map.get(key) - value;
+                        if (newValue == 0) {
+                            map.remove(key);
+                        } else {
+                            map.put(key, newValue);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         /**
@@ -174,13 +178,15 @@ public class DefenseLayer {
          *            The additional mapping.
          */
         public void merge(HashMap<String, Integer> otherMap) {
-            otherMap.forEach((key, value) -> {
-                if (!map.containsKey(key)) {
-                    map.put(key, value);
-                } else if (map.get(key) > value) {
-                    map.put(key, value);
-                }
-            });
+            if (otherMap != null) {
+                otherMap.forEach((key, value) -> {
+                    if (!map.containsKey(key)) {
+                        map.put(key, value);
+                    } else if (map.get(key) > value) {
+                        map.put(key, value);
+                    }
+                });
+            }
         }
 
         public boolean isEmpty() {
