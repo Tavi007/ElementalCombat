@@ -1,62 +1,66 @@
 package Tavi007.ElementalCombat.loading;
 
+import com.google.gson.annotations.SerializedName;
+
 import Tavi007.ElementalCombat.config.ServerConfig;
 import net.minecraft.network.PacketBuffer;
 
 public class AttackOnlyCombatProperties {
 
-    private String attack_style;
-    private String attack_element;
+    @SerializedName("attack_style")
+    private String attackStyle;
+    @SerializedName("attack_element")
+    private String attackElement;
 
     public AttackOnlyCombatProperties() {
-        this.attack_style = ServerConfig.getDefaultStyle();
-        this.attack_element = ServerConfig.getDefaultElement();
+        this.attackStyle = ServerConfig.getDefaultStyle();
+        this.attackElement = ServerConfig.getDefaultElement();
     }
 
-    public AttackOnlyCombatProperties(String attack_style, String attack_element) {
-        if (attack_style.isEmpty()) {
-            this.attack_style = ServerConfig.getDefaultStyle();
+    public AttackOnlyCombatProperties(String attackStyle, String attackElement) {
+        if (attackStyle.isEmpty()) {
+            this.attackStyle = ServerConfig.getDefaultStyle();
         } else {
-            this.attack_style = attack_style;
+            this.attackStyle = attackStyle;
         }
-        if (attack_element.isEmpty()) {
-            this.attack_element = ServerConfig.getDefaultElement();
+        if (attackElement.isEmpty()) {
+            this.attackElement = ServerConfig.getDefaultElement();
         } else {
-            this.attack_element = attack_element;
+            this.attackElement = attackElement;
         }
     }
 
     public AttackOnlyCombatProperties(AttackOnlyCombatProperties properties) {
-        this.attack_element = properties.getAttackElement();
-        this.attack_style = properties.getAttackStyle();
+        this.attackElement = properties.getAttackElement();
+        this.attackStyle = properties.getAttackStyle();
     }
 
     public String getAttackStyle() {
-        return this.attack_style;
+        return this.attackStyle;
     }
 
     public String getAttackElement() {
-        return this.attack_element;
+        return this.attackElement;
     }
 
     public boolean isEmpty() {
-        return attack_style.equals(ServerConfig.getDefaultStyle()) && attack_element.equals(ServerConfig.getDefaultElement());
+        return attackStyle.equals(ServerConfig.getDefaultStyle()) && attackElement.equals(ServerConfig.getDefaultElement());
     }
 
     public void writeToBuffer(PacketBuffer buf) {
-        buf.writeString(attack_style);
-        buf.writeString(attack_element);
+        buf.writeString(attackStyle);
+        buf.writeString(attackElement);
     }
 
     public void readFromBuffer(PacketBuffer buf) {
-        attack_style = buf.readString();
-        attack_element = buf.readString();
+        attackStyle = buf.readString();
+        attackElement = buf.readString();
     }
 
     @Override
     public String toString() {
-        return "\nAtckStyle=" + attack_style.toString()
-            + "\nAtckElement=" + attack_element.toString();
+        return "\nAttackStyle=" + attackStyle.toString()
+            + "\nAttackElement=" + attackElement.toString();
     }
 
 }

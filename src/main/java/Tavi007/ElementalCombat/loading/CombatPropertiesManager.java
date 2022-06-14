@@ -146,11 +146,11 @@ public class CombatPropertiesManager extends JsonReloadListener {
         builderDamageSource.put(EMPTY_RESOURCELOCATION, new AttackOnlyCombatProperties());
         builderProjectile.put(EMPTY_RESOURCELOCATION, new AttackOnlyCombatProperties());
 
-        this.registeredMobData = builderMob.build();
-        this.registeredItemData = builderItem.build();
-        this.registeredBiomeData = builderBiome.build();
-        this.registeredDamageSourceData = builderDamageSource.build();
-        this.registeredProjectileData = builderProjectile.build();
+        registeredMobData = builderMob.build();
+        registeredItemData = builderItem.build();
+        registeredBiomeData = builderBiome.build();
+        registeredDamageSourceData = builderDamageSource.build();
+        registeredProjectileData = builderProjectile.build();
 
         counter.forEach((modid, propertyCounter) -> {
             ElementalCombat.LOGGER.info("The mod " + modid + " loaded: ");
@@ -187,22 +187,22 @@ public class CombatPropertiesManager extends JsonReloadListener {
     }
 
     public MobCombatProperties getMobDataFromLocation(ResourceLocation rl) {
-        return new MobCombatProperties(this.registeredMobData.getOrDefault(rl, new MobCombatProperties()));
+        return new MobCombatProperties(registeredMobData.getOrDefault(rl, new MobCombatProperties()));
     }
 
     public ItemCombatProperties getItemDataFromLocation(ResourceLocation rl) {
-        return new ItemCombatProperties(this.registeredItemData.getOrDefault(rl, new ItemCombatProperties()));
+        return new ItemCombatProperties(registeredItemData.getOrDefault(rl, new ItemCombatProperties()));
     }
 
     public BiomeCombatProperties getBiomeDataFromLocation(ResourceLocation rl) {
-        return new BiomeCombatProperties(this.registeredBiomeData.getOrDefault(rl, new BiomeCombatProperties()));
+        return new BiomeCombatProperties(registeredBiomeData.getOrDefault(rl, new BiomeCombatProperties()));
     }
 
     public AttackOnlyCombatProperties getDamageSourceDataFromLocation(ResourceLocation rl) {
-        return new AttackOnlyCombatProperties(this.registeredDamageSourceData.getOrDefault(rl, new AttackOnlyCombatProperties()));
+        return new AttackOnlyCombatProperties(registeredDamageSourceData.getOrDefault(rl, new AttackOnlyCombatProperties()));
     }
 
     public AttackOnlyCombatProperties getProjectileDataFromLocation(ResourceLocation rl) {
-        return new AttackOnlyCombatProperties(this.registeredProjectileData.getOrDefault(rl, new AttackOnlyCombatProperties()));
+        return new AttackOnlyCombatProperties(registeredProjectileData.getOrDefault(rl, new AttackOnlyCombatProperties()));
     }
 }
