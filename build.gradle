@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -17,7 +17,7 @@ version = "${mod_version}"
 group = "${mod_group}"
 archivesBaseName = "${mod_id}-forge"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(16) 
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -71,14 +71,14 @@ minecraft {
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
 
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}:api")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}")
+    //compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}:api")
+    //runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}")
 	
-    compileOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}:api")
-    runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}")
+    //compileOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}:api")
+    //runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}")
 	
-    compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
+    //compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
+    //runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
 }
 
 repositories {
