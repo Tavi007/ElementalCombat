@@ -1,14 +1,7 @@
 {
-	"attack_style":"",
-	"attack_element":"",
-	
-	"defense_style":{
-	},
-	
 	"defense_element":{
 		"wind":-12,
 		"flora":-12
 	},
-	
 	"biome_dependency":true
 }

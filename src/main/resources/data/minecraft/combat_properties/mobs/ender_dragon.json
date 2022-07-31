@@ -1,10 +1,5 @@
 {
 	"attack_style":"magic",
-	"attack_element":"",
-	
-	"defense_style":{
-	},
-	
 	"defense_element":{
 		"wind":-25,
 		"fire":12,
@@ -12,6 +7,5 @@
 		"thunder":12,
 		"water":12
 	},
-	
 	"biome_dependency":false
 }

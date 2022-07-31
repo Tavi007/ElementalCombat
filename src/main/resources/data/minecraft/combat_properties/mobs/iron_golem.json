@@ -1,7 +1,4 @@
 {
-	"attack_style":"",
-	"attack_element":"",
-	
 	"defense_style":{
 		"magic":-25,
 		"stab":25,
@@ -11,7 +8,6 @@
 		"explosion":25,
 		"projectile":25
 	},
-	
 	"defense_element":{
 		"earth":-25,
 		"water":-25,
@@ -24,6 +20,5 @@
 		"thunder":25,
 		"flora":25
 	},
-	
 	"biome_dependency":false
 }

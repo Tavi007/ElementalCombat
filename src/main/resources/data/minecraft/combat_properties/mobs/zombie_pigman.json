@@ -1,15 +1,8 @@
 {
-	"attack_style":"",
-	"attack_element":"",
-	
-	"defense_style":{
-	},
-	
 	"defense_element":{
 		"light":-12,
 		"ice":-12,
 		"fire":12
 	},
-	
 	"biome_dependency":true
 }

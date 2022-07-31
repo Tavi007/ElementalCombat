@@ -1,13 +1,6 @@
 {
-	"attack_style":"",
-	"attack_element":"",
-	
-	"defense_style":{
-	},
-	
 	"defense_element":{
 		"ice":12
 	},
-	
 	"biome_dependency":false
 }
