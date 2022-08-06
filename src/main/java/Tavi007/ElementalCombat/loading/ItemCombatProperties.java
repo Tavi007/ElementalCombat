@@ -66,17 +66,17 @@ public class ItemCombatProperties {
     }
 
     public void writeToBuffer(PacketBuffer buf) {
-        PacketBufferHelper.writeStringToInt(buf, defenseStyle);
-        PacketBufferHelper.writeStringToInt(buf, defenseElement);
-        buf.writeString(attackStyle);
-        buf.writeString(attackElement);
+        PacketBufferHelper.writeHashMap(buf, defenseStyle);
+        PacketBufferHelper.writeHashMap(buf, defenseElement);
+        buf.writeUtf(attackStyle);
+        buf.writeUtf(attackElement);
     }
 
     public void readFromBuffer(PacketBuffer buf) {
-        defenseStyle = PacketBufferHelper.readStringToInt(buf);
-        defenseElement = PacketBufferHelper.readStringToInt(buf);
-        attackStyle = buf.readString();
-        attackElement = buf.readString();
+        defenseStyle = PacketBufferHelper.readHashMap(buf);
+        defenseElement = PacketBufferHelper.readHashMap(buf);
+        attackStyle = buf.readUtf();
+        attackElement = buf.readUtf();
     }
 
     @Override

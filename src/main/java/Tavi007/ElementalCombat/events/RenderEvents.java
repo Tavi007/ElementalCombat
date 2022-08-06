@@ -77,7 +77,7 @@ public class RenderEvents {
                 if (data.disableFlag) {
                     // Use the same calculation as in GameRenderer#hurtCameraEffect.
                     float f = (float) (mc.player.hurtTime - event.getRenderPartialTicks());
-                    f = f / (float) mc.player.maxHurtTime;
+                    f = f / (float) mc.player.hurtDuration;
                     f = MathHelper.sin(f * f * f * f * (float) Math.PI);
                     event.setRoll(f * 14.0F); // counter acts the screen shake. Only the hand is moving now.
                 }
@@ -89,16 +89,16 @@ public class RenderEvents {
     public static void onPlaySoundEvent(PlaySoundEvent event) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {
-            if (mc.player.hurtTime == mc.player.maxHurtTime) {
+            if (mc.player.hurtTime == mc.player.hurtDuration) {
                 ImmersionData data = (ImmersionData) mc.player.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null)
                     .orElse(new ImmersionData());
                 if (data.disableFlag) {
                     // What if other mods implements their own version of an hurt sound?
                     // Also what if the on_fire sound gets disabled, even so I still took fire damage?
-                    if (event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT.getRegistryName()) ||
-                        event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_DROWN.getRegistryName()) ||
-                        event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_ON_FIRE.getRegistryName()) ||
-                        event.getSound().getSoundLocation().equals(SoundEvents.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH.getRegistryName())) {
+                    if (event.getSound().getLocation().equals(SoundEvents.PLAYER_HURT.getRegistryName()) ||
+                        event.getSound().getLocation().equals(SoundEvents.PLAYER_HURT_DROWN.getRegistryName()) ||
+                        event.getSound().getLocation().equals(SoundEvents.PLAYER_HURT_ON_FIRE.getRegistryName()) ||
+                        event.getSound().getLocation().equals(SoundEvents.PLAYER_HURT_SWEET_BERRY_BUSH.getRegistryName())) {
                         event.setResult(null);
                     }
                 }
@@ -185,22 +185,22 @@ public class RenderEvents {
                     int posX = 12;
                     int posY = 12;
                     if (!ClientConfig.isTop()) {
-                        int screenHeight = (int) (event.getWindow().getScaledHeight() / scale);
+                        int screenHeight = (int) (event.getWindow().getGuiScaledHeight() / scale);
                         posY = Math.max(12, screenHeight - listHeight - 12);
                     }
                     if (!ClientConfig.isLeft()) {
-                        int screenWidth = (int) (event.getWindow().getScaledWidth() / scale);
+                        int screenWidth = (int) (event.getWindow().getGuiScaledWidth() / scale);
                         posX = Math.max(12, screenWidth - listWidth - 12);
                     }
 
-                    matrixStack.push();
+                    matrixStack.pushPose();
                     matrixStack.scale(scale, scale, scale);
 
                     // draw background box
                     Tessellator tessellator = Tessellator.getInstance();
-                    BufferBuilder bufferbuilder = tessellator.getBuffer();
+                    BufferBuilder bufferbuilder = tessellator.getBuilder();
                     bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-                    Matrix4f matrix4f = matrixStack.getLast().getMatrix();
+                    Matrix4f matrix4f = matrixStack.last().pose();
                     func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 4, posX + listWidth + 3, posY - 3, 400, -267386864, -267386864);
                     func_238462_a_(matrix4f,
                         bufferbuilder,
@@ -247,14 +247,14 @@ public class RenderEvents {
                     RenderSystem.enableBlend();
                     RenderSystem.defaultBlendFunc();
                     RenderSystem.shadeModel(7425);
-                    bufferbuilder.finishDrawing();
-                    WorldVertexBufferUploader.draw(bufferbuilder);
+                    bufferbuilder.end();
+                    WorldVertexBufferUploader.end(bufferbuilder);
                     RenderSystem.shadeModel(7424);
                     RenderSystem.disableBlend();
                     RenderSystem.enableTexture();
-                    IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+                    IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.immediate(Tessellator.getInstance().getBuilder());
                     matrixStack.translate(0.0D, 0.0D, 400.0D);
-                    irendertypebuffer$impl.finish();
+                    irendertypebuffer$impl.endBatch();
 
                     // fill and render tooltip
                     List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
@@ -269,7 +269,7 @@ public class RenderEvents {
                         posY += RenderHelper.maxLineHeight;
                         RenderHelper.renderDefenseIcons(defenseData, ClientConfig.isDoubleRowDefenseHUD(), matrixStack, posX, posY);
                     }
-                    matrixStack.pop();
+                    matrixStack.popPose();
                 }
             }
         }
@@ -286,9 +286,9 @@ public class RenderEvents {
         float f5 = (float) (p_238462_8_ >> 16 & 255) / 255.0F;
         float f6 = (float) (p_238462_8_ >> 8 & 255) / 255.0F;
         float f7 = (float) (p_238462_8_ & 255) / 255.0F;
-        p_238462_1_.pos(p_238462_0_, (float) p_238462_4_, (float) p_238462_3_, (float) p_238462_6_).color(f1, f2, f3, f).endVertex();
-        p_238462_1_.pos(p_238462_0_, (float) p_238462_2_, (float) p_238462_3_, (float) p_238462_6_).color(f1, f2, f3, f).endVertex();
-        p_238462_1_.pos(p_238462_0_, (float) p_238462_2_, (float) p_238462_5_, (float) p_238462_6_).color(f5, f6, f7, f4).endVertex();
-        p_238462_1_.pos(p_238462_0_, (float) p_238462_4_, (float) p_238462_5_, (float) p_238462_6_).color(f5, f6, f7, f4).endVertex();
+        p_238462_1_.vertex(p_238462_0_, (float) p_238462_4_, (float) p_238462_3_, (float) p_238462_6_).color(f1, f2, f3, f).endVertex();
+        p_238462_1_.vertex(p_238462_0_, (float) p_238462_2_, (float) p_238462_3_, (float) p_238462_6_).color(f1, f2, f3, f).endVertex();
+        p_238462_1_.vertex(p_238462_0_, (float) p_238462_2_, (float) p_238462_5_, (float) p_238462_6_).color(f5, f6, f7, f4).endVertex();
+        p_238462_1_.vertex(p_238462_0_, (float) p_238462_4_, (float) p_238462_5_, (float) p_238462_6_).color(f5, f6, f7, f4).endVertex();
     }
 }

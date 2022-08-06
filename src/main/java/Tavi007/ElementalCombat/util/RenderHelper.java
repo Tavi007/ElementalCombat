@@ -24,7 +24,7 @@ import net.minecraft.util.text.TextFormatting;
 
 public class RenderHelper {
 
-    private static final FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+    private static final FontRenderer fontRenderer = Minecraft.getInstance().font;
     private static final TextureManager textureManager = Minecraft.getInstance().textureManager;
 
     private static final String textAttack = "Attack:";
@@ -33,10 +33,10 @@ public class RenderHelper {
     private static final String textSeperator = "---------------";
     private static final int iconSize = 8;
 
-    private static final int widthAttack = fontRenderer.getStringWidth(textAttack) + 2;
-    private static final int widthDefense = fontRenderer.getStringWidth(textDefense) + 2;
-    public static final int maxLineHeight = fontRenderer.FONT_HEIGHT + 1;
-    public static final int maxLineWidth = fontRenderer.getStringWidth(textDefense + " -999%") + iconSize + 2;
+    private static final int widthAttack = fontRenderer.width(textAttack) + 2;
+    private static final int widthDefense = fontRenderer.width(textDefense) + 2;
+    public static final int maxLineHeight = fontRenderer.lineHeight + 1;
+    public static final int maxLineWidth = fontRenderer.width(textDefense + " -999%") + iconSize + 2;
 
     private static int iteratorCounter = 0;
 
@@ -110,7 +110,7 @@ public class RenderHelper {
     // Tooltip stuff
     public static void renderTooltip(List<ITextComponent> tooltip, MatrixStack matrixStack, int x, int y) {
         for (int i = 0; i < tooltip.size(); i++) {
-            fontRenderer.drawStringWithShadow(matrixStack, tooltip.get(i).getString(), x, y + i * RenderHelper.maxLineHeight, TextFormatting.GRAY.getColor());
+            fontRenderer.drawShadow(matrixStack, tooltip.get(i).getString(), x, y + i * RenderHelper.maxLineHeight, TextFormatting.GRAY.getColor());
         }
     }
 
@@ -190,8 +190,8 @@ public class RenderHelper {
     }
 
     public static void renderIcon(String name, MatrixStack matrixStack, int posX, int posY) {
-        textureManager.bindTexture(new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + name + ".png"));
+        textureManager.bind(new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + name + ".png"));
         AbstractGui.blit(matrixStack, posX, posY, 0, 0, iconSize, iconSize, iconSize, iconSize);
-        textureManager.bindTexture(AbstractGui.GUI_ICONS_LOCATION);
+        textureManager.bind(AbstractGui.GUI_ICONS_LOCATION);
     }
 }

@@ -29,11 +29,11 @@ public class BiomeCombatProperties {
     }
 
     public void writeToBuffer(PacketBuffer buf) {
-        PacketBufferHelper.writeStringToInt(buf, defenseElement);
+        PacketBufferHelper.writeHashMap(buf, defenseElement);
     }
 
     public void readFromBuffer(PacketBuffer buf) {
-        defenseElement = PacketBufferHelper.readStringToInt(buf);
+        defenseElement = PacketBufferHelper.readHashMap(buf);
     }
 
     @Override

@@ -83,7 +83,7 @@ public class CombatPropertiesManager extends JsonReloadListener {
                     MobCombatProperties combatProperties = loadData(GSON,
                         rl,
                         json,
-                        res == null || !res.getPackName().equals("main"),
+                        res == null || !res.getSourceName().equals("main"),
                         MobCombatProperties.class);
                     builderMob.put(rl, combatProperties);
                     type = "mobs";
@@ -91,7 +91,7 @@ public class CombatPropertiesManager extends JsonReloadListener {
                     ItemCombatProperties combatProperties = loadData(GSON,
                         rl,
                         json,
-                        res == null || !res.getPackName().equals("main"),
+                        res == null || !res.getSourceName().equals("main"),
                         ItemCombatProperties.class);
                     builderItem.put(rl, combatProperties);
                     type = "items";
@@ -99,7 +99,7 @@ public class CombatPropertiesManager extends JsonReloadListener {
                     BiomeCombatProperties combatProperties = loadData(GSON,
                         rl,
                         json,
-                        res == null || !res.getPackName().equals("main"),
+                        res == null || !res.getSourceName().equals("main"),
                         BiomeCombatProperties.class);
                     builderBiome.put(rl, combatProperties);
                     type = "biomes";
@@ -107,7 +107,7 @@ public class CombatPropertiesManager extends JsonReloadListener {
                     AttackOnlyCombatProperties combatProperties = loadData(GSON,
                         rl,
                         json,
-                        res == null || !res.getPackName().equals("main"),
+                        res == null || !res.getSourceName().equals("main"),
                         AttackOnlyCombatProperties.class);
                     builderDamageSource.put(rl, combatProperties);
                     type = "damage_sources";
@@ -115,7 +115,7 @@ public class CombatPropertiesManager extends JsonReloadListener {
                     AttackOnlyCombatProperties combatProperties = loadData(GSON,
                         rl,
                         json,
-                        res == null || !res.getPackName().equals("main"),
+                        res == null || !res.getSourceName().equals("main"),
                         AttackOnlyCombatProperties.class);
                     builderProjectile.put(rl, combatProperties);
                     type = "projectiles";

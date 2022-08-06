@@ -23,16 +23,16 @@ public class NetworkHelper {
      *            A LivingEntity.
      */
     public static void syncMessageForClients(LivingEntity livingEntity) {
-        if (livingEntity.isServerWorld()) {
+        if (!livingEntity.level.isClientSide) {
             AttackDataHelper.updateItemLayer(livingEntity);
             AttackData attackData = AttackDataHelper.get(livingEntity);
             attackData.getLayers().forEach((rl, layer) -> {
-                EntityAttackLayerMessage attackMessageToClient = new EntityAttackLayerMessage(layer, rl, livingEntity.getEntityId());
+                EntityAttackLayerMessage attackMessageToClient = new EntityAttackLayerMessage(layer, rl, livingEntity.getId());
                 ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), attackMessageToClient);
             });
             DefenseData defenseData = DefenseDataHelper.get(livingEntity);
             defenseData.getLayers().forEach((rl, layer) -> {
-                EntityDefenseLayerMessage defenseMessageToClient = new EntityDefenseLayerMessage(layer, rl, livingEntity.getEntityId());
+                EntityDefenseLayerMessage defenseMessageToClient = new EntityDefenseLayerMessage(layer, rl, livingEntity.getId());
                 ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), defenseMessageToClient);
             });
         }
@@ -48,24 +48,24 @@ public class NetworkHelper {
      *            The DefenseData to be added to the defense values of the LivingEntity (on the client).
      */
     public static void syncDefenseLayerMessageForClients(LivingEntity livingEntity, DefenseLayer layer, ResourceLocation location) {
-        if (livingEntity.isServerWorld()) {
+        if (!livingEntity.level.isClientSide) {
             DefenseDataHelper.get(livingEntity).putLayer(location, layer);
-            EntityDefenseLayerMessage defenseMessageToClient = new EntityDefenseLayerMessage(layer, location, livingEntity.getEntityId());
+            EntityDefenseLayerMessage defenseMessageToClient = new EntityDefenseLayerMessage(layer, location, livingEntity.getId());
             ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), defenseMessageToClient);
         }
     }
 
     public static void syncAttackLayerMessageForClients(LivingEntity livingEntity, AttackLayer layer, ResourceLocation location) {
-        if (livingEntity.isServerWorld()) {
+        if (!livingEntity.level.isClientSide) {
             AttackDataHelper.get(livingEntity).putLayer(location, layer);
             ;
-            EntityAttackLayerMessage attackMessageToClient = new EntityAttackLayerMessage(layer, location, livingEntity.getEntityId());
+            EntityAttackLayerMessage attackMessageToClient = new EntityAttackLayerMessage(layer, location, livingEntity.getId());
             ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), attackMessageToClient);
         }
     }
 
     public static void syncJsonMessageForClients(PlayerEntity player) {
-        if (player.isServerWorld() && player instanceof ServerPlayerEntity) {
+        if (!player.level.isClientSide && player instanceof ServerPlayerEntity) {
             ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
             BasePropertiesMessage messageToClient = ElementalCombat.COMBAT_PROPERTIES_MANGER.createSyncMessage();
             ElementalCombat.simpleChannel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), messageToClient);

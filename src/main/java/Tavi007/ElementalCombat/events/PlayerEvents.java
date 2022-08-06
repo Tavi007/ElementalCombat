@@ -27,10 +27,10 @@ public class PlayerEvents {
     public static void livingEquipmentChange(LivingEquipmentChangeEvent event) {
         LivingEntity entity = event.getEntityLiving();
         // change defense properties
-        switch (event.getSlot().getSlotType()) {
+        switch (event.getSlot().getType()) {
         case ARMOR:
             DefenseLayer defenseLayer = new DefenseLayer();
-            entity.getArmorInventoryList().forEach(stack -> {
+            entity.getArmorSlots().forEach(stack -> {
                 DefenseData data = DefenseDataHelper.get(stack);
                 defenseLayer.addLayer(data.toLayer());
             });
@@ -59,7 +59,7 @@ public class PlayerEvents {
 
     @SubscribeEvent
     public static void onKeyInput(KeyInputEvent event) {
-        if (StartupClientOnly.TOGGLE_HUD.isKeyDown()) {
+        if (StartupClientOnly.TOGGLE_HUD.isDown()) {
             ClientConfig.toogleHUD();
         }
     }

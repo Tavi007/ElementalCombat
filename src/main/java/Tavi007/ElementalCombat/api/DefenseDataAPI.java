@@ -53,7 +53,7 @@ public class DefenseDataAPI {
      */
     public static void putLayer(LivingEntity entity, DefenseLayer layer, ResourceLocation location) {
         DefenseDataHelper.get(entity).putLayer(location, layer);
-        if (entity.isServerWorld()) {
+        if (!entity.level.isClientSide) {
             NetworkHelper.syncDefenseLayerMessageForClients(entity, layer, location);
         }
     }
@@ -69,7 +69,7 @@ public class DefenseDataAPI {
     public static void deleteLayer(LivingEntity entity, ResourceLocation location) {
         DefenseLayer layer = new DefenseLayer();
         DefenseDataHelper.get(entity).putLayer(location, layer);
-        if (entity.isServerWorld()) {
+        if (!entity.level.isClientSide) {
             NetworkHelper.syncDefenseLayerMessageForClients(entity, layer, location);
         }
     }

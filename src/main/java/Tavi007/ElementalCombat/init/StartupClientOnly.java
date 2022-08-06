@@ -32,11 +32,11 @@ public class StartupClientOnly {
     @SuppressWarnings("resource")
     @SubscribeEvent
     public static void onParticleFactoryRegistration(ParticleFactoryRegisterEvent event) {
-        Minecraft.getInstance().particles.registerFactory(ParticleList.CRIT_ELEMENT.get(), CombatParticle.Factory::new);
-        Minecraft.getInstance().particles.registerFactory(ParticleList.CRIT_STYLE.get(), CombatParticle.Factory::new);
-        Minecraft.getInstance().particles.registerFactory(ParticleList.RESIST_ELEMENT.get(), CombatParticle.Factory::new);
-        Minecraft.getInstance().particles.registerFactory(ParticleList.RESIST_STYLE.get(), CombatParticle.Factory::new);
-        Minecraft.getInstance().particles.registerFactory(ParticleList.ABSORB.get(), CombatParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(ParticleList.CRIT_ELEMENT.get(), CombatParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(ParticleList.CRIT_STYLE.get(), CombatParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(ParticleList.RESIST_ELEMENT.get(), CombatParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(ParticleList.RESIST_STYLE.get(), CombatParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(ParticleList.ABSORB.get(), CombatParticle.Factory::new);
 
         ElementalCombat.LOGGER.info("ElementalCombat particles factory registered.");
     }

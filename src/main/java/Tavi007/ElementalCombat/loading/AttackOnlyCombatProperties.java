@@ -47,13 +47,13 @@ public class AttackOnlyCombatProperties {
     }
 
     public void writeToBuffer(PacketBuffer buf) {
-        buf.writeString(attackStyle);
-        buf.writeString(attackElement);
+        buf.writeUtf(attackStyle);
+        buf.writeUtf(attackElement);
     }
 
     public void readFromBuffer(PacketBuffer buf) {
-        attackStyle = buf.readString();
-        attackElement = buf.readString();
+        attackStyle = buf.readUtf();
+        attackElement = buf.readUtf();
     }
 
     @Override

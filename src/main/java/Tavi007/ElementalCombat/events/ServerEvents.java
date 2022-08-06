@@ -45,18 +45,18 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void entityJoinWorld(EntityJoinWorldEvent event) {
-        if (!event.getWorld().isRemote()) { // only server side should check
+        if (!event.getWorld().isClientSide()) { // only server side should check
             Entity entity = event.getEntity();
 
             // for synchronization after switching dimensions
             if (entity instanceof LivingEntity) {
                 NetworkHelper.syncMessageForClients((LivingEntity) entity);
-            } else if (entity instanceof ProjectileEntity && entity.ticksExisted == 0) {
+            } else if (entity instanceof ProjectileEntity && entity.tickCount == 0) {
                 // fill with default values in here.
                 ProjectileEntity projectile = (ProjectileEntity) entity;
                 AttackData projectileData = AttackDataHelper.get(projectile);
                 projectileData.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(projectile));
-                addLayerFromSource(projectileData, projectile.func_234616_v_());
+                addLayerFromSource(projectileData, projectile.getOwner());
                 addLayerFromPotion(projectileData, projectile);
             }
         }
@@ -72,11 +72,11 @@ public class ServerEvents {
     private static void addLayerFromPotion(AttackData projectileData, ProjectileEntity projectile) {
         if (projectile instanceof ArrowEntity) {
             CompoundNBT compound = new CompoundNBT();
-            ((ArrowEntity) projectile).writeAdditional(compound);
+            ((ArrowEntity) projectile).addAdditionalSaveData(compound);
             if (compound.contains("Potion", 8)) {
                 AttackData potionLayer = new AttackData();
-                PotionUtils.getEffectsFromTag(compound).forEach(effect -> {
-                    potionLayer.putLayer(new ResourceLocation(effect.getEffectName()), BasePropertiesAPI.getAttackLayer(effect));
+                PotionUtils.getAllEffects(compound).forEach(effect -> {
+                    potionLayer.putLayer(new ResourceLocation(effect.getDescriptionId()), BasePropertiesAPI.getAttackLayer(effect));
                 });
                 projectileData.putLayer(new ResourceLocation("potion"), potionLayer.toLayer());
             }
@@ -126,12 +126,12 @@ public class ServerEvents {
             damageAmount = 0;
 
             // send message to disable the hurt animation and sound.
-            DisableDamageRenderMessage messageToClient = new DisableDamageRenderMessage(target.getEntityId());
+            DisableDamageRenderMessage messageToClient = new DisableDamageRenderMessage(target.getId());
             ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 
             // play a healing sound
-            SoundEvent sound = SoundEvents.ENTITY_PLAYER_LEVELUP; // need better sound
-            target.getEntityWorld().playSound(null, target.getPosition(), sound, SoundCategory.MASTER, 1.0f, 2.0f);
+            SoundEvent sound = SoundEvents.PLAYER_LEVELUP; // need better sound
+            target.getCommandSenderWorld().playSound(null, target.blockPosition(), sound, SoundCategory.MASTER, 1.0f, 2.0f);
         }
 
         event.setAmount(damageAmount);
@@ -139,14 +139,14 @@ public class ServerEvents {
 
     private static void sendParticleMessage(LivingEntity entity, String name, int amount) {
         // define message
-        CreateEmitterMessage messageToClient = new CreateEmitterMessage(entity.getEntityId(), name, amount);
+        CreateEmitterMessage messageToClient = new CreateEmitterMessage(entity.getId(), name, amount);
 
         // send message to nearby players
-        ServerWorld world = (ServerWorld) entity.world;
-        for (int j = 0; j < world.getPlayers().size(); ++j) {
-            ServerPlayerEntity serverplayerentity = world.getPlayers().get(j);
-            BlockPos blockpos = serverplayerentity.getPosition();
-            if (blockpos.withinDistance(entity.getPositionVec(), 32.0D)) {
+        ServerWorld world = (ServerWorld) entity.level;
+        for (int j = 0; j < world.players().size(); ++j) {
+            ServerPlayerEntity serverplayerentity = world.players().get(j);
+            BlockPos blockpos = serverplayerentity.blockPosition();
+            if (blockpos.closerThan(entity.position(), 32.0D)) {
                 Supplier<ServerPlayerEntity> supplier = new ServerPlayerSupplier(serverplayerentity);
                 ElementalCombat.simpleChannel.send(PacketDistributor.PLAYER.with(supplier), messageToClient);
             }

@@ -62,7 +62,7 @@ public class PackageHandlerOnClient {
 
     private static void processMessage(ClientWorld clientWorld, EntityAttackLayerMessage message) {
         AttackLayer atckLayer = message.getAttackLayer();
-        Entity entity = clientWorld.getEntityByID(message.getId());
+        Entity entity = clientWorld.getEntity(message.getId());
         if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
             AttackDataHelper.get(livingEntity).putLayer(new ResourceLocation(message.getLocation()), atckLayer);
@@ -71,7 +71,7 @@ public class PackageHandlerOnClient {
 
     private static void processMessage(ClientWorld clientWorld, EntityDefenseLayerMessage message) {
         DefenseLayer defLayer = message.getDefenseLayer();
-        Entity entity = clientWorld.getEntityByID(message.getId());
+        Entity entity = clientWorld.getEntity(message.getId());
         if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
             DefenseDataHelper.get(livingEntity).putLayer(message.getLocation(), defLayer);
@@ -79,7 +79,7 @@ public class PackageHandlerOnClient {
     }
 
     private static void processMessage(ClientWorld clientWorld, DisableDamageRenderMessage message) {
-        Entity entity = clientWorld.getEntityByID((message.getId()));
+        Entity entity = clientWorld.getEntity((message.getId()));
         if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
             ImmersionData data = (ImmersionData) livingEntity.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null)
@@ -90,9 +90,9 @@ public class PackageHandlerOnClient {
 
     @SuppressWarnings("resource")
     private static void processMessage(ClientWorld clientWorld, CreateEmitterMessage message) {
-        ParticleManager particles = Minecraft.getInstance().particles;
+        ParticleManager particles = Minecraft.getInstance().particleEngine;
 
-        Entity entity = clientWorld.getEntityByID(message.getEntityId());
+        Entity entity = clientWorld.getEntity(message.getEntityId());
         IParticleData particle = ParticleTypes.CRIT;
         switch (message.getParticleName()) {
         case "critical_element":
@@ -116,10 +116,10 @@ public class PackageHandlerOnClient {
             double vx = Math.sin(Math.random() * 2 * Math.PI) * 0.5;
             double vz = Math.cos(Math.random() * 2 * Math.PI) * 0.5;
 
-            particles.addParticle(particle,
-                entity.getPosX(),
-                entity.getPosY() + entity.getEyeHeight(),
-                entity.getPosZ(),
+            particles.createParticle(particle,
+                entity.getX(),
+                entity.getY() + entity.getEyeHeight(),
+                entity.getZ(),
                 vx,
                 vy,
                 vz);

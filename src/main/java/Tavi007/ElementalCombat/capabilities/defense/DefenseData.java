@@ -74,7 +74,7 @@ public class DefenseData {
     public void applyEnchantmentChanges(Map<Enchantment, Integer> enchantments) {
         DefenseData data = new DefenseData();
         enchantments.forEach((ench, level) -> {
-            data.putLayer(new ResourceLocation(ench.getName()), BasePropertiesAPI.getDefenseLayer(ench, level));
+            data.putLayer(new ResourceLocation(ench.getDescriptionId()), BasePropertiesAPI.getDefenseLayer(ench, level));
         });
         if (!data.isEmpty()) {
             defenseLayers.put(new ResourceLocation("enchantment"), data.toLayer());
