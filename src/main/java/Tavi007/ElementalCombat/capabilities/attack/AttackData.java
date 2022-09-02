@@ -1,10 +1,10 @@
 package Tavi007.ElementalCombat.capabilities.attack;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.config.ServerConfig;
@@ -18,7 +18,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class AttackData {
 
-    private HashMap<ResourceLocation, AttackLayer> attackLayers = new HashMap<>();
+    private TreeMap<ResourceLocation, AttackLayer> attackLayers = new TreeMap<>();
     private boolean isInitialized = false;
 
     // for itemstack
@@ -32,7 +32,7 @@ public class AttackData {
     }
 
     public String getElement() {
-        for (ResourceLocation rl : attackLayers.keySet()) {
+        for (ResourceLocation rl : attackLayers.descendingKeySet()) {
             AttackLayer layer = attackLayers.get(rl);
             String element = layer.getElement();
             if (!element.equals(ServerConfig.getDefaultElement())) {
@@ -43,7 +43,7 @@ public class AttackData {
     }
 
     public String getStyle() {
-        for (ResourceLocation rl : attackLayers.keySet()) {
+        for (ResourceLocation rl : attackLayers.descendingKeySet()) {
             AttackLayer layer = attackLayers.get(rl);
             String style = layer.getStyle();
             if (!style.equals(ServerConfig.getDefaultStyle())) {
@@ -160,7 +160,7 @@ public class AttackData {
         return areEnchantmentChangesApplied;
     }
 
-    public HashMap<ResourceLocation, AttackLayer> getLayers() {
+    public TreeMap<ResourceLocation, AttackLayer> getLayers() {
         return attackLayers;
     }
 }

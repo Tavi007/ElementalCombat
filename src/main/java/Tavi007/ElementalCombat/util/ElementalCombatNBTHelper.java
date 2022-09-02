@@ -2,6 +2,7 @@ package Tavi007.ElementalCombat.util;
 
 import java.util.HashMap;
 import java.util.Set;
+import java.util.TreeMap;
 
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
@@ -122,7 +123,7 @@ public class ElementalCombatNBTHelper {
     }
 
     // write to nbt
-    private static CompoundNBT fromAttackLayersToNBT(HashMap<ResourceLocation, AttackLayer> layers) {
+    private static CompoundNBT fromAttackLayersToNBT(TreeMap<ResourceLocation, AttackLayer> layers) {
         CompoundNBT nbt = new CompoundNBT();
         if (layers != null) {
             layers.forEach((rl, layer) -> {
