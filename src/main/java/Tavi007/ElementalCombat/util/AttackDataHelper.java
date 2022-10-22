@@ -23,7 +23,7 @@ public class AttackDataHelper {
     }
 
     public static void updateItemLayer(LivingEntity entity) {
-        AttackData attackDataItem = get(entity.getHeldItemMainhand());
+        AttackData attackDataItem = get(entity.getMainHandItem());
         AttackDataAPI.putLayer(entity, attackDataItem.toLayer(), new ResourceLocation("item"));
     }
 
@@ -51,7 +51,7 @@ public class AttackDataHelper {
     }
 
     public static AttackData get(DamageSource damageSource) {
-        Entity immediateSource = damageSource.getImmediateSource();
+        Entity immediateSource = damageSource.getDirectEntity();
 
         // Get combat data from source
         if (immediateSource instanceof LivingEntity) {

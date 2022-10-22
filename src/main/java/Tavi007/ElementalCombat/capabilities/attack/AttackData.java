@@ -1,7 +1,9 @@
 package Tavi007.ElementalCombat.capabilities.attack;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,7 +20,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class AttackData {
 
-    private HashMap<ResourceLocation, AttackLayer> attackLayers = new HashMap<>();
+    private LinkedHashMap<ResourceLocation, AttackLayer> attackLayers = new LinkedHashMap<>();
     private boolean isInitialized = false;
 
     // for itemstack
@@ -32,7 +34,9 @@ public class AttackData {
     }
 
     public String getElement() {
-        for (ResourceLocation rl : attackLayers.keySet()) {
+        List<ResourceLocation> keys = new ArrayList<ResourceLocation>(attackLayers.keySet());
+        Collections.reverse(keys);
+        for (ResourceLocation rl : keys) {
             AttackLayer layer = attackLayers.get(rl);
             String element = layer.getElement();
             if (!element.equals(ServerConfig.getDefaultElement())) {
@@ -43,7 +47,9 @@ public class AttackData {
     }
 
     public String getStyle() {
-        for (ResourceLocation rl : attackLayers.keySet()) {
+        List<ResourceLocation> keys = new ArrayList<ResourceLocation>(attackLayers.keySet());
+        Collections.reverse(keys);
+        for (ResourceLocation rl : keys) {
             AttackLayer layer = attackLayers.get(rl);
             String style = layer.getStyle();
             if (!style.equals(ServerConfig.getDefaultStyle())) {
@@ -66,9 +72,8 @@ public class AttackData {
     }
 
     public void putLayer(ResourceLocation rl, AttackLayer layer) {
-        if (layer.isDefault()) {
-            attackLayers.remove(rl);
-        } else {
+        attackLayers.remove(rl);
+        if (!layer.isDefault()) {
             attackLayers.put(rl, layer);
         }
     }
@@ -93,9 +98,9 @@ public class AttackData {
     public void initialize(ItemStack stack) {
         AttackLayer base = BasePropertiesAPI.getAttackData(stack);
         attackLayers.put(new ResourceLocation("base"), base);
-        List<EffectInstance> potionEffects = PotionUtils.getEffectsFromStack(stack);
+        List<EffectInstance> potionEffects = PotionUtils.getMobEffects(stack);
         potionEffects.forEach(effect -> {
-            attackLayers.put(new ResourceLocation("potion_" + effect.getEffectName()), BasePropertiesAPI.getAttackLayer(effect));
+            attackLayers.put(new ResourceLocation("potion_" + effect.getDescriptionId()), BasePropertiesAPI.getAttackLayer(effect));
         });
         isInitialized = true;
     }
@@ -160,7 +165,7 @@ public class AttackData {
         return areEnchantmentChangesApplied;
     }
 
-    public HashMap<ResourceLocation, AttackLayer> getLayers() {
+    public LinkedHashMap<ResourceLocation, AttackLayer> getLayers() {
         return attackLayers;
     }
 }

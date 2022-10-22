@@ -5,7 +5,10 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+    }
+    dependencies {
+        classpath "org.spongepowered:mixingradle:0.7.+"
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -17,12 +20,11 @@ version = "${mod_version}"
 group = "${mod_group}"
 archivesBaseName = "${mod_id}-forge"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16) 
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    //mappings channel: 'official', version: "${version_mc}"
-	mappings channel: 'official', version: "${version_mc}"
+    mappings channel: 'official', version: "${version_mc}"
 	
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -71,26 +73,37 @@ minecraft {
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
 
-    //compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}:api")
-    //runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}:api")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}")
+    
+    
+    compileOnly fg.deobf("mcp.mobius.waila:wthit-api:forge-${version_wthit}")
 	
-    //compileOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}:api")
-    //runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}")
+    // compileOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}:api")
+    // runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}")
 	
-    //compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
-    //runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
+    compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
+    
+    testCompile group: 'junit', name: 'junit', version: '4.13.2'
+    testImplementation("junit:junit:4.13.2")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.8.2")
 }
 
 repositories {
     mavenCentral()
     maven { 
         name = "curios"
-		url = "https://maven.theillusivec4.top/" 
-	}
-    maven {
-		name = "hwyla"
-		url = "https://maven.tehnut.info" 
-	}
+        url = "https://maven.theillusivec4.top/" 
+    }
+//    maven {
+//      name = "hwyla"
+//      url = "https://maven.tehnut.info" 
+//  }
+    maven { 
+        name = "wthit"
+        url = "https://maven.bai.lol"
+    }
     maven {
         // location of the maven that hosts JEI files
         name = "jei"
@@ -131,6 +144,10 @@ task sourcesJar(type: Jar) {
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
     from javadoc
+}
+
+test {
+    useJUnitPlatform()
 }
 
 tasks.build.dependsOn apiJar, sourcesJar

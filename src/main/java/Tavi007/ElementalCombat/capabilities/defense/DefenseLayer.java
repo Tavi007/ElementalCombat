@@ -156,7 +156,7 @@ public class DefenseLayer {
             if (otherMap != null) {
                 otherMap.forEach((key, value) -> {
                     if (!map.containsKey(key)) {
-                        map.put(key, value);
+                        map.put(key, -value);
                     } else {
                         int newValue = map.get(key) - value;
                         if (newValue == 0) {

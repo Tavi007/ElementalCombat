@@ -24,9 +24,6 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 
 public class BasePropertiesAPI {
 
@@ -78,7 +75,7 @@ public class BasePropertiesAPI {
      */
     public static AttackLayer getAttackLayer(EffectInstance effect) {
         AttackLayer base = new AttackLayer();
-        if (effect.getPotion() == Effects.INSTANT_DAMAGE) {
+        if (effect.getEffect() == Effects.HARM) {
             base.setStyle("magic");
         }
         return base;
@@ -94,21 +91,21 @@ public class BasePropertiesAPI {
      */
     public static AttackLayer getAttackLayer(Enchantment ench) {
         AttackLayer layer = new AttackLayer();
-        if (ench.getName().equals(Enchantments.FIRE_ASPECT.getName())) {
+        if (ench.getRegistryName().equals(Enchantments.FIRE_ASPECT.getRegistryName())) {
             layer.setElement("fire");
-        } else if (ench.getName().equals(EnchantmentList.ICE_ASPECT.get().getName())) {
+        } else if (ench.getRegistryName().equals(EnchantmentList.ICE_ASPECT.get().getRegistryName())) {
             layer.setElement("ice");
-        } else if (ench.getName().equals(EnchantmentList.WATER_ASPECT.get().getName())) {
+        } else if (ench.getRegistryName().equals(EnchantmentList.WATER_ASPECT.get().getRegistryName())) {
             layer.setElement("water");
-        } else if (ench.getName().equals(EnchantmentList.THUNDER_ASPECT.get().getName())) {
+        } else if (ench.getRegistryName().equals(EnchantmentList.THUNDER_ASPECT.get().getRegistryName())) {
             layer.setElement("thunder");
-        } else if (ench.getName().equals(EnchantmentList.DARKNESS_ASPECT.get().getName())) {
+        } else if (ench.getRegistryName().equals(EnchantmentList.DARKNESS_ASPECT.get().getRegistryName())) {
             layer.setElement("darkness");
-        } else if (ench.getName().equals(EnchantmentList.LIGHT_ASPECT.get().getName())) {
+        } else if (ench.getRegistryName().equals(EnchantmentList.LIGHT_ASPECT.get().getRegistryName())) {
             layer.setElement("light");
-        } else if (ench.getName().equals(Enchantments.FLAME.getName())) {
+        } else if (ench.getRegistryName().equals(Enchantments.FLAMING_ARROWS.getRegistryName())) {
             layer.setElement("fire");
-        } else if (ench.getName().equals(Enchantments.CHANNELING.getName())) {
+        } else if (ench.getRegistryName().equals(Enchantments.CHANNELING.getRegistryName())) {
             layer.setElement("thunder");
         }
         return layer;
@@ -128,10 +125,10 @@ public class BasePropertiesAPI {
         // for now do not use Namespace.
         if (damageSource.isExplosion()) {
             rlDamageSource = new ResourceLocation("minecraft", "damage_sources/explosion");
-        } else if (damageSource.isMagicDamage()) {
+        } else if (damageSource.isMagic()) {
             rlDamageSource = new ResourceLocation("minecraft", "damage_sources/magic");
         } else {
-            rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + damageSource.getDamageType().toLowerCase());
+            rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + damageSource.getMsgId().toLowerCase());
         }
         AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(
             ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource));
@@ -253,13 +250,8 @@ public class BasePropertiesAPI {
      *            The BlockPos
      * @return copy of DefenseData.
      */
-    public static DefenseLayer getDefenseLayer(World world, BlockPos position) {
+    public static DefenseLayer getDefenseLayer(ResourceLocation rlBiome) {
         DefenseLayer defData = new DefenseLayer();
-        Biome biome = world.getBiome(position);
-        ResourceLocation rlBiome = biome.getRegistryName();
-        if (rlBiome == null) {
-            rlBiome = world.func_241828_r().getRegistry(Registry.BIOME_KEY).getKey(biome);
-        }
         if (rlBiome == null) {
             return defData;
         }

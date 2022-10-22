@@ -84,7 +84,7 @@ public class BasePropertiesMessage extends MessageToClient {
     private void writeMob(PacketBuffer buf) {
         buf.writeInt(mobData.size());
         mobData.forEach((key, value) -> {
-            buf.writeString(key.toString());
+            buf.writeUtf(key.toString());
             value.writeToBuffer(buf);
         });
     }
@@ -92,7 +92,7 @@ public class BasePropertiesMessage extends MessageToClient {
     private void writeItem(PacketBuffer buf) {
         buf.writeInt(itemData.size());
         itemData.forEach((key, value) -> {
-            buf.writeString(key.toString());
+            buf.writeUtf(key.toString());
             value.writeToBuffer(buf);
         });
     }
@@ -100,7 +100,7 @@ public class BasePropertiesMessage extends MessageToClient {
     private void writeBiome(PacketBuffer buf) {
         buf.writeInt(biomeData.size());
         biomeData.forEach((key, value) -> {
-            buf.writeString(key.toString());
+            buf.writeUtf(key.toString());
             value.writeToBuffer(buf);
         });
     }
@@ -108,7 +108,7 @@ public class BasePropertiesMessage extends MessageToClient {
     private void writeProjectile(PacketBuffer buf) {
         buf.writeInt(projectileData.size());
         projectileData.forEach((key, value) -> {
-            buf.writeString(key.toString());
+            buf.writeUtf(key.toString());
             value.writeToBuffer(buf);
         });
     }
@@ -116,7 +116,7 @@ public class BasePropertiesMessage extends MessageToClient {
     private void writeDamageSource(PacketBuffer buf) {
         buf.writeInt(damageSourceData.size());
         damageSourceData.forEach((key, value) -> {
-            buf.writeString(key.toString());
+            buf.writeUtf(key.toString());
             value.writeToBuffer(buf);
         });
     }
@@ -125,7 +125,7 @@ public class BasePropertiesMessage extends MessageToClient {
         Builder<ResourceLocation, MobCombatProperties> builder = ImmutableMap.builder();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
-            ResourceLocation key = new ResourceLocation(buf.readString());
+            ResourceLocation key = new ResourceLocation(buf.readUtf());
             MobCombatProperties value = new MobCombatProperties();
             value.readFromBuffer(buf);
             builder.put(key, value);
@@ -137,7 +137,7 @@ public class BasePropertiesMessage extends MessageToClient {
         Builder<ResourceLocation, ItemCombatProperties> builder = ImmutableMap.builder();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
-            ResourceLocation key = new ResourceLocation(buf.readString());
+            ResourceLocation key = new ResourceLocation(buf.readUtf());
             ItemCombatProperties value = new ItemCombatProperties();
             value.readFromBuffer(buf);
             builder.put(key, value);
@@ -149,7 +149,7 @@ public class BasePropertiesMessage extends MessageToClient {
         Builder<ResourceLocation, BiomeCombatProperties> builder = ImmutableMap.builder();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
-            ResourceLocation key = new ResourceLocation(buf.readString());
+            ResourceLocation key = new ResourceLocation(buf.readUtf());
             BiomeCombatProperties value = new BiomeCombatProperties();
             value.readFromBuffer(buf);
             builder.put(key, value);
@@ -161,7 +161,7 @@ public class BasePropertiesMessage extends MessageToClient {
         Builder<ResourceLocation, AttackOnlyCombatProperties> builder = ImmutableMap.builder();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
-            ResourceLocation key = new ResourceLocation(buf.readString());
+            ResourceLocation key = new ResourceLocation(buf.readUtf());
             AttackOnlyCombatProperties value = new AttackOnlyCombatProperties();
             value.readFromBuffer(buf);
             builder.put(key, value);

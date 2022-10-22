@@ -46,7 +46,7 @@ public class AttackLayer {
     }
 
     public void setElement(String element) {
-        if (element == null || element.isEmpty()) {
+        if (element == null || element.trim().isEmpty()) {
             this.element = ServerConfig.getDefaultElement();
         } else {
             this.element = element;
@@ -54,7 +54,7 @@ public class AttackLayer {
     }
 
     public void setStyle(String style) {
-        if (style == null || style.isEmpty()) {
+        if (style == null || style.trim().isEmpty()) {
             this.style = ServerConfig.getDefaultStyle();
         } else {
             this.style = style;

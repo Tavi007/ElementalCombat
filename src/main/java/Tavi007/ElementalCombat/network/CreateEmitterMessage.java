@@ -51,7 +51,7 @@ public class CreateEmitterMessage extends MessageToClient {
         CreateEmitterMessage ret = new CreateEmitterMessage();
         try {
             ret.setEntityId(buf.readInt());
-            ret.setParticleName(buf.readString());
+            ret.setParticleName(buf.readUtf());
             ret.setAmount(buf.readInt());
 
         } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
@@ -64,7 +64,7 @@ public class CreateEmitterMessage extends MessageToClient {
 
     public void encode(PacketBuffer buf) {
         buf.writeInt(entityId);
-        buf.writeString(particleName);
+        buf.writeUtf(particleName);
         buf.writeInt(amount);
     }
 

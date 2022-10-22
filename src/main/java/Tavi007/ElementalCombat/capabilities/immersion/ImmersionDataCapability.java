@@ -51,7 +51,7 @@ public class ImmersionDataCapability {
                 IntNBT timeNBT = (IntNBT) ((CompoundNBT) nbt).get("hurt_time");
                 ByteNBT redNBT = (ByteNBT) ((CompoundNBT) nbt).get("disable_flag");
 
-                instance.setHurtTime(timeNBT.getInt());
+                instance.setHurtTime(timeNBT.getAsInt());
                 if (redNBT.equals(ByteNBT.ONE)) {
                     instance.disableFlag = true;
                 } else {

@@ -43,9 +43,9 @@ public class EntityDefenseLayerMessage extends MessageToClient {
         EntityDefenseLayerMessage retval = new EntityDefenseLayerMessage();
         try {
             retval.id = buf.readInt();
-            retval.location = buf.readString();
-            retval.defenseLayerToSend.addElement(PacketBufferHelper.readStringToInt(buf));
-            retval.defenseLayerToSend.addStyle(PacketBufferHelper.readStringToInt(buf));
+            retval.location = buf.readUtf();
+            retval.defenseLayerToSend.addElement(PacketBufferHelper.readHashMap(buf));
+            retval.defenseLayerToSend.addStyle(PacketBufferHelper.readHashMap(buf));
 
         } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
             ElementalCombat.LOGGER.warn("Exception while reading EntityMessage: " + e);
@@ -59,8 +59,8 @@ public class EntityDefenseLayerMessage extends MessageToClient {
         if (!isMessageValid())
             return;
         buf.writeInt(id);
-        buf.writeString(location);
-        PacketBufferHelper.writeStringToInt(buf, defenseLayerToSend.getElementFactor());
-        PacketBufferHelper.writeStringToInt(buf, defenseLayerToSend.getStyleFactor());
+        buf.writeUtf(location);
+        PacketBufferHelper.writeHashMap(buf, defenseLayerToSend.getElementFactor());
+        PacketBufferHelper.writeHashMap(buf, defenseLayerToSend.getStyleFactor());
     }
 }

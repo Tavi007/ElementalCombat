@@ -42,11 +42,11 @@ public class EntityAttackLayerMessage extends MessageToClient {
         EntityAttackLayerMessage retval = new EntityAttackLayerMessage();
         try {
             retval.id = buf.readInt();
-            retval.location = buf.readString();
+            retval.location = buf.readUtf();
 
             // rest of the combat properties
-            retval.attackLayer.setElement(buf.readString());
-            retval.attackLayer.setStyle(buf.readString());
+            retval.attackLayer.setElement(buf.readUtf());
+            retval.attackLayer.setStyle(buf.readUtf());
 
         } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
             ElementalCombat.LOGGER.warn("Exception while reading EntityMessage: " + e);
@@ -61,9 +61,9 @@ public class EntityAttackLayerMessage extends MessageToClient {
             return;
         // get entity through id
         buf.writeInt(id);
-        buf.writeString(location);
+        buf.writeUtf(location);
         // write rest of the combat properties
-        buf.writeString(attackLayer.getElement());
-        buf.writeString(attackLayer.getStyle());
+        buf.writeUtf(attackLayer.getElement());
+        buf.writeUtf(attackLayer.getStyle());
     }
 }

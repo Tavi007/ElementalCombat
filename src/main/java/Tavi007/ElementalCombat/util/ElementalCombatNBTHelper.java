@@ -1,6 +1,7 @@
 package Tavi007.ElementalCombat.util;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
@@ -69,10 +70,10 @@ public class ElementalCombatNBTHelper {
     }
 
     // read defense data from nbt helper methods
-    private static HashMap<ResourceLocation, AttackLayer> fromNBTToAttackLayers(CompoundNBT nbtCompound) {
-        HashMap<ResourceLocation, AttackLayer> map = new HashMap<>();
+    private static LinkedHashMap<ResourceLocation, AttackLayer> fromNBTToAttackLayers(CompoundNBT nbtCompound) {
+        LinkedHashMap<ResourceLocation, AttackLayer> map = new LinkedHashMap<>();
         if (nbtCompound != null) {
-            Set<String> keySet = nbtCompound.keySet();
+            Set<String> keySet = nbtCompound.getAllKeys();
             for (String key : keySet) {
                 map.put(new ResourceLocation(key), fromNBTToAttackLayer((CompoundNBT) nbtCompound.get(key)));
             }
@@ -83,7 +84,7 @@ public class ElementalCombatNBTHelper {
     private static HashMap<ResourceLocation, DefenseLayer> fromNBTToDefenseLayers(CompoundNBT nbtCompound) {
         HashMap<ResourceLocation, DefenseLayer> map = new HashMap<>();
         if (nbtCompound != null) {
-            Set<String> keySet = nbtCompound.keySet();
+            Set<String> keySet = nbtCompound.getAllKeys();
             for (String key : keySet) {
                 map.put(new ResourceLocation(key), fromNBTToDefenseLayer((CompoundNBT) nbtCompound.get(key)));
             }
@@ -112,7 +113,7 @@ public class ElementalCombatNBTHelper {
     private static HashMap<String, Integer> fromNBTToDefenseMap(CompoundNBT nbtCompound) {
         HashMap<String, Integer> map = new HashMap<>();
         if (nbtCompound != null) {
-            Set<String> keySet = nbtCompound.keySet();
+            Set<String> keySet = nbtCompound.getAllKeys();
             for (String key : keySet) {
                 Integer value = nbtCompound.getInt(key);
                 map.put(key, value);
