@@ -1,8 +1,8 @@
 package Tavi007.ElementalCombat.util;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
-import java.util.TreeMap;
 
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
@@ -70,8 +70,8 @@ public class ElementalCombatNBTHelper {
     }
 
     // read defense data from nbt helper methods
-    private static HashMap<ResourceLocation, AttackLayer> fromNBTToAttackLayers(CompoundNBT nbtCompound) {
-        HashMap<ResourceLocation, AttackLayer> map = new HashMap<>();
+    private static LinkedHashMap<ResourceLocation, AttackLayer> fromNBTToAttackLayers(CompoundNBT nbtCompound) {
+        LinkedHashMap<ResourceLocation, AttackLayer> map = new LinkedHashMap<>();
         if (nbtCompound != null) {
             Set<String> keySet = nbtCompound.getAllKeys();
             for (String key : keySet) {
@@ -123,7 +123,7 @@ public class ElementalCombatNBTHelper {
     }
 
     // write to nbt
-    private static CompoundNBT fromAttackLayersToNBT(TreeMap<ResourceLocation, AttackLayer> layers) {
+    private static CompoundNBT fromAttackLayersToNBT(HashMap<ResourceLocation, AttackLayer> layers) {
         CompoundNBT nbt = new CompoundNBT();
         if (layers != null) {
             layers.forEach((rl, layer) -> {

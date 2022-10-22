@@ -1,10 +1,12 @@
 package Tavi007.ElementalCombat.capabilities.attack;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.config.ServerConfig;
@@ -18,7 +20,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class AttackData {
 
-    private TreeMap<ResourceLocation, AttackLayer> attackLayers = new TreeMap<>();
+    private LinkedHashMap<ResourceLocation, AttackLayer> attackLayers = new LinkedHashMap<>();
     private boolean isInitialized = false;
 
     // for itemstack
@@ -32,7 +34,9 @@ public class AttackData {
     }
 
     public String getElement() {
-        for (ResourceLocation rl : attackLayers.descendingKeySet()) {
+        List<ResourceLocation> keys = new ArrayList<ResourceLocation>(attackLayers.keySet());
+        Collections.reverse(keys);
+        for (ResourceLocation rl : keys) {
             AttackLayer layer = attackLayers.get(rl);
             String element = layer.getElement();
             if (!element.equals(ServerConfig.getDefaultElement())) {
@@ -43,7 +47,9 @@ public class AttackData {
     }
 
     public String getStyle() {
-        for (ResourceLocation rl : attackLayers.descendingKeySet()) {
+        List<ResourceLocation> keys = new ArrayList<ResourceLocation>(attackLayers.keySet());
+        Collections.reverse(keys);
+        for (ResourceLocation rl : keys) {
             AttackLayer layer = attackLayers.get(rl);
             String style = layer.getStyle();
             if (!style.equals(ServerConfig.getDefaultStyle())) {
@@ -66,9 +72,8 @@ public class AttackData {
     }
 
     public void putLayer(ResourceLocation rl, AttackLayer layer) {
-        if (layer.isDefault()) {
-            attackLayers.remove(rl);
-        } else {
+        attackLayers.remove(rl);
+        if (!layer.isDefault()) {
             attackLayers.put(rl, layer);
         }
     }
@@ -160,7 +165,7 @@ public class AttackData {
         return areEnchantmentChangesApplied;
     }
 
-    public TreeMap<ResourceLocation, AttackLayer> getLayers() {
+    public LinkedHashMap<ResourceLocation, AttackLayer> getLayers() {
         return attackLayers;
     }
 }

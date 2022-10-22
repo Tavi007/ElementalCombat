@@ -36,7 +36,7 @@ public class AttackLayerTest {
     @Test
     public void newObjectWithNonEmpty() {
         AttackLayer layer = new AttackLayer("style", "element");
-        assertEquals("isDefault not returning true", true, layer.isDefault());
+        assertEquals("isDefault not returning false", false, layer.isDefault());
         assertEquals("incorrect Element", "element", layer.getElement());
         assertEquals("incorrect Style", "style", layer.getStyle());
     }

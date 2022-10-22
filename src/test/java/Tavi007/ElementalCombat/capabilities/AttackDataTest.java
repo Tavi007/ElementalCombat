@@ -40,6 +40,10 @@ public class AttackDataTest {
         data.putLayer(thirdRL, thirdLayer); // now layer 3 was added last and therefor has highest priority
         assertEquals("style with third layer is incorrect", "style3", data.getStyle());
         assertEquals("element with third layer is incorrect", "element3", data.getElement());
+
+        data.putLayer(secondRL, secondLayer); // now layer 2 was updated and has highest priority again. Now the order must be base, third, second
+        assertEquals("style with updated second layer is incorrect", "style2", data.getStyle());
+        assertEquals("element with updated second layer is incorrect", "element2", data.getElement());
     }
 
     @Test
