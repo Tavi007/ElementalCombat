@@ -38,10 +38,10 @@ public class ClientConfig {
             .comment("Decides in which corner the Hud should be displayed.")
             .defineEnum("hudAnchor", HudAnchor.BOTTOM_RIGHT);
         xOffSet = builder
-            .comment("Offsets the hud along the x-coordinate.")
+            .comment("Offsets the hud along the x-coordinate. The direction depends on HudAnchor")
             .defineInRange("xOffSet", 0, 0, 500);
         yOffSet = builder
-            .comment("Offsets the hud along the y-coordinate.")
+            .comment("Offsets the hud along the y-coordinate. The direction depends on HudAnchor")
             .defineInRange("yOffSet", 0, 0, 500);
         scale = builder
             .comment("The multiplier of the combat data HUD size.")
