@@ -1,3 +1,4 @@
+
 package Tavi007.ElementalCombat.config;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -5,6 +6,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
+import net.minecraftforge.common.ForgeConfigSpec.EnumValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
 public class ClientConfig {
@@ -14,8 +16,9 @@ public class ClientConfig {
 
     private static boolean enableHUD = true;
 
-    private final BooleanValue isTop;
-    private final BooleanValue isLeft;
+    private final EnumValue hudAnchor;
+    private final IntValue xOffSet;
+    private final IntValue yOffSet;
     private final DoubleValue scale;
     private final IntValue iterationSpeed;
 
@@ -32,12 +35,15 @@ public class ClientConfig {
     }
 
     ClientConfig(ForgeConfigSpec.Builder builder) {
-        isTop = builder
-            .comment("If true, displays combat data HUD on the top side.")
-            .define("isTop", false);
-        isLeft = builder
-            .comment("If true, displays combat data HUD on the left side.")
-            .define("isLeft", false);
+        hudAnchor = builder
+            .comment("Decides in which corner the Hud should be displayed.")
+            .defineEnum("hudAnchor", HudAnchor.BOTTOM_RIGHT);
+        xOffSet = builder
+            .comment("Offsets the hud along the x-coordinate. The direction depends on HudAnchor")
+            .defineInRange("xOffSet", 0, 0, 1000);
+        yOffSet = builder
+            .comment("Offsets the hud along the y-coordinate. The direction depends on HudAnchor")
+            .defineInRange("yOffSet", 0, 0, 1000);
         scale = builder
             .comment("The multiplier of the combat data HUD size.")
             .defineInRange("scale", 1.0D, 0.25D, 4.0D);
@@ -71,11 +77,21 @@ public class ClientConfig {
     }
 
     public static boolean isLeft() {
-        return CLIENT.isLeft.get();
+        return HudAnchor.BOTTOM_LEFT.equals(CLIENT.hudAnchor.get())
+            || HudAnchor.TOP_LEFT.equals(CLIENT.hudAnchor.get());
     }
 
     public static boolean isTop() {
-        return CLIENT.isTop.get();
+        return HudAnchor.TOP_LEFT.equals(CLIENT.hudAnchor.get())
+            || HudAnchor.TOP_RIGHT.equals(CLIENT.hudAnchor.get());
+    }
+
+    public static int getXOffset() {
+        return CLIENT.xOffSet.get();
+    }
+
+    public static int getYOffset() {
+        return CLIENT.yOffSet.get();
     }
 
     public static double scale() {
