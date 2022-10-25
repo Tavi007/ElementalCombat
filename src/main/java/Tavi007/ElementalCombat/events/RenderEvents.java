@@ -182,15 +182,19 @@ public class RenderEvents {
                     }
 
                     // moves the coords so the text and box appear correct
-                    int posX = 12;
-                    int posY = 12;
-                    if (!ClientConfig.isTop()) {
-                        int screenHeight = (int) (event.getWindow().getGuiScaledHeight() / scale);
-                        posY = Math.max(12, screenHeight - listHeight - 12);
+                    int posX = 0;
+                    int maxPosX = (int) (event.getWindow().getGuiScaledWidth() / scale) - listWidth - 12;
+                    if (ClientConfig.isLeft()) {
+                        posX = Math.min(12 + ClientConfig.getXOffset(), maxPosX);
+                    } else {
+                        posX = Math.max(12, maxPosX - ClientConfig.getXOffset());
                     }
-                    if (!ClientConfig.isLeft()) {
-                        int screenWidth = (int) (event.getWindow().getGuiScaledWidth() / scale);
-                        posX = Math.max(12, screenWidth - listWidth - 12);
+                    int posY = 0;
+                    int maxPosY = (int) (event.getWindow().getGuiScaledHeight() / scale) - listHeight - 12;
+                    if (ClientConfig.isTop()) {
+                        posY = Math.min(12 + ClientConfig.getYOffset(), maxPosY);
+                    } else {
+                        posY = Math.max(12, maxPosY - ClientConfig.getYOffset());
                     }
 
                     matrixStack.pushPose();
