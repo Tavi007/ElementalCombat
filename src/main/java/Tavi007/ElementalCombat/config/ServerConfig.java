@@ -14,7 +14,8 @@ public class ServerConfig {
     private final ConfigValue<String> defaultElement;
     private final ConfigValue<String> defaultStyle;
     private final IntValue maxFactor;
-    private final IntValue enchantmentScaling;
+    private final IntValue enchantmentScalingElement;
+    private final IntValue enchantmentScalingStyle;
 
     static {
         Pair<ServerConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
@@ -33,8 +34,11 @@ public class ServerConfig {
         maxFactor = builder
             .comment("The maximal combat factor. See vanilla Enchantment Protection Factor.")
             .defineInRange("maxFactor", 100, 1, 200);
-        enchantmentScaling = builder
-            .comment("Scaling for protection enchantments. See vanilla Enchantment Protection Factor.")
+        enchantmentScalingElement = builder
+            .comment("Scaling for (element) protection enchantments. See vanilla Enchantment Protection Factor.")
+            .defineInRange("enchantmentScaling", 5, 1, 15);
+        enchantmentScalingStyle = builder
+            .comment("Scaling for (style) protection enchantments. See vanilla Enchantment Protection Factor.")
             .defineInRange("enchantmentScaling", 5, 1, 15);
     }
 
@@ -42,8 +46,12 @@ public class ServerConfig {
         return SERVER.maxFactor.get();
     }
 
-    public static int getEnchantmentScaling() {
-        return SERVER.enchantmentScaling.get();
+    public static int getEnchantmentScalingElement() {
+        return SERVER.enchantmentScalingElement.get();
+    }
+
+    public static int getEnchantmentScalingStyle() {
+        return SERVER.enchantmentScalingStyle.get();
     }
 
     public static String getDefaultStyle() {

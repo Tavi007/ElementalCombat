@@ -205,37 +205,37 @@ public class BasePropertiesAPI {
         if (level != 0) {
             // elemental enchantments
             if (ench == Enchantments.FIRE_PROTECTION) {
-                defElement.put("fire", level * ServerConfig.getEnchantmentScaling());
-                defElement.put("ice", -level * ServerConfig.getEnchantmentScaling() / 2);
+                defElement.put("fire", level * ServerConfig.getEnchantmentScalingElement());
+                defElement.put("ice", -level * ServerConfig.getEnchantmentScalingElement() / 2);
             } else if (ench == EnchantmentList.ICE_PROTECTION.get()) {
-                defElement.put("ice", level * ServerConfig.getEnchantmentScaling());
-                defElement.put("fire", -level * ServerConfig.getEnchantmentScaling() / 2);
+                defElement.put("ice", level * ServerConfig.getEnchantmentScalingElement());
+                defElement.put("fire", -level * ServerConfig.getEnchantmentScalingElement() / 2);
             } else if (ench == EnchantmentList.WATER_PROTECTION.get()) {
-                defElement.put("water", level * ServerConfig.getEnchantmentScaling());
-                defElement.put("thunder", -level * ServerConfig.getEnchantmentScaling() / 2);
+                defElement.put("water", level * ServerConfig.getEnchantmentScalingElement());
+                defElement.put("thunder", -level * ServerConfig.getEnchantmentScalingElement() / 2);
             } else if (ench == EnchantmentList.THUNDER_PROTECTION.get()) {
-                defElement.put("thunder", level * ServerConfig.getEnchantmentScaling());
-                defElement.put("water", -level * ServerConfig.getEnchantmentScaling() / 2);
+                defElement.put("thunder", level * ServerConfig.getEnchantmentScalingElement());
+                defElement.put("water", -level * ServerConfig.getEnchantmentScalingElement() / 2);
             } else if (ench == EnchantmentList.DARKNESS_PROTECTION.get()) {
-                defElement.put("darkness", level * ServerConfig.getEnchantmentScaling());
-                defElement.put("light", -level * ServerConfig.getEnchantmentScaling() / 2);
+                defElement.put("darkness", level * ServerConfig.getEnchantmentScalingElement());
+                defElement.put("light", -level * ServerConfig.getEnchantmentScalingElement() / 2);
             } else if (ench == EnchantmentList.LIGHT_PROTECTION.get()) {
-                defElement.put("light", level * ServerConfig.getEnchantmentScaling());
-                defElement.put("darkness", -level * ServerConfig.getEnchantmentScaling() / 2);
+                defElement.put("light", level * ServerConfig.getEnchantmentScalingElement());
+                defElement.put("darkness", -level * ServerConfig.getEnchantmentScalingElement() / 2);
             } else if (ench == EnchantmentList.ELEMENT_PROTECTION.get()) {
-                defElement.put("fire", level * ServerConfig.getEnchantmentScaling() / 5);
-                defElement.put("water", level * ServerConfig.getEnchantmentScaling() / 5);
-                defElement.put("ice", level * ServerConfig.getEnchantmentScaling() / 5);
-                defElement.put("thunder", level * ServerConfig.getEnchantmentScaling() / 5);
+                defElement.put("fire", level * ServerConfig.getEnchantmentScalingElement() / 5);
+                defElement.put("water", level * ServerConfig.getEnchantmentScalingElement() / 5);
+                defElement.put("ice", level * ServerConfig.getEnchantmentScalingElement() / 5);
+                defElement.put("thunder", level * ServerConfig.getEnchantmentScalingElement() / 5);
             }
 
             // style enchantments
             if (ench == Enchantments.BLAST_PROTECTION) {
-                defStyle.put("explosion", level * ServerConfig.getEnchantmentScaling());
+                defStyle.put("explosion", level * ServerConfig.getEnchantmentScalingStyle());
             } else if (ench == Enchantments.PROJECTILE_PROTECTION) {
-                defStyle.put("projectile", level * ServerConfig.getEnchantmentScaling());
+                defStyle.put("projectile", level * ServerConfig.getEnchantmentScalingStyle());
             } else if (ench == EnchantmentList.MAGIC_PROTECTION.get()) {
-                defStyle.put("magic", level * ServerConfig.getEnchantmentScaling());
+                defStyle.put("magic", level * ServerConfig.getEnchantmentScalingStyle());
             }
         }
         return new DefenseLayer(defStyle, defElement);
