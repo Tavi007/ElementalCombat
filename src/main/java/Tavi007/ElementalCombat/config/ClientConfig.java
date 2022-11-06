@@ -40,10 +40,10 @@ public class ClientConfig {
             .defineEnum("hudAnchor", HudAnchor.BOTTOM_RIGHT);
         xOffSet = builder
             .comment("Offsets the hud along the x-coordinate. The direction depends on HudAnchor")
-            .defineInRange("xOffSet", 0, 0, 1000);
+            .defineInRange("xOffSet", 0, 0, 500);
         yOffSet = builder
             .comment("Offsets the hud along the y-coordinate. The direction depends on HudAnchor")
-            .defineInRange("yOffSet", 0, 0, 1000);
+            .defineInRange("yOffSet", 0, 0, 500);
         scale = builder
             .comment("The multiplier of the combat data HUD size.")
             .defineInRange("scale", 1.0D, 0.25D, 4.0D);
