@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.+', changing: true
     }
     dependencies {
         classpath "org.spongepowered:mixingradle:0.7.+"
@@ -85,7 +85,7 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
     
-    testCompile group: 'junit', name: 'junit', version: '4.13.2'
+    testImplementation group: 'junit', name: 'junit', version: '4.13.2'
     testImplementation("junit:junit:4.13.2")
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.8.2")
 }
