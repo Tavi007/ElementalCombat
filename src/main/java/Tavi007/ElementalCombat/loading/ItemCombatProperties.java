@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.util.PacketBufferHelper;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class ItemCombatProperties {
 
@@ -65,14 +65,14 @@ public class ItemCombatProperties {
         return this.attackElement;
     }
 
-    public void writeToBuffer(PacketBuffer buf) {
+    public void writeToBuffer(FriendlyByteBuf buf) {
         PacketBufferHelper.writeHashMap(buf, defenseStyle);
         PacketBufferHelper.writeHashMap(buf, defenseElement);
         buf.writeUtf(attackStyle);
         buf.writeUtf(attackElement);
     }
 
-    public void readFromBuffer(PacketBuffer buf) {
+    public void readFromBuffer(FriendlyByteBuf buf) {
         defenseStyle = PacketBufferHelper.readHashMap(buf);
         defenseElement = PacketBufferHelper.readHashMap(buf);
         attackStyle = buf.readUtf();

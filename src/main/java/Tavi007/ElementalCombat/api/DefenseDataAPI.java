@@ -4,10 +4,10 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 public class DefenseDataAPI {
 
@@ -75,26 +75,26 @@ public class DefenseDataAPI {
     }
 
     /**
-     * Writes the defense data to the {@link CompoundNBT} of the {@link LivingEntity}.
+     * Writes the defense data to the {@link CompoundTag} of the {@link LivingEntity}.
      * 
      * @param entity
      *            A LivingEntity.
      * @param nbt
-     *            The CompoundNBT.
+     *            The CompoundTag.
      */
-    public static void writeToNBT(CompoundNBT nbt, LivingEntity entity) {
+    public static void writeToNBT(CompoundTag nbt, LivingEntity entity) {
         ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, DefenseDataHelper.get(entity));
     }
 
     /**
-     * Reads the defense data from the {@link CompoundNBT} and updates the {@link LivingEntity}.
+     * Reads the defense data from the {@link CompoundTag} and updates the {@link LivingEntity}.
      * 
      * @param entity
      *            A LivingEntity.
      * @param nbt
-     *            The CompoundNBT.
+     *            The CompoundTag.
      */
-    public static void readFromNBT(CompoundNBT nbt, LivingEntity entity) {
+    public static void readFromNBT(CompoundTag nbt, LivingEntity entity) {
         DefenseDataHelper.get(entity).set(ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt));
     }
 
@@ -158,26 +158,26 @@ public class DefenseDataAPI {
     }
 
     /**
-     * Writes the defense data to the {@link CompoundNBT} of the {@link ItemStack}.
+     * Writes the defense data to the {@link CompoundTag} of the {@link ItemStack}.
      * 
      * @param stack
      *            A ItemStack.
      * @param nbt
-     *            The CompoundNBT.
+     *            The CompoundTag.
      */
-    public static void writeToNBT(CompoundNBT nbt, ItemStack stack) {
+    public static void writeToNBT(CompoundTag nbt, ItemStack stack) {
         ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, DefenseDataHelper.get(stack));
     }
 
     /**
-     * Reads the defense data from the {@link CompoundNBT} and updates the {@link ItemStack}.
+     * Reads the defense data from the {@link CompoundTag} and updates the {@link ItemStack}.
      * 
      * @param stack
      *            A ItemStack.
      * @param nbt
-     *            The CompoundNBT.
+     *            The CompoundTag.
      */
-    public static void readFromNBT(CompoundNBT nbt, ItemStack stack) {
+    public static void readFromNBT(CompoundTag nbt, ItemStack stack) {
         DefenseDataHelper.get(stack).set(ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt));
     }
 }

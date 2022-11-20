@@ -8,32 +8,32 @@ import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 
 public class ElementalCombatNBTHelper {
 
     /**
-     * Writes the attack-combat data {@link AttackData} to the {@link CompoundNBT}.
+     * Writes the attack-combat data {@link AttackData} to the {@link CompoundTag}.
      * 
      * @param nbt
-     *            The CompoundNBT.
+     *            The CompoundTag.
      * @param data
      *            The AttackData.
      */
-    public static void writeAttackDataToNBT(CompoundNBT nbt, AttackData data) {
+    public static void writeAttackDataToNBT(CompoundTag nbt, AttackData data) {
         nbt.put("elementalcombat_attack", fromAttackLayersToNBT(data.getLayers()));
     }
 
     /**
-     * Reads the attack-combat data {@link AttackData} from the {@link CompoundNBT}.
+     * Reads the attack-combat data {@link AttackData} from the {@link CompoundTag}.
      * Note: It will read whatever was written into nbt by {@link ElementalCombatNBTHelper#writeAttackDataToNBT}.
      * 
      * @param nbt
-     *            The CompoundNBT.
+     *            The CompoundTag.
      * @return The AttackData. Default is an empty instance.
      */
-    public static AttackData readAttackDataFromNBT(CompoundNBT nbt) {
+    public static AttackData readAttackDataFromNBT(CompoundTag nbt) {
         AttackData data = new AttackData();
         fromNBTToAttackLayers(nbt.getCompound("elementalcombat_attack")).forEach((rl, layer) -> {
             data.putLayer(rl, layer);
@@ -42,26 +42,26 @@ public class ElementalCombatNBTHelper {
     }
 
     /**
-     * Writes the defense-combat data {@link DefenseData} to the {@link CompoundNBT}.
+     * Writes the defense-combat data {@link DefenseData} to the {@link CompoundTag}.
      * 
      * @param nbt
-     *            The CompoundNBT.
+     *            The CompoundTag.
      * @param data
      *            The DefenseData.
      */
-    public static void writeDefenseDataToNBT(CompoundNBT nbt, DefenseData data) {
+    public static void writeDefenseDataToNBT(CompoundTag nbt, DefenseData data) {
         nbt.put("elementalcombat_defense", fromDefenseLayersToNBT(data.getLayers()));
     }
 
     /**
-     * Reads the defense-combat data {@link DefenseData} from the {@link CompoundNBT}.
+     * Reads the defense-combat data {@link DefenseData} from the {@link CompoundTag}.
      * Note: It will read whatever was written into nbt by {@link ElementalCombatNBTHelper#writeDefenseDataToNBT}.
      * 
      * @param nbt
-     *            The CompoundNBT.
+     *            The CompoundTag.
      * @return The DefenseData. Default is an empty instance.
      */
-    public static DefenseData readDefenseDataFromNBT(CompoundNBT nbt) {
+    public static DefenseData readDefenseDataFromNBT(CompoundTag nbt) {
         DefenseData data = new DefenseData();
         fromNBTToDefenseLayers(nbt.getCompound("elementalcombat_defense")).forEach((rl, layer) -> {
             data.putLayer(rl, layer);
@@ -70,29 +70,29 @@ public class ElementalCombatNBTHelper {
     }
 
     // read defense data from nbt helper methods
-    private static LinkedHashMap<ResourceLocation, AttackLayer> fromNBTToAttackLayers(CompoundNBT nbtCompound) {
+    private static LinkedHashMap<ResourceLocation, AttackLayer> fromNBTToAttackLayers(CompoundTag nbtCompound) {
         LinkedHashMap<ResourceLocation, AttackLayer> map = new LinkedHashMap<>();
         if (nbtCompound != null) {
             Set<String> keySet = nbtCompound.getAllKeys();
             for (String key : keySet) {
-                map.put(new ResourceLocation(key), fromNBTToAttackLayer((CompoundNBT) nbtCompound.get(key)));
+                map.put(new ResourceLocation(key), fromNBTToAttackLayer((CompoundTag) nbtCompound.get(key)));
             }
         }
         return map;
     }
 
-    private static HashMap<ResourceLocation, DefenseLayer> fromNBTToDefenseLayers(CompoundNBT nbtCompound) {
+    private static HashMap<ResourceLocation, DefenseLayer> fromNBTToDefenseLayers(CompoundTag nbtCompound) {
         HashMap<ResourceLocation, DefenseLayer> map = new HashMap<>();
         if (nbtCompound != null) {
             Set<String> keySet = nbtCompound.getAllKeys();
             for (String key : keySet) {
-                map.put(new ResourceLocation(key), fromNBTToDefenseLayer((CompoundNBT) nbtCompound.get(key)));
+                map.put(new ResourceLocation(key), fromNBTToDefenseLayer((CompoundTag) nbtCompound.get(key)));
             }
         }
         return map;
     }
 
-    private static AttackLayer fromNBTToAttackLayer(CompoundNBT nbtCompound) {
+    private static AttackLayer fromNBTToAttackLayer(CompoundTag nbtCompound) {
         AttackLayer layer = new AttackLayer();
         if (nbtCompound != null) {
             layer.setStyle(nbtCompound.getString("style"));
@@ -101,16 +101,16 @@ public class ElementalCombatNBTHelper {
         return layer;
     }
 
-    private static DefenseLayer fromNBTToDefenseLayer(CompoundNBT nbtCompound) {
+    private static DefenseLayer fromNBTToDefenseLayer(CompoundTag nbtCompound) {
         DefenseLayer layer = new DefenseLayer();
         if (nbtCompound != null) {
-            layer.addStyle(fromNBTToDefenseMap((CompoundNBT) nbtCompound.get("style")));
-            layer.addElement(fromNBTToDefenseMap((CompoundNBT) nbtCompound.get("element")));
+            layer.addStyle(fromNBTToDefenseMap((CompoundTag) nbtCompound.get("style")));
+            layer.addElement(fromNBTToDefenseMap((CompoundTag) nbtCompound.get("element")));
         }
         return layer;
     }
 
-    private static HashMap<String, Integer> fromNBTToDefenseMap(CompoundNBT nbtCompound) {
+    private static HashMap<String, Integer> fromNBTToDefenseMap(CompoundTag nbtCompound) {
         HashMap<String, Integer> map = new HashMap<>();
         if (nbtCompound != null) {
             Set<String> keySet = nbtCompound.getAllKeys();
@@ -123,8 +123,8 @@ public class ElementalCombatNBTHelper {
     }
 
     // write to nbt
-    private static CompoundNBT fromAttackLayersToNBT(HashMap<ResourceLocation, AttackLayer> layers) {
-        CompoundNBT nbt = new CompoundNBT();
+    private static CompoundTag fromAttackLayersToNBT(HashMap<ResourceLocation, AttackLayer> layers) {
+        CompoundTag nbt = new CompoundTag();
         if (layers != null) {
             layers.forEach((rl, layer) -> {
                 nbt.put(rl.toString(), fromAttackLayerToNBT(layer));
@@ -133,8 +133,8 @@ public class ElementalCombatNBTHelper {
         return nbt;
     }
 
-    private static CompoundNBT fromDefenseLayersToNBT(HashMap<ResourceLocation, DefenseLayer> layers) {
-        CompoundNBT nbt = new CompoundNBT();
+    private static CompoundTag fromDefenseLayersToNBT(HashMap<ResourceLocation, DefenseLayer> layers) {
+        CompoundTag nbt = new CompoundTag();
         if (layers != null) {
             layers.forEach((rl, layer) -> {
                 nbt.put(rl.toString(), fromDefenseLayerToNBT(layer));
@@ -143,8 +143,8 @@ public class ElementalCombatNBTHelper {
         return nbt;
     }
 
-    private static CompoundNBT fromAttackLayerToNBT(AttackLayer layer) {
-        CompoundNBT nbt = new CompoundNBT();
+    private static CompoundTag fromAttackLayerToNBT(AttackLayer layer) {
+        CompoundTag nbt = new CompoundTag();
         if (layer != null) {
             nbt.putString("style", layer.getStyle());
             nbt.putString("element", layer.getElement());
@@ -152,8 +152,8 @@ public class ElementalCombatNBTHelper {
         return nbt;
     }
 
-    private static CompoundNBT fromDefenseLayerToNBT(DefenseLayer layer) {
-        CompoundNBT nbt = new CompoundNBT();
+    private static CompoundTag fromDefenseLayerToNBT(DefenseLayer layer) {
+        CompoundTag nbt = new CompoundTag();
         if (layer != null) {
             nbt.put("style", fromDefenseMapToNBT(layer.getStyleFactor()));
             nbt.put("element", fromDefenseMapToNBT(layer.getElementFactor()));
@@ -161,8 +161,8 @@ public class ElementalCombatNBTHelper {
         return nbt;
     }
 
-    private static CompoundNBT fromDefenseMapToNBT(HashMap<String, Integer> map) {
-        CompoundNBT nbt = new CompoundNBT();
+    private static CompoundTag fromDefenseMapToNBT(HashMap<String, Integer> map) {
+        CompoundTag nbt = new CompoundTag();
         if (map != null) {
             map.forEach((elemString, value) -> {
                 nbt.putInt(elemString, value);

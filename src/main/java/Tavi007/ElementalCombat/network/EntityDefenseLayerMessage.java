@@ -3,8 +3,8 @@ package Tavi007.ElementalCombat.network;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.util.PacketBufferHelper;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 public class EntityDefenseLayerMessage extends MessageToClient {
 
@@ -39,7 +39,7 @@ public class EntityDefenseLayerMessage extends MessageToClient {
         return new ResourceLocation(location);
     }
 
-    public static EntityDefenseLayerMessage decode(PacketBuffer buf) {
+    public static EntityDefenseLayerMessage decode(FriendlyByteBuf buf) {
         EntityDefenseLayerMessage retval = new EntityDefenseLayerMessage();
         try {
             retval.id = buf.readInt();
@@ -55,7 +55,7 @@ public class EntityDefenseLayerMessage extends MessageToClient {
         return retval;
     }
 
-    public void encode(PacketBuffer buf) {
+    public void encode(FriendlyByteBuf buf) {
         if (!isMessageValid())
             return;
         buf.writeInt(id);

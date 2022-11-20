@@ -10,8 +10,8 @@ import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import Tavi007.ElementalCombat.loading.MobCombatProperties;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 public class BasePropertiesMessage extends MessageToClient {
 
@@ -56,7 +56,7 @@ public class BasePropertiesMessage extends MessageToClient {
         return damageSourceData;
     }
 
-    public static BasePropertiesMessage decode(PacketBuffer buf) {
+    public static BasePropertiesMessage decode(FriendlyByteBuf buf) {
         BasePropertiesMessage ret = new BasePropertiesMessage();
         try {
             ret.mobData = readMob(buf);
@@ -73,7 +73,7 @@ public class BasePropertiesMessage extends MessageToClient {
         return ret;
     }
 
-    public void encode(PacketBuffer buf) {
+    public void encode(FriendlyByteBuf buf) {
         writeMob(buf);
         writeItem(buf);
         writeBiome(buf);
@@ -81,7 +81,7 @@ public class BasePropertiesMessage extends MessageToClient {
         writeDamageSource(buf);
     }
 
-    private void writeMob(PacketBuffer buf) {
+    private void writeMob(FriendlyByteBuf buf) {
         buf.writeInt(mobData.size());
         mobData.forEach((key, value) -> {
             buf.writeUtf(key.toString());
@@ -89,7 +89,7 @@ public class BasePropertiesMessage extends MessageToClient {
         });
     }
 
-    private void writeItem(PacketBuffer buf) {
+    private void writeItem(FriendlyByteBuf buf) {
         buf.writeInt(itemData.size());
         itemData.forEach((key, value) -> {
             buf.writeUtf(key.toString());
@@ -97,7 +97,7 @@ public class BasePropertiesMessage extends MessageToClient {
         });
     }
 
-    private void writeBiome(PacketBuffer buf) {
+    private void writeBiome(FriendlyByteBuf buf) {
         buf.writeInt(biomeData.size());
         biomeData.forEach((key, value) -> {
             buf.writeUtf(key.toString());
@@ -105,7 +105,7 @@ public class BasePropertiesMessage extends MessageToClient {
         });
     }
 
-    private void writeProjectile(PacketBuffer buf) {
+    private void writeProjectile(FriendlyByteBuf buf) {
         buf.writeInt(projectileData.size());
         projectileData.forEach((key, value) -> {
             buf.writeUtf(key.toString());
@@ -113,7 +113,7 @@ public class BasePropertiesMessage extends MessageToClient {
         });
     }
 
-    private void writeDamageSource(PacketBuffer buf) {
+    private void writeDamageSource(FriendlyByteBuf buf) {
         buf.writeInt(damageSourceData.size());
         damageSourceData.forEach((key, value) -> {
             buf.writeUtf(key.toString());
@@ -121,7 +121,7 @@ public class BasePropertiesMessage extends MessageToClient {
         });
     }
 
-    private static Map<ResourceLocation, MobCombatProperties> readMob(PacketBuffer buf) {
+    private static Map<ResourceLocation, MobCombatProperties> readMob(FriendlyByteBuf buf) {
         Builder<ResourceLocation, MobCombatProperties> builder = ImmutableMap.builder();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
@@ -133,7 +133,7 @@ public class BasePropertiesMessage extends MessageToClient {
         return builder.build();
     }
 
-    private static Map<ResourceLocation, ItemCombatProperties> readItem(PacketBuffer buf) {
+    private static Map<ResourceLocation, ItemCombatProperties> readItem(FriendlyByteBuf buf) {
         Builder<ResourceLocation, ItemCombatProperties> builder = ImmutableMap.builder();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
@@ -145,7 +145,7 @@ public class BasePropertiesMessage extends MessageToClient {
         return builder.build();
     }
 
-    private static Map<ResourceLocation, BiomeCombatProperties> readBiome(PacketBuffer buf) {
+    private static Map<ResourceLocation, BiomeCombatProperties> readBiome(FriendlyByteBuf buf) {
         Builder<ResourceLocation, BiomeCombatProperties> builder = ImmutableMap.builder();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
@@ -157,7 +157,7 @@ public class BasePropertiesMessage extends MessageToClient {
         return builder.build();
     }
 
-    private static Map<ResourceLocation, AttackOnlyCombatProperties> readAttackOnly(PacketBuffer buf) {
+    private static Map<ResourceLocation, AttackOnlyCombatProperties> readAttackOnly(FriendlyByteBuf buf) {
         Builder<ResourceLocation, AttackOnlyCombatProperties> builder = ImmutableMap.builder();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {

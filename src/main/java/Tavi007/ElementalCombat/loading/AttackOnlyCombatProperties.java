@@ -3,7 +3,7 @@ package Tavi007.ElementalCombat.loading;
 import com.google.gson.annotations.SerializedName;
 
 import Tavi007.ElementalCombat.config.ServerConfig;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class AttackOnlyCombatProperties {
 
@@ -46,12 +46,12 @@ public class AttackOnlyCombatProperties {
         return attackStyle.equals(ServerConfig.getDefaultStyle()) && attackElement.equals(ServerConfig.getDefaultElement());
     }
 
-    public void writeToBuffer(PacketBuffer buf) {
+    public void writeToBuffer(FriendlyByteBuf buf) {
         buf.writeUtf(attackStyle);
         buf.writeUtf(attackElement);
     }
 
-    public void readFromBuffer(PacketBuffer buf) {
+    public void readFromBuffer(FriendlyByteBuf buf) {
         attackStyle = buf.readUtf();
         attackElement = buf.readUtf();
     }

@@ -2,18 +2,18 @@ package Tavi007.ElementalCombat.network;
 
 import java.util.function.Supplier;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
-public class ServerPlayerSupplier implements Supplier<ServerPlayerEntity> {
+public class ServerPlayerSupplier implements Supplier<ServerPlayer> {
 
-    ServerPlayerEntity entity;
+    ServerPlayer entity;
 
-    public ServerPlayerSupplier(ServerPlayerEntity entity) {
+    public ServerPlayerSupplier(ServerPlayer entity) {
         this.entity = entity;
     }
 
     @Override
-    public ServerPlayerEntity get() {
+    public ServerPlayer get() {
         return entity;
     }
 

@@ -12,19 +12,19 @@ import Tavi007.ElementalCombat.network.ServerPlayerSupplier;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -32,7 +32,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Bus.FORGE)
 public class ServerEvents {
@@ -51,9 +51,9 @@ public class ServerEvents {
             // for synchronization after switching dimensions
             if (entity instanceof LivingEntity) {
                 NetworkHelper.syncMessageForClients((LivingEntity) entity);
-            } else if (entity instanceof ProjectileEntity && entity.tickCount == 0) {
+            } else if (entity instanceof Projectile && entity.tickCount == 0) {
                 // fill with default values in here.
-                ProjectileEntity projectile = (ProjectileEntity) entity;
+                Projectile projectile = (Projectile) entity;
                 AttackData projectileData = AttackDataHelper.get(projectile);
                 projectileData.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(projectile));
                 addLayerFromSource(projectileData, projectile.getOwner());
@@ -69,7 +69,7 @@ public class ServerEvents {
         }
     }
 
-    private static void addLayerFromPotion(AttackData projectileData, ProjectileEntity projectile) {
+    private static void addLayerFromPotion(AttackData projectileData, Projectile projectile) {
         if (projectile instanceof ArrowEntity) {
             CompoundNBT compound = new CompoundNBT();
             ((ArrowEntity) projectile).addAdditionalSaveData(compound);
@@ -144,7 +144,7 @@ public class ServerEvents {
         // send message to nearby players
         ServerWorld world = (ServerWorld) entity.level;
         for (int j = 0; j < world.players().size(); ++j) {
-            ServerPlayerEntity serverplayerentity = world.players().get(j);
+            ServerPlayer serverplayerentity = world.players().get(j);
             BlockPos blockpos = serverplayerentity.blockPosition();
             if (blockpos.closerThan(entity.position(), 32.0D)) {
                 Supplier<ServerPlayerEntity> supplier = new ServerPlayerSupplier(serverplayerentity);

@@ -13,17 +13,18 @@ import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import Tavi007.ElementalCombat.loading.MobCombatProperties;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.renderer.EffectInstance;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 
 public class BasePropertiesAPI {
 
@@ -75,7 +76,7 @@ public class BasePropertiesAPI {
      */
     public static AttackLayer getAttackLayer(EffectInstance effect) {
         AttackLayer base = new AttackLayer();
-        if (effect.getEffect() == Effects.HARM) {
+        if (effect.get.getEffect() == Effects.HARM) {
             base.setStyle("magic");
         }
         return base;
@@ -142,9 +143,9 @@ public class BasePropertiesAPI {
      *            The Projectile.
      * @return copy of AttackData.
      */
-    public static AttackLayer getAttackData(ProjectileEntity projectile) {
-        if (projectile instanceof ProjectileItemEntity) {
-            ItemStack stack = ((ProjectileItemEntity) projectile).getItem();
+    public static AttackLayer getAttackData(Projectile projectile) {
+        if (projectile instanceof ThrowableItemProjectile) {
+            ItemStack stack = ((ThrowableItemProjectile) projectile).getItem();
             return getAttackData(stack);
         }
         ResourceLocation resourcelocation = projectile.getType().getRegistryName();

@@ -10,13 +10,13 @@ import java.util.Set;
 
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.config.ServerConfig;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.EffectInstance;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 public class AttackData {
 
@@ -100,7 +100,7 @@ public class AttackData {
         attackLayers.put(new ResourceLocation("base"), base);
         List<EffectInstance> potionEffects = PotionUtils.getMobEffects(stack);
         potionEffects.forEach(effect -> {
-            attackLayers.put(new ResourceLocation("potion_" + effect.getDescriptionId()), BasePropertiesAPI.getAttackLayer(effect));
+            attackLayers.put(new ResourceLocation("potion_" + effect.getName()), BasePropertiesAPI.getAttackLayer(effect));
         });
         isInitialized = true;
     }
@@ -111,7 +111,7 @@ public class AttackData {
         isInitialized = true;
     }
 
-    public void initialize(ProjectileEntity entity) {
+    public void initialize(Projectile entity) {
         AttackLayer base = BasePropertiesAPI.getAttackData(entity);
         attackLayers.put(new ResourceLocation("base"), base);
         isInitialized = true;

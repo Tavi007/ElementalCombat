@@ -1,18 +1,22 @@
 package Tavi007.ElementalCombat.enchantments;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class ElementalResistanceEnchantment extends Enchantment {
 
-    private static final EquipmentSlotType[] ARMOR_SLOTS = new EquipmentSlotType[] { EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS,
-        EquipmentSlotType.FEET };
+    private static final EquipmentSlot[] ARMOR_SLOTS = new EquipmentSlot[] {
+        EquipmentSlot.HEAD,
+        EquipmentSlot.CHEST,
+        EquipmentSlot.LEGS,
+        EquipmentSlot.FEET
+    };
 
     public final ElementalResistanceEnchantment.Type protectionType;
 
     public ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type typeIn) {
-        super(Rarity.UNCOMMON, EnchantmentType.ARMOR, ARMOR_SLOTS);
+        super(Rarity.UNCOMMON, EnchantmentCategory.ARMOR, ARMOR_SLOTS);
         this.protectionType = typeIn;
     }
 

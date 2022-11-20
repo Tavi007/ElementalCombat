@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.network;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class DisableDamageRenderMessage extends MessageToClient {
 
@@ -25,7 +25,7 @@ public class DisableDamageRenderMessage extends MessageToClient {
         this.id = id;
     }
 
-    public static DisableDamageRenderMessage decode(PacketBuffer buf) {
+    public static DisableDamageRenderMessage decode(FriendlyByteBuf buf) {
         DisableDamageRenderMessage retval = new DisableDamageRenderMessage();
         try {
             retval.setId(buf.readInt());
@@ -38,7 +38,7 @@ public class DisableDamageRenderMessage extends MessageToClient {
         return retval;
     }
 
-    public void encode(PacketBuffer buf) {
+    public void encode(FriendlyByteBuf buf) {
         if (!this.messageIsValid)
             return;
         buf.writeInt(this.id);

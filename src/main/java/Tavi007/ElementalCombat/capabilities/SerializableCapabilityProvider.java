@@ -3,7 +3,6 @@ package Tavi007.ElementalCombat.capabilities;
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.INBTSerializable;
 

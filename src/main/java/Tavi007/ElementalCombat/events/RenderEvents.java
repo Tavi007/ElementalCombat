@@ -3,8 +3,10 @@ package Tavi007.ElementalCombat.events;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Matrix4f;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
@@ -16,18 +18,16 @@ import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.RenderHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
-import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -78,7 +78,7 @@ public class RenderEvents {
                     // Use the same calculation as in GameRenderer#hurtCameraEffect.
                     float f = (float) (mc.player.hurtTime - event.getRenderPartialTicks());
                     f = f / (float) mc.player.hurtDuration;
-                    f = MathHelper.sin(f * f * f * f * (float) Math.PI);
+                    f = Mth.sin(f * f * f * f * (float) Math.PI);
                     event.setRoll(f * 14.0F); // counter acts the screen shake. Only the hand is moving now.
                 }
             }
@@ -132,19 +132,19 @@ public class RenderEvents {
     // render only icons here (because strings wont't get rendered anymore)
     @SubscribeEvent
     public static void onTooltipRenderPost(RenderTooltipEvent.PostText event) {
-        MatrixStack matrixStack = event.getMatrixStack();
+        PoseStack poseStack = event.getMatrixStack();
         ItemStack stack = event.getStack();
         AttackData attackData = AttackDataHelper.get(stack);
         DefenseData defenseData = DefenseDataHelper.get(stack);
         if (!attackData.isDefault()) {
-            int tooltipIndexAttack = RenderHelper.getTooltipIndexAttack(event.getLines());
-            RenderHelper.renderAttackIcons(attackData, matrixStack, event.getX(), event.getY() + 2 + tooltipIndexAttack * RenderHelper.maxLineHeight);
+            int tooltipIndexAttack = RenderHelper.getTooltipIndexAttack(event.getComponents());
+            RenderHelper.renderAttackIcons(attackData, poseStack, event.getX(), event.getY() + 2 + tooltipIndexAttack * RenderHelper.maxLineHeight);
         }
         if (!defenseData.isEmpty()) {
-            int tooltipIndexDefense = RenderHelper.getTooltipIndexDefense(event.getLines());
+            int tooltipIndexDefense = RenderHelper.getTooltipIndexDefense(event.getComponents());
             RenderHelper.renderDefenseIcons(defenseData,
                 ClientConfig.isDoubleRowDefenseTooltip(),
-                matrixStack,
+                poseStack,
                 event.getX(),
                 event.getY() + 2 + tooltipIndexDefense * RenderHelper.maxLineHeight);
         }
@@ -154,7 +154,7 @@ public class RenderEvents {
 
     @SubscribeEvent
     public static void displayElementalCombatHUD(RenderGameOverlayEvent.Post event) {
-        if (event.getType().equals(RenderGameOverlayEvent.ElementType.HOTBAR)) {
+        if (event.getType().equals(RenderGameOverlayEvent.ElementType.PLAYER_LIST)) {
             ticks++;
             if (ticks >= ClientConfig.iterationSpeed() * 2.5) {
                 ticks = 0;
@@ -164,7 +164,7 @@ public class RenderEvents {
                 // see Screen#renderToolTips in client.gui.screen
                 Minecraft mc = Minecraft.getInstance();
                 if (mc.player != null) {
-                    MatrixStack matrixStack = event.getMatrixStack();
+                    PoseStack matrixStack = event.getMatrixStack();
                     float scale = (float) ClientConfig.scale();
                     AttackData attackData = AttackDataHelper.get(mc.player);
                     DefenseData defenseData = DefenseDataHelper.get(mc.player);
@@ -250,10 +250,10 @@ public class RenderEvents {
                     RenderSystem.disableTexture();
                     RenderSystem.enableBlend();
                     RenderSystem.defaultBlendFunc();
-                    RenderSystem.shadeModel(7425);
+                    // RenderSystem.shadeModel(7425);
                     bufferbuilder.end();
                     WorldVertexBufferUploader.end(bufferbuilder);
-                    RenderSystem.shadeModel(7424);
+                    // RenderSystem.shadeModel(7424);
                     RenderSystem.disableBlend();
                     RenderSystem.enableTexture();
                     IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.immediate(Tessellator.getInstance().getBuilder());

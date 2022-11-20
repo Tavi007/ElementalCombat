@@ -2,22 +2,23 @@ package Tavi007.ElementalCombat.init;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.mojang.blaze3d.platform.InputConstants;
+
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.client.CombatParticle;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.client.util.InputMappings;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fmlclient.registry.ClientRegistry;
 
 public class StartupClientOnly {
 
-    public static final KeyBinding TOGGLE_HUD = new KeyBinding("Toggle HUD",
+    public static final KeyMapping TOGGLE_HUD = new KeyMapping("Toggle HUD",
         KeyConflictContext.UNIVERSAL,
-        InputMappings.Type.KEYSYM,
+        InputConstants.Type.KEYSYM,
         GLFW.GLFW_KEY_J,
         "Elemental Combat");
 

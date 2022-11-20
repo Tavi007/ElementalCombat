@@ -9,9 +9,9 @@ import Tavi007.ElementalCombat.init.StartupClientOnly;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
@@ -45,7 +45,7 @@ public class PlayerEvents {
     // this is why, all this stuff need to be removed on log out.
     @SubscribeEvent
     public static void playerLoggedOut(PlayerLoggedOutEvent event) {
-        PlayerEntity entity = event.getPlayer();
+        Player entity = event.getPlayer();
         if (entity != null) {
             DefenseData defCapEntity = DefenseDataHelper.get(entity);
             defCapEntity.clear();

@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import com.google.gson.annotations.SerializedName;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class MobCombatProperties extends ItemCombatProperties {
 
@@ -32,13 +32,13 @@ public class MobCombatProperties extends ItemCombatProperties {
     }
 
     @Override
-    public void writeToBuffer(PacketBuffer buf) {
+    public void writeToBuffer(FriendlyByteBuf buf) {
         super.writeToBuffer(buf);
         buf.writeBoolean(biomeDependency);
     }
 
     @Override
-    public void readFromBuffer(PacketBuffer buf) {
+    public void readFromBuffer(FriendlyByteBuf buf) {
         super.readFromBuffer(buf);
         biomeDependency = buf.readBoolean();
     }

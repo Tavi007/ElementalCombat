@@ -1,9 +1,9 @@
 package Tavi007.ElementalCombat.capabilities.defense;
 
 import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
-public class DefenseDataNBT extends CompoundNBT {
+public class DefenseDataNBT extends CompoundTag {
 
     public DefenseDataNBT() {
         super();

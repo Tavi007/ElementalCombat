@@ -6,25 +6,26 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 
 public class RenderHelper {
 
-    private static final FontRenderer fontRenderer = Minecraft.getInstance().font;
+    private static final Font fontRenderer = Minecraft.getInstance().font;
     private static final TextureManager textureManager = Minecraft.getInstance().textureManager;
 
     private static final String textAttack = "Attack:";
@@ -108,90 +109,90 @@ public class RenderHelper {
     }
 
     // Tooltip stuff
-    public static void renderTooltip(List<ITextComponent> tooltip, MatrixStack matrixStack, int x, int y) {
+    public static void renderTooltip(List<ITextComponent> tooltip, PoseStack poseStack, int x, int y) {
         for (int i = 0; i < tooltip.size(); i++) {
-            fontRenderer.drawShadow(matrixStack, tooltip.get(i).getString(), x, y + i * RenderHelper.maxLineHeight, TextFormatting.GRAY.getColor());
+            fontRenderer.drawShadow(poseStack, tooltip.get(i).getString(), x, y + i * RenderHelper.maxLineHeight, ChatFormatting.GRAY.getColor());
         }
     }
 
     public static void addTooltipSeperator(List<ITextComponent> tooltip, boolean hasDefenseData) {
         if (hasDefenseData) {
-            tooltip.add(new StringTextComponent(TextFormatting.GRAY + textSeperator + TextFormatting.RESET));
+            tooltip.add(new StringTextComponent(ChatFormatting.GRAY + textSeperator + ChatFormatting.RESET));
         } else {
-            tooltip.add(new StringTextComponent(TextFormatting.GRAY + textSeperatorOnlyAttack + TextFormatting.RESET));
+            tooltip.add(new StringTextComponent(ChatFormatting.GRAY + textSeperatorOnlyAttack + ChatFormatting.RESET));
         }
     }
 
     public static void addTooltip(List<ITextComponent> tooltip, boolean inTwoRows, @Nullable AttackData attackData, @Nullable DefenseData defenseData) {
         if (attackData != null) {
-            tooltip.add(new StringTextComponent(TextFormatting.GRAY + textAttack));
+            tooltip.add(new StringTextComponent(ChatFormatting.GRAY + textAttack));
         }
         if (defenseData != null && !defenseData.isEmpty()) {
             if (inTwoRows) {
                 if (!defenseData.getElementFactor().isEmpty()) {
                     int factor = getCurrentElementDefenseFactor(defenseData);
-                    tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor, false)));
+                    tooltip.add(new StringTextComponent(ChatFormatting.GRAY + textDefense + "   " + getPercentage(factor, false)));
                 }
                 if (!defenseData.getStyleFactor().isEmpty()) {
                     int factor = getCurrentStyleDefenseFactor(defenseData);
-                    tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor, true)));
+                    tooltip.add(new StringTextComponent(ChatFormatting.GRAY + textDefense + "   " + getPercentage(factor, true)));
                 }
             } else {
                 int factor = getCurrentDefenseFactor(defenseData);
                 boolean isStyle = isCurrentDefenseFactorStyle(defenseData);
-                tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor, isStyle)));
+                tooltip.add(new ChatComponent(ChatFormatting.GRAY + textDefense + "   " + getPercentage(factor, isStyle)));
             }
         }
     }
 
     public static String getPercentage(Integer factor, boolean isStyle) {
         Integer percentage = Math.round(DefenseDataHelper.getPercentage(factor, isStyle) * 100);
-        TextFormatting textFormatting = TextFormatting.GRAY;
+        ChatFormatting ChatFormatting = net.minecraft.ChatFormatting.GRAY;
         if (percentage < 0) {
-            textFormatting = TextFormatting.RED;
+            ChatFormatting = ChatFormatting.RED;
         }
         if (percentage > 0 && percentage < 100) {
-            textFormatting = TextFormatting.BLUE;
+            ChatFormatting = ChatFormatting.BLUE;
         }
         if (percentage == 100) {
-            textFormatting = TextFormatting.YELLOW;
+            ChatFormatting = ChatFormatting.YELLOW;
         }
         if (percentage > 100) {
-            textFormatting = TextFormatting.GREEN;
+            ChatFormatting = ChatFormatting.GREEN;
         }
 
         if (percentage < 0) {
-            return textFormatting + String.valueOf(percentage) + "%" + TextFormatting.RESET;
+            return ChatFormatting + String.valueOf(percentage) + "%" + ChatFormatting.RESET;
         } else {
-            return textFormatting + "+" + String.valueOf(percentage) + "%" + TextFormatting.RESET;
+            return ChatFormatting + "+" + String.valueOf(percentage) + "%" + ChatFormatting.RESET;
         }
     }
 
     // icon render stuff
     // posX and posY are the start coords of the "Attack: "- String. Calculation will be relative from there on out.
-    public static void renderAttackIcons(AttackData data, MatrixStack matrixStack, int posX, int posY) {
-        renderIcon(data.getElement(), matrixStack, posX + widthAttack, posY);
-        renderIcon(data.getStyle(), matrixStack, posX + widthAttack + iconSize + 2, posY);
+    public static void renderAttackIcons(AttackData data, PoseStack poseStack, int posX, int posY) {
+        renderIcon(data.getElement(), poseStack, posX + widthAttack, posY);
+        renderIcon(data.getStyle(), poseStack, posX + widthAttack + iconSize + 2, posY);
     }
 
     // posX and posY are the start coords of the "Defense: "- String. Calculation will be relative from there on out.
-    public static void renderDefenseIcons(DefenseData data, boolean inTwoRows, MatrixStack matrixStack, int posX, int posY) {
+    public static void renderDefenseIcons(DefenseData data, boolean inTwoRows, PoseStack poseStack, int posX, int posY) {
         if (inTwoRows) {
             if (!data.getElementFactor().isEmpty()) {
-                renderIcon(getCurrentElementDefenseName(data), matrixStack, posX + widthDefense, posY);
+                renderIcon(getCurrentElementDefenseName(data), poseStack, posX + widthDefense, posY);
                 posY += maxLineHeight;
             }
             if (!data.getStyleFactor().isEmpty()) {
-                renderIcon(getCurrentStyleDefenseName(data), matrixStack, posX + widthDefense, posY);
+                renderIcon(getCurrentStyleDefenseName(data), poseStack, posX + widthDefense, posY);
             }
         } else {
-            renderIcon(getCurrentDefenseName(data), matrixStack, posX + widthDefense, posY);
+            renderIcon(getCurrentDefenseName(data), poseStack, posX + widthDefense, posY);
         }
     }
 
-    public static void renderIcon(String name, MatrixStack matrixStack, int posX, int posY) {
-        textureManager.bind(new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + name + ".png"));
-        AbstractGui.blit(matrixStack, posX, posY, 0, 0, iconSize, iconSize, iconSize, iconSize);
-        textureManager.bind(AbstractGui.GUI_ICONS_LOCATION);
+    public static void renderIcon(String name, PoseStack poseStack, int posX, int posY) {
+        textureManager.bindForSetup(new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + name + ".png"));
+        GuiComponent.blit(poseStack, posX, posY, 0, 0, iconSize, iconSize, iconSize, iconSize);
+        textureManager.bindForSetup(GuiComponent.GUI_ICONS_LOCATION);
     }
 }

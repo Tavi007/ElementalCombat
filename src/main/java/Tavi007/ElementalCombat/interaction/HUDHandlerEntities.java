@@ -6,9 +6,9 @@ import mcp.mobius.waila.api.IDrawableText;
 import mcp.mobius.waila.api.IEntityAccessor;
 import mcp.mobius.waila.api.IEntityComponentProvider;
 import mcp.mobius.waila.api.IPluginConfig;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.LivingEntity;
 
 public class HUDHandlerEntities implements IEntityComponentProvider {
 

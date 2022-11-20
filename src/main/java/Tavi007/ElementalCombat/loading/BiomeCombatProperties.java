@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.google.gson.annotations.SerializedName;
 
 import Tavi007.ElementalCombat.util.PacketBufferHelper;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class BiomeCombatProperties {
 
@@ -28,11 +28,11 @@ public class BiomeCombatProperties {
         return this.defenseElement;
     }
 
-    public void writeToBuffer(PacketBuffer buf) {
+    public void writeToBuffer(FriendlyByteBuf buf) {
         PacketBufferHelper.writeHashMap(buf, defenseElement);
     }
 
-    public void readFromBuffer(PacketBuffer buf) {
+    public void readFromBuffer(FriendlyByteBuf buf) {
         defenseElement = PacketBufferHelper.readHashMap(buf);
     }
 

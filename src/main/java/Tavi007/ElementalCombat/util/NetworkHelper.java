@@ -8,11 +8,11 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.network.BasePropertiesMessage;
 import Tavi007.ElementalCombat.network.EntityAttackLayerMessage;
 import Tavi007.ElementalCombat.network.EntityDefenseLayerMessage;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 public class NetworkHelper {
 
@@ -64,9 +64,9 @@ public class NetworkHelper {
         }
     }
 
-    public static void syncJsonMessageForClients(PlayerEntity player) {
-        if (!player.level.isClientSide && player instanceof ServerPlayerEntity) {
-            ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+    public static void syncJsonMessageForClients(Player player) {
+        if (!player.level.isClientSide && player instanceof ServerPlayer) {
+            ServerPlayer serverPlayer = (ServerPlayer) player;
             BasePropertiesMessage messageToClient = ElementalCombat.COMBAT_PROPERTIES_MANGER.createSyncMessage();
             ElementalCombat.simpleChannel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), messageToClient);
         }

@@ -13,16 +13,16 @@ import Tavi007.ElementalCombat.init.StartupCommon;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.LogicalSidedProvider;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.LogicalSidedProvider;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 public class PackageHandlerOnClient {
 
@@ -41,45 +41,45 @@ public class PackageHandlerOnClient {
             return;
         }
 
-        Optional<ClientWorld> clientWorld = LogicalSidedProvider.CLIENTWORLD.get(sideReceived);
-        if (!clientWorld.isPresent()) {
-            ElementalCombat.LOGGER.warn(message.getClass().getName() + " context could not provide a ClientWorld.");
+        Optional<ClientLevel> ClientLevel = LogicalSidedProvider.CLIENTWORLD.get(sideReceived);
+        if (!ClientLevel.isPresent()) {
+            ElementalCombat.LOGGER.warn(message.getClass().getName() + " context could not provide a ClientLevel.");
             return;
         }
 
         if (message instanceof CreateEmitterMessage) {
-            ctx.enqueueWork(() -> processMessage(clientWorld.get(), (CreateEmitterMessage) message));
+            ctx.enqueueWork(() -> processMessage(ClientLevel.get(), (CreateEmitterMessage) message));
         } else if (message instanceof DisableDamageRenderMessage) {
-            ctx.enqueueWork(() -> processMessage(clientWorld.get(), (DisableDamageRenderMessage) message));
+            ctx.enqueueWork(() -> processMessage(ClientLevel.get(), (DisableDamageRenderMessage) message));
         } else if (message instanceof EntityAttackLayerMessage) {
-            ctx.enqueueWork(() -> processMessage(clientWorld.get(), (EntityAttackLayerMessage) message));
+            ctx.enqueueWork(() -> processMessage(ClientLevel.get(), (EntityAttackLayerMessage) message));
         } else if (message instanceof EntityDefenseLayerMessage) {
-            ctx.enqueueWork(() -> processMessage(clientWorld.get(), (EntityDefenseLayerMessage) message));
+            ctx.enqueueWork(() -> processMessage(ClientLevel.get(), (EntityDefenseLayerMessage) message));
         } else if (message instanceof BasePropertiesMessage) {
             ctx.enqueueWork(() -> ElementalCombat.COMBAT_PROPERTIES_MANGER.set((BasePropertiesMessage) message));
         }
     }
 
-    private static void processMessage(ClientWorld clientWorld, EntityAttackLayerMessage message) {
+    private static void processMessage(ClientLevel ClientLevel, EntityAttackLayerMessage message) {
         AttackLayer atckLayer = message.getAttackLayer();
-        Entity entity = clientWorld.getEntity(message.getId());
+        Entity entity = ClientLevel.getEntity(message.getId());
         if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
             AttackDataHelper.get(livingEntity).putLayer(new ResourceLocation(message.getLocation()), atckLayer);
         }
     }
 
-    private static void processMessage(ClientWorld clientWorld, EntityDefenseLayerMessage message) {
+    private static void processMessage(ClientLevel ClientLevel, EntityDefenseLayerMessage message) {
         DefenseLayer defLayer = message.getDefenseLayer();
-        Entity entity = clientWorld.getEntity(message.getId());
+        Entity entity = ClientLevel.getEntity(message.getId());
         if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
             DefenseDataHelper.get(livingEntity).putLayer(message.getLocation(), defLayer);
         }
     }
 
-    private static void processMessage(ClientWorld clientWorld, DisableDamageRenderMessage message) {
-        Entity entity = clientWorld.getEntity((message.getId()));
+    private static void processMessage(ClientLevel ClientLevel, DisableDamageRenderMessage message) {
+        Entity entity = ClientLevel.getEntity((message.getId()));
         if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
             ImmersionData data = (ImmersionData) livingEntity.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null)
@@ -89,11 +89,11 @@ public class PackageHandlerOnClient {
     }
 
     @SuppressWarnings("resource")
-    private static void processMessage(ClientWorld clientWorld, CreateEmitterMessage message) {
-        ParticleManager particles = Minecraft.getInstance().particleEngine;
+    private static void processMessage(ClientLevel clientLevel, CreateEmitterMessage message) {
+        ParticleEngine engine = Minecraft.getInstance().particleEngine;
 
-        Entity entity = clientWorld.getEntity(message.getEntityId());
-        IParticleData particle = ParticleTypes.CRIT;
+        Entity entity = clientLevel.getEntity(message.getEntityId());
+        SimpleParticleType particle = ParticleTypes.CRIT;
         switch (message.getParticleName()) {
         case "critical_element":
             particle = ParticleList.CRIT_ELEMENT.get();
@@ -116,7 +116,7 @@ public class PackageHandlerOnClient {
             double vx = Math.sin(Math.random() * 2 * Math.PI) * 0.5;
             double vz = Math.cos(Math.random() * 2 * Math.PI) * 0.5;
 
-            particles.createParticle(particle,
+            engine.createParticle(particle,
                 entity.getX(),
                 entity.getY() + entity.getEyeHeight(),
                 entity.getZ(),

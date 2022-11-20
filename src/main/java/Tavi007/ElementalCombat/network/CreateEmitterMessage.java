@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.network;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class CreateEmitterMessage extends MessageToClient {
 
@@ -47,7 +47,7 @@ public class CreateEmitterMessage extends MessageToClient {
         this.amount = amount;
     }
 
-    public static CreateEmitterMessage decode(PacketBuffer buf) {
+    public static CreateEmitterMessage decode(FriendlyByteBuf buf) {
         CreateEmitterMessage ret = new CreateEmitterMessage();
         try {
             ret.setEntityId(buf.readInt());
@@ -62,7 +62,7 @@ public class CreateEmitterMessage extends MessageToClient {
         return ret;
     }
 
-    public void encode(PacketBuffer buf) {
+    public void encode(FriendlyByteBuf buf) {
         buf.writeInt(entityId);
         buf.writeUtf(particleName);
         buf.writeInt(amount);

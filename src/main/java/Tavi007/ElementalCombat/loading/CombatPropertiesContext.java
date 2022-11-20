@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonParseException;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class CombatPropertiesContext {
 

@@ -6,12 +6,12 @@ import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
 
 public class AttackDataAPI {
 
@@ -79,106 +79,106 @@ public class AttackDataAPI {
     }
 
     /**
-     * Writes the attack data to the {@link CompoundNBT} of the {@link LivingEntity}.
+     * Writes the attack data to the {@link CompoundTag} of the {@link LivingEntity}.
      * 
      * @param entity
      *            A LivingEntity.
      * @param nbt
-     *            The CompoundNBT.
+     *            The CompoundTag.
      */
-    public static void writeToNBT(CompoundNBT nbt, LivingEntity entity) {
+    public static void writeToNBT(CompoundTag nbt, LivingEntity entity) {
         ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, AttackDataHelper.get(entity));
     }
 
     /**
-     * Reads the attack data from the {@link CompoundNBT} and updates the {@link LivingEntity}.
+     * Reads the attack data from the {@link CompoundTag} and updates the {@link LivingEntity}.
      * 
      * @param entity
      *            A LivingEntity.
      * @param nbt
-     *            The CompoundNBT.
+     *            The CompoundTag.
      */
-    public static void readFromNBT(CompoundNBT nbt, LivingEntity entity) {
+    public static void readFromNBT(CompoundTag nbt, LivingEntity entity) {
         AttackDataHelper.get(entity).set(ElementalCombatNBTHelper.readAttackDataFromNBT(nbt));
     }
 
     //////////////////////
-    // ProjectileEntity //
+    // Projectile //
     //////////////////////
 
     /**
-     * Get a copy of the fully merged {@link AttackLayer} of the {@link ProjectileEntity}.
+     * Get a copy of the fully merged {@link AttackLayer} of the {@link Projectile}.
      * Use this to get the attack properties, which will be used in combat.
      * 
      * @param entity
-     *            A ProjectileEntity.
+     *            A Projectile.
      * @param location
      *            The ResourceLocation.
      */
-    public static AttackLayer getFullDataAsLayer(ProjectileEntity entity) {
+    public static AttackLayer getFullDataAsLayer(Projectile entity) {
         return new AttackLayer(AttackDataHelper.get(entity).toLayer());
     }
 
     /**
-     * Get a copy of the {@link AttackLayer} of the {@link ProjectileEntity} at the {@link ResourceLocation}.
-     * Use {@link AttackDataAPI#putLayer(ProjectileEntity, AttackLayer, ResourceLocation)} to apply changes.
+     * Get a copy of the {@link AttackLayer} of the {@link Projectile} at the {@link ResourceLocation}.
+     * Use {@link AttackDataAPI#putLayer(Projectile, AttackLayer, ResourceLocation)} to apply changes.
      * 
      * @param entity
-     *            A ProjectileEntity.
+     *            A Projectile.
      * @param location
      *            The ResourceLocation.
      */
-    public static AttackLayer getLayer(ProjectileEntity entity, ResourceLocation location) {
+    public static AttackLayer getLayer(Projectile entity, ResourceLocation location) {
         return new AttackLayer(AttackDataHelper.get(entity).getLayer(location));
     }
 
     /**
-     * Set the {@link AttackLayer} of the {@link ProjectileEntity} at the {@link ResourceLocation}.
+     * Set the {@link AttackLayer} of the {@link Projectile} at the {@link ResourceLocation}.
      * 
      * @param entity
-     *            A ProjectileEntity.
+     *            A Projectile.
      * @param location
      *            The ResourceLocation.
      * @param layer
      *            The attack layer to be set.
      */
-    public static void putLayer(ProjectileEntity entity, AttackLayer layer, ResourceLocation location) {
+    public static void putLayer(Projectile entity, AttackLayer layer, ResourceLocation location) {
         AttackDataHelper.get(entity).putLayer(location, layer);
     }
 
     /**
-     * Delete the {@link AttackLayer} of the {@link ProjectileEntity} at the {@link ResourceLocation}.
+     * Delete the {@link AttackLayer} of the {@link Projectile} at the {@link ResourceLocation}.
      * 
      * @param entity
-     *            A LivProjectileEntityingEntity.
+     *            A LivProjectileingEntity.
      * @param location
      *            The ResourceLocation.
      */
-    public static void deleteLayer(ProjectileEntity entity, ResourceLocation location) {
+    public static void deleteLayer(Projectile entity, ResourceLocation location) {
         AttackDataHelper.get(entity).putLayer(location, new AttackLayer());
     }
 
     /**
-     * Writes the attack data to the {@link CompoundNBT} of the {@link ProjectileEntity}.
+     * Writes the attack data to the {@link CompoundTag} of the {@link Projectile}.
      * 
      * @param entity
-     *            A ProjectileEntity.
+     *            A Projectile.
      * @param nbt
-     *            The CompoundNBT.
+     *            The CompoundTag.
      */
-    public static void writeToNBT(CompoundNBT nbt, ProjectileEntity entity) {
+    public static void writeToNBT(CompoundTag nbt, Projectile entity) {
         ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, AttackDataHelper.get(entity));
     }
 
     /**
-     * Reads the attack data from the {@link CompoundNBT} and updates the {@link ProjectileEntity}.
+     * Reads the attack data from the {@link CompoundTag} and updates the {@link Projectile}.
      * 
      * @param entity
-     *            A ProjectileEntity.
+     *            A Projectile.
      * @param nbt
-     *            The CompoundNBT.
+     *            The CompoundTag.
      */
-    public static void readFromNBT(CompoundNBT nbt, ProjectileEntity entity) {
+    public static void readFromNBT(CompoundTag nbt, Projectile entity) {
         AttackDataHelper.get(entity).set(ElementalCombatNBTHelper.readAttackDataFromNBT(nbt));
     }
 
@@ -248,26 +248,26 @@ public class AttackDataAPI {
     }
 
     /**
-     * Writes the attack data to the {@link CompoundNBT} of the {@link ItemStack}.
+     * Writes the attack data to the {@link CompoundTag} of the {@link ItemStack}.
      * 
      * @param stack
      *            A ItemStack.
      * @param nbt
-     *            The CompoundNBT.
+     *            The CompoundTag.
      */
-    public static void writeToNBT(CompoundNBT nbt, ItemStack stack) {
+    public static void writeToNBT(CompoundTag nbt, ItemStack stack) {
         ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, AttackDataHelper.get(stack));
     }
 
     /**
-     * Reads the attack data from the {@link CompoundNBT} and updates the {@link ItemStack}.
+     * Reads the attack data from the {@link CompoundTag} and updates the {@link ItemStack}.
      * 
      * @param stack
      *            A ItemStack.
      * @param nbt
-     *            The CompoundNBT.
+     *            The CompoundTag.
      */
-    public static void readFromNBT(CompoundNBT nbt, ItemStack stack) {
+    public static void readFromNBT(CompoundTag nbt, ItemStack stack) {
         AttackDataHelper.get(stack).set(ElementalCombatNBTHelper.readAttackDataFromNBT(nbt));
     }
 
