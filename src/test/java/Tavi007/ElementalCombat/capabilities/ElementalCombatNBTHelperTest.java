@@ -11,15 +11,15 @@ import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 
 public class ElementalCombatNBTHelperTest {
 
     @Test
     public void testDefaultAttackData() {
         AttackData data = new AttackData();
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, data);
 
         AttackData newData = ElementalCombatNBTHelper.readAttackDataFromNBT(nbt);
@@ -30,7 +30,7 @@ public class ElementalCombatNBTHelperTest {
     public void testAttackDataWithSingleLayer() {
         AttackData data = new AttackData();
         data.putLayer(new ResourceLocation("test"), new AttackLayer("style", "element"));
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, data);
 
         AttackData newData = ElementalCombatNBTHelper.readAttackDataFromNBT(nbt);
@@ -42,7 +42,7 @@ public class ElementalCombatNBTHelperTest {
         AttackData data = new AttackData();
         data.putLayer(new ResourceLocation("test1"), new AttackLayer("style1", "element1"));
         data.putLayer(new ResourceLocation("test2"), new AttackLayer("style2", "element2"));
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, data);
 
         AttackData newData = ElementalCombatNBTHelper.readAttackDataFromNBT(nbt);
@@ -52,7 +52,7 @@ public class ElementalCombatNBTHelperTest {
     @Test
     public void testDefaultDefenseData() {
         DefenseData data = new DefenseData();
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, data);
 
         DefenseData newData = ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt);
@@ -63,7 +63,7 @@ public class ElementalCombatNBTHelperTest {
     public void testDefenseDataWithSingleEmptyLayer() {
         DefenseData data = new DefenseData();
         data.putLayer(new ResourceLocation("test"), new DefenseLayer());
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, data);
 
         DefenseData newData = ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt);
@@ -80,7 +80,7 @@ public class ElementalCombatNBTHelperTest {
         element.put("element1", 10);
         element.put("element2", 20);
         data.putLayer(new ResourceLocation("test"), new DefenseLayer(style, element));
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, data);
 
         DefenseData newData = ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt);
@@ -106,7 +106,7 @@ public class ElementalCombatNBTHelperTest {
         element2.put("element22", 201);
         data.putLayer(new ResourceLocation("test2"), new DefenseLayer(style2, element2));
 
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, data);
 
         DefenseData newData = ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt);

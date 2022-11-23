@@ -16,14 +16,14 @@ import com.google.gson.JsonParseException;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.network.BasePropertiesMessage;
-import net.minecraft.client.resources.JsonReloadListener;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class CombatPropertiesManager extends JsonReloadListener {
+public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
 
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
     public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
@@ -62,7 +62,8 @@ public class CombatPropertiesManager extends JsonReloadListener {
         return new BasePropertiesMessage(registeredMobData, registeredItemData, registeredBiomeData, registeredDamageSourceData, registeredProjectileData);
     }
 
-    protected void apply(Map<ResourceLocation, JsonElement> objectIn, IResourceManager resourceManagerIn, IProfiler profilerIn) {
+    @Override
+    protected void apply(Map<ResourceLocation, JsonElement> objectIn, ResourceManager resourceManagerIn, ProfilerFiller profilerIn) {
         Builder<ResourceLocation, MobCombatProperties> builderMob = ImmutableMap.builder();
         Builder<ResourceLocation, ItemCombatProperties> builderItem = ImmutableMap.builder();
         Builder<ResourceLocation, BiomeCombatProperties> builderBiome = ImmutableMap.builder();
@@ -75,7 +76,7 @@ public class CombatPropertiesManager extends JsonReloadListener {
 
         Map<String, Map<String, Integer>> counter = new HashMap<String, Map<String, Integer>>();
         objectIn.forEach((rl, json) -> {
-            try (net.minecraft.resources.IResource res = resourceManagerIn.getResource(getPreparedPath(rl));) {
+            try (net.minecraft.server.packs.resources.Resource res = resourceManagerIn.getResource(getPreparedPath(rl));) {
                 String modid = rl.getNamespace();
                 String type = "incorrect entries (check path!)";
                 // check if entity/item/biome/damageSource gets loaded

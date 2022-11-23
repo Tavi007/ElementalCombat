@@ -13,19 +13,19 @@ import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -70,9 +70,9 @@ public class ServerEvents {
     }
 
     private static void addLayerFromPotion(AttackData projectileData, Projectile projectile) {
-        if (projectile instanceof ArrowEntity) {
-            CompoundNBT compound = new CompoundNBT();
-            ((ArrowEntity) projectile).addAdditionalSaveData(compound);
+        if (projectile instanceof Arrow) {
+            CompoundTag compound = new CompoundTag();
+            ((Arrow) projectile).addAdditionalSaveData(compound);
             if (compound.contains("Potion", 8)) {
                 AttackData potionLayer = new AttackData();
                 PotionUtils.getAllEffects(compound).forEach(effect -> {
@@ -131,7 +131,7 @@ public class ServerEvents {
 
             // play a healing sound
             SoundEvent sound = SoundEvents.PLAYER_LEVELUP; // need better sound
-            target.getCommandSenderWorld().playSound(null, target.blockPosition(), sound, SoundCategory.MASTER, 1.0f, 2.0f);
+            target.getCommandSenderWorld().playSound(null, target.blockPosition(), sound, SoundSource.MASTER, 1.0f, 2.0f);
         }
 
         event.setAmount(damageAmount);
@@ -142,12 +142,12 @@ public class ServerEvents {
         CreateEmitterMessage messageToClient = new CreateEmitterMessage(entity.getId(), name, amount);
 
         // send message to nearby players
-        ServerWorld world = (ServerWorld) entity.level;
+        ServerLevel world = (ServerLevel) entity.level;
         for (int j = 0; j < world.players().size(); ++j) {
             ServerPlayer serverplayerentity = world.players().get(j);
             BlockPos blockpos = serverplayerentity.blockPosition();
             if (blockpos.closerThan(entity.position(), 32.0D)) {
-                Supplier<ServerPlayerEntity> supplier = new ServerPlayerSupplier(serverplayerentity);
+                Supplier<ServerPlayer> supplier = new ServerPlayerSupplier(serverplayerentity);
                 ElementalCombat.simpleChannel.send(PacketDistributor.PLAYER.with(supplier), messageToClient);
             }
         }

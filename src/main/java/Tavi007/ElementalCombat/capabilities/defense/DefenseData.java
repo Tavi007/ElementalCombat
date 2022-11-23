@@ -7,12 +7,14 @@ import java.util.Set;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
+import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraftforge.common.util.INBTSerializable;
 
-public class DefenseData {
+public class DefenseData implements INBTSerializable<DefenseDataNBT> {
 
     private HashMap<ResourceLocation, DefenseLayer> defenseLayers = new HashMap<>();
     private boolean isInitialized = false;
@@ -141,5 +143,18 @@ public class DefenseData {
             }
         }
         return false;
+    }
+
+    @Override
+    public DefenseDataNBT serializeNBT() {
+        DefenseDataNBT nbt = new DefenseDataNBT();
+        ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, this);
+        return nbt;
+    }
+
+    @Override
+    public void deserializeNBT(DefenseDataNBT nbt) {
+        DefenseData data = ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt);
+        set(data);
     }
 }

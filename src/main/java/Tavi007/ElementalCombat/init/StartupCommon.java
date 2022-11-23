@@ -13,6 +13,7 @@ import Tavi007.ElementalCombat.network.EntityAttackLayerMessage;
 import Tavi007.ElementalCombat.network.EntityDefenseLayerMessage;
 import Tavi007.ElementalCombat.network.PackageHandlerOnClient;
 import Tavi007.ElementalCombat.network.PackageHandlerOnServer;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fmllegacy.network.NetworkDirection;
@@ -28,12 +29,15 @@ public class StartupCommon {
     public static final String MESSAGE_PROTOCOL_VERSION = "1.0";
 
     @SubscribeEvent
-    public static void onCommonSetup(FMLCommonSetupEvent event) {
+    public static void onCommonSetup(RegisterCapabilitiesEvent event) {
         // capabilities
-        AttackDataCapability.register();
-        DefenseDataCapability.register();
-        ImmersionDataCapability.register();
+        AttackDataCapability.register(event);
+        DefenseDataCapability.register(event);
+        ImmersionDataCapability.register(event);
+    }
 
+    @SubscribeEvent
+    public static void onCommonSetup(FMLCommonSetupEvent event) {
         // networking
         ElementalCombat.simpleChannel = NetworkRegistry.newSimpleChannel(ElementalCombat.simpleChannelRL,
             () -> MESSAGE_PROTOCOL_VERSION,

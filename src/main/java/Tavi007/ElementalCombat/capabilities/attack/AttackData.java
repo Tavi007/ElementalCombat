@@ -10,15 +10,17 @@ import java.util.Set;
 
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.config.ServerConfig;
-import net.minecraft.client.renderer.EffectInstance;
+import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraftforge.common.util.INBTSerializable;
 
-public class AttackData {
+public class AttackData implements INBTSerializable<AttackDataNBT> {
 
     private LinkedHashMap<ResourceLocation, AttackLayer> attackLayers = new LinkedHashMap<>();
     private boolean isInitialized = false;
@@ -98,9 +100,9 @@ public class AttackData {
     public void initialize(ItemStack stack) {
         AttackLayer base = BasePropertiesAPI.getAttackData(stack);
         attackLayers.put(new ResourceLocation("base"), base);
-        List<EffectInstance> potionEffects = PotionUtils.getMobEffects(stack);
+        List<MobEffectInstance> potionEffects = PotionUtils.getMobEffects(stack);
         potionEffects.forEach(effect -> {
-            attackLayers.put(new ResourceLocation("potion_" + effect.getName()), BasePropertiesAPI.getAttackLayer(effect));
+            attackLayers.put(new ResourceLocation("potion_" + effect.getDescriptionId()), BasePropertiesAPI.getAttackLayer(effect));
         });
         isInitialized = true;
     }
@@ -167,5 +169,18 @@ public class AttackData {
 
     public LinkedHashMap<ResourceLocation, AttackLayer> getLayers() {
         return attackLayers;
+    }
+
+    @Override
+    public AttackDataNBT serializeNBT() {
+        AttackDataNBT nbt = new AttackDataNBT();
+        ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, this);
+        return nbt;
+    }
+
+    @Override
+    public void deserializeNBT(AttackDataNBT nbt) {
+        AttackData data = ElementalCombatNBTHelper.readAttackDataFromNBT(nbt);
+        set(data);
     }
 }

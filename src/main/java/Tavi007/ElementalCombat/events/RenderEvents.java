@@ -5,7 +5,11 @@ import java.util.List;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 
 import Tavi007.ElementalCombat.ElementalCombat;
@@ -19,13 +23,11 @@ import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -111,7 +113,7 @@ public class RenderEvents {
 
     @SubscribeEvent
     public static void onTooltip(ItemTooltipEvent event) {
-        List<ITextComponent> tooltip = event.getToolTip();
+        List<Component> tooltip = event.getToolTip();
         ItemStack stack = event.getItemStack();
         AttackData attackData = AttackDataHelper.get(stack);
         DefenseData defenseData = DefenseDataHelper.get(stack);
@@ -201,9 +203,10 @@ public class RenderEvents {
                     matrixStack.scale(scale, scale, scale);
 
                     // draw background box
-                    Tessellator tessellator = Tessellator.getInstance();
+                    Tesselator tessellator = Tesselator.getInstance();
                     BufferBuilder bufferbuilder = tessellator.getBuilder();
-                    bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+                    RenderSystem.setShader(GameRenderer::getPositionColorShader);
+                    bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
                     Matrix4f matrix4f = matrixStack.last().pose();
                     func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 4, posX + listWidth + 3, posY - 3, 400, -267386864, -267386864);
                     func_238462_a_(matrix4f,
@@ -252,16 +255,16 @@ public class RenderEvents {
                     RenderSystem.defaultBlendFunc();
                     // RenderSystem.shadeModel(7425);
                     bufferbuilder.end();
-                    WorldVertexBufferUploader.end(bufferbuilder);
+                    BufferUploader.end(bufferbuilder);
                     // RenderSystem.shadeModel(7424);
                     RenderSystem.disableBlend();
                     RenderSystem.enableTexture();
-                    IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.immediate(Tessellator.getInstance().getBuilder());
+                    MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
                     matrixStack.translate(0.0D, 0.0D, 400.0D);
-                    irendertypebuffer$impl.endBatch();
+                    multibuffersource$buffersource.endBatch();
 
                     // fill and render tooltip
-                    List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
+                    List<Component> tooltip = new ArrayList<Component>();
                     RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseHUD(), attackData, defenseData);
                     RenderHelper.renderTooltip(tooltip, matrixStack, posX, posY);
 

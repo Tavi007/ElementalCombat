@@ -16,12 +16,11 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.ChatComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.ITextProperties;
-import net.minecraft.util.text.StringTextComponent;
 
 public class RenderHelper {
 
@@ -48,18 +47,18 @@ public class RenderHelper {
         }
     }
 
-    public static int getTooltipIndexAttack(List<? extends ITextProperties> list) {
+    public static int getTooltipIndexAttack(List<? extends ClientTooltipComponent> list) {
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getString().contains(textAttack)) {
+            if (list.get(i).toString().contains(textAttack)) {
                 return i;
             }
         }
         return -1;
     }
 
-    public static int getTooltipIndexDefense(List<? extends ITextProperties> list) {
+    public static int getTooltipIndexDefense(List<? extends ClientTooltipComponent> list) {
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getString().contains(textDefense)) {
+            if (list.get(i).toString().contains(textDefense)) {
                 return i;
             }
         }
@@ -109,38 +108,38 @@ public class RenderHelper {
     }
 
     // Tooltip stuff
-    public static void renderTooltip(List<ITextComponent> tooltip, PoseStack poseStack, int x, int y) {
+    public static void renderTooltip(List<Component> tooltip, PoseStack poseStack, int x, int y) {
         for (int i = 0; i < tooltip.size(); i++) {
             fontRenderer.drawShadow(poseStack, tooltip.get(i).getString(), x, y + i * RenderHelper.maxLineHeight, ChatFormatting.GRAY.getColor());
         }
     }
 
-    public static void addTooltipSeperator(List<ITextComponent> tooltip, boolean hasDefenseData) {
+    public static void addTooltipSeperator(List<Component> tooltip, boolean hasDefenseData) {
         if (hasDefenseData) {
-            tooltip.add(new StringTextComponent(ChatFormatting.GRAY + textSeperator + ChatFormatting.RESET));
+            tooltip.add(new TextComponent(ChatFormatting.GRAY + textSeperator + ChatFormatting.RESET));
         } else {
-            tooltip.add(new StringTextComponent(ChatFormatting.GRAY + textSeperatorOnlyAttack + ChatFormatting.RESET));
+            tooltip.add(new TextComponent(ChatFormatting.GRAY + textSeperatorOnlyAttack + ChatFormatting.RESET));
         }
     }
 
-    public static void addTooltip(List<ITextComponent> tooltip, boolean inTwoRows, @Nullable AttackData attackData, @Nullable DefenseData defenseData) {
+    public static void addTooltip(List<Component> tooltip, boolean inTwoRows, @Nullable AttackData attackData, @Nullable DefenseData defenseData) {
         if (attackData != null) {
-            tooltip.add(new StringTextComponent(ChatFormatting.GRAY + textAttack));
+            tooltip.add(new TextComponent(ChatFormatting.GRAY + textAttack));
         }
         if (defenseData != null && !defenseData.isEmpty()) {
             if (inTwoRows) {
                 if (!defenseData.getElementFactor().isEmpty()) {
                     int factor = getCurrentElementDefenseFactor(defenseData);
-                    tooltip.add(new StringTextComponent(ChatFormatting.GRAY + textDefense + "   " + getPercentage(factor, false)));
+                    tooltip.add(new TextComponent(ChatFormatting.GRAY + textDefense + "   " + getPercentage(factor, false)));
                 }
                 if (!defenseData.getStyleFactor().isEmpty()) {
                     int factor = getCurrentStyleDefenseFactor(defenseData);
-                    tooltip.add(new StringTextComponent(ChatFormatting.GRAY + textDefense + "   " + getPercentage(factor, true)));
+                    tooltip.add(new TextComponent(ChatFormatting.GRAY + textDefense + "   " + getPercentage(factor, true)));
                 }
             } else {
                 int factor = getCurrentDefenseFactor(defenseData);
                 boolean isStyle = isCurrentDefenseFactorStyle(defenseData);
-                tooltip.add(new ChatComponent(ChatFormatting.GRAY + textDefense + "   " + getPercentage(factor, isStyle)));
+                tooltip.add(new TextComponent(ChatFormatting.GRAY + textDefense + "   " + getPercentage(factor, isStyle)));
             }
         }
     }

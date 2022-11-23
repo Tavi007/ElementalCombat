@@ -15,10 +15,10 @@ import Tavi007.ElementalCombat.loading.ItemCombatProperties;
 import Tavi007.ElementalCombat.loading.MobCombatProperties;
 import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.core.BlockPos;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.potion.Effects;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
@@ -74,9 +74,9 @@ public class BasePropertiesAPI {
      *            The EffectInstance.
      * @return copy of AttackData.
      */
-    public static AttackLayer getAttackLayer(EffectInstance effect) {
+    public static AttackLayer getAttackLayer(MobEffectInstance effect) {
         AttackLayer base = new AttackLayer();
-        if (effect.get.getEffect() == Effects.HARM) {
+        if (effect.getEffect() == MobEffects.HARM) {
             base.setStyle("magic");
         }
         return base;

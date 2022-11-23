@@ -4,7 +4,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
@@ -14,15 +14,16 @@ import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.RenderHelper;
 import mcp.mobius.waila.api.ICommonAccessor;
 import mcp.mobius.waila.api.ITooltipRenderer;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 public class WailaTooltipRenderer implements ITooltipRenderer {
 
     @Override
-    public Dimension getSize(CompoundNBT data, ICommonAccessor accessor) {
+    public Dimension getSize(CompoundTag data, ICommonAccessor accessor) {
         if (ClientConfig.isHWYLAActive()) {
             if (accessor.getEntity() != null && accessor.getEntity() instanceof LivingEntity) {
                 LivingEntity living = (LivingEntity) accessor.getEntity();
@@ -56,7 +57,7 @@ public class WailaTooltipRenderer implements ITooltipRenderer {
     }
 
     @Override
-    public void draw(CompoundNBT data, ICommonAccessor accessor, int x, int y) {
+    public void draw(PoseStack matrices, CompoundTag data, ICommonAccessor accessor, int x, int y) {
         if (ClientConfig.isHWYLAActive()) {
 
             AttackData attackData;
@@ -77,8 +78,8 @@ public class WailaTooltipRenderer implements ITooltipRenderer {
             }
 
             // rendering starts here
-            MatrixStack matrixStack = new MatrixStack();
-            List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
+            PoseStack matrixStack = new PoseStack();
+            List<Component> tooltip = new ArrayList<Component>();
             RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseHWYLA(), attackData, defenseData);
             RenderHelper.renderTooltip(tooltip, matrixStack, x, y);
 

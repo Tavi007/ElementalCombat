@@ -8,7 +8,7 @@ import mcp.mobius.waila.api.WailaPlugin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
-@WailaPlugin(ElementalCombat.MOD_ID)
+@WailaPlugin(id = ElementalCombat.MOD_ID)
 public class CombatPropertiesWailaPlugin implements IWailaPlugin {
 
     static final ResourceLocation COMBAT_PROPERTIES = new ResourceLocation(ElementalCombat.MOD_ID, "combat_properties");
