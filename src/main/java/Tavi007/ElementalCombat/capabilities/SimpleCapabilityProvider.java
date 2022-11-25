@@ -2,6 +2,8 @@ package Tavi007.ElementalCombat.capabilities;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Preconditions;
+
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -21,14 +23,9 @@ public class SimpleCapabilityProvider<HANDLER> implements ICapabilityProvider {
     public SimpleCapabilityProvider(final Capability<HANDLER> capability, @Nullable final Direction facing, @Nullable final HANDLER instance) {
         this.capability = capability;
         this.facing = facing;
+        this.instance = Preconditions.checkNotNull(instance, "instance");
 
-        this.instance = instance;
-
-        if (this.instance != null) {
-            lazyOptional = LazyOptional.of(() -> this.instance);
-        } else {
-            lazyOptional = LazyOptional.empty();
-        }
+        lazyOptional = LazyOptional.of(() -> this.instance);
     }
 
     @Override

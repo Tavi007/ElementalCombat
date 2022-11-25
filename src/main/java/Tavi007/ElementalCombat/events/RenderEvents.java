@@ -156,7 +156,7 @@ public class RenderEvents {
 
     @SubscribeEvent
     public static void displayElementalCombatHUD(RenderGameOverlayEvent.Post event) {
-        if (event.getType().equals(RenderGameOverlayEvent.ElementType.PLAYER_LIST)) {
+        if (event.getType().equals(RenderGameOverlayEvent.ElementType.LAYER)) {
             ticks++;
             if (ticks >= ClientConfig.iterationSpeed() * 2.5) {
                 ticks = 0;

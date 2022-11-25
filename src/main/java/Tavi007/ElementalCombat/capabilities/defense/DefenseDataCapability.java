@@ -7,6 +7,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -16,7 +18,8 @@ import net.minecraftforge.fml.common.Mod;
 
 public class DefenseDataCapability {
 
-    public static final Capability<DefenseData> ELEMENTAL_DEFENSE_CAPABILITY = null;
+    public static final Capability<DefenseData> ELEMENTAL_DEFENSE_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+    });
 
     /**
      * The default {@link Direction} to use for this capability.

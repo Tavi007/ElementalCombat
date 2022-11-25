@@ -8,13 +8,14 @@ import java.util.Set;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public class DefenseData implements INBTSerializable<DefenseDataNBT> {
+public class DefenseData implements INBTSerializable<CompoundTag> {
 
     private HashMap<ResourceLocation, DefenseLayer> defenseLayers = new HashMap<>();
     private boolean isInitialized = false;
@@ -146,14 +147,14 @@ public class DefenseData implements INBTSerializable<DefenseDataNBT> {
     }
 
     @Override
-    public DefenseDataNBT serializeNBT() {
+    public CompoundTag serializeNBT() {
         DefenseDataNBT nbt = new DefenseDataNBT();
         ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, this);
         return nbt;
     }
 
     @Override
-    public void deserializeNBT(DefenseDataNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         DefenseData data = ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt);
         set(data);
     }

@@ -11,6 +11,7 @@ import java.util.Set;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +21,7 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public class AttackData implements INBTSerializable<AttackDataNBT> {
+public class AttackData implements INBTSerializable<CompoundTag> {
 
     private LinkedHashMap<ResourceLocation, AttackLayer> attackLayers = new LinkedHashMap<>();
     private boolean isInitialized = false;
@@ -172,14 +173,14 @@ public class AttackData implements INBTSerializable<AttackDataNBT> {
     }
 
     @Override
-    public AttackDataNBT serializeNBT() {
+    public CompoundTag serializeNBT() {
         AttackDataNBT nbt = new AttackDataNBT();
         ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, this);
         return nbt;
     }
 
     @Override
-    public void deserializeNBT(AttackDataNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         AttackData data = ElementalCombatNBTHelper.readAttackDataFromNBT(nbt);
         set(data);
     }
