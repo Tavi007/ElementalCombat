@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import Tavi007.ElementalCombat.ElementalCombat;
@@ -15,9 +16,8 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +25,6 @@ import net.minecraft.resources.ResourceLocation;
 public class RenderHelper {
 
     private static final Font fontRenderer = Minecraft.getInstance().font;
-    private static final TextureManager textureManager = Minecraft.getInstance().textureManager;
 
     private static final String textAttack = "Attack:";
     private static final String textSeperatorOnlyAttack = "---------";
@@ -190,8 +189,8 @@ public class RenderHelper {
     }
 
     public static void renderIcon(String name, PoseStack poseStack, int posX, int posY) {
-        textureManager.bindForSetup(new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + name + ".png"));
-        GuiComponent.blit(poseStack, posX, posY, 0, 0, iconSize, iconSize, iconSize, iconSize);
-        textureManager.bindForSetup(GuiComponent.GUI_ICONS_LOCATION);
+        ResourceLocation texture = new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + name + ".png");
+        RenderSystem.setShaderTexture(0, texture);
+        Gui.blit(poseStack, posX, posY, 0, 0, iconSize, iconSize, iconSize, iconSize);
     }
 }
