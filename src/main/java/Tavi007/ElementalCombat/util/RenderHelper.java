@@ -26,14 +26,12 @@ public class RenderHelper {
 
     private static final Font fontRenderer = Minecraft.getInstance().font;
 
-    private static final String textAttack = "Attack:";
-    private static final String textSeperatorOnlyAttack = "---------";
-    private static final String textDefense = "Defense:";
-    private static final String textSeperator = "---------------";
-    private static final int iconSize = 8;
+    public static final String textAttack = "Attack:";
+    public static final String textDefense = "Defense:";
+    public static final int widthAttack = fontRenderer.width(textAttack) + 2;
+    public static final int widthDefense = fontRenderer.width(textDefense) + 2;
 
-    private static final int widthAttack = fontRenderer.width(textAttack) + 2;
-    private static final int widthDefense = fontRenderer.width(textDefense) + 2;
+    public static final int iconSize = 8;
     public static final int maxLineHeight = fontRenderer.lineHeight + 1;
     public static final int maxLineWidth = fontRenderer.width(textDefense + " -999%") + iconSize + 2;
 
@@ -88,19 +86,19 @@ public class RenderHelper {
         return getCurrentDefenseName(onlyElement);
     }
 
-    private static int getCurrentElementDefenseFactor(DefenseData data) {
+    public static int getCurrentElementDefenseFactor(DefenseData data) {
         DefenseData onlyElement = new DefenseData();
         onlyElement.putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "render"), new DefenseLayer(new HashMap<>(), data.getElementFactor()));
         return getCurrentDefenseFactor(onlyElement);
     }
 
-    private static String getCurrentStyleDefenseName(DefenseData data) {
+    public static String getCurrentStyleDefenseName(DefenseData data) {
         DefenseData onlyStyle = new DefenseData();
         onlyStyle.putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "render"), new DefenseLayer(data.getStyleFactor(), new HashMap<>()));
         return getCurrentDefenseName(onlyStyle);
     }
 
-    private static int getCurrentStyleDefenseFactor(DefenseData data) {
+    public static int getCurrentStyleDefenseFactor(DefenseData data) {
         DefenseData onlyStyle = new DefenseData();
         onlyStyle.putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "render"), new DefenseLayer(data.getStyleFactor(), new HashMap<>()));
         return getCurrentDefenseFactor(onlyStyle);
@@ -110,14 +108,6 @@ public class RenderHelper {
     public static void renderTooltip(List<Component> tooltip, PoseStack poseStack, int x, int y) {
         for (int i = 0; i < tooltip.size(); i++) {
             fontRenderer.drawShadow(poseStack, tooltip.get(i).getString(), x, y + i * RenderHelper.maxLineHeight, ChatFormatting.GRAY.getColor());
-        }
-    }
-
-    public static void addTooltipSeperator(List<Component> tooltip, boolean hasDefenseData) {
-        if (hasDefenseData) {
-            tooltip.add(new TextComponent(ChatFormatting.GRAY + textSeperator + ChatFormatting.RESET));
-        } else {
-            tooltip.add(new TextComponent(ChatFormatting.GRAY + textSeperatorOnlyAttack + ChatFormatting.RESET));
         }
     }
 

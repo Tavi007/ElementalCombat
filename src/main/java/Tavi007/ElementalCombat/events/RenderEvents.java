@@ -10,6 +10,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.datafixers.util.Either;
 import com.mojang.math.Matrix4f;
 
 import Tavi007.ElementalCombat.ElementalCombat;
@@ -17,6 +18,7 @@ import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
+import Tavi007.ElementalCombat.client.ElementalCombatComponent;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
@@ -26,9 +28,11 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
@@ -36,7 +40,6 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -108,49 +111,57 @@ public class RenderEvents {
         }
     }
 
-    // fires before RenderTooltipEvent.PostText
-    // add all the text to tooltip
-
     @SubscribeEvent
-    public static void onTooltip(ItemTooltipEvent event) {
-        List<Component> tooltip = event.getToolTip();
-        ItemStack stack = event.getItemStack();
-        AttackData attackData = AttackDataHelper.get(stack);
-        DefenseData defenseData = DefenseDataHelper.get(stack);
-        boolean hasData = !(attackData.isDefault() && defenseData.isEmpty());
-        boolean hasDefenseData = !defenseData.isEmpty();
-        if (hasData) {
-            RenderHelper.addTooltipSeperator(tooltip, hasDefenseData);
-        }
-        if (!attackData.isDefault()) {
-            RenderHelper.addTooltip(tooltip, false, attackData, null);
-        }
-        if (hasDefenseData) {
-            RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseTooltip(), null, defenseData);
-        }
-    }
-
-    // fires after ItemTooltipEvent
-    // render only icons here (because strings wont't get rendered anymore)
-    @SubscribeEvent
-    public static void onTooltipRenderPost(RenderTooltipEvent.PostText event) {
-        PoseStack poseStack = event.getMatrixStack();
+    public static void onGatherTooltip(RenderTooltipEvent.GatherComponents event) {
+        List<Either<FormattedText, TooltipComponent>> tooltip = event.getTooltipElements();
         ItemStack stack = event.getStack();
         AttackData attackData = AttackDataHelper.get(stack);
         DefenseData defenseData = DefenseDataHelper.get(stack);
-        if (!attackData.isDefault()) {
-            int tooltipIndexAttack = RenderHelper.getTooltipIndexAttack(event.getComponents());
-            RenderHelper.renderAttackIcons(attackData, poseStack, event.getX(), event.getY() + 2 + tooltipIndexAttack * RenderHelper.maxLineHeight);
-        }
-        if (!defenseData.isEmpty()) {
-            int tooltipIndexDefense = RenderHelper.getTooltipIndexDefense(event.getComponents());
-            RenderHelper.renderDefenseIcons(defenseData,
-                ClientConfig.isDoubleRowDefenseTooltip(),
-                poseStack,
-                event.getX(),
-                event.getY() + 2 + tooltipIndexDefense * RenderHelper.maxLineHeight);
-        }
+
+        tooltip.add(Either.right(new ElementalCombatComponent(attackData, defenseData)));
+
     }
+
+    // fires before RenderTooltipEvent.PostText
+    // add all the text to tooltip
+
+    // @SubscribeEvent
+    // public static void onTooltip(ItemTooltipEvent event) {
+    // List<Component> tooltip = event.getToolTip();
+    // ItemStack stack = event.getItemStack();
+    // AttackData attackData = AttackDataHelper.get(stack);
+    // DefenseData defenseData = DefenseDataHelper.get(stack);
+    // boolean hasDefenseData = !defenseData.isEmpty();
+    //
+    // if (!attackData.isDefault()) {
+    // RenderHelper.addTooltip(tooltip, false, attackData, null);
+    // }
+    // if (hasDefenseData) {
+    // RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseTooltip(), null, defenseData);
+    // }
+    // }
+    //
+    // // fires after ItemTooltipEvent
+    // // render only icons here (because strings wont't get rendered anymore)
+    // @SubscribeEvent
+    // public static void onTooltipRenderPost(RenderTooltipEvent.PostText event) {
+    // PoseStack poseStack = event.getMatrixStack();
+    // ItemStack stack = event.getStack();
+    // AttackData attackData = AttackDataHelper.get(stack);
+    // DefenseData defenseData = DefenseDataHelper.get(stack);
+    // if (!attackData.isDefault()) {
+    // int tooltipIndexAttack = RenderHelper.getTooltipIndexAttack(event.getComponents());
+    // RenderHelper.renderAttackIcons(attackData, poseStack, event.getX(), event.getY() + 2 + tooltipIndexAttack * RenderHelper.maxLineHeight);
+    // }
+    // if (!defenseData.isEmpty()) {
+    // int tooltipIndexDefense = RenderHelper.getTooltipIndexDefense(event.getComponents());
+    // RenderHelper.renderDefenseIcons(defenseData,
+    // ClientConfig.isDoubleRowDefenseTooltip(),
+    // poseStack,
+    // event.getX(),
+    // event.getY() + 2 + tooltipIndexDefense * RenderHelper.maxLineHeight);
+    // }
+    // }
 
     static int ticks = 0;
 
