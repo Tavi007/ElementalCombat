@@ -1,0 +1,16 @@
+{
+	"enchantment.elementalcombat.ice_protection" : "冰霜抗性",
+	"enchantment.elementalcombat.thunder_protection" : "雷霆抗性",
+	"enchantment.elementalcombat.water_protection" : "湍流抗性",
+	"enchantment.elementalcombat.darkness_protection" : "黑暗抗性",
+	"enchantment.elementalcombat.light_protection" : "光明抗性",
+	"enchantment.elementalcombat.element_protection" : "元素抗性",
+	"enchantment.elementalcombat.magic_protection" : "魔法抗性",
+
+	"enchantment.elementalcombat.ice_aspect" : "冰霜",
+	"enchantment.elementalcombat.thunder_aspect" : "雷霆",
+	"enchantment.elementalcombat.water_aspect" : "湍流",
+	"enchantment.elementalcombat.darkness_aspect" : "黑暗",
+	"enchantment.elementalcombat.light_aspect" : "光明"
+	
+}
