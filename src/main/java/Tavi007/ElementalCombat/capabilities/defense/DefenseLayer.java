@@ -84,7 +84,15 @@ public class DefenseLayer {
 
     // Other
     public boolean isEmpty() {
-        return styleFactor.isEmpty() && elementFactor.isEmpty();
+        return isStyleEmpty() && isElementEmpty();
+    }
+
+    public boolean isElementEmpty() {
+        return elementFactor.isEmpty();
+    }
+
+    public boolean isStyleEmpty() {
+        return styleFactor.isEmpty();
     }
 
     public String toString() {

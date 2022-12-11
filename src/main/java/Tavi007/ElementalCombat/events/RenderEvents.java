@@ -1,6 +1,5 @@
 package Tavi007.ElementalCombat.events;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -18,7 +17,8 @@ import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
-import Tavi007.ElementalCombat.client.ElementalCombatComponent;
+import Tavi007.ElementalCombat.client.CombatDataLayerClientComponent;
+import Tavi007.ElementalCombat.client.CombatDataLayerComponent;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
@@ -27,7 +27,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -118,7 +117,12 @@ public class RenderEvents {
         AttackData attackData = AttackDataHelper.get(stack);
         DefenseData defenseData = DefenseDataHelper.get(stack);
 
-        tooltip.add(Either.right(new ElementalCombatComponent(attackData, defenseData)));
+        tooltip.add(Either.right(new CombatDataLayerComponent(
+            attackData.toLayer(),
+            defenseData.toLayer(),
+            false,
+            false,
+            ClientConfig.isDoubleRowDefenseTooltip())));
 
     }
 
@@ -165,19 +169,13 @@ public class RenderEvents {
 
     static int ticks = 0;
 
-    @SubscribeEvent
+    // @SubscribeEvent
     public static void displayElementalCombatHUD(RenderGameOverlayEvent.Post event) {
         if (event.getType().equals(RenderGameOverlayEvent.ElementType.LAYER)) {
-            ticks++;
-            if (ticks >= ClientConfig.iterationSpeed() * 2.5) {
-                ticks = 0;
-                RenderHelper.tickIteratorCounter();
-            }
             if (ClientConfig.isHUDEnabled()) {
                 // see Screen#renderToolTips in client.gui.screen
                 Minecraft mc = Minecraft.getInstance();
                 if (mc.player != null) {
-                    PoseStack matrixStack = event.getMatrixStack();
                     float scale = (float) ClientConfig.scale();
                     AttackData attackData = AttackDataHelper.get(mc.player);
                     DefenseData defenseData = DefenseDataHelper.get(mc.player);
@@ -210,87 +208,92 @@ public class RenderEvents {
                         posY = Math.max(12, maxPosY - ClientConfig.getYOffset());
                     }
 
-                    matrixStack.pushPose();
-                    matrixStack.scale(scale, scale, scale);
+                    // rendering starts here
+                    PoseStack poseStack = event.getMatrixStack();
+                    poseStack.pushPose();
+                    poseStack.scale(scale, scale, scale);
 
-                    // draw background box
-                    Tesselator tessellator = Tesselator.getInstance();
-                    BufferBuilder bufferbuilder = tessellator.getBuilder();
-                    RenderSystem.setShader(GameRenderer::getPositionColorShader);
-                    bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-                    Matrix4f matrix4f = matrixStack.last().pose();
-                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 4, posX + listWidth + 3, posY - 3, 400, -267386864, -267386864);
-                    func_238462_a_(matrix4f,
-                        bufferbuilder,
-                        posX - 3,
-                        posY + listHeight + 1,
-                        posX + listWidth + 3,
-                        posY + listHeight + 2,
-                        400,
-                        -267386864,
-                        -267386864);
-                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + listWidth + 3, posY + listHeight + 1, 400, -267386864, -267386864);
-                    func_238462_a_(matrix4f, bufferbuilder, posX - 4, posY - 3, posX - 3, posY + listHeight + 1, 400, -267386864, -267386864);
-                    func_238462_a_(matrix4f,
-                        bufferbuilder,
-                        posX + listWidth + 3,
-                        posY - 3,
-                        posX + listWidth + 4,
-                        posY + listHeight + 1,
-                        400,
-                        -267386864,
-                        -267386864);
-                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3 + 1, posX - 3 + 1, posY + listHeight, 400, 1347420415, 1344798847);
-                    func_238462_a_(matrix4f,
-                        bufferbuilder,
-                        posX + listWidth + 2,
-                        posY - 3 + 1,
-                        posX + listWidth + 3,
-                        posY + listHeight,
-                        400,
-                        1347420415,
-                        1344798847);
-                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + listWidth + 3, posY - 3 + 1, 400, 1347420415, 1347420415);
-                    func_238462_a_(matrix4f,
-                        bufferbuilder,
-                        posX - 3,
-                        posY + listHeight,
-                        posX + listWidth + 3,
-                        posY + listHeight + 1,
-                        400,
-                        1344798847,
-                        1344798847);
-                    RenderSystem.enableDepthTest();
-                    RenderSystem.disableTexture();
-                    RenderSystem.enableBlend();
-                    RenderSystem.defaultBlendFunc();
-                    // RenderSystem.shadeModel(7425);
-                    bufferbuilder.end();
-                    BufferUploader.end(bufferbuilder);
-                    // RenderSystem.shadeModel(7424);
-                    RenderSystem.disableBlend();
-                    RenderSystem.enableTexture();
-                    MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-                    matrixStack.translate(0.0D, 0.0D, 400.0D);
-                    multibuffersource$buffersource.endBatch();
+                    renderHUDBox(poseStack, posX, posY, listWidth, listHeight);
 
-                    // fill and render tooltip
-                    List<Component> tooltip = new ArrayList<Component>();
-                    RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseHUD(), attackData, defenseData);
-                    RenderHelper.renderTooltip(tooltip, matrixStack, posX, posY);
+                    // render component
+                    CombatDataLayerComponent component = new CombatDataLayerComponent(
+                        attackData.toLayer(),
+                        defenseData.toLayer(),
+                        true,
+                        false,
+                        ClientConfig.isDoubleRowDefenseHUD());
+                    CombatDataLayerClientComponent clientComponent = new CombatDataLayerClientComponent(component);
+                    clientComponent.renderText(Minecraft.getInstance().font, posX, posY, poseStack.last().pose(), null);
+                    clientComponent.renderImage(Minecraft.getInstance().font, posX, posY, poseStack, null, 0, null);
 
-                    // render attackData icons
-                    RenderHelper.renderAttackIcons(attackData, matrixStack, posX, posY);
-
-                    // render defenseData icons
-                    if (!defenseData.isEmpty()) {
-                        posY += RenderHelper.maxLineHeight;
-                        RenderHelper.renderDefenseIcons(defenseData, ClientConfig.isDoubleRowDefenseHUD(), matrixStack, posX, posY);
-                    }
-                    matrixStack.popPose();
+                    poseStack.popPose();
                 }
             }
         }
+    }
+
+    private static void renderHUDBox(PoseStack poseStack, int posX, int posY, int width, int height) {
+
+        // draw background box
+        Tesselator tessellator = Tesselator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuilder();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        Matrix4f matrix4f = poseStack.last().pose();
+        func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 4, posX + width + 3, posY - 3, 400, -267386864, -267386864);
+        func_238462_a_(matrix4f,
+            bufferbuilder,
+            posX - 3,
+            posY + height + 1,
+            posX + width + 3,
+            posY + height + 2,
+            400,
+            -267386864,
+            -267386864);
+        func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + width + 3, posY + height + 1, 400, -267386864, -267386864);
+        func_238462_a_(matrix4f, bufferbuilder, posX - 4, posY - 3, posX - 3, posY + height + 1, 400, -267386864, -267386864);
+        func_238462_a_(matrix4f,
+            bufferbuilder,
+            posX + width + 3,
+            posY - 3,
+            posX + width + 4,
+            posY + height + 1,
+            400,
+            -267386864,
+            -267386864);
+        func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3 + 1, posX - 3 + 1, posY + height, 400, 1347420415, 1344798847);
+        func_238462_a_(matrix4f,
+            bufferbuilder,
+            posX + width + 2,
+            posY - 3 + 1,
+            posX + width + 3,
+            posY + height,
+            400,
+            1347420415,
+            1344798847);
+        func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + width + 3, posY - 3 + 1, 400, 1347420415, 1347420415);
+        func_238462_a_(matrix4f,
+            bufferbuilder,
+            posX - 3,
+            posY + height,
+            posX + width + 3,
+            posY + height + 1,
+            400,
+            1344798847,
+            1344798847);
+        RenderSystem.enableDepthTest();
+        RenderSystem.disableTexture();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        // RenderSystem.shadeModel(7425);
+        bufferbuilder.end();
+        BufferUploader.end(bufferbuilder);
+        // RenderSystem.shadeModel(7424);
+        RenderSystem.disableBlend();
+        RenderSystem.enableTexture();
+        MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
+        poseStack.translate(0.0D, 0.0D, 400.0D);
+        multibuffersource$buffersource.endBatch();
     }
 
     // copied from Screen

@@ -5,9 +5,9 @@ import org.lwjgl.glfw.GLFW;
 import com.mojang.blaze3d.platform.InputConstants;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.client.CombatDataLayerClientComponent;
+import Tavi007.ElementalCombat.client.CombatDataLayerComponent;
 import Tavi007.ElementalCombat.client.CombatParticle;
-import Tavi007.ElementalCombat.client.ElementalCombatClientComponent;
-import Tavi007.ElementalCombat.client.ElementalCombatComponent;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -30,9 +30,9 @@ public class StartupClientOnly {
         // key bindings
         ClientRegistry.registerKeyBinding(TOGGLE_HUD);
 
-        MinecraftForgeClient.registerTooltipComponentFactory(ElementalCombatComponent.class,
+        MinecraftForgeClient.registerTooltipComponentFactory(CombatDataLayerComponent.class,
             component -> {
-                return new ElementalCombatClientComponent(component);
+                return new CombatDataLayerClientComponent(component);
             });
 
         ElementalCombat.LOGGER.info("ElementalCombat clientRegistries method registered.");
