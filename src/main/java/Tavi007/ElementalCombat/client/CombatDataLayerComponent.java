@@ -7,7 +7,6 @@ import java.util.List;
 import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
-import Tavi007.ElementalCombat.util.RenderHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -67,7 +66,7 @@ public class CombatDataLayerComponent implements TooltipComponent {
     public List<String> getTooltip() {
         List<String> tooltip = new ArrayList<>();
         if (shouldAttackLayerBeDisplayed()) {
-            tooltip.add(ChatFormatting.GRAY + RenderHelper.textAttack);
+            tooltip.add(ChatFormatting.GRAY + textAttack);
         }
 
         if (shouldDefenseLayerBeDisplayed()) {

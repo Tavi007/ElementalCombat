@@ -43,7 +43,13 @@ public class CombatDataLayerClientComponent implements ClientTooltipComponent {
         for (int i = 0; i < tooltip.size(); i++) {
             font.drawInBatch(tooltip.get(i), x, y + i * CombatDataLayerComponent.maxLineHeight, 0, false, matrix4f, bufferSource, false, 0, 15728880);
         }
+    }
 
+    public void renderText(Font font, PoseStack poseStack, int posX, int posY) {
+        List<String> tooltip = component.getTooltip();
+        for (int i = 0; i < tooltip.size(); i++) {
+            font.drawShadow(poseStack, tooltip.get(i), posX, posY + i * CombatDataLayerComponent.maxLineHeight, 16777215);
+        }
     }
 
     @Override

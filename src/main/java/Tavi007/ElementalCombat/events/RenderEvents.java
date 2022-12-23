@@ -22,7 +22,6 @@ import Tavi007.ElementalCombat.client.CombatDataLayerComponent;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
-import Tavi007.ElementalCombat.util.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.GameRenderer;
@@ -123,53 +122,9 @@ public class RenderEvents {
             false,
             false,
             ClientConfig.isDoubleRowDefenseTooltip())));
-
     }
 
-    // fires before RenderTooltipEvent.PostText
-    // add all the text to tooltip
-
-    // @SubscribeEvent
-    // public static void onTooltip(ItemTooltipEvent event) {
-    // List<Component> tooltip = event.getToolTip();
-    // ItemStack stack = event.getItemStack();
-    // AttackData attackData = AttackDataHelper.get(stack);
-    // DefenseData defenseData = DefenseDataHelper.get(stack);
-    // boolean hasDefenseData = !defenseData.isEmpty();
-    //
-    // if (!attackData.isDefault()) {
-    // RenderHelper.addTooltip(tooltip, false, attackData, null);
-    // }
-    // if (hasDefenseData) {
-    // RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseTooltip(), null, defenseData);
-    // }
-    // }
-    //
-    // // fires after ItemTooltipEvent
-    // // render only icons here (because strings wont't get rendered anymore)
-    // @SubscribeEvent
-    // public static void onTooltipRenderPost(RenderTooltipEvent.PostText event) {
-    // PoseStack poseStack = event.getMatrixStack();
-    // ItemStack stack = event.getStack();
-    // AttackData attackData = AttackDataHelper.get(stack);
-    // DefenseData defenseData = DefenseDataHelper.get(stack);
-    // if (!attackData.isDefault()) {
-    // int tooltipIndexAttack = RenderHelper.getTooltipIndexAttack(event.getComponents());
-    // RenderHelper.renderAttackIcons(attackData, poseStack, event.getX(), event.getY() + 2 + tooltipIndexAttack * RenderHelper.maxLineHeight);
-    // }
-    // if (!defenseData.isEmpty()) {
-    // int tooltipIndexDefense = RenderHelper.getTooltipIndexDefense(event.getComponents());
-    // RenderHelper.renderDefenseIcons(defenseData,
-    // ClientConfig.isDoubleRowDefenseTooltip(),
-    // poseStack,
-    // event.getX(),
-    // event.getY() + 2 + tooltipIndexDefense * RenderHelper.maxLineHeight);
-    // }
-    // }
-
-    static int ticks = 0;
-
-    // @SubscribeEvent
+    @SubscribeEvent
     public static void displayElementalCombatHUD(RenderGameOverlayEvent.Post event) {
         if (event.getType().equals(RenderGameOverlayEvent.ElementType.LAYER)) {
             if (ClientConfig.isHUDEnabled()) {
@@ -180,17 +135,17 @@ public class RenderEvents {
                     AttackData attackData = AttackDataHelper.get(mc.player);
                     DefenseData defenseData = DefenseDataHelper.get(mc.player);
 
-                    // the width of the box.
-                    int listWidth = RenderHelper.maxLineWidth;
+                    CombatDataLayerClientComponent clientComponent = new CombatDataLayerClientComponent(
+                        new CombatDataLayerComponent(
+                            attackData.toLayer(),
+                            defenseData.toLayer(),
+                            true,
+                            true,
+                            ClientConfig.isDoubleRowDefenseHUD()));
 
-                    // computes the height of the list
-                    int listHeight = RenderHelper.maxLineHeight;
-                    if (!defenseData.isEmpty()) {
-                        listHeight += RenderHelper.maxLineHeight;
-                        if (ClientConfig.isDoubleRowDefenseHUD() && !defenseData.getElementFactor().isEmpty() && !defenseData.getStyleFactor().isEmpty()) {
-                            listHeight += RenderHelper.maxLineHeight;
-                        }
-                    }
+                    // the width of the box.
+                    int listWidth = clientComponent.getWidth(mc.font);
+                    int listHeight = clientComponent.getHeight();
 
                     // moves the coords so the text and box appear correct
                     int posX = 0;
@@ -216,15 +171,8 @@ public class RenderEvents {
                     renderHUDBox(poseStack, posX, posY, listWidth, listHeight);
 
                     // render component
-                    CombatDataLayerComponent component = new CombatDataLayerComponent(
-                        attackData.toLayer(),
-                        defenseData.toLayer(),
-                        true,
-                        false,
-                        ClientConfig.isDoubleRowDefenseHUD());
-                    CombatDataLayerClientComponent clientComponent = new CombatDataLayerClientComponent(component);
-                    clientComponent.renderText(Minecraft.getInstance().font, posX, posY, poseStack.last().pose(), null);
-                    clientComponent.renderImage(Minecraft.getInstance().font, posX, posY, poseStack, null, 0, null);
+                    clientComponent.renderText(mc.font, poseStack, posX, posY);
+                    clientComponent.renderImage(mc.font, posX, posY, poseStack, null, 0, null);
 
                     poseStack.popPose();
                 }
