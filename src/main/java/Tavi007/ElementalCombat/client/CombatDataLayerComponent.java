@@ -8,21 +8,15 @@ import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 
 public class CombatDataLayerComponent implements TooltipComponent {
 
-    private static final Font fontRenderer = Minecraft.getInstance().font;
     private static final String textAttack = "Attack:";
     private static final String textDefense = "Defense:";
-    private static final int widthAttack = fontRenderer.width(textAttack) + 2;
-    private static final int widthDefense = fontRenderer.width(textDefense) + 2;
 
     public static final int iconSize = 8;
-    public static final int maxLineHeight = fontRenderer.lineHeight + 1;
-    public static final int maxLineWidth = fontRenderer.width(textDefense + " -999%") + iconSize + 2;
 
     private static int iteratorCounter = 0;
 
@@ -40,6 +34,20 @@ public class CombatDataLayerComponent implements TooltipComponent {
         this.alwaysShowAttack = alwaysShowAttack;
         this.alwaysShowDefense = alwaysShowDefense;
         this.showDefenseInDoubleRow = showDefenseInDoubleRow;
+    }
+
+    public int getWidth(Font font) {
+        if (shouldDefenseLayerBeDisplayed()) {
+            return font.width(textDefense + " -999%") + iconSize + 2;
+        }
+        if (shouldAttackLayerBeDisplayed()) {
+            return font.width(textAttack) + (iconSize + 2) * 2;
+        }
+        return 0;
+    }
+
+    public int getLineHeight(Font font) {
+        return font.lineHeight + 1;
     }
 
     public int getNumberOfRows() {
@@ -99,7 +107,11 @@ public class CombatDataLayerComponent implements TooltipComponent {
         return tooltip;
     }
 
-    public List<TextureData> getTextureData(int posX, int posY) {
+    public List<TextureData> getTextureData(Font font, int posX, int posY) {
+        int widthAttack = font.width(textAttack) + 2;
+        int widthDefense = font.width(textDefense) + 2;
+        int maxLineHeight = getLineHeight(font);
+
         List<TextureData> textureData = new ArrayList<>();
         if (shouldAttackLayerBeDisplayed()) {
             textureData.add(new TextureData(
