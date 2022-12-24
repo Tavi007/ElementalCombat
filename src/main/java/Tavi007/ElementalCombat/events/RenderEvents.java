@@ -172,7 +172,7 @@ public class RenderEvents {
 
                     // render component
                     clientComponent.renderText(mc.font, poseStack, posX, posY);
-                    clientComponent.renderImage(mc.font, posX, posY, poseStack, null, 0, null);
+                    clientComponent.renderImage(mc.font, posX, posY, poseStack, null, 0);
 
                     poseStack.popPose();
                 }

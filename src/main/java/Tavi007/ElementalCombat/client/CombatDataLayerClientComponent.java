@@ -7,12 +7,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 
 public class CombatDataLayerClientComponent implements ClientTooltipComponent {
@@ -29,32 +29,33 @@ public class CombatDataLayerClientComponent implements ClientTooltipComponent {
 
     @Override
     public int getHeight() {
-        return component.getNumberOfRows() * CombatDataLayerComponent.maxLineHeight;
+        return component.getNumberOfRows() * component.getLineHeight(Minecraft.getInstance().font);
     }
 
     @Override
-    public int getWidth(Font p_169952_) {
-        return CombatDataLayerComponent.maxLineWidth;
+    public int getWidth(Font font) {
+        return component.getWidth(font);
     }
 
     @Override
     public void renderText(Font font, int x, int y, Matrix4f matrix4f, MultiBufferSource.BufferSource bufferSource) {
         List<String> tooltip = component.getTooltip();
         for (int i = 0; i < tooltip.size(); i++) {
-            font.drawInBatch(tooltip.get(i), x, y + i * CombatDataLayerComponent.maxLineHeight, 0, false, matrix4f, bufferSource, false, 0, 15728880);
+            font.drawInBatch(tooltip.get(i), x, y + i * component.getLineHeight(font), 0, false, matrix4f, bufferSource, false, 0, 15728880);
         }
     }
 
     public void renderText(Font font, PoseStack poseStack, int posX, int posY) {
         List<String> tooltip = component.getTooltip();
         for (int i = 0; i < tooltip.size(); i++) {
-            font.drawShadow(poseStack, tooltip.get(i), posX, posY + i * CombatDataLayerComponent.maxLineHeight, 16777215);
+            font.drawShadow(poseStack, tooltip.get(i), posX, posY + i * component.getLineHeight(font), 16777215);
         }
     }
 
+    @Override
     public void renderImage(Font font, int x, int y, PoseStack poseStack,
-            ItemRenderer itemRenderer, int p_169963_, TextureManager textureManager) {
-        List<TextureData> textureData = component.getTextureData(x, y);
+            ItemRenderer itemRenderer, int p_169963_) {
+        List<TextureData> textureData = component.getTextureData(font, x, y);
         textureData.forEach(data -> {
             ResourceLocation texture = new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + data.getName() + ".png");
             RenderSystem.setShaderTexture(0, texture);
