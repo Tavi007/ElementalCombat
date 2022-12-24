@@ -40,10 +40,7 @@ public class CombatDataLayerComponent implements TooltipComponent {
         if (hasDefense()) {
             return font.width(textDefense + " -999%") + iconSize + 2;
         }
-        if (hasAttack()) {
-            return font.width(textAttack) + (iconSize + 2) * 2;
-        }
-        return 0;
+        return font.width(textAttack) + (iconSize + 2) * 2;
     }
 
     public int getLineHeight(Font font) {
