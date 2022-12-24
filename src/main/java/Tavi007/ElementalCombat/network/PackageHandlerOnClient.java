@@ -13,16 +13,16 @@ import Tavi007.ElementalCombat.init.StartupCommon;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.LogicalSidedProvider;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fmllegacy.LogicalSidedProvider;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 public class PackageHandlerOnClient {
 
@@ -41,45 +41,45 @@ public class PackageHandlerOnClient {
             return;
         }
 
-        Optional<ClientLevel> ClientLevel = LogicalSidedProvider.CLIENTWORLD.get(sideReceived);
-        if (!ClientLevel.isPresent()) {
+        Optional<Level> level = LogicalSidedProvider.CLIENTWORLD.get(sideReceived);
+        if (!level.isPresent()) {
             ElementalCombat.LOGGER.warn(message.getClass().getName() + " context could not provide a ClientLevel.");
             return;
         }
 
         if (message instanceof CreateEmitterMessage) {
-            ctx.enqueueWork(() -> processMessage(ClientLevel.get(), (CreateEmitterMessage) message));
+            ctx.enqueueWork(() -> processMessage(level.get(), (CreateEmitterMessage) message));
         } else if (message instanceof DisableDamageRenderMessage) {
-            ctx.enqueueWork(() -> processMessage(ClientLevel.get(), (DisableDamageRenderMessage) message));
+            ctx.enqueueWork(() -> processMessage(level.get(), (DisableDamageRenderMessage) message));
         } else if (message instanceof EntityAttackLayerMessage) {
-            ctx.enqueueWork(() -> processMessage(ClientLevel.get(), (EntityAttackLayerMessage) message));
+            ctx.enqueueWork(() -> processMessage(level.get(), (EntityAttackLayerMessage) message));
         } else if (message instanceof EntityDefenseLayerMessage) {
-            ctx.enqueueWork(() -> processMessage(ClientLevel.get(), (EntityDefenseLayerMessage) message));
+            ctx.enqueueWork(() -> processMessage(level.get(), (EntityDefenseLayerMessage) message));
         } else if (message instanceof BasePropertiesMessage) {
             ctx.enqueueWork(() -> ElementalCombat.COMBAT_PROPERTIES_MANGER.set((BasePropertiesMessage) message));
         }
     }
 
-    private static void processMessage(ClientLevel ClientLevel, EntityAttackLayerMessage message) {
+    private static void processMessage(Level level, EntityAttackLayerMessage message) {
         AttackLayer atckLayer = message.getAttackLayer();
-        Entity entity = ClientLevel.getEntity(message.getId());
+        Entity entity = level.getEntity(message.getId());
         if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
             AttackDataHelper.get(livingEntity).putLayer(new ResourceLocation(message.getLocation()), atckLayer);
         }
     }
 
-    private static void processMessage(ClientLevel ClientLevel, EntityDefenseLayerMessage message) {
+    private static void processMessage(Level level, EntityDefenseLayerMessage message) {
         DefenseLayer defLayer = message.getDefenseLayer();
-        Entity entity = ClientLevel.getEntity(message.getId());
+        Entity entity = level.getEntity(message.getId());
         if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
             DefenseDataHelper.get(livingEntity).putLayer(message.getLocation(), defLayer);
         }
     }
 
-    private static void processMessage(ClientLevel ClientLevel, DisableDamageRenderMessage message) {
-        Entity entity = ClientLevel.getEntity((message.getId()));
+    private static void processMessage(Level level, DisableDamageRenderMessage message) {
+        Entity entity = level.getEntity((message.getId()));
         if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
             ImmersionData data = (ImmersionData) livingEntity.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null)
@@ -89,10 +89,10 @@ public class PackageHandlerOnClient {
     }
 
     @SuppressWarnings("resource")
-    private static void processMessage(ClientLevel clientLevel, CreateEmitterMessage message) {
+    private static void processMessage(Level level, CreateEmitterMessage message) {
         ParticleEngine engine = Minecraft.getInstance().particleEngine;
 
-        Entity entity = clientLevel.getEntity(message.getEntityId());
+        Entity entity = level.getEntity(message.getEntityId());
         SimpleParticleType particle = ParticleTypes.CRIT;
         switch (message.getParticleName()) {
         case "critical_element":

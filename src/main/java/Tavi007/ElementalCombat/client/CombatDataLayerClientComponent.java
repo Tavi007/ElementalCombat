@@ -52,7 +52,6 @@ public class CombatDataLayerClientComponent implements ClientTooltipComponent {
         }
     }
 
-    @Override
     public void renderImage(Font font, int x, int y, PoseStack poseStack,
             ItemRenderer itemRenderer, int p_169963_, TextureManager textureManager) {
         List<TextureData> textureData = component.getTextureData(x, y);

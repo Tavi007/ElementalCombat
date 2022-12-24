@@ -79,7 +79,7 @@ public class RenderEvents {
                     .orElse(new ImmersionData());
                 if (data.disableFlag) {
                     // Use the same calculation as in GameRenderer#hurtCameraEffect.
-                    float f = (float) (mc.player.hurtTime - event.getRenderPartialTicks());
+                    float f = (float) (mc.player.hurtTime - event.getPartialTicks());
                     f = f / (float) mc.player.hurtDuration;
                     f = Mth.sin(f * f * f * f * (float) Math.PI);
                     event.setRoll(f * 14.0F); // counter acts the screen shake. Only the hand is moving now.
@@ -112,7 +112,7 @@ public class RenderEvents {
     @SubscribeEvent
     public static void onGatherTooltip(RenderTooltipEvent.GatherComponents event) {
         List<Either<FormattedText, TooltipComponent>> tooltip = event.getTooltipElements();
-        ItemStack stack = event.getStack();
+        ItemStack stack = event.getItemStack();
         AttackData attackData = AttackDataHelper.get(stack);
         DefenseData defenseData = DefenseDataHelper.get(stack);
 

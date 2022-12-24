@@ -32,7 +32,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Bus.FORGE)
 public class ServerEvents {
@@ -146,7 +146,7 @@ public class ServerEvents {
         for (int j = 0; j < world.players().size(); ++j) {
             ServerPlayer serverplayerentity = world.players().get(j);
             BlockPos blockpos = serverplayerentity.blockPosition();
-            if (blockpos.closerThan(entity.position(), 32.0D)) {
+            if (blockpos.closerToCenterThan(entity.position(), 32.0D)) {
                 Supplier<ServerPlayer> supplier = new ServerPlayerSupplier(serverplayerentity);
                 ElementalCombat.simpleChannel.send(PacketDistributor.PLAYER.with(supplier), messageToClient);
             }

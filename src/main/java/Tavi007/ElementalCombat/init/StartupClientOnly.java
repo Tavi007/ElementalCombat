@@ -10,12 +10,12 @@ import Tavi007.ElementalCombat.client.CombatDataLayerComponent;
 import Tavi007.ElementalCombat.client.CombatParticle;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fmlclient.registry.ClientRegistry;
 
 public class StartupClientOnly {
 
