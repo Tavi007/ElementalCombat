@@ -37,10 +37,10 @@ public class CombatDataLayerComponent implements TooltipComponent {
     }
 
     public int getWidth(Font font) {
-        if (shouldDefenseLayerBeDisplayed()) {
+        if (hasDefense()) {
             return font.width(textDefense + " -999%") + iconSize + 2;
         }
-        if (shouldAttackLayerBeDisplayed()) {
+        if (hasAttack()) {
             return font.width(textAttack) + (iconSize + 2) * 2;
         }
         return 0;
@@ -153,14 +153,20 @@ public class CombatDataLayerComponent implements TooltipComponent {
         return textureData;
     }
 
+    private boolean hasAttack() {
+        return attackLayer != null && !attackLayer.isDefault();
+    }
+
     private boolean shouldAttackLayerBeDisplayed() {
-        return alwaysShowAttack
-            || (attackLayer != null && !attackLayer.isDefault());
+        return alwaysShowAttack || hasAttack();
+    }
+
+    private boolean hasDefense() {
+        return defenseLayer != null && !defenseLayer.isEmpty();
     }
 
     private boolean shouldDefenseLayerBeDisplayed() {
-        return alwaysShowDefense
-            || (defenseLayer != null && !defenseLayer.isEmpty());
+        return alwaysShowDefense || hasDefense();
     }
 
     private boolean hasElementDefense() {
