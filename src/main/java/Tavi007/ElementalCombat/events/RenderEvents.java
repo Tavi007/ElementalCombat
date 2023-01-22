@@ -34,6 +34,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -153,13 +154,19 @@ public class RenderEvents {
     static int ticks = 0;
 
     @SubscribeEvent
+    public static void onClientTickEvent(TickEvent event) {
+        if (TickEvent.Type.CLIENT.equals(event.type)) {
+            ticks++;
+            if (ticks >= ClientConfig.iterationSpeed()) {
+                RenderHelper.tickIteratorCounter();
+                ticks = 0;
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void displayElementalCombatHUD(RenderGameOverlayEvent.Post event) {
         if (event.getType().equals(RenderGameOverlayEvent.ElementType.HOTBAR)) {
-            ticks++;
-            if (ticks >= ClientConfig.iterationSpeed() * 2.5) {
-                ticks = 0;
-                RenderHelper.tickIteratorCounter();
-            }
             if (ClientConfig.isHUDEnabled()) {
                 // see Screen#renderToolTips in client.gui.screen
                 Minecraft mc = Minecraft.getInstance();
