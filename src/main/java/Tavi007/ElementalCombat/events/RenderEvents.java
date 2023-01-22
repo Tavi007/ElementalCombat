@@ -38,6 +38,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -124,9 +125,23 @@ public class RenderEvents {
             ClientConfig.isDoubleRowDefenseTooltip())));
     }
 
+    private static int ticks = 0;
+
+    @SubscribeEvent
+    public static void onClientTickEvent(TickEvent event) {
+        if (TickEvent.Type.CLIENT.equals(event.type)) {
+            ticks++;
+            if (ticks >= ClientConfig.iterationSpeed()) {
+                CombatDataLayerComponent.increaseIteratorCounter();
+                ticks = 0;
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void displayElementalCombatHUD(RenderGameOverlayEvent.Post event) {
         if (event.getType().equals(RenderGameOverlayEvent.ElementType.LAYER)) {
+
             if (ClientConfig.isHUDEnabled()) {
                 // see Screen#renderToolTips in client.gui.screen
                 Minecraft mc = Minecraft.getInstance();
@@ -140,7 +155,7 @@ public class RenderEvents {
                             attackData.toLayer(),
                             defenseData.toLayer(),
                             true,
-                            true,
+                            false,
                             ClientConfig.isDoubleRowDefenseHUD()));
 
                     // the width of the box.

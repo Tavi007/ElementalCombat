@@ -36,6 +36,13 @@ public class CombatDataLayerComponent implements TooltipComponent {
         this.showDefenseInDoubleRow = showDefenseInDoubleRow;
     }
 
+    public static void increaseIteratorCounter() {
+        iteratorCounter++;
+        if (iteratorCounter == Integer.MAX_VALUE) {
+            iteratorCounter = 0;
+        }
+    }
+
     public int getWidth(Font font) {
         if (hasDefense()) {
             return font.width(textDefense + " -999%") + iconSize + 2;
@@ -94,11 +101,13 @@ public class CombatDataLayerComponent implements TooltipComponent {
                 HashMap<String, Integer> map = new HashMap<>();
                 map.putAll(defenseLayer.getStyleFactor());
                 map.putAll(defenseLayer.getElementFactor());
-                int factor = getCurrentFactor(map);
-                tooltip.add(ChatFormatting.GRAY +
-                    textDefense +
-                    "   " +
-                    getPercentage(factor, false));
+                if (!map.isEmpty()) {
+                    int factor = getCurrentFactor(map);
+                    tooltip.add(ChatFormatting.GRAY +
+                        textDefense +
+                        "   " +
+                        getPercentage(factor, false));
+                }
             }
         }
         return tooltip;
@@ -141,10 +150,12 @@ public class CombatDataLayerComponent implements TooltipComponent {
                 HashMap<String, Integer> map = new HashMap<>();
                 map.putAll(defenseLayer.getStyleFactor());
                 map.putAll(defenseLayer.getElementFactor());
-                textureData.add(new TextureData(
-                    getCurrentName(map),
-                    posX + widthDefense,
-                    posY));
+                if (!map.isEmpty()) {
+                    textureData.add(new TextureData(
+                        getCurrentName(map),
+                        posX + widthDefense,
+                        posY));
+                }
             }
         }
         return textureData;
@@ -175,11 +186,13 @@ public class CombatDataLayerComponent implements TooltipComponent {
     }
 
     private int getCurrentFactor(HashMap<String, Integer> map) {
-        return (new ArrayList<Integer>(map.values())).get(iteratorCounter % map.size());
+        int index = iteratorCounter % map.size();
+        return (new ArrayList<Integer>(map.values())).get(index);
     }
 
     private String getCurrentName(HashMap<String, Integer> map) {
-        return (new ArrayList<String>(map.keySet())).get(iteratorCounter % map.size());
+        int index = iteratorCounter % map.size();
+        return (new ArrayList<String>(map.keySet())).get(index);
     }
 
     private static String getPercentage(Integer factor, boolean isStyle) {
