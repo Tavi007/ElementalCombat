@@ -86,7 +86,7 @@ public class WailaTooltipRenderer implements ITooltipRenderer {
                 poseStack,
                 x,
                 y); // nullpointer here
-            clientComponent.renderImage(null, x, y, poseStack, null, 0, null);
+            clientComponent.renderImage(mc.font, x, y, poseStack, null, 0, null);
         }
     }
 
