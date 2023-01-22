@@ -4,13 +4,11 @@ import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 public class AttackDataHelper {
 
@@ -50,19 +48,21 @@ public class AttackDataHelper {
         return attackData;
     }
 
-    public static AttackData get(DamageSource damageSource) {
+    public static AttackData get(net.minecraft.util.DamageSource damageSource) {
         Entity immediateSource = damageSource.getDirectEntity();
 
         // Get combat data from source
-        if (immediateSource instanceof LivingEntity) {
-            return get((LivingEntity) immediateSource);
-        } else if (immediateSource instanceof Projectile) {
-            return get((Projectile) immediateSource);
-        } else {
-            AttackData data = new AttackData();
-            data.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(damageSource));
-            return data;
+        if (!damageSource.isExplosion()) {
+            if (immediateSource instanceof LivingEntity) {
+                return get((LivingEntity) immediateSource);
+            } else if (immediateSource instanceof Projectile) {
+                return get((Projectile) immediateSource);
+            }
         }
+        AttackData data = new AttackData();
+        data.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(damageSource));
+        return data;
+
     }
 
 }
