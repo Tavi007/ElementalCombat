@@ -53,8 +53,7 @@ public class CombatDataLayerClientComponent implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderImage(Font font, int x, int y, PoseStack poseStack,
-            ItemRenderer itemRenderer, int p_169963_) {
+    public void renderImage(Font font, int x, int y, PoseStack poseStack, ItemRenderer itemRenderer, int p_169963_) {
         List<TextureData> textureData = component.getTextureData(font, x, y);
         textureData.forEach(data -> {
             ResourceLocation texture = new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + data.getName() + ".png");
