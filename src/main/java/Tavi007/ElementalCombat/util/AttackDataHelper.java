@@ -54,15 +54,17 @@ public class AttackDataHelper {
         Entity immediateSource = damageSource.getDirectEntity();
 
         // Get combat data from source
-        if (immediateSource instanceof LivingEntity) {
-            return get((LivingEntity) immediateSource);
-        } else if (immediateSource instanceof ProjectileEntity) {
-            return get((ProjectileEntity) immediateSource);
-        } else {
-            AttackData data = new AttackData();
-            data.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(damageSource));
-            return data;
+        if (!damageSource.isExplosion()) {
+            if (immediateSource instanceof LivingEntity) {
+                return get((LivingEntity) immediateSource);
+            } else if (immediateSource instanceof ProjectileEntity) {
+                return get((ProjectileEntity) immediateSource);
+            }
         }
+        AttackData data = new AttackData();
+        data.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(damageSource));
+        return data;
+
     }
 
 }
