@@ -9,13 +9,11 @@ import Tavi007.ElementalCombat.client.CombatDataLayerClientComponent;
 import Tavi007.ElementalCombat.client.CombatDataLayerComponent;
 import Tavi007.ElementalCombat.client.CombatParticle;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.ClientRegistry;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class StartupClientOnly {
 
@@ -26,26 +24,24 @@ public class StartupClientOnly {
         "Elemental Combat");
 
     @SubscribeEvent
-    public static void onClientSetupEvent(final FMLClientSetupEvent event) {
-        // key bindings
-        ClientRegistry.registerKeyBinding(TOGGLE_HUD);
-
-        MinecraftForgeClient.registerTooltipComponentFactory(CombatDataLayerComponent.class,
-            component -> {
-                return new CombatDataLayerClientComponent(component);
-            });
-
-        ElementalCombat.LOGGER.info("ElementalCombat clientRegistries method registered.");
+    public static void onRegisterKeyMappingsEvent(RegisterKeyMappingsEvent event) {
+        event.register(TOGGLE_HUD);
+        ElementalCombat.LOGGER.info("ElementalCombat key mappings registered.");
     }
 
-    @SuppressWarnings("resource")
     @SubscribeEvent
-    public static void onParticleFactoryRegistration(ParticleFactoryRegisterEvent event) {
-        Minecraft.getInstance().particleEngine.register(ParticleList.CRIT_ELEMENT.get(), CombatParticle.Factory::new);
-        Minecraft.getInstance().particleEngine.register(ParticleList.CRIT_STYLE.get(), CombatParticle.Factory::new);
-        Minecraft.getInstance().particleEngine.register(ParticleList.RESIST_ELEMENT.get(), CombatParticle.Factory::new);
-        Minecraft.getInstance().particleEngine.register(ParticleList.RESIST_STYLE.get(), CombatParticle.Factory::new);
-        Minecraft.getInstance().particleEngine.register(ParticleList.ABSORB.get(), CombatParticle.Factory::new);
+    public static void onRegisterClientTooltipComponentFactoriesEvent(RegisterClientTooltipComponentFactoriesEvent event) {
+        event.register(CombatDataLayerComponent.class, CombatDataLayerClientComponent::new);
+        ElementalCombat.LOGGER.info("ElementalCombat tooltip component factory registered.");
+    }
+
+    @SubscribeEvent
+    public static void onRegisterParticleProvidersEvent(RegisterParticleProvidersEvent event) {
+        event.register(ParticleList.CRIT_ELEMENT.get(), CombatParticle.Factory::new);
+        event.register(ParticleList.CRIT_STYLE.get(), CombatParticle.Factory::new);
+        event.register(ParticleList.RESIST_ELEMENT.get(), CombatParticle.Factory::new);
+        event.register(ParticleList.RESIST_STYLE.get(), CombatParticle.Factory::new);
+        event.register(ParticleList.ABSORB.get(), CombatParticle.Factory::new);
 
         ElementalCombat.LOGGER.info("ElementalCombat particles factory registered.");
     }

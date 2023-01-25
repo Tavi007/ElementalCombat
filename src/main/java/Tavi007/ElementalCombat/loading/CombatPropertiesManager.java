@@ -17,6 +17,7 @@ import com.google.gson.JsonParseException;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.network.BasePropertiesMessage;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -76,7 +77,8 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
 
         Map<String, Map<String, Integer>> counter = new HashMap<String, Map<String, Integer>>();
         objectIn.forEach((rl, json) -> {
-            try (net.minecraft.server.packs.resources.Resource res = resourceManagerIn.getResource(getPreparedPath(rl));) {
+            try {
+                Resource res = resourceManagerIn.getResourceOrThrow(getPreparedPath(rl));
                 String modid = rl.getNamespace();
                 String type = "incorrect entries (check path!)";
                 // check if entity/item/biome/damageSource gets loaded
@@ -84,7 +86,8 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
                     MobCombatProperties combatProperties = loadData(GSON,
                         rl,
                         json,
-                        res == null || !res.getSourceName().equals("main"),
+                        // res == null || !res.getSourceName().equals("main"),
+                        false,
                         MobCombatProperties.class);
                     builderMob.put(rl, combatProperties);
                     type = "mobs";
@@ -92,7 +95,8 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
                     ItemCombatProperties combatProperties = loadData(GSON,
                         rl,
                         json,
-                        res == null || !res.getSourceName().equals("main"),
+                        // res == null || !res.getSourceName().equals("main"),
+                        false,
                         ItemCombatProperties.class);
                     builderItem.put(rl, combatProperties);
                     type = "items";
@@ -100,7 +104,8 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
                     BiomeCombatProperties combatProperties = loadData(GSON,
                         rl,
                         json,
-                        res == null || !res.getSourceName().equals("main"),
+                        // res == null || !res.getSourceName().equals("main"),
+                        false,
                         BiomeCombatProperties.class);
                     builderBiome.put(rl, combatProperties);
                     type = "biomes";
@@ -108,7 +113,8 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
                     AttackOnlyCombatProperties combatProperties = loadData(GSON,
                         rl,
                         json,
-                        res == null || !res.getSourceName().equals("main"),
+                        // res == null || !res.getSourceName().equals("main"),
+                        false,
                         AttackOnlyCombatProperties.class);
                     builderDamageSource.put(rl, combatProperties);
                     type = "damage_sources";
@@ -116,7 +122,8 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
                     AttackOnlyCombatProperties combatProperties = loadData(GSON,
                         rl,
                         json,
-                        res == null || !res.getSourceName().equals("main"),
+                        // res == null || !res.getSourceName().equals("main"),
+                        false,
                         AttackOnlyCombatProperties.class);
                     builderProjectile.put(rl, combatProperties);
                     type = "projectiles";

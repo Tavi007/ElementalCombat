@@ -25,6 +25,7 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class BasePropertiesAPI {
 
@@ -40,7 +41,7 @@ public class BasePropertiesAPI {
      * @return copy of AttackData.
      */
     public static AttackLayer getAttackData(LivingEntity livingEntity) {
-        ResourceLocation rlEntity = livingEntity.getType().getRegistryName();
+        ResourceLocation rlEntity = ForgeRegistries.ENTITY_TYPES.getKey(livingEntity.getType());
         if (rlEntity == null) {
             return new AttackLayer();
         }
@@ -57,7 +58,7 @@ public class BasePropertiesAPI {
      * @return copy of AttackData.
      */
     public static AttackLayer getAttackData(ItemStack stack) {
-        ResourceLocation rlItem = stack.getItem().getRegistryName();
+        ResourceLocation rlItem = ForgeRegistries.ITEMS.getKey(stack.getItem());
         if (rlItem == null) {
             return new AttackLayer();
         }
@@ -92,21 +93,25 @@ public class BasePropertiesAPI {
      */
     public static AttackLayer getAttackLayer(Enchantment ench) {
         AttackLayer layer = new AttackLayer();
-        if (ench.getRegistryName().equals(Enchantments.FIRE_ASPECT.getRegistryName())) {
+
+        // TODO: change to use resource location and loaded data from datapack
+        // ResourceLocation rlEnch = ForgeRegistries.ENCHANTMENTS.getKey(ench);
+
+        if (ench.equals(Enchantments.FIRE_ASPECT)) {
             layer.setElement("fire");
-        } else if (ench.getRegistryName().equals(EnchantmentList.ICE_ASPECT.get().getRegistryName())) {
+        } else if (ench.equals(EnchantmentList.ICE_ASPECT.get())) {
             layer.setElement("ice");
-        } else if (ench.getRegistryName().equals(EnchantmentList.WATER_ASPECT.get().getRegistryName())) {
+        } else if (ench.equals(EnchantmentList.WATER_ASPECT.get())) {
             layer.setElement("water");
-        } else if (ench.getRegistryName().equals(EnchantmentList.THUNDER_ASPECT.get().getRegistryName())) {
+        } else if (ench.equals(EnchantmentList.THUNDER_ASPECT.get())) {
             layer.setElement("thunder");
-        } else if (ench.getRegistryName().equals(EnchantmentList.DARKNESS_ASPECT.get().getRegistryName())) {
+        } else if (ench.equals(EnchantmentList.DARKNESS_ASPECT.get())) {
             layer.setElement("darkness");
-        } else if (ench.getRegistryName().equals(EnchantmentList.LIGHT_ASPECT.get().getRegistryName())) {
+        } else if (ench.equals(EnchantmentList.LIGHT_ASPECT.get())) {
             layer.setElement("light");
-        } else if (ench.getRegistryName().equals(Enchantments.FLAMING_ARROWS.getRegistryName())) {
+        } else if (ench.equals(Enchantments.FLAMING_ARROWS)) {
             layer.setElement("fire");
-        } else if (ench.getRegistryName().equals(Enchantments.CHANNELING.getRegistryName())) {
+        } else if (ench.equals(Enchantments.CHANNELING)) {
             layer.setElement("thunder");
         }
         return layer;
@@ -148,7 +153,7 @@ public class BasePropertiesAPI {
             ItemStack stack = ((ThrowableItemProjectile) projectile).getItem();
             return getAttackData(stack);
         }
-        ResourceLocation resourcelocation = projectile.getType().getRegistryName();
+        ResourceLocation resourcelocation = ForgeRegistries.ENTITY_TYPES.getKey(projectile.getType());
         ResourceLocation rlProjectile = new ResourceLocation(resourcelocation.getNamespace(), "projectiles/" + resourcelocation.getPath());
         AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(
             ElementalCombat.COMBAT_PROPERTIES_MANGER.getProjectileDataFromLocation(rlProjectile));
@@ -167,7 +172,7 @@ public class BasePropertiesAPI {
      * @return copy of DefenseData.
      */
     public static DefenseLayer getDefenseLayer(LivingEntity livingEntity) {
-        ResourceLocation rlEntity = livingEntity.getType().getRegistryName();
+        ResourceLocation rlEntity = ForgeRegistries.ENTITY_TYPES.getKey(livingEntity.getType());
         if (rlEntity == null) {
             return new DefenseLayer();
         }
@@ -184,7 +189,7 @@ public class BasePropertiesAPI {
      * @return copy of DefenseData.
      */
     public static DefenseLayer getDefenseLayer(ItemStack stack) {
-        ResourceLocation rlItem = stack.getItem().getRegistryName();
+        ResourceLocation rlItem = ForgeRegistries.ITEMS.getKey(stack.getItem());
         if (rlItem == null) {
             return new DefenseLayer();
         }
@@ -201,6 +206,10 @@ public class BasePropertiesAPI {
      * @return copy of DefenseData.
      */
     public static DefenseLayer getDefenseLayer(Enchantment ench, int level) {
+
+        // TODO: change to use resource location and loaded data from datapack
+        // ResourceLocation rlEnch = ForgeRegistries.ENCHANTMENTS.getKey(ench);
+
         HashMap<String, Integer> defElement = new HashMap<String, Integer>();
         HashMap<String, Integer> defStyle = new HashMap<String, Integer>();
         if (level != 0) {
@@ -275,7 +284,7 @@ public class BasePropertiesAPI {
      * @return boolean isBiomeDependent.
      */
     public static boolean isBiomeDependent(LivingEntity livingEntity) {
-        ResourceLocation rlEntity = livingEntity.getType().getRegistryName();
+        ResourceLocation rlEntity = ForgeRegistries.ENTITY_TYPES.getKey(livingEntity.getType());
         if (rlEntity == null) {
             return false;
         }

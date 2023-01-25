@@ -27,7 +27,7 @@ import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -44,8 +44,8 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public static void entityJoinWorld(EntityJoinWorldEvent event) {
-        if (!event.getWorld().isClientSide()) { // only server side should check
+    public static void entityJoinWorld(EntityJoinLevelEvent event) {
+        if (!event.getLevel().isClientSide()) { // only server side should check
             Entity entity = event.getEntity();
 
             // for synchronization after switching dimensions
@@ -94,7 +94,7 @@ public class ServerEvents {
 
         // compute new Damage value
         AttackData sourceData = AttackDataHelper.get(damageSource);
-        LivingEntity target = event.getEntityLiving();
+        LivingEntity target = event.getEntity();
         float damageAmount = event.getAmount();
         // Get the protection data from target
         DefenseData defCap = DefenseDataHelper.get(target);
