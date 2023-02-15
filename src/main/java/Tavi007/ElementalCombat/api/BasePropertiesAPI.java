@@ -11,7 +11,7 @@ import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.EnchantmentList;
 import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
-import Tavi007.ElementalCombat.loading.ItemCombatProperties;
+import Tavi007.ElementalCombat.loading.ElementalCombatProperties;
 import Tavi007.ElementalCombat.loading.MobCombatProperties;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
@@ -61,7 +61,7 @@ public class BasePropertiesAPI {
             return new AttackLayer();
         }
         ResourceLocation rlProperties = new ResourceLocation(rlItem.getNamespace(), "items/" + rlItem.getPath());
-        ItemCombatProperties property = new ItemCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
+        ElementalCombatProperties property = new ElementalCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
         return new AttackLayer(property.getAttackStyle(), property.getAttackElement());
     }
 
@@ -188,7 +188,7 @@ public class BasePropertiesAPI {
             return new DefenseLayer();
         }
         ResourceLocation rlProperties = new ResourceLocation(rlItem.getNamespace(), "items/" + rlItem.getPath());
-        ItemCombatProperties property = new ItemCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
+        ElementalCombatProperties property = new ElementalCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
         return new DefenseLayer(property.getDefenseStyle(), property.getDefenseElement());
     }
 
