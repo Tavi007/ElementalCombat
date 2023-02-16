@@ -29,7 +29,7 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
     public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
 
     private Map<ResourceLocation, MobCombatProperties> registeredMobData = ImmutableMap.of();
-    private Map<ResourceLocation, ItemCombatProperties> registeredItemData = ImmutableMap.of();
+    private Map<ResourceLocation, ElementalCombatProperties> registeredItemData = ImmutableMap.of();
     private Map<ResourceLocation, BiomeCombatProperties> registeredBiomeData = ImmutableMap.of();
     private Map<ResourceLocation, AttackOnlyCombatProperties> registeredDamageSourceData = ImmutableMap.of();
     private Map<ResourceLocation, AttackOnlyCombatProperties> registeredProjectileData = ImmutableMap.of();
@@ -65,7 +65,7 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> objectIn, ResourceManager resourceManagerIn, ProfilerFiller profilerIn) {
         Builder<ResourceLocation, MobCombatProperties> builderMob = ImmutableMap.builder();
-        Builder<ResourceLocation, ItemCombatProperties> builderItem = ImmutableMap.builder();
+        Builder<ResourceLocation, ElementalCombatProperties> builderItem = ImmutableMap.builder();
         Builder<ResourceLocation, BiomeCombatProperties> builderBiome = ImmutableMap.builder();
         Builder<ResourceLocation, AttackOnlyCombatProperties> builderDamageSource = ImmutableMap.builder();
         Builder<ResourceLocation, AttackOnlyCombatProperties> builderProjectile = ImmutableMap.builder();
@@ -89,11 +89,11 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
                     builderMob.put(rl, combatProperties);
                     type = "mobs";
                 } else if (rl.getPath().contains("items/")) {
-                    ItemCombatProperties combatProperties = loadData(GSON,
+                    ElementalCombatProperties combatProperties = loadData(GSON,
                         rl,
                         json,
                         res == null || !res.getSourceName().equals("main"),
-                        ItemCombatProperties.class);
+                        ElementalCombatProperties.class);
                     builderItem.put(rl, combatProperties);
                     type = "items";
                 } else if (rl.getPath().contains("biomes/")) {
@@ -142,7 +142,7 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
 
         // not sure if empty resourceLocation is necessary...
         builderMob.put(EMPTY_RESOURCELOCATION, new MobCombatProperties());
-        builderItem.put(EMPTY_RESOURCELOCATION, new ItemCombatProperties());
+        builderItem.put(EMPTY_RESOURCELOCATION, new ElementalCombatProperties());
         builderBiome.put(EMPTY_RESOURCELOCATION, new BiomeCombatProperties());
         builderDamageSource.put(EMPTY_RESOURCELOCATION, new AttackOnlyCombatProperties());
         builderProjectile.put(EMPTY_RESOURCELOCATION, new AttackOnlyCombatProperties());
@@ -191,8 +191,8 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         return new MobCombatProperties(registeredMobData.getOrDefault(rl, new MobCombatProperties()));
     }
 
-    public ItemCombatProperties getItemDataFromLocation(ResourceLocation rl) {
-        return new ItemCombatProperties(registeredItemData.getOrDefault(rl, new ItemCombatProperties()));
+    public ElementalCombatProperties getItemDataFromLocation(ResourceLocation rl) {
+        return new ElementalCombatProperties(registeredItemData.getOrDefault(rl, new ElementalCombatProperties()));
     }
 
     public BiomeCombatProperties getBiomeDataFromLocation(ResourceLocation rl) {
