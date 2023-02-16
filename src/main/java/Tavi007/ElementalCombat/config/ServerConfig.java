@@ -3,6 +3,7 @@ package Tavi007.ElementalCombat.config;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
@@ -14,6 +15,7 @@ public class ServerConfig {
     private final ConfigValue<String> defaultElement;
     private final ConfigValue<String> defaultStyle;
     private final IntValue maxFactor;
+    private final BooleanValue overrideVanillaEnchantment;
     private final IntValue enchantmentScalingElement;
     private final IntValue enchantmentScalingStyle;
 
@@ -40,6 +42,9 @@ public class ServerConfig {
         enchantmentScalingStyle = builder
             .comment("Scaling for (style) protection enchantments. See vanilla Enchantment Protection Factor.")
             .defineInRange("enchantmentScaling", 5, 1, 15);
+        overrideVanillaEnchantment = builder
+            .comment("When true, vanilla protection enchantments will be overriden so they will use the elemental combat protection system.")
+            .define("overrideVanillaEnchantment", true);
     }
 
     public static int getMaxFactor() {
@@ -60,5 +65,9 @@ public class ServerConfig {
 
     public static String getDefaultElement() {
         return SERVER.defaultElement.get();
+    }
+
+    public static boolean shouldVanillaEnchantmentsBeOverriden() {
+        return SERVER.overrideVanillaEnchantment.get();
     }
 }

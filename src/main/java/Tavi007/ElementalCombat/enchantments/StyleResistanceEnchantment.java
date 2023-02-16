@@ -1,10 +1,14 @@
 package Tavi007.ElementalCombat.enchantments;
 
+import java.util.HashMap;
+
+import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
+import Tavi007.ElementalCombat.config.ServerConfig;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
-public class StyleResistanceEnchantment extends Enchantment {
+public class StyleResistanceEnchantment extends Enchantment implements IResistanceEnchantment {
 
     private static final EquipmentSlot[] ARMOR_SLOTS = new EquipmentSlot[] {
         EquipmentSlot.HEAD,
@@ -34,18 +38,27 @@ public class StyleResistanceEnchantment extends Enchantment {
         return 4;
     }
 
+    @Override
+    public DefenseLayer getDefenseLayer(int level) {
+        HashMap<String, Integer> defStyle = new HashMap<String, Integer>();
+        defStyle.put(protectionType.style, level * ServerConfig.getEnchantmentScalingStyle());
+        return new DefenseLayer(defStyle, new HashMap<String, Integer>());
+    }
+
     public static enum Type {
 
-        PROJECTILE(10, 8),
-        EXPLOSION(10, 8),
-        MAGIC(10, 8);
+        PROJECTILE(10, 8, "projectile"),
+        EXPLOSION(10, 8, "explosion"),
+        MAGIC(10, 8, "magic");
 
         private final int minEnchantability;
         private final int levelCost;
+        private final String style;
 
-        private Type(int minEnchantability, int levelCost) {
+        private Type(int minEnchantability, int levelCost, String style) {
             this.minEnchantability = minEnchantability;
             this.levelCost = levelCost;
+            this.style = style;
         }
 
         public int getMinimalEnchantability() {
