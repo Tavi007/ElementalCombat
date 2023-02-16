@@ -1,6 +1,7 @@
 package Tavi007.ElementalCombat.init;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.enchantments.StyleResistanceEnchantment;
@@ -46,15 +47,17 @@ public class EnchantmentList {
 
     @SubscribeEvent
     public static void registerEnchantments(Register<Enchantment> event) {
-        // overwriting of vanilla enchantments
-        event.getRegistry()
-            .register(
-                new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.FIRE).setRegistryName(Enchantments.FIRE_PROTECTION.getRegistryName()));
-        event.getRegistry()
-            .register(new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.PROJECTILE)
-                .setRegistryName(Enchantments.PROJECTILE_PROTECTION.getRegistryName()));
-        event.getRegistry()
-            .register(
-                new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.EXPLOSION).setRegistryName(Enchantments.BLAST_PROTECTION.getRegistryName()));
+        if (ServerConfig.shouldVanillaEnchantmentsBeOverriden()) {
+            event.getRegistry()
+                .register(
+                    new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.FIRE)
+                        .setRegistryName(Enchantments.FIRE_PROTECTION.getRegistryName()));
+            event.getRegistry()
+                .register(new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.PROJECTILE)
+                    .setRegistryName(Enchantments.PROJECTILE_PROTECTION.getRegistryName()));
+            event.getRegistry()
+                .register(
+                    new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.EXPLOSION).setRegistryName(Enchantments.BLAST_PROTECTION.getRegistryName()));
+        }
     }
 }
