@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 import net.minecraft.network.FriendlyByteBuf;
 
-public class MobCombatProperties extends ItemCombatProperties {
+public class MobCombatProperties extends ElementalCombatProperties {
 
     @SerializedName("biome_dependency")
     private boolean biomeDependency;

@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableMap.Builder;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
-import Tavi007.ElementalCombat.loading.ItemCombatProperties;
+import Tavi007.ElementalCombat.loading.ElementalCombatProperties;
 import Tavi007.ElementalCombat.loading.MobCombatProperties;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 public class BasePropertiesMessage extends MessageToClient {
 
     private Map<ResourceLocation, MobCombatProperties> mobData;
-    private Map<ResourceLocation, ItemCombatProperties> itemData;
+    private Map<ResourceLocation, ElementalCombatProperties> itemData;
     private Map<ResourceLocation, BiomeCombatProperties> biomeData;
     private Map<ResourceLocation, AttackOnlyCombatProperties> damageSourceData;
     private Map<ResourceLocation, AttackOnlyCombatProperties> projectileData;
@@ -25,7 +25,7 @@ public class BasePropertiesMessage extends MessageToClient {
     }
 
     public BasePropertiesMessage(Map<ResourceLocation, MobCombatProperties> mobData,
-            Map<ResourceLocation, ItemCombatProperties> itemData,
+            Map<ResourceLocation, ElementalCombatProperties> itemData,
             Map<ResourceLocation, BiomeCombatProperties> biomeData,
             Map<ResourceLocation, AttackOnlyCombatProperties> damageSourceData,
             Map<ResourceLocation, AttackOnlyCombatProperties> projectileData) {
@@ -40,7 +40,7 @@ public class BasePropertiesMessage extends MessageToClient {
         return mobData;
     }
 
-    public Map<ResourceLocation, ItemCombatProperties> getItemData() {
+    public Map<ResourceLocation, ElementalCombatProperties> getItemData() {
         return itemData;
     }
 
@@ -133,12 +133,12 @@ public class BasePropertiesMessage extends MessageToClient {
         return builder.build();
     }
 
-    private static Map<ResourceLocation, ItemCombatProperties> readItem(FriendlyByteBuf buf) {
-        Builder<ResourceLocation, ItemCombatProperties> builder = ImmutableMap.builder();
+    private static Map<ResourceLocation, ElementalCombatProperties> readItem(FriendlyByteBuf buf) {
+        Builder<ResourceLocation, ElementalCombatProperties> builder = ImmutableMap.builder();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
             ResourceLocation key = new ResourceLocation(buf.readUtf());
-            ItemCombatProperties value = new ItemCombatProperties();
+            ElementalCombatProperties value = new ElementalCombatProperties();
             value.readFromBuffer(buf);
             builder.put(key, value);
         }
