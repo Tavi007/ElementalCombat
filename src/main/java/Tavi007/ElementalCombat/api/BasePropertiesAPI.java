@@ -93,6 +93,8 @@ public class BasePropertiesAPI {
             layer = ((ElementalWeaponEnchantment) ench).getAttackLayer();
         } else if (ench.equals(Enchantments.FIRE_ASPECT) || ench.equals(Enchantments.FLAMING_ARROWS)) {
             layer.setElement("fire");
+        } else if (ench.equals(Enchantments.CHANNELING)) {
+            layer.setElement("thunder");
         }
         return layer;
     }
