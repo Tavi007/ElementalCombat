@@ -117,10 +117,6 @@ public class DefenseData {
         return areEnchantmentChangesApplied;
     }
 
-    public void clear() {
-        defenseLayers.clear();
-    }
-
     @Override
     public boolean equals(Object object) {
         if (object instanceof DefenseData) {
