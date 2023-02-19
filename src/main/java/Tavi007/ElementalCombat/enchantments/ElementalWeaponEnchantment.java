@@ -43,7 +43,10 @@ public class ElementalWeaponEnchantment extends Enchantment {
         WATER(10, 8, "water"),
         THUNDER(10, 8, "thunder"),
         DARKNESS(10, 8, "darkness"),
-        LIGHT(10, 8, "light");
+        LIGHT(10, 8, "light"),
+        FLORA(10, 8, "flora"),
+        EARTH(10, 8, "earth"),
+        WIND(10, 8, "wind");
 
         private final int minEnchantability;
         private final int levelCost;

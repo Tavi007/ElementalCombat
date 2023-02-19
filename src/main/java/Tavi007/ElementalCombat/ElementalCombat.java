@@ -7,6 +7,7 @@ import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.EnchantmentList;
 import Tavi007.ElementalCombat.init.ParticleList;
+import Tavi007.ElementalCombat.init.PotionList;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
 import Tavi007.ElementalCombat.init.StartupCommon;
 import Tavi007.ElementalCombat.interaction.HandleCuriosInventory;
@@ -47,6 +48,9 @@ public class ElementalCombat {
         ParticleList.PARTICLES.register(ElementalCombat.MOD_EVENT_BUS);
         EnchantmentList.ENCHANTMENTS.register(ElementalCombat.MOD_EVENT_BUS);
         MOD_EVENT_BUS.register(EnchantmentList.class);
+        PotionList.POTION_EFFECTS.register(ElementalCombat.MOD_EVENT_BUS);
+        PotionList.POTION_TYPES.register(ElementalCombat.MOD_EVENT_BUS);
+        MOD_EVENT_BUS.register(PotionList.class);
 
         // register common stuff
         MOD_EVENT_BUS.register(StartupCommon.class);

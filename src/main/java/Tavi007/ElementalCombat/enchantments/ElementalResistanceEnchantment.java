@@ -55,8 +55,11 @@ public class ElementalResistanceEnchantment extends Enchantment implements IResi
         THUNDER("thunder", 1.0f, "water", 0.5f, 10, 8),
         DARKNESS("darkness", 1.0f, "light", 0.5f, 10, 8),
         LIGHT("light", 1.0f, "darkness", 0.5f, 10, 8),
+        EARTH("earth", 1.0f, "wind", 0.5f, 10, 8),
+        WIND("wind", 1.0f, "earth", 0.5f, 10, 8),
 
-        ELEMENT(10, 8, 0.2f, "fire", "ice", "water", "thunder");
+        FLORA(10, 8, 1.0f, "flora"),
+        ELEMENT(10, 8, 0.2f, "fire", "ice", "water", "thunder", "flora", "earth", "wind");
 
         private final int minEnchantability;
         private final int levelCost;

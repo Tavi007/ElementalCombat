@@ -9,6 +9,7 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.network.CreateEmitterMessage;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
 import Tavi007.ElementalCombat.network.ServerPlayerSupplier;
+import Tavi007.ElementalCombat.potions.ElementalResistanceEffect;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
@@ -18,6 +19,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -29,6 +31,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -80,6 +83,30 @@ public class ServerEvents {
                 });
                 projectileData.putLayer(new ResourceLocation("potion"), potionLayer.toLayer());
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onAddPotionEvent(PotionEvent.PotionAddedEvent event) {
+        EffectInstance effect = event.getPotionEffect();
+        if (effect.getEffect() instanceof ElementalResistanceEffect) {
+            ((ElementalResistanceEffect) effect.getEffect()).applyEffect(event.getEntityLiving(), effect.getAmplifier() + 1);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRemovePotionEvent(PotionEvent.PotionRemoveEvent event) {
+        EffectInstance effect = event.getPotionEffect();
+        if (effect.getEffect() instanceof ElementalResistanceEffect) {
+            ((ElementalResistanceEffect) effect.getEffect()).remnoveEffect(event.getEntityLiving());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onExpirePotionEvent(PotionEvent.PotionExpiryEvent event) {
+        EffectInstance effect = event.getPotionEffect();
+        if (effect.getEffect() instanceof ElementalResistanceEffect) {
+            ((ElementalResistanceEffect) effect.getEffect()).remnoveEffect(event.getEntityLiving());
         }
     }
 
