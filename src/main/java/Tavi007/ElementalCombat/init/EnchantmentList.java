@@ -1,7 +1,6 @@
 package Tavi007.ElementalCombat.init;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.enchantments.StyleResistanceEnchantment;
@@ -27,6 +26,12 @@ public class EnchantmentList {
         () -> new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.DARKNESS));
     public static final RegistryObject<Enchantment> LIGHT_PROTECTION = ENCHANTMENTS.register("light_protection",
         () -> new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.LIGHT));
+    public static final RegistryObject<Enchantment> FLORA_PROTECTION = ENCHANTMENTS.register("flora_protection",
+        () -> new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.FLORA));
+    public static final RegistryObject<Enchantment> EARTH_PROTECTION = ENCHANTMENTS.register("earth_protection",
+        () -> new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.EARTH));
+    public static final RegistryObject<Enchantment> WIND_PROTECTION = ENCHANTMENTS.register("wind_protection",
+        () -> new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.WIND));
 
     public static final RegistryObject<Enchantment> ELEMENT_PROTECTION = ENCHANTMENTS.register("element_protection",
         () -> new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.ELEMENT));
@@ -44,20 +49,24 @@ public class EnchantmentList {
         () -> new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.DARKNESS));
     public static final RegistryObject<Enchantment> LIGHT_ASPECT = ENCHANTMENTS.register("light_aspect",
         () -> new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.LIGHT));
+    public static final RegistryObject<Enchantment> FLORA_ASPECT = ENCHANTMENTS.register("flora_aspect",
+        () -> new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.FLORA));
+    public static final RegistryObject<Enchantment> EARTH_ASPECT = ENCHANTMENTS.register("earth_aspect",
+        () -> new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.EARTH));
+    public static final RegistryObject<Enchantment> WIND_ASPECT = ENCHANTMENTS.register("wind_aspect",
+        () -> new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.WIND));
 
     @SubscribeEvent
     public static void registerEnchantments(Register<Enchantment> event) {
-        if (ServerConfig.shouldVanillaEnchantmentsBeOverriden()) {
-            event.getRegistry()
-                .register(
-                    new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.FIRE)
-                        .setRegistryName(Enchantments.FIRE_PROTECTION.getRegistryName()));
-            event.getRegistry()
-                .register(new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.PROJECTILE)
-                    .setRegistryName(Enchantments.PROJECTILE_PROTECTION.getRegistryName()));
-            event.getRegistry()
-                .register(
-                    new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.EXPLOSION).setRegistryName(Enchantments.BLAST_PROTECTION.getRegistryName()));
-        }
+        event.getRegistry()
+            .register(
+                new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.FIRE)
+                    .setRegistryName(Enchantments.FIRE_PROTECTION.getRegistryName()));
+        event.getRegistry()
+            .register(new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.PROJECTILE)
+                .setRegistryName(Enchantments.PROJECTILE_PROTECTION.getRegistryName()));
+        event.getRegistry()
+            .register(
+                new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.EXPLOSION).setRegistryName(Enchantments.BLAST_PROTECTION.getRegistryName()));
     }
 }
