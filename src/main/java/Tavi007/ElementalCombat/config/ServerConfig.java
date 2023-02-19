@@ -16,6 +16,7 @@ public class ServerConfig {
     private final IntValue maxFactor;
     private final IntValue enchantmentScalingElement;
     private final IntValue enchantmentScalingStyle;
+    private final IntValue potionScaling;
 
     static {
         Pair<ServerConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
@@ -40,6 +41,9 @@ public class ServerConfig {
         enchantmentScalingStyle = builder
             .comment("Scaling for (style) protection enchantments. See vanilla Enchantment Protection Factor.")
             .defineInRange("enchantmentScaling", 5, 1, 15);
+        potionScaling = builder
+            .comment("Scaling for potion effects. Resistance (or Weakness) gained through potion effects will be scaled with this factor")
+            .defineInRange("potionScaling", 50, 1, 100);
     }
 
     public static int getMaxFactor() {
@@ -60,5 +64,9 @@ public class ServerConfig {
 
     public static String getDefaultElement() {
         return SERVER.defaultElement.get();
+    }
+
+    public static int getPotionScaling() {
+        return SERVER.potionScaling.get();
     }
 }

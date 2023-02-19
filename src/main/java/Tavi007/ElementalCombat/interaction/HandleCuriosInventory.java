@@ -13,7 +13,7 @@ public class HandleCuriosInventory {
 
     @SubscribeEvent
     public static void onCurioChange(CurioChangeEvent event) {
-        LivingEntity entity = event.getEntity();
+        LivingEntity entity = event.getEntityLiving();
         DefenseData data = DefenseDataHelper.get(entity);
         ResourceLocation rl = new ResourceLocation("curios", "armor");
         DefenseLayer layer = data.getLayer(rl);
