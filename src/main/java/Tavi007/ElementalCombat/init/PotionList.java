@@ -121,8 +121,8 @@ public class PotionList {
 
     public static final DeferredRegister<Potion> VANILLA_POTIONS = DeferredRegister.create(ForgeRegistries.POTIONS, "minecraft");
     public static final RegistryObject<Potion> FIRE_RESISTANCE_POTION = VANILLA_POTIONS.register("fire_resistance",
-        () -> new Potion("wind_resistance", new MobEffectInstance(FIRE_RESISTANCE_EFFECT, 3600, 0, false, true, true)));
+        () -> new Potion("fire_resistance", new MobEffectInstance(FIRE_RESISTANCE_EFFECT, 3600, 0, false, true, true)));
     public static final RegistryObject<Potion> FIRE_RESISTANCE_POTION_LONG = VANILLA_POTIONS.register("long_fire_resistance",
-        () -> new Potion("long_wind_resistance", new MobEffectInstance(FIRE_RESISTANCE_EFFECT, 9600, 0, false, true, true)));
+        () -> new Potion("long_fire_resistance", new MobEffectInstance(FIRE_RESISTANCE_EFFECT, 9600, 0, false, true, true)));
 
 }
