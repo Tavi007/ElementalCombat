@@ -40,9 +40,10 @@ public class ElementalResistanceEnchantment extends Enchantment implements IResi
     @Override
     public DefenseLayer getDefenseLayer(int level) {
         HashMap<String, Integer> defElement = new HashMap<String, Integer>();
-        protectionType.elements.forEach(element -> defElement.put(element, (int) (level * ServerConfig.getEnchantmentScalingStyle() * protectionType.scaling)));
+        protectionType.elements
+            .forEach(element -> defElement.put(element, (int) (level * ServerConfig.getEnchantmentScalingElement() * protectionType.scaling)));
         protectionType.antiElements
-            .forEach(element -> defElement.put(element, (int) (-level * ServerConfig.getEnchantmentScalingStyle() * protectionType.scalingAnti)));
+            .forEach(element -> defElement.put(element, (int) (-level * ServerConfig.getEnchantmentScalingElement() * protectionType.scalingAnti)));
         return new DefenseLayer(new HashMap<String, Integer>(), defElement);
     }
 
