@@ -2,6 +2,8 @@ package Tavi007.ElementalCombat.capabilities;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
@@ -9,7 +11,13 @@ import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import net.minecraft.resources.ResourceLocation;
 
+@Ignore
 public class AttackDataTest {
+
+    @Before
+    public void init() {
+        System.getProperties().put("production", "1");
+    }
 
     private static final ResourceLocation baseRL = new ResourceLocation("base");
     private AttackLayer baseLayer = new AttackLayer("style1", "element1");

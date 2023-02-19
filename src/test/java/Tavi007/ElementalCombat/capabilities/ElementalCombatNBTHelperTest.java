@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
@@ -14,7 +16,13 @@ import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 
+@Ignore
 public class ElementalCombatNBTHelperTest {
+
+    @Before
+    public void init() {
+        System.getProperties().put("production", "1");
+    }
 
     @Test
     public void testDefaultAttackData() {

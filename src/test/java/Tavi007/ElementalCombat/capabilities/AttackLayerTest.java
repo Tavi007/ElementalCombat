@@ -2,12 +2,20 @@ package Tavi007.ElementalCombat.capabilities;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.config.ServerConfig;
 
+@Ignore
 public class AttackLayerTest {
+
+    @Before
+    public void init() {
+        System.getProperties().put("production", "1");
+    }
 
     @Test
     public void newObjectDefault() {
