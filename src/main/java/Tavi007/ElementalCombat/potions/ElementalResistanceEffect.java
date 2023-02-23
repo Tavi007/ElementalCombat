@@ -9,7 +9,9 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
+import net.minecraft.util.ResourceLocation;
 
 public class ElementalResistanceEffect extends Effect {
 
@@ -33,13 +35,21 @@ public class ElementalResistanceEffect extends Effect {
         return map;
     }
 
-    public void applyEffect(LivingEntity target, int level) {
+    public DefenseLayer getDefenseLayer(EffectInstance instance) {
         DefenseLayer layer = new DefenseLayer();
-        layer.addElement(getResistanceMap(level));
-        DefenseDataAPI.putLayer(target, layer, this.getRegistryName());
+        layer.addElement(getResistanceMap(instance.getAmplifier() + 1));
+        return layer;
     }
 
-    public void remnoveEffect(LivingEntity target) {
+    public void applyEffect(LivingEntity target, EffectInstance instance) {
+        DefenseDataAPI.putLayer(target, getDefenseLayer(instance), this.getRegistryName());
+    }
+
+    public ResourceLocation getResourceLocation() {
+        return this.getRegistryName();
+    }
+
+    public void removeEffect(LivingEntity target) {
         DefenseDataAPI.deleteLayer(target, this.getRegistryName());
     }
 }

@@ -12,6 +12,8 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
 import Tavi007.ElementalCombat.config.ClientConfig;
+import Tavi007.ElementalCombat.init.PotionList;
+import Tavi007.ElementalCombat.potions.ElementalResistanceEffect;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.RenderHelper;
@@ -24,6 +26,10 @@ import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.PotionItem;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
@@ -114,8 +120,22 @@ public class RenderEvents {
     public static void onTooltip(ItemTooltipEvent event) {
         List<ITextComponent> tooltip = event.getToolTip();
         ItemStack stack = event.getItemStack();
-        AttackData attackData = AttackDataHelper.get(stack);
-        DefenseData defenseData = DefenseDataHelper.get(stack);
+        final AttackData attackData = AttackDataHelper.get(stack);
+        final DefenseData defenseData = DefenseDataHelper.get(stack);
+
+        if (stack.getItem() instanceof PotionItem) {
+            List<EffectInstance> instances = PotionUtils.getMobEffects(stack);
+            instances.forEach(instance -> {
+                if (Effects.FIRE_RESISTANCE.equals(instance.getEffect())) {
+                    ElementalResistanceEffect elementalResistanceEffect = (ElementalResistanceEffect) PotionList.FIRE_RESISTANCE_EFFECT.get();
+                    defenseData.putLayer(elementalResistanceEffect.getRegistryName(), elementalResistanceEffect.getDefenseLayer(instance));
+                } else if (instance.getEffect() instanceof ElementalResistanceEffect) {
+                    ElementalResistanceEffect elementalResistanceEffect = ((ElementalResistanceEffect) instance.getEffect());
+                    defenseData.putLayer(elementalResistanceEffect.getRegistryName(), elementalResistanceEffect.getDefenseLayer(instance));
+                }
+            });
+        }
+
         boolean hasData = !(attackData.isDefault() && defenseData.isEmpty());
         boolean hasDefenseData = !defenseData.isEmpty();
         if (hasData) {

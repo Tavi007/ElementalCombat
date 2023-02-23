@@ -8,11 +8,7 @@ import Tavi007.ElementalCombat.potions.ElementalResistanceEffect;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
-import net.minecraft.potion.Effects;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.Potions;
-import net.minecraftforge.event.RegistryEvent.Register;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,7 +16,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class PotionList {
 
     public static final DeferredRegister<Effect> POTION_EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, ElementalCombat.MOD_ID);
-    public static final Effect FIRE_RESISTANCE_EFFECT = new ElementalResistanceEffect(EffectType.NEUTRAL, 14981690, "fire", "ice");
+    public static final RegistryObject<Effect> FIRE_RESISTANCE_EFFECT = POTION_EFFECTS.register("fire_resistance",
+        () -> new ElementalResistanceEffect(EffectType.NEUTRAL, 14981690, "fire", "ice"));
     public static final RegistryObject<Effect> ICE_RESISTANCE_EFFECT = POTION_EFFECTS.register("ice_resistance",
         () -> new ElementalResistanceEffect(EffectType.NEUTRAL, 9158640, "ice", "fire"));
     public static final RegistryObject<Effect> THUNDER_RESISTANCE_EFFECT = POTION_EFFECTS.register("thunder_resistance",
@@ -40,7 +37,7 @@ public class PotionList {
 
     public static final DeferredRegister<Potion> POTION_TYPES = DeferredRegister.create(ForgeRegistries.POTION_TYPES, ElementalCombat.MOD_ID);
     public static final RegistryObject<Potion> FIRE_RESISTANCE_POTION_STRONG = POTION_TYPES.register("strong_fire_resistance",
-        () -> new Potion("strong_fire_resistance", new EffectInstance(FIRE_RESISTANCE_EFFECT, 3600, 1, false, true, true)));
+        () -> new Potion("strong_fire_resistance", new EffectInstance(FIRE_RESISTANCE_EFFECT.get(), 3600, 1, false, true, true)));
     public static final RegistryObject<Potion> ICE_RESISTANCE_POTION = POTION_TYPES.register("ice_resistance",
         () -> new Potion("ice_resistance", new EffectInstance(ICE_RESISTANCE_EFFECT.get(), 3600, 0, false, true, true)));
     public static final RegistryObject<Potion> ICE_RESISTANCE_POTION_LONG = POTION_TYPES.register("long_ice_resistance",
@@ -89,26 +86,4 @@ public class PotionList {
         () -> new Potion("long_wind_resistance", new EffectInstance(WIND_RESISTANCE_EFFECT.get(), 9600, 0, false, true, true)));
     public static final RegistryObject<Potion> WIND_RESISTANCE_POTION_STRONG = POTION_TYPES.register("strong_wind_resistance",
         () -> new Potion("strong_wind_resistance", new EffectInstance(WIND_RESISTANCE_EFFECT.get(), 3600, 1, false, true, true)));
-
-    @SubscribeEvent
-    public static void registerEffects(Register<Effect> event) {
-        ElementalCombat.LOGGER.info("Expected override");
-        event.getRegistry()
-            .register(FIRE_RESISTANCE_EFFECT.setRegistryName(Effects.FIRE_RESISTANCE.getRegistryName()));
-
-    }
-
-    @SubscribeEvent
-    public static void registerPotions(Register<Potion> event) {
-        ElementalCombat.LOGGER.info("Expected overrides");
-        event.getRegistry()
-            .register(
-                new Potion("fire_resistance", new EffectInstance(FIRE_RESISTANCE_EFFECT, 3600, 0, false, true, true))
-                    .setRegistryName(Potions.FIRE_RESISTANCE.getRegistryName()));
-        event.getRegistry()
-            .register(
-                new Potion("long_fire_resistance", new EffectInstance(FIRE_RESISTANCE_EFFECT, 9600, 0, false, true, true))
-                    .setRegistryName(Potions.LONG_FIRE_RESISTANCE.getRegistryName()));
-    }
-
 }

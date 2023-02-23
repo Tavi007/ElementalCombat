@@ -18,9 +18,7 @@
     "enchantment.elementalcombat.flora_aspect" : "Flora Aspekt",
     "enchantment.elementalcombat.earth_aspect" : "Earth Aspekt",
     "enchantment.elementalcombat.wind_aspect" : "Wind Aspekt",
-    
-    
-    "item.minecraft.potion.effect.long_fire_resistance" : "Potion of Fire Resistance",
+
     "item.minecraft.potion.effect.strong_fire_resistance" : "Potion of Fire Resistance II",
     "item.minecraft.potion.effect.ice_resistance" : "Potion of Ice Resistance",
     "item.minecraft.potion.effect.long_ice_resistance" : "Potion of Ice Resistance",
