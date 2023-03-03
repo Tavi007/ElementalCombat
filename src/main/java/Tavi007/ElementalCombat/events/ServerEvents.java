@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
+import Tavi007.ElementalCombat.api.ElementifyDamageSourceEvent;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.init.PotionList;
@@ -30,11 +31,13 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -128,21 +131,31 @@ public class ServerEvents {
         }
     }
 
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onElementifyDamageSource(ElementifyDamageSourceEvent event) {
+        DamageSource damageSource = event.getDamageSource();
+        event.addLayer(new ResourceLocation("base"), AttackDataHelper.get(damageSource).toLayer());
+    }
+
     @SubscribeEvent
     public static void elementifyLivingHurtEvent(LivingHurtEvent event) {
         DamageSource damageSource = event.getSource();
 
         // no modification. Entity should take normal damage and die eventually.
-        if (damageSource == DamageSource.OUT_OF_WORLD) {
+        if (DamageSource.OUT_OF_WORLD.equals(damageSource)) {
             return;
         }
 
-        // compute new Damage value
-        AttackData sourceData = AttackDataHelper.get(damageSource);
-        LivingEntity target = event.getEntityLiving();
-        float damageAmount = event.getAmount();
+        // Get the attack data from the damage source
+        AttackData sourceData = new AttackData();
+        MinecraftForge.EVENT_BUS.post(new ElementifyDamageSourceEvent(damageSource, sourceData));
+
         // Get the protection data from target
+        LivingEntity target = event.getEntityLiving();
         DefenseData defCap = DefenseDataHelper.get(target);
+
+        // compute new damage value
+        float damageAmount = event.getAmount();
         float defenseStyleScaling = DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceData.getStyle(), true);
         float defenseElementScaling = DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceData.getElement(), false);
         damageAmount = (float) (damageAmount * defenseStyleScaling * defenseElementScaling);

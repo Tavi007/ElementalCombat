@@ -10,7 +10,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 
 public class AttackDataAPI {
@@ -269,22 +268,5 @@ public class AttackDataAPI {
      */
     public static void readFromNBT(CompoundNBT nbt, ItemStack stack) {
         AttackDataHelper.get(stack).set(ElementalCombatNBTHelper.readAttackDataFromNBT(nbt));
-    }
-
-    //////////////////
-    // DamageSource //
-    //////////////////
-
-    /**
-     * Get a copy of the fully merged {@link AttackLayer} of the {@link DamageSource}.
-     * Use this to get the attack properties, which will be used in combat.
-     * 
-     * @param source
-     *            A DamageSource.
-     * @param location
-     *            The ResourceLocation.
-     */
-    public static AttackLayer getFullDataAsLayer(DamageSource source) {
-        return new AttackLayer(AttackDataHelper.get(source).toLayer());
     }
 }

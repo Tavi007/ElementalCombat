@@ -51,20 +51,18 @@ public class AttackDataHelper {
     }
 
     public static AttackData get(DamageSource damageSource) {
-        Entity immediateSource = damageSource.getDirectEntity();
-
-        // Get combat data from source
-        if (!damageSource.isExplosion()) {
-            if (immediateSource instanceof LivingEntity) {
-                return get((LivingEntity) immediateSource);
-            } else if (immediateSource instanceof ProjectileEntity) {
-                return get((ProjectileEntity) immediateSource);
-            }
-        }
         AttackData data = new AttackData();
+
+        Entity immediateSource = damageSource.getDirectEntity();
+        if (immediateSource instanceof LivingEntity) {
+            data.putLayer(new ResourceLocation("direct_entity"), get((LivingEntity) immediateSource).toLayer());
+        } else if (immediateSource instanceof ProjectileEntity) {
+            data.putLayer(new ResourceLocation("direct_entity"), get((ProjectileEntity) immediateSource).toLayer());
+        }
+
+        // base values have higher priority, so they must be added last.
         data.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(damageSource));
         return data;
-
     }
 
 }

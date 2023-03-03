@@ -108,19 +108,14 @@ public class BasePropertiesAPI {
      * @return copy of AttackData.
      */
     public static AttackLayer getAttackData(DamageSource damageSource) {
-        ResourceLocation rlDamageSource = null;
-        // do other mods implement their own natural damageSource? If so, how could I get the mod id from it?
-        // for now do not use Namespace.
-        if (damageSource.isExplosion()) {
-            rlDamageSource = new ResourceLocation("minecraft", "damage_sources/explosion");
-        } else if (damageSource.isMagic()) {
-            rlDamageSource = new ResourceLocation("minecraft", "damage_sources/magic");
-        } else {
-            rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + damageSource.getMsgId().toLowerCase());
+        if (damageSource.getMsgId() != null) {
+            String name = damageSource.getMsgId().toLowerCase();
+            ResourceLocation rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + name);
+            AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(
+                ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource));
+            return new AttackLayer(property.getAttackStyle(), property.getAttackElement());
         }
-        AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(
-            ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource));
-        return new AttackLayer(property.getAttackStyle(), property.getAttackElement());
+        return new AttackLayer();
     }
 
     /**
