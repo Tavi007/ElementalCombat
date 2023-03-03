@@ -2,6 +2,7 @@ package Tavi007.ElementalCombat.capabilities.defense;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,6 +11,8 @@ import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
 
 public class DefenseData {
@@ -97,6 +100,10 @@ public class DefenseData {
 
     public void initialize(ItemStack stack) {
         isInitialized = true;
+        List<EffectInstance> potionEffects = PotionUtils.getMobEffects(stack);
+        potionEffects.forEach(effect -> {
+            defenseLayers.put(effect.getEffect().getRegistryName(), BasePropertiesAPI.getDefenseLayer(effect));
+        });
         putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "base"), BasePropertiesAPI.getDefenseLayer(stack));
     }
 

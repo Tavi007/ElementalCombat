@@ -3,7 +3,6 @@ package Tavi007.ElementalCombat.api;
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.enchantments.IResistanceEnchantment;
@@ -11,12 +10,15 @@ import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.ElementalCombatProperties;
 import Tavi007.ElementalCombat.loading.MobCombatProperties;
+import Tavi007.ElementalCombat.potions.ElementalHarmingEffect;
+import Tavi007.ElementalCombat.potions.ElementalResistanceEffect;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
@@ -65,16 +67,19 @@ public class BasePropertiesAPI {
 
     /**
      * Returns a copy of the default {@link AttackData} of the {@link EffectInstance}.
-     * Currently only checks for INSTANT_DAMAGE, which has the style 'magic'. Might rework at some point.
+     * Currently only checks for my own Effect class and vanilla ones.
      * 
      * @param effect
      *            The EffectInstance.
      * @return copy of AttackData.
      */
-    public static AttackLayer getAttackLayer(EffectInstance effect) {
+    public static AttackLayer getAttackLayer(EffectInstance effectInstance) {
         AttackLayer base = new AttackLayer();
-        if (effect.getEffect() == Effects.HARM) {
+        Effect effect = effectInstance.getEffect();
+        if (Effects.HARM.equals(effect)) {
             base.setStyle("magic");
+        } else if (effect instanceof ElementalHarmingEffect) {
+            base = ((ElementalHarmingEffect) effect).getAttackLayer();
         }
         return base;
     }
@@ -142,11 +147,11 @@ public class BasePropertiesAPI {
     /////////////////
 
     /**
-     * Returns a copy of the default {@link DefenseData} of any {@link LivingEntity}.
+     * Returns a copy of the default {@link DefenseLayer} of any {@link LivingEntity}.
      * 
      * @param livingEntity
      *            The LivingEntity.
-     * @return copy of DefenseData.
+     * @return copy of DefenseLayer.
      */
     public static DefenseLayer getDefenseLayer(LivingEntity livingEntity) {
         ResourceLocation rlEntity = livingEntity.getType().getRegistryName();
@@ -159,11 +164,11 @@ public class BasePropertiesAPI {
     }
 
     /**
-     * Returns a copy of the default {@link DefenseData} of any {@link ItemStack}.
+     * Returns a copy of the default {@link DefenseLayer} of any {@link ItemStack}.
      * 
      * @param stack
      *            The ItemStack.
-     * @return copy of DefenseData.
+     * @return copy of DefenseLayer.
      */
     public static DefenseLayer getDefenseLayer(ItemStack stack) {
         ResourceLocation rlItem = stack.getItem().getRegistryName();
@@ -176,11 +181,11 @@ public class BasePropertiesAPI {
     }
 
     /**
-     * Returns a copy of the default {@link DefenseData} of any {@link Enchantment}.
+     * Returns a copy of the default {@link DefenseLayer} of any {@link Enchantment}.
      * 
      * @param ench
      *            The Enchantment.
-     * @return copy of DefenseData.
+     * @return copy of DefenseLayer.
      */
     public static DefenseLayer getDefenseLayer(Enchantment ench, int level) {
         DefenseLayer defenseLayer = new DefenseLayer();
@@ -191,13 +196,13 @@ public class BasePropertiesAPI {
     }
 
     /**
-     * Returns a copy of the default {@link DefenseData} of a Biome at position {@link BlockPos}.
+     * Returns a copy of the default {@link DefenseLayer} of a Biome at position {@link BlockPos}.
      * 
      * @param world
      *            A World.
      * @param position
      *            The BlockPos
-     * @return copy of DefenseData.
+     * @return copy of DefenseLayer.
      */
     public static DefenseLayer getDefenseLayer(ResourceLocation rlBiome) {
         DefenseLayer defData = new DefenseLayer();
@@ -209,6 +214,23 @@ public class BasePropertiesAPI {
         BiomeCombatProperties property = new BiomeCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties));
         defData.addElement(property.getDefenseElement());
         return defData;
+    }
+
+    /**
+     * Returns a copy of the default {@link DefenseLayer} of the {@link EffectInstance}.
+     * Currently only checks for my own Effect class and vanilla ones.
+     * 
+     * @param effect
+     *            The EffectInstance.
+     * @return copy of DefenseLayer.
+     */
+    public static DefenseLayer getDefenseLayer(EffectInstance effectInstance) {
+        DefenseLayer base = new DefenseLayer();
+        Effect effect = effectInstance.getEffect();
+        if (effect instanceof ElementalResistanceEffect) {
+            base = ((ElementalResistanceEffect) effect).getDefenseLayer(effectInstance);
+        }
+        return base;
     }
 
     /////////////////

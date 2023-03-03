@@ -37,21 +37,21 @@ public class PotionList {
         () -> new ElementalResistanceEffect(EffectType.NEUTRAL, 5854011, "earth", "wind"));
 
     public static final RegistryObject<Effect> FIRE_HARMING_EFFECT = POTION_EFFECTS.register("fire_harming",
-        () -> new ElementalHarmingEffect("fire", 5854011));
+        () -> new ElementalHarmingEffect("fire", 14981690));
     public static final RegistryObject<Effect> ICE_HARMING_EFFECT = POTION_EFFECTS.register("ice_harming",
-        () -> new ElementalHarmingEffect("ice", 5854011));
+        () -> new ElementalHarmingEffect("ice", 9158640));
     public static final RegistryObject<Effect> THUNDER_HARMING_EFFECT = POTION_EFFECTS.register("thunder_harming",
-        () -> new ElementalHarmingEffect("thunder", 5854011));
+        () -> new ElementalHarmingEffect("thunder", 14735695));
     public static final RegistryObject<Effect> WATER_HARMING_EFFECT = POTION_EFFECTS.register("water_harming",
-        () -> new ElementalHarmingEffect("water", 5854011));
+        () -> new ElementalHarmingEffect("water", 2636728));
     public static final RegistryObject<Effect> DARKNESS_HARMING_EFFECT = POTION_EFFECTS.register("darkness_harming",
-        () -> new ElementalHarmingEffect("darkness", 5854011));
+        () -> new ElementalHarmingEffect("darkness", 2821688));
     public static final RegistryObject<Effect> LIGHT_HARMING_EFFECT = POTION_EFFECTS.register("light_harming",
-        () -> new ElementalHarmingEffect("light", 5854011));
+        () -> new ElementalHarmingEffect("light", 15856307));
     public static final RegistryObject<Effect> FLORA_HARMING_EFFECT = POTION_EFFECTS.register("flora_harming",
-        () -> new ElementalHarmingEffect("flora", 5854011));
+        () -> new ElementalHarmingEffect("flora", 11335061));
     public static final RegistryObject<Effect> WIND_HARMING_EFFECT = POTION_EFFECTS.register("wind_harming",
-        () -> new ElementalHarmingEffect("wind", 5854011));
+        () -> new ElementalHarmingEffect("wind", 9285299));
     public static final RegistryObject<Effect> EARTH_HARMING_EFFECT = POTION_EFFECTS.register("earth_harming",
         () -> new ElementalHarmingEffect("earth", 5854011));
 

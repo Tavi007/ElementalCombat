@@ -34,8 +34,6 @@ public class ElementalHarmingEffect extends Effect {
     }
 
     public AttackLayer getAttackLayer() {
-        AttackLayer layer = new AttackLayer();
-        layer.setElement(element);
-        return layer;
+        return new AttackLayer("magic", element);
     }
 }

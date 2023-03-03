@@ -100,7 +100,7 @@ public class AttackData {
         attackLayers.put(new ResourceLocation("base"), base);
         List<EffectInstance> potionEffects = PotionUtils.getMobEffects(stack);
         potionEffects.forEach(effect -> {
-            attackLayers.put(new ResourceLocation("potion_" + effect.getDescriptionId()), BasePropertiesAPI.getAttackLayer(effect));
+            attackLayers.put(effect.getEffect().getRegistryName(), BasePropertiesAPI.getAttackLayer(effect));
         });
         isInitialized = true;
     }
