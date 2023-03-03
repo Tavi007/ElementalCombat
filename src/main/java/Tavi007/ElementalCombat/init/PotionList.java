@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.potions.ElementalHarmingEffect;
 import Tavi007.ElementalCombat.potions.ElementalResistanceEffect;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
@@ -34,6 +35,25 @@ public class PotionList {
         () -> new ElementalResistanceEffect(EffectType.NEUTRAL, 9285299, "wind", "earth"));
     public static final RegistryObject<Effect> EARTH_RESISTANCE_EFFECT = POTION_EFFECTS.register("earth_resistance",
         () -> new ElementalResistanceEffect(EffectType.NEUTRAL, 5854011, "earth", "wind"));
+
+    public static final RegistryObject<Effect> FIRE_HARMING_EFFECT = POTION_EFFECTS.register("fire_harming",
+        () -> new ElementalHarmingEffect("fire", 5854011));
+    public static final RegistryObject<Effect> ICE_HARMING_EFFECT = POTION_EFFECTS.register("ice_harming",
+        () -> new ElementalHarmingEffect("ice", 5854011));
+    public static final RegistryObject<Effect> THUNDER_HARMING_EFFECT = POTION_EFFECTS.register("thunder_harming",
+        () -> new ElementalHarmingEffect("thunder", 5854011));
+    public static final RegistryObject<Effect> WATER_HARMING_EFFECT = POTION_EFFECTS.register("water_harming",
+        () -> new ElementalHarmingEffect("water", 5854011));
+    public static final RegistryObject<Effect> DARKNESS_HARMING_EFFECT = POTION_EFFECTS.register("darkness_harming",
+        () -> new ElementalHarmingEffect("darkness", 5854011));
+    public static final RegistryObject<Effect> LIGHT_HARMING_EFFECT = POTION_EFFECTS.register("light_harming",
+        () -> new ElementalHarmingEffect("light", 5854011));
+    public static final RegistryObject<Effect> FLORA_HARMING_EFFECT = POTION_EFFECTS.register("flora_harming",
+        () -> new ElementalHarmingEffect("flora", 5854011));
+    public static final RegistryObject<Effect> WIND_HARMING_EFFECT = POTION_EFFECTS.register("wind_harming",
+        () -> new ElementalHarmingEffect("wind", 5854011));
+    public static final RegistryObject<Effect> EARTH_HARMING_EFFECT = POTION_EFFECTS.register("earth_harming",
+        () -> new ElementalHarmingEffect("earth", 5854011));
 
     public static final DeferredRegister<Potion> POTION_TYPES = DeferredRegister.create(ForgeRegistries.POTION_TYPES, ElementalCombat.MOD_ID);
     public static final RegistryObject<Potion> FIRE_RESISTANCE_POTION_STRONG = POTION_TYPES.register("strong_fire_resistance",
@@ -86,4 +106,41 @@ public class PotionList {
         () -> new Potion("long_wind_resistance", new EffectInstance(WIND_RESISTANCE_EFFECT.get(), 9600, 0, false, true, true)));
     public static final RegistryObject<Potion> WIND_RESISTANCE_POTION_STRONG = POTION_TYPES.register("strong_wind_resistance",
         () -> new Potion("strong_wind_resistance", new EffectInstance(WIND_RESISTANCE_EFFECT.get(), 3600, 1, false, true, true)));
+
+    public static final RegistryObject<Potion> FIRE_HARMING_POTION = POTION_TYPES.register("fire_harming",
+        () -> new Potion("fire_harming", new EffectInstance(FIRE_HARMING_EFFECT.get(), 1)));
+    public static final RegistryObject<Potion> STRONG_FIRE_HARMING_POTION = POTION_TYPES.register("strong_fire_harming",
+        () -> new Potion("strong_fire_harming", new EffectInstance(FIRE_HARMING_EFFECT.get(), 1, 1)));
+    public static final RegistryObject<Potion> ICE_HARMING_POTION = POTION_TYPES.register("ice_harming",
+        () -> new Potion("ice_harming", new EffectInstance(ICE_HARMING_EFFECT.get(), 1)));
+    public static final RegistryObject<Potion> STRONG_ICE_HARMING_POTION = POTION_TYPES.register("strong_ice_harming",
+        () -> new Potion("strong_ice_harming", new EffectInstance(ICE_HARMING_EFFECT.get(), 1, 1)));
+    public static final RegistryObject<Potion> THUNDER_HARMING_POTION = POTION_TYPES.register("thunder_harming",
+        () -> new Potion("thunder_harming", new EffectInstance(THUNDER_HARMING_EFFECT.get(), 1)));
+    public static final RegistryObject<Potion> STRONG_THUNDER_HARMING_POTION = POTION_TYPES.register("strong_thunder_harming",
+        () -> new Potion("strong_thunder_harming", new EffectInstance(THUNDER_HARMING_EFFECT.get(), 1, 1)));
+    public static final RegistryObject<Potion> WATER_HARMING_POTION = POTION_TYPES.register("water_harming",
+        () -> new Potion("water_harming", new EffectInstance(WATER_HARMING_EFFECT.get(), 1)));
+    public static final RegistryObject<Potion> STRONG_WATER_HARMING_POTION = POTION_TYPES.register("strong_water_harming",
+        () -> new Potion("strong_water_harming", new EffectInstance(WATER_HARMING_EFFECT.get(), 1, 1)));
+    public static final RegistryObject<Potion> DARKNESS_HARMING_POTION = POTION_TYPES.register("darkness_harming",
+        () -> new Potion("darkness_harming", new EffectInstance(DARKNESS_HARMING_EFFECT.get(), 1)));
+    public static final RegistryObject<Potion> STRONG_DARKNESS_HARMING_POTION = POTION_TYPES.register("strong_darkness_harming",
+        () -> new Potion("strong_darkness_harming", new EffectInstance(DARKNESS_HARMING_EFFECT.get(), 1, 1)));
+    public static final RegistryObject<Potion> LIGHT_HARMING_POTION = POTION_TYPES.register("light_harming",
+        () -> new Potion("light_harming", new EffectInstance(LIGHT_HARMING_EFFECT.get(), 1)));
+    public static final RegistryObject<Potion> STRONG_LIGHT_HARMING_POTION = POTION_TYPES.register("strong_light_harming",
+        () -> new Potion("strong_light_harming", new EffectInstance(LIGHT_HARMING_EFFECT.get(), 1, 1)));
+    public static final RegistryObject<Potion> FLORA_HARMING_POTION = POTION_TYPES.register("flora_harming",
+        () -> new Potion("flora_harming", new EffectInstance(FLORA_HARMING_EFFECT.get(), 1)));
+    public static final RegistryObject<Potion> STRONG_FLORA_HARMING_POTION = POTION_TYPES.register("strong_flora_harming",
+        () -> new Potion("strong_flora_harming", new EffectInstance(FLORA_HARMING_EFFECT.get(), 1, 1)));
+    public static final RegistryObject<Potion> EARTH_HARMING_POTION = POTION_TYPES.register("earth_harming",
+        () -> new Potion("earth_harming", new EffectInstance(EARTH_HARMING_EFFECT.get(), 1)));
+    public static final RegistryObject<Potion> STRONG_EARTH_HARMING_POTION = POTION_TYPES.register("strong_earth_harming",
+        () -> new Potion("strong_earth_harming", new EffectInstance(EARTH_HARMING_EFFECT.get(), 1, 1)));
+    public static final RegistryObject<Potion> WIND_HARMING_POTION = POTION_TYPES.register("wind_harming",
+        () -> new Potion("wind_harming", new EffectInstance(WIND_HARMING_EFFECT.get(), 1)));
+    public static final RegistryObject<Potion> STRONG_WIND_HARMING_POTION = POTION_TYPES.register("strong_wind_harming",
+        () -> new Potion("strong_wind_harming", new EffectInstance(WIND_HARMING_EFFECT.get(), 1, 1)));
 }

@@ -13,6 +13,7 @@ import Tavi007.ElementalCombat.capabilities.immersion.ImmersionData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.init.PotionList;
+import Tavi007.ElementalCombat.potions.ElementalHarmingEffect;
 import Tavi007.ElementalCombat.potions.ElementalResistanceEffect;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
@@ -132,6 +133,9 @@ public class RenderEvents {
                 } else if (instance.getEffect() instanceof ElementalResistanceEffect) {
                     ElementalResistanceEffect elementalResistanceEffect = ((ElementalResistanceEffect) instance.getEffect());
                     defenseData.putLayer(elementalResistanceEffect.getRegistryName(), elementalResistanceEffect.getDefenseLayer(instance));
+                } else if (instance.getEffect() instanceof ElementalHarmingEffect) {
+                    ElementalHarmingEffect elementalharmingEffect = ((ElementalHarmingEffect) instance.getEffect());
+                    attackData.putLayer(elementalharmingEffect.getRegistryName(), elementalharmingEffect.getAttackLayer());
                 }
             });
         }
