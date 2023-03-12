@@ -5,13 +5,16 @@ import org.apache.logging.log4j.Logger;
 
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.config.ServerConfig;
+import Tavi007.ElementalCombat.init.BlockList;
 import Tavi007.ElementalCombat.init.EnchantmentList;
+import Tavi007.ElementalCombat.init.ItemList;
 import Tavi007.ElementalCombat.init.ParticleList;
 import Tavi007.ElementalCombat.init.PotionList;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
 import Tavi007.ElementalCombat.init.StartupCommon;
 import Tavi007.ElementalCombat.interaction.HandleCuriosInventory;
 import Tavi007.ElementalCombat.loading.CombatPropertiesManager;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -32,6 +35,7 @@ public class ElementalCombat {
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static CombatPropertiesManager COMBAT_PROPERTIES_MANGER = new CombatPropertiesManager();
     public static IEventBus MOD_EVENT_BUS;
+    public static final ItemGroup ELEMENTAL_COMBAT_GROUP = new ItemList.ElementalCombatItemGroup(MOD_ID);
 
     public static final ResourceLocation simpleChannelRL = new ResourceLocation(MOD_ID, "channel");
     public static SimpleChannel simpleChannel; // used to transmit your network messages
@@ -46,11 +50,20 @@ public class ElementalCombat {
 
         // register
         ParticleList.PARTICLES.register(ElementalCombat.MOD_EVENT_BUS);
+
         EnchantmentList.ENCHANTMENTS.register(ElementalCombat.MOD_EVENT_BUS);
         MOD_EVENT_BUS.register(EnchantmentList.class);
+
         PotionList.POTION_EFFECTS.register(ElementalCombat.MOD_EVENT_BUS);
         PotionList.POTION_TYPES.register(ElementalCombat.MOD_EVENT_BUS);
         MOD_EVENT_BUS.register(PotionList.class);
+
+        ItemList.ITEMS.register(ElementalCombat.MOD_EVENT_BUS);
+        MOD_EVENT_BUS.register(ItemList.class);
+
+        BlockList.ITEMS.register(ElementalCombat.MOD_EVENT_BUS);
+        BlockList.BLOCKS.register(ElementalCombat.MOD_EVENT_BUS);
+        MOD_EVENT_BUS.register(BlockList.class);
 
         // register common stuff
         MOD_EVENT_BUS.register(StartupCommon.class);

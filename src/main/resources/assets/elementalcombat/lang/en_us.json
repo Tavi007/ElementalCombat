@@ -1,4 +1,26 @@
 {
+    "itemGroup.elementalcombat" : "Elemental Combat - Weaponry",
+    
+    "block.elementalcombat.essence_block_fire" : "Fire Essence Block",
+    "block.elementalcombat.essence_block_ice" : "Ice Essence Block",
+    "block.elementalcombat.essence_block_water" : "Water Essence Block",
+    "block.elementalcombat.essence_block_thunder" : "Thunder Essence Block",
+    "block.elementalcombat.essence_block_darkness" : "Darkness Essence Block",
+    "block.elementalcombat.essence_block_light" : "Light Essence Block",
+    "block.elementalcombat.essence_block_earth" : "Earth Essence Block",
+    "block.elementalcombat.essence_block_wind" : "Wind Essence Block",
+    "block.elementalcombat.essence_block_flora" : "Flora Essence Block",
+    
+    "item.elementalcombat.essence_fire" : "Fire Essence",
+    "item.elementalcombat.essence_ice" : "Ice Essence",
+    "item.elementalcombat.essence_water" : "Water Essence",
+    "item.elementalcombat.essence_thunder" : "Thunder Essence",
+    "item.elementalcombat.essence_darkness" : "Darkness Essence",
+    "item.elementalcombat.essence_light" : "Light Essence",
+    "item.elementalcombat.essence_earth" : "Earth Essence",
+    "item.elementalcombat.essence_wind" : "Wind Essence",
+    "item.elementalcombat.essence_flora" : "Flora Essence",
+    
     "enchantment.elementalcombat.ice_protection" : "Ice Resistance",
     "enchantment.elementalcombat.thunder_protection" : "Thunder Resistance",
     "enchantment.elementalcombat.water_protection" : "Water Resistance",
