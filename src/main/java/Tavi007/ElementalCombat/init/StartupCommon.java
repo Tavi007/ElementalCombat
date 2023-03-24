@@ -13,6 +13,7 @@ import Tavi007.ElementalCombat.network.EntityAttackLayerMessage;
 import Tavi007.ElementalCombat.network.EntityDefenseLayerMessage;
 import Tavi007.ElementalCombat.network.PackageHandlerOnClient;
 import Tavi007.ElementalCombat.network.PackageHandlerOnServer;
+import Tavi007.ElementalCombat.potions.SpecificPotionIngredient;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -112,7 +113,7 @@ public class StartupCommon {
 
     private static void register(Potion from, Item with, Potion to) {
         BrewingRecipeRegistry.addRecipe(
-            Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), from)),
+            new SpecificPotionIngredient(PotionUtils.setPotion(new ItemStack(Items.POTION), from)),
             Ingredient.of(new ItemStack(with)),
             PotionUtils.setPotion(new ItemStack(Items.POTION), to));
     }
