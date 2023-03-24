@@ -6,6 +6,7 @@ import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.enchantments.IResistanceEnchantment;
+import Tavi007.ElementalCombat.init.PotionList;
 import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.ElementalCombatProperties;
@@ -229,6 +230,8 @@ public class BasePropertiesAPI {
         Effect effect = effectInstance.getEffect();
         if (effect instanceof ElementalResistanceEffect) {
             base = ((ElementalResistanceEffect) effect).getDefenseLayer(effectInstance);
+        } else if (Effects.FIRE_RESISTANCE.equals(effect)) {
+            base = ((ElementalResistanceEffect) PotionList.FIRE_RESISTANCE_EFFECT.get()).getDefenseLayer(effectInstance);
         }
         return base;
     }
