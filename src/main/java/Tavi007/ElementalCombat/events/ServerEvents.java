@@ -1,17 +1,14 @@
 package Tavi007.ElementalCombat.events;
 
-import java.util.Collection;
 import java.util.function.Supplier;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
-import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.api.ElementifyDamageSourceEvent;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.ItemList;
 import Tavi007.ElementalCombat.init.PotionList;
@@ -29,6 +26,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
@@ -224,56 +222,47 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void onLivingDropsEvent(LivingDropsEvent event) {
-        if (!(event.getEntityLiving() instanceof PlayerEntity) &&
-            Math.random() <= ServerConfig.getEssenceSpawnChance()) {
-            AttackLayer atckData = AttackDataAPI.getFullDataAsLayer(event.getEntityLiving());
-            addEssenceDropToList(atckData.getElement(), event.getEntityLiving(), event.getDrops(), event.getLootingLevel());
-            DefenseLayer defData = DefenseDataAPI.getFullDataAsLayer(event.getEntityLiving());
-            defData.getElementFactor().forEach((element, factor) -> {
-                if (factor > 0) {
-                    addEssenceDropToList(element, event.getEntityLiving(), event.getDrops(), event.getLootingLevel());
-                }
-            });
+        LivingEntity entity = event.getEntityLiving();
+        if (entity instanceof PlayerEntity) {
+            return;
         }
+
+        int numberOfDrops = (int) Math.round(Math.random() * ServerConfig.getEssenceSpawnWeight() * (1 + event.getLootingLevel()));
+        if (numberOfDrops < 1) {
+            return;
+        }
+
+        AttackLayer atckData = AttackDataAPI.getFullDataAsLayer(event.getEntityLiving());
+        Item item = getEssenceItem(atckData.getElement());
+        if (item == null) {
+            return;
+        }
+
+        event.getDrops().add(new ItemEntity(entity.getCommandSenderWorld(), entity.getX(), entity.getY(), entity.getZ(), new ItemStack(item, numberOfDrops)));
     }
 
-    private static void addEssenceDropToList(String element, LivingEntity entity, Collection<ItemEntity> drops, int lootingLevel) {
-        int numberOfDrops = 1 + lootingLevel;
-
-        if (numberOfDrops > 0) {
-            double x = entity.getX();
-            double y = entity.getY();
-            double z = entity.getZ();
-
-            switch (element) {
-            case "fire":
-                drops.add(new ItemEntity(entity.getCommandSenderWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_FIRE.get(), numberOfDrops)));
-                break;
-            case "ice":
-                drops.add(new ItemEntity(entity.getCommandSenderWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_ICE.get(), numberOfDrops)));
-                break;
-            case "water":
-                drops.add(new ItemEntity(entity.getCommandSenderWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_WATER.get(), numberOfDrops)));
-                break;
-            case "thunder":
-                drops.add(new ItemEntity(entity.getCommandSenderWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_THUNDER.get(), numberOfDrops)));
-                break;
-            case "darkness":
-                drops.add(new ItemEntity(entity.getCommandSenderWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_DARKNESS.get(), numberOfDrops)));
-                break;
-            case "light":
-                drops.add(new ItemEntity(entity.getCommandSenderWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_LIGHT.get(), numberOfDrops)));
-                break;
-            case "earth":
-                drops.add(new ItemEntity(entity.getCommandSenderWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_EARTH.get(), numberOfDrops)));
-                break;
-            case "wind":
-                drops.add(new ItemEntity(entity.getCommandSenderWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_WIND.get(), numberOfDrops)));
-                break;
-            case "flora":
-                drops.add(new ItemEntity(entity.getCommandSenderWorld(), x, y, z, new ItemStack(ItemList.ESSENCE_FLORA.get(), numberOfDrops)));
-                break;
-            }
+    private static Item getEssenceItem(String element) {
+        switch (element) {
+        case "fire":
+            return ItemList.ESSENCE_FIRE.get();
+        case "ice":
+            return ItemList.ESSENCE_ICE.get();
+        case "water":
+            return ItemList.ESSENCE_WATER.get();
+        case "thunder":
+            return ItemList.ESSENCE_THUNDER.get();
+        case "darkness":
+            return ItemList.ESSENCE_DARKNESS.get();
+        case "light":
+            return ItemList.ESSENCE_LIGHT.get();
+        case "earth":
+            return ItemList.ESSENCE_EARTH.get();
+        case "wind":
+            return ItemList.ESSENCE_WIND.get();
+        case "flora":
+            return ItemList.ESSENCE_FLORA.get();
+        default:
+            return null;
         }
     }
 

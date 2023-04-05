@@ -20,7 +20,7 @@ public class ServerConfig {
     private final IntValue enchantmentScalingStyle;
     private final IntValue potionScaling;
 
-    private final DoubleValue essenceSpawnChance;
+    private final DoubleValue essenceSpawnWeight;
 
     static {
         Pair<ServerConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
@@ -48,10 +48,10 @@ public class ServerConfig {
         potionScaling = builder
             .comment("Scaling for potion effects. Resistance (or Weakness) gained through potion effects will be scaled with this factor")
             .defineInRange("potionScaling", 50, 1, 100);
-        essenceSpawnChance = builder
+        essenceSpawnWeight = builder
             .comment(
-                "Chance for the essence item to spawn depending on the attack element of the mob. 0 disables this features. 1 will always spawn the essence.")
-            .defineInRange("essenceSpawnChance", 0.5, 0, 1);
+                "Weight for the essence item to spawn depending on the attack element of the mob. 0 disables this features. 1 is normal spawning rate.")
+            .defineInRange("essenceSpawnWeight", 0.5, 0, 1);
     }
 
     public static int getMaxFactor() {
@@ -78,7 +78,7 @@ public class ServerConfig {
         return SERVER.potionScaling.get();
     }
 
-    public static double getEssenceSpawnChance() {
-        return SERVER.essenceSpawnChance.get();
+    public static double getEssenceSpawnWeight() {
+        return SERVER.essenceSpawnWeight.get();
     }
 }
