@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "elementalcombat:block/essence_block_water",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "elementalcombat:block/essence_block_water",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "elementalcombat:block/essence_block_water"
+    },
+    "facing=west": {
+      "model": "elementalcombat:block/essence_block_water",
+      "y": 90
+    }
+  }
+}

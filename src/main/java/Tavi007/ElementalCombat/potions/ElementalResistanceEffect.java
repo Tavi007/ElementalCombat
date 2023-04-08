@@ -4,29 +4,29 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 
 public class ElementalResistanceEffect extends MobEffect {
 
     List<String> buffs;
     List<String> debuffs;
-    ResourceLocation registryName;
 
-    public ElementalResistanceEffect(MobEffectCategory category, int color, List<String> buffs, List<String> debuffs, ResourceLocation registryName) {
+    public ElementalResistanceEffect(MobEffectCategory category, int color, List<String> buffs, List<String> debuffs) {
         super(category, color);
         this.buffs = buffs;
         this.debuffs = debuffs;
-        this.registryName = registryName;
     }
 
-    public ElementalResistanceEffect(MobEffectCategory category, int color, String buff, String debuff, ResourceLocation registryName) {
-        this(category, color, Arrays.asList(buff), Arrays.asList(debuff), registryName);
+    public ElementalResistanceEffect(MobEffectCategory category, int color, String buff, String debuff) {
+        this(category, color, Arrays.asList(buff), Arrays.asList(debuff));
     }
 
     private HashMap<String, Integer> getResistanceMap(int level) {
@@ -36,13 +36,21 @@ public class ElementalResistanceEffect extends MobEffect {
         return map;
     }
 
-    public void applyEffect(LivingEntity target, int level) {
+    public DefenseLayer getDefenseLayer(MobEffectInstance instance) {
         DefenseLayer layer = new DefenseLayer();
-        layer.addElement(getResistanceMap(level));
-        DefenseDataAPI.putLayer(target, layer, registryName);
+        layer.addElement(getResistanceMap(instance.getAmplifier() + 1));
+        return layer;
     }
 
-    public void remnoveEffect(LivingEntity target) {
-        DefenseDataAPI.deleteLayer(target, registryName);
+    public void applyEffect(LivingEntity target, MobEffectInstance instance) {
+        DefenseDataAPI.putLayer(target, getDefenseLayer(instance), getResourceLocation());
+    }
+
+    public ResourceLocation getResourceLocation() {
+        return new ResourceLocation(ElementalCombat.MOD_ID, this.getDescriptionId());
+    }
+
+    public void removeEffect(LivingEntity target) {
+        DefenseDataAPI.deleteLayer(target, getResourceLocation());
     }
 }

@@ -3,9 +3,15 @@ package Tavi007.ElementalCombat.events;
 import java.util.function.Supplier;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
+import Tavi007.ElementalCombat.api.ElementifyDamageSourceEvent;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
+import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.config.ServerConfig;
+import Tavi007.ElementalCombat.init.ItemList;
+import Tavi007.ElementalCombat.init.PotionList;
 import Tavi007.ElementalCombat.network.CreateEmitterMessage;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
 import Tavi007.ElementalCombat.network.ServerPlayerSupplier;
@@ -23,15 +29,24 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
+import net.minecraftforge.eventbus.api.Event.Result;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -87,10 +102,25 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
+    public static void onCheckPotionEvent(MobEffectEvent.Applicable event) {
+        if (MobEffects.FIRE_RESISTANCE.equals(event.getEffectInstance().getEffect())) {
+            event.getEntity().addEffect(new MobEffectInstance(PotionList.FIRE_RESISTANCE_EFFECT.get(), event.getEffectInstance().getDuration()));
+            event.setResult(Result.DENY);
+        }
+    }
+
+    @SubscribeEvent
     public static void onAddPotionEvent(MobEffectEvent.Added event) {
         MobEffectInstance effect = event.getEffectInstance();
         if (effect.getEffect() instanceof ElementalResistanceEffect) {
-            ((ElementalResistanceEffect) effect.getEffect()).applyEffect(event.getEntity(), effect.getAmplifier() + 1);
+            if (event.getEntity().hasEffect(effect.getEffect())) {
+                MobEffectInstance currentEffect = event.getEntity().getEffect(effect.getEffect());
+                if (currentEffect.getAmplifier() < effect.getAmplifier()) {
+                    ((ElementalResistanceEffect) effect.getEffect()).applyEffect(event.getEntity(), effect);
+                }
+            } else {
+                ((ElementalResistanceEffect) effect.getEffect()).applyEffect(event.getEntity(), effect);
+            }
         }
     }
 
@@ -98,7 +128,7 @@ public class ServerEvents {
     public static void onRemovePotionEvent(MobEffectEvent.Remove event) {
         MobEffectInstance effect = event.getEffectInstance();
         if (effect.getEffect() instanceof ElementalResistanceEffect) {
-            ((ElementalResistanceEffect) effect.getEffect()).remnoveEffect(event.getEntity());
+            ((ElementalResistanceEffect) effect.getEffect()).removeEffect(event.getEntity());
         }
     }
 
@@ -106,8 +136,14 @@ public class ServerEvents {
     public static void onExpirePotionEvent(MobEffectEvent.Expired event) {
         MobEffectInstance effect = event.getEffectInstance();
         if (effect.getEffect() instanceof ElementalResistanceEffect) {
-            ((ElementalResistanceEffect) effect.getEffect()).remnoveEffect(event.getEntity());
+            ((ElementalResistanceEffect) effect.getEffect()).removeEffect(event.getEntity());
         }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onElementifyDamageSource(ElementifyDamageSourceEvent event) {
+        DamageSource damageSource = event.getDamageSource();
+        event.addLayer(new ResourceLocation("base"), AttackDataHelper.get(damageSource).toLayer());
     }
 
     @SubscribeEvent
@@ -119,12 +155,16 @@ public class ServerEvents {
             return;
         }
 
-        // compute new Damage value
-        AttackData sourceData = AttackDataHelper.get(damageSource);
-        LivingEntity target = event.getEntity();
-        float damageAmount = event.getAmount();
+        // Get the attack data from the damage source
+        AttackData sourceData = new AttackData();
+        MinecraftForge.EVENT_BUS.post(new ElementifyDamageSourceEvent(damageSource, sourceData));
+
         // Get the protection data from target
+        LivingEntity target = event.getEntity();
         DefenseData defCap = DefenseDataHelper.get(target);
+
+        // compute new Damage value
+        float damageAmount = event.getAmount();
         float defenseStyleScaling = DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceData.getStyle(), true);
         float defenseElementScaling = DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceData.getElement(), false);
         damageAmount = (float) (damageAmount * defenseStyleScaling * defenseElementScaling);
@@ -177,6 +217,52 @@ public class ServerEvents {
                 Supplier<ServerPlayer> supplier = new ServerPlayerSupplier(serverplayerentity);
                 ElementalCombat.simpleChannel.send(PacketDistributor.PLAYER.with(supplier), messageToClient);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingDropsEvent(LivingDropsEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (entity instanceof Player) {
+            return;
+        }
+
+        int numberOfDrops = (int) Math.round(Math.random() * ServerConfig.getEssenceSpawnWeight() * (1 + event.getLootingLevel()));
+        if (numberOfDrops < 1) {
+            return;
+        }
+
+        AttackLayer atckData = AttackDataAPI.getFullDataAsLayer(event.getEntity());
+        Item item = getEssenceItem(atckData.getElement());
+        if (item == null) {
+            return;
+        }
+
+        event.getDrops().add(new ItemEntity(entity.getCommandSenderWorld(), entity.getX(), entity.getY(), entity.getZ(), new ItemStack(item, numberOfDrops)));
+    }
+
+    private static Item getEssenceItem(String element) {
+        switch (element) {
+        case "fire":
+            return ItemList.ESSENCE_FIRE.get();
+        case "ice":
+            return ItemList.ESSENCE_ICE.get();
+        case "water":
+            return ItemList.ESSENCE_WATER.get();
+        case "thunder":
+            return ItemList.ESSENCE_THUNDER.get();
+        case "darkness":
+            return ItemList.ESSENCE_DARKNESS.get();
+        case "light":
+            return ItemList.ESSENCE_LIGHT.get();
+        case "earth":
+            return ItemList.ESSENCE_EARTH.get();
+        case "wind":
+            return ItemList.ESSENCE_WIND.get();
+        case "flora":
+            return ItemList.ESSENCE_FLORA.get();
+        default:
+            return null;
         }
     }
 

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "elementalcombat:block/essence_block_ice",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "elementalcombat:block/essence_block_ice",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "elementalcombat:block/essence_block_ice"
+    },
+    "facing=west": {
+      "model": "elementalcombat:block/essence_block_ice",
+      "y": 90
+    }
+  }
+}
