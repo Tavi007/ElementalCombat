@@ -7,14 +7,18 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.enchantments.IResistanceEnchantment;
+import Tavi007.ElementalCombat.init.PotionList;
 import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.ElementalCombatProperties;
 import Tavi007.ElementalCombat.loading.MobCombatProperties;
+import Tavi007.ElementalCombat.potions.ElementalHarmingEffect;
+import Tavi007.ElementalCombat.potions.ElementalResistanceEffect;
 import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -72,10 +76,13 @@ public class BasePropertiesAPI {
      *            The EffectInstance.
      * @return copy of AttackData.
      */
-    public static AttackLayer getAttackLayer(MobEffectInstance effect) {
+    public static AttackLayer getAttackLayer(MobEffectInstance effectInstance) {
         AttackLayer base = new AttackLayer();
-        if (effect.getEffect() == MobEffects.HARM) {
+        MobEffect effect = effectInstance.getEffect();
+        if (MobEffects.HARM.equals(effect)) {
             base.setStyle("magic");
+        } else if (effect instanceof ElementalHarmingEffect) {
+            base = ((ElementalHarmingEffect) effect).getAttackLayer();
         }
         return base;
     }
@@ -109,19 +116,14 @@ public class BasePropertiesAPI {
      * @return copy of AttackData.
      */
     public static AttackLayer getAttackData(DamageSource damageSource) {
-        ResourceLocation rlDamageSource = null;
-        // do other mods implement their own natural damageSource? If so, how could I get the mod id from it?
-        // for now do not use Namespace.
-        if (damageSource.isExplosion()) {
-            rlDamageSource = new ResourceLocation("minecraft", "damage_sources/explosion");
-        } else if (damageSource.isMagic()) {
-            rlDamageSource = new ResourceLocation("minecraft", "damage_sources/magic");
-        } else {
-            rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + damageSource.getMsgId().toLowerCase());
+        if (damageSource.getMsgId() != null) {
+            String name = damageSource.getMsgId().toLowerCase();
+            ResourceLocation rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + name);
+            AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(
+                ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource));
+            return new AttackLayer(property.getAttackStyle(), property.getAttackElement());
         }
-        AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(
-            ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource));
-        return new AttackLayer(property.getAttackStyle(), property.getAttackElement());
+        return new AttackLayer();
     }
 
     /**
@@ -215,6 +217,25 @@ public class BasePropertiesAPI {
         BiomeCombatProperties property = new BiomeCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties));
         defData.addElement(property.getDefenseElement());
         return defData;
+    }
+
+    /**
+     * Returns a copy of the default {@link DefenseLayer} of the {@link EffectInstance}.
+     * Currently only checks for my own Effect class and vanilla ones.
+     * 
+     * @param effect
+     *            The EffectInstance.
+     * @return copy of DefenseLayer.
+     */
+    public static DefenseLayer getDefenseLayer(MobEffectInstance effectInstance) {
+        DefenseLayer base = new DefenseLayer();
+        MobEffect effect = effectInstance.getEffect();
+        if (effect instanceof ElementalResistanceEffect) {
+            base = ((ElementalResistanceEffect) effect).getDefenseLayer(effectInstance);
+        } else if (MobEffects.FIRE_RESISTANCE.equals(effect)) {
+            base = ((ElementalResistanceEffect) PotionList.FIRE_RESISTANCE_EFFECT.get()).getDefenseLayer(effectInstance);
+        }
+        return base;
     }
 
     /////////////////
