@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "elementalcombat:essence_block_earth"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "elementalcombat:essence_earth"
+  }
+}

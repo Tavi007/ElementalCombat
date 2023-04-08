@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "elementalcombat:block/essence_block_flora",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "elementalcombat:block/essence_block_flora",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "elementalcombat:block/essence_block_flora"
+    },
+    "facing=west": {
+      "model": "elementalcombat:block/essence_block_flora",
+      "y": 90
+    }
+  }
+}

@@ -7,8 +7,10 @@ import java.util.List;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.config.ServerConfig;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 
 public class ElementalResistanceEffect extends MobEffect {
@@ -33,13 +35,21 @@ public class ElementalResistanceEffect extends MobEffect {
         return map;
     }
 
-    public void applyEffect(LivingEntity target, int level) {
+    public DefenseLayer getDefenseLayer(MobEffectInstance instance) {
         DefenseLayer layer = new DefenseLayer();
-        layer.addElement(getResistanceMap(level));
-        DefenseDataAPI.putLayer(target, layer, this.getRegistryName());
+        layer.addElement(getResistanceMap(instance.getAmplifier() + 1));
+        return layer;
     }
 
-    public void remnoveEffect(LivingEntity target) {
+    public void applyEffect(LivingEntity target, MobEffectInstance instance) {
+        DefenseDataAPI.putLayer(target, getDefenseLayer(instance), this.getRegistryName());
+    }
+
+    public ResourceLocation getResourceLocation() {
+        return this.getRegistryName();
+    }
+
+    public void removeEffect(LivingEntity target) {
         DefenseDataAPI.deleteLayer(target, this.getRegistryName());
     }
 }

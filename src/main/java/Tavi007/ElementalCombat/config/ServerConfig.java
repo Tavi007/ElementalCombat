@@ -4,6 +4,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
 public class ServerConfig {
@@ -14,9 +15,12 @@ public class ServerConfig {
     private final ConfigValue<String> defaultElement;
     private final ConfigValue<String> defaultStyle;
     private final IntValue maxFactor;
+
     private final IntValue enchantmentScalingElement;
     private final IntValue enchantmentScalingStyle;
     private final IntValue potionScaling;
+
+    private final DoubleValue essenceSpawnWeight;
 
     static {
         Pair<ServerConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
@@ -44,6 +48,10 @@ public class ServerConfig {
         potionScaling = builder
             .comment("Scaling for potion effects. Resistance (or Weakness) gained through potion effects will be scaled with this factor")
             .defineInRange("potionScaling", 50, 1, 100);
+        essenceSpawnWeight = builder
+            .comment(
+                "Weight for the essence item to spawn depending on the attack element of the mob. 0 disables this features. 1 is normal spawning rate.")
+            .defineInRange("essenceSpawnWeight", 0.5, 0, 1);
     }
 
     public static int getMaxFactor() {
@@ -68,5 +76,9 @@ public class ServerConfig {
 
     public static int getPotionScaling() {
         return SERVER.potionScaling.get();
+    }
+
+    public static double getEssenceSpawnWeight() {
+        return SERVER.essenceSpawnWeight.get();
     }
 }
