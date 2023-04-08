@@ -16,7 +16,7 @@ public class BlockList {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ElementalCombat.MOD_ID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ElementalCombat.MOD_ID);
 
-    private static Properties standardItemProperties = new Item.Properties().tab(ElementalCombat.ELEMENTAL_COMBAT_GROUP).stacksTo(64);
+    private static Properties standardItemProperties = new Item.Properties().stacksTo(64);
 
     public static final RegistryObject<Block> ESSENCE_BLOCK_FIRE = BLOCKS.register("essence_block_fire",
         () -> new GlazedTerracottaBlock(Block.Properties.of(Material.METAL)));
