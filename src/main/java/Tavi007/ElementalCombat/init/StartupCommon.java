@@ -116,6 +116,14 @@ public class StartupCommon {
             new SpecificPotionIngredient(PotionUtils.setPotion(new ItemStack(Items.POTION), from)),
             Ingredient.of(new ItemStack(with)),
             PotionUtils.setPotion(new ItemStack(Items.POTION), to));
+        BrewingRecipeRegistry.addRecipe(
+            new SpecificPotionIngredient(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), from)),
+            Ingredient.of(new ItemStack(with)),
+            PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), to));
+        BrewingRecipeRegistry.addRecipe(
+            new SpecificPotionIngredient(PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), from)),
+            Ingredient.of(new ItemStack(with)),
+            PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), to));
     }
 
     private static void registerNetworking() {
