@@ -6,12 +6,14 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: 'org.spongepowered.mixin'
 
 version = "${mod_version}"
 group = "${mod_group}"
@@ -120,10 +122,6 @@ repositories {
         name = "curios"
         url = "https://maven.theillusivec4.top/" 
     }
-//    maven {
-//      name = "hwyla"
-//      url = "https://maven.tehnut.info" 
-//  }
     maven { 
         name = "wthit"
         url = "https://maven.bai.lol"
@@ -143,6 +141,7 @@ dependencies {
     
     compileOnly fg.deobf("mcp.mobius.waila:wthit-api:forge-${version_wthit}")
     runtimeOnly fg.deobf("mcp.mobius.waila:wthit:forge-${version_wthit}")
+    runtimeOnly fg.deobf("lol.bai:badpackets:forge-0.2.0")
 	
     //compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
     //runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
