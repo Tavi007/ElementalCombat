@@ -1,1 +1,1 @@
-gradlew genEclipseRuns --refresh-dependencies&&gradlew eclipse
+gradlew clean genEclipseRuns --refresh-dependencies&&gradlew clean eclipse
