@@ -2,9 +2,9 @@ package Tavi007.ElementalCombat.loading;
 
 import java.util.HashMap;
 
+import com.google.common.base.Optional;
 import com.google.gson.annotations.SerializedName;
 
-import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.util.PacketBufferHelper;
 import net.minecraft.network.FriendlyByteBuf;
 
@@ -23,23 +23,15 @@ public class ElementalCombatProperties {
     public ElementalCombatProperties(HashMap<String, Integer> defenseStyle, HashMap<String, Integer> defenseElement, String attackStyle, String attackElement) {
         this.defenseStyle = defenseStyle;
         this.defenseElement = defenseElement;
-        if (attackStyle == null || attackStyle.isEmpty()) {
-            this.attackStyle = ServerConfig.getDefaultStyle();
-        } else {
-            this.attackStyle = attackStyle;
-        }
-        if (attackElement == null || attackElement.isEmpty()) {
-            this.attackElement = ServerConfig.getDefaultElement();
-        } else {
-            this.attackElement = attackElement;
-        }
+        this.attackStyle = attackStyle;
+        this.attackElement = attackElement;
     }
 
     public ElementalCombatProperties() {
         this.defenseStyle = new HashMap<String, Integer>();
         this.defenseElement = new HashMap<String, Integer>();
-        this.attackStyle = ServerConfig.getDefaultStyle();
-        this.attackElement = ServerConfig.getDefaultElement();
+        this.attackStyle = "";
+        this.attackElement = "";
     }
 
     public ElementalCombatProperties(ElementalCombatProperties properties) {
@@ -50,26 +42,26 @@ public class ElementalCombatProperties {
     }
 
     public HashMap<String, Integer> getDefenseStyle() {
-        return this.defenseStyle;
+        return Optional.fromNullable(defenseStyle).or(new HashMap<>());
     }
 
     public HashMap<String, Integer> getDefenseElement() {
-        return this.defenseElement;
+        return Optional.fromNullable(defenseElement).or(new HashMap<>());
     }
 
     public String getAttackStyle() {
-        return this.attackStyle;
+        return Optional.fromNullable(this.attackStyle).or("");
     }
 
     public String getAttackElement() {
-        return this.attackElement;
+        return Optional.fromNullable(this.attackElement).or("");
     }
 
     public void writeToBuffer(FriendlyByteBuf buf) {
-        PacketBufferHelper.writeHashMap(buf, defenseStyle);
-        PacketBufferHelper.writeHashMap(buf, defenseElement);
-        buf.writeUtf(attackStyle);
-        buf.writeUtf(attackElement);
+        PacketBufferHelper.writeHashMap(buf, getDefenseStyle());
+        PacketBufferHelper.writeHashMap(buf, getDefenseElement());
+        buf.writeUtf(getAttackStyle());
+        buf.writeUtf(getAttackElement());
     }
 
     public void readFromBuffer(FriendlyByteBuf buf) {
@@ -81,10 +73,10 @@ public class ElementalCombatProperties {
 
     @Override
     public String toString() {
-        return "\nDefStyle=" + defenseStyle.toString()
-            + "\nDefElement=" + defenseElement.toString()
-            + "\nAtckStyle=" + attackStyle.toString()
-            + "\nAtckElement=" + attackElement.toString();
+        return "\nDefStyle=" + getDefenseStyle().toString()
+            + "\nDefElement=" + getDefenseElement().toString()
+            + "\nAtckStyle=" + getAttackStyle().toString()
+            + "\nAtckElement=" + getAttackElement().toString();
     }
 
 }

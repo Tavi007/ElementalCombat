@@ -2,6 +2,7 @@ package Tavi007.ElementalCombat.loading;
 
 import java.util.HashMap;
 
+import com.google.common.base.Optional;
 import com.google.gson.annotations.SerializedName;
 
 import Tavi007.ElementalCombat.util.PacketBufferHelper;
@@ -13,23 +14,19 @@ public class BiomeCombatProperties {
     private HashMap<String, Integer> defenseElement;
 
     public BiomeCombatProperties() {
-        this.defenseElement = new HashMap<String, Integer>();
-    }
-
-    public BiomeCombatProperties(HashMap<String, Integer> defenseElement) {
-        this.defenseElement = defenseElement;
+        defenseElement = new HashMap<String, Integer>();
     }
 
     public BiomeCombatProperties(BiomeCombatProperties biomeData) {
-        this.defenseElement = biomeData.getDefenseElement();
+        defenseElement = biomeData.getDefenseElement();
     }
 
     public HashMap<String, Integer> getDefenseElement() {
-        return this.defenseElement;
+        return Optional.fromNullable(defenseElement).or(new HashMap<>());
     }
 
     public void writeToBuffer(FriendlyByteBuf buf) {
-        PacketBufferHelper.writeHashMap(buf, defenseElement);
+        PacketBufferHelper.writeHashMap(buf, getDefenseElement());
     }
 
     public void readFromBuffer(FriendlyByteBuf buf) {
@@ -38,7 +35,7 @@ public class BiomeCombatProperties {
 
     @Override
     public String toString() {
-        return "\nDefElement=" + defenseElement.toString();
+        return "\nDefElement=" + getDefenseElement().toString();
     }
 
 }

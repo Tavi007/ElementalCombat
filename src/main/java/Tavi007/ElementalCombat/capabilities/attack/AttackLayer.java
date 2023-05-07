@@ -11,7 +11,7 @@ public class AttackLayer {
     }
 
     public AttackLayer(String style, String element) {
-        this.set(style, element);
+        set(style, element);
     }
 
     public AttackLayer(AttackLayer data) {
