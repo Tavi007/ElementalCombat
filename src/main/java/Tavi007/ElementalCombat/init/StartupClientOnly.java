@@ -10,6 +10,7 @@ import Tavi007.ElementalCombat.client.CombatDataLayerComponent;
 import Tavi007.ElementalCombat.client.CombatParticle;
 import net.minecraft.client.KeyMapping;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
@@ -33,6 +34,12 @@ public class StartupClientOnly {
     public static void onRegisterClientTooltipComponentFactoriesEvent(RegisterClientTooltipComponentFactoriesEvent event) {
         event.register(CombatDataLayerComponent.class, CombatDataLayerClientComponent::new);
         ElementalCombat.LOGGER.info("ElementalCombat tooltip component factory registered.");
+    }
+
+    @SubscribeEvent
+    public static void onRegisterGuiOverlayst(RegisterGuiOverlaysEvent event) {
+        // event.registerAboveAll("player_data", new CombatDataHudOverlay());
+        ElementalCombat.LOGGER.info("ElementalCombat hud overlay registered.");
     }
 
     @SubscribeEvent
