@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFW;
 import com.mojang.blaze3d.platform.InputConstants;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.client.CombatDataHudOverlay;
 import Tavi007.ElementalCombat.client.CombatDataLayerClientComponent;
 import Tavi007.ElementalCombat.client.CombatDataLayerComponent;
 import Tavi007.ElementalCombat.client.CombatParticle;
@@ -38,7 +39,7 @@ public class StartupClientOnly {
 
     @SubscribeEvent
     public static void onRegisterGuiOverlayst(RegisterGuiOverlaysEvent event) {
-        // event.registerAboveAll("player_data", new CombatDataHudOverlay());
+        event.registerAboveAll("player_data", new CombatDataHudOverlay());
         ElementalCombat.LOGGER.info("ElementalCombat hud overlay registered.");
     }
 

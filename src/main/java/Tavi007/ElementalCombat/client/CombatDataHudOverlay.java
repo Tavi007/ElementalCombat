@@ -2,7 +2,9 @@ package Tavi007.ElementalCombat.client;
 
 import org.joml.Matrix4f;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
@@ -15,23 +17,32 @@ import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 public class CombatDataHudOverlay implements IGuiOverlay {
 
-    // stolen from Screen
-    private static void renderHUDBox(PoseStack poseStack, int posX, int posY, int width, int height) {
+    // copied from Screen
+    private void renderHUDBox(PoseStack poseStack, int posX, int posY, int width, int height) {
         Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         TooltipRenderUtil.renderTooltipBackground((p_262872_, p_262873_, p_262874_, p_262875_, p_262876_, p_262877_, p_262878_, p_262879_, p_262880_) -> {
             fillGradient(p_262872_, p_262873_, p_262874_, p_262875_, p_262876_, p_262877_, p_262878_, p_262879_, p_262880_);
         }, poseStack.last().pose(), bufferbuilder, posX, posY, width, height, 400);
+        // RenderSystem.enableDepthTest();
+        // RenderSystem.disableTexture();
+        // RenderSystem.enableBlend();
+        // RenderSystem.defaultBlendFunc();
+        BufferUploader.drawWithShader(bufferbuilder.end());
+        // RenderSystem.disableBlend();
+        // RenderSystem.enableTexture();
     }
 
     // copied from GuiComponent
-    protected static void fillGradient(Matrix4f p_254526_, BufferBuilder p_93125_, int p_93126_, int p_93127_, int p_93128_, int p_93129_, int p_93130_,
+    protected void fillGradient(Matrix4f p_254526_, BufferBuilder p_93125_, int p_93126_, int p_93127_, int p_93128_, int p_93129_, int p_93130_,
             int p_93131_, int p_93132_) {
         float f = (p_93131_ >> 24 & 255) / 255.0F;
         float f1 = (p_93131_ >> 16 & 255) / 255.0F;
