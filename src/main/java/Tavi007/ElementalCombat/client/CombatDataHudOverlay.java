@@ -32,13 +32,7 @@ public class CombatDataHudOverlay implements IGuiOverlay {
         TooltipRenderUtil.renderTooltipBackground((p_262872_, p_262873_, p_262874_, p_262875_, p_262876_, p_262877_, p_262878_, p_262879_, p_262880_) -> {
             fillGradient(p_262872_, p_262873_, p_262874_, p_262875_, p_262876_, p_262877_, p_262878_, p_262879_, p_262880_);
         }, poseStack.last().pose(), bufferbuilder, posX, posY, width, height, 400);
-        // RenderSystem.enableDepthTest();
-        // RenderSystem.disableTexture();
-        // RenderSystem.enableBlend();
-        // RenderSystem.defaultBlendFunc();
         BufferUploader.drawWithShader(bufferbuilder.end());
-        // RenderSystem.disableBlend();
-        // RenderSystem.enableTexture();
     }
 
     // copied from GuiComponent
