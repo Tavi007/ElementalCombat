@@ -36,6 +36,20 @@ public class BasePropertiesAPI {
     ////////////////
 
     /**
+     * Returns the default attack style.
+     */
+    public static String getDefaultAttackStyle() {
+        return ElementalCombat.COMBAT_PROPERTIES_MANGER.getBaseAttackProperties().getAttackStyle();
+    }
+
+    /**
+     * Returns the default attack element.
+     */
+    public static String getDefaultAttackElement() {
+        return ElementalCombat.COMBAT_PROPERTIES_MANGER.getBaseAttackProperties().getAttackElement();
+    }
+
+    /**
      * Returns a copy of the default {@link AttackData} of any {@link LivingEntity}.
      * 
      * @param livingEntity

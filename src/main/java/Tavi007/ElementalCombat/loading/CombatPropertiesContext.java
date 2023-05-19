@@ -13,14 +13,12 @@ public class CombatPropertiesContext {
 
     public final ResourceLocation name;
     private final boolean vanilla;
-    public final boolean custom;
     public int poolCount = 0;
     public int entryCount = 0;
     private HashSet<String> entryNames = Sets.newHashSet();
 
-    public CombatPropertiesContext(ResourceLocation name, boolean custom) {
+    public CombatPropertiesContext(ResourceLocation name) {
         this.name = name;
-        this.custom = custom;
         this.vanilla = "minecraft".equals(this.name.getNamespace());
     }
 

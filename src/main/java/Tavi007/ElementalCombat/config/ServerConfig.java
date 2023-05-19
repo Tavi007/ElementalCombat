@@ -3,7 +3,6 @@ package Tavi007.ElementalCombat.config;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
@@ -12,8 +11,6 @@ public class ServerConfig {
     public static final ForgeConfigSpec CONFIG_SPEC;
     private static final ServerConfig SERVER;
 
-    private final ConfigValue<String> defaultElement;
-    private final ConfigValue<String> defaultStyle;
     private final IntValue maxFactor;
 
     private final IntValue enchantmentScalingElement;
@@ -30,12 +27,6 @@ public class ServerConfig {
     }
 
     ServerConfig(ForgeConfigSpec.Builder builder) {
-        defaultElement = builder
-            .comment("The default element.")
-            .define("defaultElement", "normal");
-        defaultStyle = builder
-            .comment("The default style.")
-            .define("defaultStyle", "hit");
         maxFactor = builder
             .comment("The maximal combat factor. See vanilla Enchantment Protection Factor.")
             .defineInRange("maxFactor", 100, 1, 200);
@@ -64,14 +55,6 @@ public class ServerConfig {
 
     public static int getEnchantmentScalingStyle() {
         return SERVER.enchantmentScalingStyle.get();
-    }
-
-    public static String getDefaultStyle() {
-        return SERVER.defaultStyle.get();
-    }
-
-    public static String getDefaultElement() {
-        return SERVER.defaultElement.get();
     }
 
     public static int getPotionScaling() {

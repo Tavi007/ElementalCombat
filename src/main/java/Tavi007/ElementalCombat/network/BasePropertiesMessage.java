@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class BasePropertiesMessage extends MessageToClient {
 
+    private AttackOnlyCombatProperties baseAttackProperties;
     private Map<ResourceLocation, MobCombatProperties> mobData;
     private Map<ResourceLocation, ElementalCombatProperties> itemData;
     private Map<ResourceLocation, BiomeCombatProperties> biomeData;
@@ -24,16 +25,22 @@ public class BasePropertiesMessage extends MessageToClient {
     private BasePropertiesMessage() {
     }
 
-    public BasePropertiesMessage(Map<ResourceLocation, MobCombatProperties> mobData,
+    public BasePropertiesMessage(AttackOnlyCombatProperties baseAttackProperties,
+            Map<ResourceLocation, MobCombatProperties> mobData,
             Map<ResourceLocation, ElementalCombatProperties> itemData,
             Map<ResourceLocation, BiomeCombatProperties> biomeData,
             Map<ResourceLocation, AttackOnlyCombatProperties> damageSourceData,
             Map<ResourceLocation, AttackOnlyCombatProperties> projectileData) {
+        this.baseAttackProperties = baseAttackProperties;
         this.mobData = mobData;
         this.itemData = itemData;
         this.biomeData = biomeData;
         this.damageSourceData = damageSourceData;
         this.projectileData = projectileData;
+    }
+
+    public AttackOnlyCombatProperties getBaseAttack() {
+        return baseAttackProperties;
     }
 
     public Map<ResourceLocation, MobCombatProperties> getMobData() {
@@ -59,11 +66,12 @@ public class BasePropertiesMessage extends MessageToClient {
     public static BasePropertiesMessage decode(FriendlyByteBuf buf) {
         BasePropertiesMessage ret = new BasePropertiesMessage();
         try {
+            ret.baseAttackProperties = readBaseAttack(buf);
             ret.mobData = readMob(buf);
             ret.itemData = readItem(buf);
             ret.biomeData = readBiome(buf);
-            ret.projectileData = readAttackOnly(buf);
-            ret.damageSourceData = readAttackOnly(buf);
+            ret.projectileData = readAttackOnly(buf, ret.baseAttackProperties);
+            ret.damageSourceData = readAttackOnly(buf, ret.baseAttackProperties);
 
         } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
             ElementalCombat.LOGGER.warn("Exception while reading BasePropertiesMessage: " + e);
@@ -74,11 +82,16 @@ public class BasePropertiesMessage extends MessageToClient {
     }
 
     public void encode(FriendlyByteBuf buf) {
+        writeBaseAttack(buf);
         writeMob(buf);
         writeItem(buf);
         writeBiome(buf);
         writeProjectile(buf);
         writeDamageSource(buf);
+    }
+
+    private void writeBaseAttack(FriendlyByteBuf buf) {
+        baseAttackProperties.writeToBuffer(buf);
     }
 
     private void writeMob(FriendlyByteBuf buf) {
@@ -121,6 +134,12 @@ public class BasePropertiesMessage extends MessageToClient {
         });
     }
 
+    private static AttackOnlyCombatProperties readBaseAttack(FriendlyByteBuf buf) {
+        AttackOnlyCombatProperties value = new AttackOnlyCombatProperties("hit", "normal");
+        value.readFromBuffer(buf);
+        return value;
+    }
+
     private static Map<ResourceLocation, MobCombatProperties> readMob(FriendlyByteBuf buf) {
         Builder<ResourceLocation, MobCombatProperties> builder = ImmutableMap.builder();
         int size = buf.readInt();
@@ -157,12 +176,12 @@ public class BasePropertiesMessage extends MessageToClient {
         return builder.build();
     }
 
-    private static Map<ResourceLocation, AttackOnlyCombatProperties> readAttackOnly(FriendlyByteBuf buf) {
+    private static Map<ResourceLocation, AttackOnlyCombatProperties> readAttackOnly(FriendlyByteBuf buf, AttackOnlyCombatProperties defaulProperty) {
         Builder<ResourceLocation, AttackOnlyCombatProperties> builder = ImmutableMap.builder();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
             ResourceLocation key = new ResourceLocation(buf.readUtf());
-            AttackOnlyCombatProperties value = new AttackOnlyCombatProperties();
+            AttackOnlyCombatProperties value = defaulProperty;
             value.readFromBuffer(buf);
             builder.put(key, value);
         }

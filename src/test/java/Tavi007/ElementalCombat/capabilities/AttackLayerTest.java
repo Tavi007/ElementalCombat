@@ -7,7 +7,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
-import Tavi007.ElementalCombat.config.ServerConfig;
 
 @Ignore
 public class AttackLayerTest {
@@ -21,24 +20,24 @@ public class AttackLayerTest {
     public void newObjectDefault() {
         AttackLayer layer = new AttackLayer();
         assertEquals("isDefault not returning true", true, layer.isDefault());
-        assertEquals("incorrect Element", ServerConfig.getDefaultElement(), layer.getElement());
-        assertEquals("incorrect Style", ServerConfig.getDefaultStyle(), layer.getStyle());
+        assertEquals("incorrect Element", "normal", layer.getElement());
+        assertEquals("incorrect Style", "hit", layer.getStyle());
     }
 
     @Test
     public void newObjectWithNull() {
         AttackLayer layer = new AttackLayer(null, null);
         assertEquals("isDefault not returning true", true, layer.isDefault());
-        assertEquals("incorrect Element", ServerConfig.getDefaultElement(), layer.getElement());
-        assertEquals("incorrect Style", ServerConfig.getDefaultStyle(), layer.getStyle());
+        assertEquals("incorrect Element", "normal", layer.getElement());
+        assertEquals("incorrect Style", "hit", layer.getStyle());
     }
 
     @Test
     public void newObjectWithEmpty() {
         AttackLayer layer = new AttackLayer("", " ");
         assertEquals("isDefault not returning true", true, layer.isDefault());
-        assertEquals("incorrect Element", ServerConfig.getDefaultElement(), layer.getElement());
-        assertEquals("incorrect Style", ServerConfig.getDefaultStyle(), layer.getStyle());
+        assertEquals("incorrect Element", "normal", layer.getElement());
+        assertEquals("incorrect Style", "hit", layer.getStyle());
     }
 
     @Test

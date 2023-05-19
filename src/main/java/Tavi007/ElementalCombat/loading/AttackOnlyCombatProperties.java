@@ -12,9 +12,9 @@ public class AttackOnlyCombatProperties {
     @SerializedName("attack_element")
     private String attackElement;
 
-    public AttackOnlyCombatProperties() {
-        this.attackStyle = "";
-        this.attackElement = "";
+    public AttackOnlyCombatProperties(String attackStyle, String attackElement) {
+        this.attackStyle = attackStyle;
+        this.attackElement = attackElement;
     }
 
     public AttackOnlyCombatProperties(AttackOnlyCombatProperties properties) {

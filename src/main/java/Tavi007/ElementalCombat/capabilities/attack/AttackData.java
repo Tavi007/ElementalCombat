@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
-import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -42,11 +41,11 @@ public class AttackData implements INBTSerializable<CompoundTag> {
         for (ResourceLocation rl : keys) {
             AttackLayer layer = attackLayers.get(rl);
             String element = layer.getElement();
-            if (!element.equals(ServerConfig.getDefaultElement())) {
+            if (!element.equals(BasePropertiesAPI.getDefaultAttackElement())) {
                 return element;
             }
         }
-        return ServerConfig.getDefaultElement();
+        return BasePropertiesAPI.getDefaultAttackElement();
     }
 
     public String getStyle() {
@@ -55,11 +54,11 @@ public class AttackData implements INBTSerializable<CompoundTag> {
         for (ResourceLocation rl : keys) {
             AttackLayer layer = attackLayers.get(rl);
             String style = layer.getStyle();
-            if (!style.equals(ServerConfig.getDefaultStyle())) {
+            if (!style.equals(BasePropertiesAPI.getDefaultAttackStyle())) {
                 return style;
             }
         }
-        return ServerConfig.getDefaultStyle();
+        return BasePropertiesAPI.getDefaultAttackStyle();
     }
 
     public AttackLayer toLayer() {
@@ -82,8 +81,8 @@ public class AttackData implements INBTSerializable<CompoundTag> {
     }
 
     public boolean isDefault() {
-        return getElement().equals(ServerConfig.getDefaultElement())
-            && getStyle().equals(ServerConfig.getDefaultStyle());
+        return getElement().equals(BasePropertiesAPI.getDefaultAttackElement())
+            && getStyle().equals(BasePropertiesAPI.getDefaultAttackStyle());
     }
 
     public void applyEnchantmentChanges(Map<Enchantment, Integer> currentEnchantments) {

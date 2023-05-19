@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
-import Tavi007.ElementalCombat.config.ServerConfig;
 import net.minecraft.resources.ResourceLocation;
 
 @Ignore
@@ -57,18 +56,18 @@ public class AttackDataTest {
     @Test
     public void testNullInLayer() {
         AttackData data = new AttackData();
-        assertEquals("style without layer is incorrect", ServerConfig.getDefaultStyle(), data.getStyle());
-        assertEquals("element without layer is incorrect", ServerConfig.getDefaultElement(), data.getElement());
+        assertEquals("style without layer is incorrect", "hit", data.getStyle());
+        assertEquals("element without layer is incorrect", "normal", data.getElement());
 
         data.putLayer(baseRL, new AttackLayer(null, "element1")); // instead of style being null, return value from server config
-        assertEquals("style with base layer is incorrect", ServerConfig.getDefaultStyle(), data.getStyle());
+        assertEquals("style with base layer is incorrect", "hit", data.getStyle());
         assertEquals("element with base layer is incorrect", "element1", data.getElement());
 
         data.putLayer(secondRL, new AttackLayer("style2", null)); // this null value will be ignored and instead the value of the next layer will be checked
         assertEquals("style with second layer is incorrect", "style2", data.getStyle());
         assertEquals("element with second layer is incorrect", "element1", data.getElement());
 
-        data.putLayer(secondRL, new AttackLayer("style3", ServerConfig.getDefaultElement())); // default values are handled the same as null
+        data.putLayer(secondRL, new AttackLayer("style3", "normal")); // default values are handled the same as null
         assertEquals("style with third layer is incorrect", "style3", data.getStyle());
         assertEquals("element with third layer is incorrect", "element1", data.getElement());
     }

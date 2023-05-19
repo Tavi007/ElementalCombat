@@ -1,11 +1,11 @@
 package Tavi007.ElementalCombat.capabilities.attack;
 
-import Tavi007.ElementalCombat.config.ServerConfig;
+import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 
 public class AttackLayer {
 
-    private String style = ServerConfig.getDefaultStyle();
-    private String element = ServerConfig.getDefaultElement();
+    private String style = BasePropertiesAPI.getDefaultAttackStyle();
+    private String element = BasePropertiesAPI.getDefaultAttackElement();
 
     public AttackLayer() {
     }
@@ -47,7 +47,7 @@ public class AttackLayer {
 
     public void setElement(String element) {
         if (element == null || element.trim().isEmpty()) {
-            this.element = ServerConfig.getDefaultElement();
+            this.element = BasePropertiesAPI.getDefaultAttackElement();
         } else {
             this.element = element;
         }
@@ -55,7 +55,7 @@ public class AttackLayer {
 
     public void setStyle(String style) {
         if (style == null || style.trim().isEmpty()) {
-            this.style = ServerConfig.getDefaultStyle();
+            this.style = BasePropertiesAPI.getDefaultAttackStyle();
         } else {
             this.style = style;
         }
@@ -70,6 +70,7 @@ public class AttackLayer {
     }
 
     public boolean isDefault() {
-        return (element.isEmpty() || element.equals(ServerConfig.getDefaultElement())) && (style.isEmpty() || style.equals(ServerConfig.getDefaultStyle()));
+        return (element.isEmpty() || element.equals(BasePropertiesAPI.getDefaultAttackElement()))
+            && (style.isEmpty() || style.equals(BasePropertiesAPI.getDefaultAttackStyle()));
     }
 }
