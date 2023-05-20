@@ -36,7 +36,7 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
     private Map<ResourceLocation, AttackOnlyCombatProperties> registeredDamageSourceData = ImmutableMap.of();
     private Map<ResourceLocation, AttackOnlyCombatProperties> registeredProjectileData = ImmutableMap.of();
 
-    private AttackOnlyCombatProperties baseAttackProperties;
+    private AttackOnlyCombatProperties baseAttackProperties = new AttackOnlyCombatProperties("hit", "normal");
 
     private static ThreadLocal<Deque<CombatPropertiesContext>> dataContext = new ThreadLocal<Deque<CombatPropertiesContext>>();
 
