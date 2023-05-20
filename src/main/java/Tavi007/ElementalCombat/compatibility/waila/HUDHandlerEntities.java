@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.interaction;
+package Tavi007.ElementalCombat.compatibility.waila;
 
 import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;

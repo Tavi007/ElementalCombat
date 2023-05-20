@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.interaction;
+package Tavi007.ElementalCombat.compatibility.waila;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
