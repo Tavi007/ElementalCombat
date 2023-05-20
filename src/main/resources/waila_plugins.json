@@ -1,0 +1,7 @@
+{
+  "elementalcombat:combat_properties": {
+    "initializer": "Tavi007.ElementalCombat.interaction.CombatPropertiesWailaPlugin",
+    "side": "client",
+    "required": []
+  }
+}
