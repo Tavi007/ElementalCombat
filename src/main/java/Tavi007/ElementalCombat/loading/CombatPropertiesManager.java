@@ -45,12 +45,15 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
     }
 
     public void set(BasePropertiesMessage message) {
-        this.registeredMobData = message.getMobData();
-        this.registeredItemData = message.getItemData();
-        this.registeredBiomeData = message.getBiomeData();
-        this.registeredProjectileData = message.getProjectileData();
-        this.registeredDamageSourceData = message.getDamageSourceData();
+        baseAttackProperties = message.getBaseAttack();
+        registeredMobData = message.getMobData();
+        registeredItemData = message.getItemData();
+        registeredBiomeData = message.getBiomeData();
+        registeredProjectileData = message.getProjectileData();
+        registeredDamageSourceData = message.getDamageSourceData();
 
+        ElementalCombat.LOGGER.info("Client loaded default attack style: " + baseAttackProperties.getAttackStyle());
+        ElementalCombat.LOGGER.info("Client loaded default attack element: " + baseAttackProperties.getAttackElement());
         logLoading("client", registeredMobData.size() - 1, "mobs");
         logLoading("client", registeredItemData.size() - 1, "items");
         logLoading("client", registeredBiomeData.size() - 1, "biomes");
@@ -150,7 +153,8 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         registeredDamageSourceData = builderDamageSource.build();
         registeredProjectileData = builderProjectile.build();
 
-        ElementalCombat.LOGGER.info("Base Attack Properies: " + baseAttackProperties);
+        ElementalCombat.LOGGER.info("Server loaded default attack style: " + baseAttackProperties.getAttackStyle());
+        ElementalCombat.LOGGER.info("Server loaded default attack element: " + baseAttackProperties.getAttackElement());
 
         counter.forEach((modid, propertyCounter) -> {
             ElementalCombat.LOGGER.info("The mod " + modid + " loaded: ");
