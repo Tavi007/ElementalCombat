@@ -1,16 +1,111 @@
-Welcome to the Elemental Combat repository.
+Welcome to the **Elemental Combat** repository. 
 
-Goal of this mod is to enhance the combat system by adding elemental and style properties to combat. This means, that players, mobs and items all have new attack and defense properties. Upon hitting something, these properties will be checked and a new damage value will be calculated.
+A summary of the mod can be found on the [curseforge page](https://www.curseforge.com/minecraft/mc-mods/elemental-combat)
 
-I made this mod, because I noticed, that in a lot of modpacks you end up using the same weapon. With this mod I hope there is an incentiv to switch your weapon and armor depending on the monster you are about to fight.
+# Wiki 
+Note: the wiki is still WIP.
+## Datapacks
+The directory structure:
+	
+	data
+	 ↳ <mod_id>
+	    ↳ combat_properties 
+	       ↳ biomes
+	       ↳ damage_sources
+	       ↳ items
+	       ↳ mobs
+	       ↳ projectiles
 
-This mod is mostly an API for other modders and to a certain extend for packmakers too.
+### Items
+The filename must be the equal to the name of the item. For example the item minecraft:apple will use the file with the name apple.json. This file will look like this
+	
+	{
+		"attack_style": string,
+		"attack_element": string,
+		"defense_style": {
+			"style1": int,
+			"style1": int,
+			...
+		},
+		"defense_element": {
+			"element1": int,
+			"element1": int,
+			...
+		}
+	}
+	
+You don't have to specify all values. If they are missing in the file, the mod will fill them with the correct default values. 
 
-If you want more details on this (aka what one can do with it) please watch this Video:
-comming soon (tm)
+### Mobs
+Basically the same as the files for items. Again the file must be name accordingly. For example minecraft:pig -> pig.json. The structure is
 
-Best regards, Tavi007.
+	{
+		"attack_style": string,
+		"attack_element": string,
+		"defense_style": {
+			"style1": int,
+			"style1": int,
+			...
+		},
+		"defense_element": {
+			"element1": int,
+			"element1": int,
+			...
+		},
+		"biome_dependency":boolean
+	}
 
- 
+Note that it has the biome_dependency flag. When true, the mob will gain biome specific elemental defense properties.
 
-PS: I do not plan on backporting it. Mostly because 1.16 introduced the ProjectileEntity-class, which is a parent class for ArrowProjectile/FireBallProjectile and so. In 1.15 and earlier this didn't exist and I would have to rewrite quite a lot of code.
+### Biomes
+
+	{	
+		"defense_element":{
+			"element1": int,
+			...
+		}
+	}
+
+a simple file containing all the values that will be added to a mob, if it has biome_dependency enabled.
+
+### Projectiles
+
+	{	
+		"attack_style": "style1",
+		"attack_element": "element1"
+	}
+
+
+
+### Damage Source
+The structure is the same as for projectiles, becaus it does not need defense properties
+
+	{	
+		"attack_style": "style1",
+		"attack_element": "element1"
+	}
+
+This is used as last resort, if the damage source is neither a mob nor a projectile. 
+
+## Using the API
+
+### Project Setup
+add repository to the build.gradle file:
+
+	repositories {
+		maven {
+			name = "CurseMaven"
+			url "https://www.cursemaven.com"
+	}
+
+add jar as dependency:
+
+	dependencies {
+		compileOnly fg.deobf("curse.maven:elementalcombat-397825:{file-id of the api-version}")
+		runtimeOnly fg.deobf("curse.maven:elementalcombat-397825:{file-id of the normal version}")
+	}
+		
+You can find the file-id in the curseforge url:
+	[curseforge.com/minecraft/mc-mods/elemental-combat/files/{file-id}](https://www.curseforge.com/minecraft/mc-mods/elemental-combat/files)
+
+Now rerun gradlew with the '--refresh-dependency' option.
