@@ -38,8 +38,8 @@ public class StartupClientOnly {
     }
 
     @SubscribeEvent
-    public static void onRegisterGuiOverlayst(RegisterGuiOverlaysEvent event) {
-        event.registerAboveAll("player_data", new CombatDataHudOverlay());
+    public static void onRegisterGuiOverlays(RegisterGuiOverlaysEvent event) {
+        event.registerAboveAll("elemental_combat_player_data", new CombatDataHudOverlay());
         ElementalCombat.LOGGER.info("ElementalCombat hud overlay registered.");
     }
 
