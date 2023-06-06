@@ -38,7 +38,7 @@ public class WailaTooltipComponent implements ITooltipComponent {
     @Override
     public void render(PoseStack poseStack, int posX, int posY, float delta) {
         Font font = Minecraft.getInstance().font;
-        clientComponent.renderImage(font, posX, posY, poseStack, null, 0);
+        clientComponent.renderImage(font, posX, posY, poseStack, null);
         clientComponent.renderText(font, poseStack, posX, posY);
     }
 
