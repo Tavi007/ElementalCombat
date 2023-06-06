@@ -42,7 +42,17 @@ public class CombatDataLayerClientComponent implements ClientTooltipComponent {
     public void renderText(Font font, int x, int y, Matrix4f matrix4f, MultiBufferSource.BufferSource bufferSource) {
         List<String> tooltip = component.getTooltip();
         for (int i = 0; i < tooltip.size(); i++) {
-            font.drawInBatch(tooltip.get(i), x, y + i * component.getLineHeight(font), 0, false, matrix4f, bufferSource, false, 0, 15728880);
+            font.drawInBatch(tooltip.get(i),
+                (float) x,
+                (float) y + i * component.getLineHeight(font),
+                0,
+                false,
+                matrix4f,
+                bufferSource,
+                Font.DisplayMode.NORMAL,
+                0,
+                15728880,
+                false);
         }
     }
 
@@ -54,7 +64,7 @@ public class CombatDataLayerClientComponent implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderImage(Font font, int x, int y, PoseStack poseStack, ItemRenderer itemRenderer, int p_169963_) {
+    public void renderImage(Font font, int x, int y, PoseStack poseStack, ItemRenderer itemRenderer) {
         List<TextureData> textureData = component.getTextureData(font, x, y);
         textureData.forEach(data -> {
             ResourceLocation texture = new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + data.getName() + ".png");

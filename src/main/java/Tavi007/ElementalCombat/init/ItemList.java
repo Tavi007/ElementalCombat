@@ -36,7 +36,8 @@ public class ItemList {
 
                 .title(Component.translatable("itemGroup.elementalcombat"))
                 .icon(() -> new ItemStack(ItemList.ESSENCE_FIRE.get()))
-                .displayItems((featureFlag, output, flag) -> {
+                .displayItems(null)
+                .displayItems((tab, output) -> {
                     output.accept(ItemList.ESSENCE_FIRE.get());
                     output.accept(ItemList.ESSENCE_ICE.get());
                     output.accept(ItemList.ESSENCE_WATER.get());
