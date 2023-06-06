@@ -19,7 +19,7 @@ public class ElementalHarmingEffect extends MobEffect {
 
     @Override
     public void applyEffectTick(LivingEntity livingEntity, int level) {
-        livingEntity.hurt(new HarmingEffectDamageSource("harming." + element), (float) (6 << level));
+        livingEntity.hurt(new HarmingEffectDamageSource("magic." + element), (float) (6 << level));
     }
 
     @Override
