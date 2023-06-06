@@ -25,7 +25,7 @@ public class ElementalHarmingEffect extends MobEffect {
     @Override
     public void applyInstantenousEffect(@Nullable Entity potionEntity, @Nullable Entity potionEntityOwner, LivingEntity target, int level, double distance) {
         int damage = (int) (distance * (double) (6 << level) + 0.5D);
-        target.hurt(new HarmingEffectDamageSource("harming." + element), (float) damage);
+        target.hurt(new HarmingEffectDamageSource("magic." + element), (float) damage);
     }
 
     @Override
