@@ -263,5 +263,15 @@
     "item.minecraft.tipped_arrow.effect.earth_harming" : "Arrow of Earth Harming",
     "item.minecraft.tipped_arrow.effect.strong_earth_harming" : "Arrow of Earth Harming II",
     "item.minecraft.tipped_arrow.effect.wind_harming" : "Arrow of Wind Harming",
-    "item.minecraft.tipped_arrow.effect.strong_wind_harming" : "Arrow of Wind Harming II"
+    "item.minecraft.tipped_arrow.effect.strong_wind_harming" : "Arrow of Wind Harming II",
+	
+    "death.attack.magic.fire": "%1$s was killed by fire magic",
+    "death.attack.magic.ice": "%1$s was killed by ice magic",
+    "death.attack.magic.water": "%1$s was killed by water magic",
+    "death.attack.magic.thunder": "%1$s was killed by thunder magic",
+    "death.attack.magic.darkness": "%1$s was killed by darkness magic",
+    "death.attack.magic.light": "%1$s was killed by light magic",
+    "death.attack.magic.wind": "%1$s was killed by wind magic",
+    "death.attack.magic.earth": "%1$s was killed by earth magic",
+    "death.attack.magic.flora": "%1$s was killed by flora magic"
 }
