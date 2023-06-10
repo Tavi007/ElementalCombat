@@ -60,12 +60,13 @@ public class AttackDataHelper {
         AttackData data = new AttackData();
         if (damageSource != null) {
             Entity immediateSource = damageSource.getDirectEntity();
-            if (immediateSource instanceof LivingEntity) {
-                data.putLayer(new ResourceLocation("direct_entity"), get((LivingEntity) immediateSource).toLayer());
-            } else if (immediateSource instanceof Projectile) {
-                data.putLayer(new ResourceLocation("direct_entity"), get((Projectile) immediateSource).toLayer());
+            if(immediateSource != null) {
+                if (immediateSource instanceof LivingEntity) {
+                    data.putLayer(new ResourceLocation("direct_entity"), get((LivingEntity) immediateSource).toLayer());
+                } else if (immediateSource instanceof Projectile) {
+                    data.putLayer(new ResourceLocation("direct_entity"), get((Projectile) immediateSource).toLayer());
+                }
             }
-
             // base values have higher priority, so they must be added last.
             data.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(damageSource));
         }
