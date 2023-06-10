@@ -28,7 +28,7 @@ public class AttackDataHelper {
     }
 
     public static AttackData get(ItemStack stack) {
-        if (stack.isEmpty()) {
+        if (stack == null || stack.isEmpty()) {
             return new AttackData();
         } else {
             AttackData attackData = (AttackData) stack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());

@@ -24,7 +24,7 @@ public class DefenseDataHelper {
     }
 
     public static DefenseData get(ItemStack stack) {
-        if (stack.isEmpty()) {
+        if (stack == null || stack.isEmpty()) {
             return new DefenseData();
         } else {
             DefenseData defenseData = (DefenseData) stack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());

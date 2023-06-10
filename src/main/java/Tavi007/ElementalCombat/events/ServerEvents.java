@@ -67,7 +67,7 @@ public class ServerEvents {
             Entity entity = event.getEntity();
 
             // for synchronization after switching dimensions
-            if (entity instanceof LivingEntity) {
+            if (entity != null && entity instanceof LivingEntity) {
                 NetworkHelper.syncMessageForClients((LivingEntity) entity);
             } else if (entity instanceof ProjectileEntity && entity.tickCount == 0) {
                 // fill with default values in here.
@@ -88,7 +88,7 @@ public class ServerEvents {
     }
 
     private static void addLayerFromPotion(AttackData projectileData, ProjectileEntity projectile) {
-        if (projectile instanceof ArrowEntity) {
+        if (projectile != null && projectile instanceof ArrowEntity) {
             CompoundNBT compound = new CompoundNBT();
             ((ArrowEntity) projectile).addAdditionalSaveData(compound);
             if (compound.contains("Potion", 8)) {
@@ -103,18 +103,21 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void onCheckPotionEvent(PotionEvent.PotionApplicableEvent event) {
-        if (Effects.FIRE_RESISTANCE.equals(event.getPotionEffect().getEffect())) {
-            event.getEntityLiving().addEffect(new EffectInstance(PotionList.FIRE_RESISTANCE_EFFECT.get(), event.getPotionEffect().getDuration()));
-            event.setResult(Result.DENY);
+        if (event.getPotionEffect() != null) {
+            if (Effects.FIRE_RESISTANCE.equals(event.getPotionEffect().getEffect())) {
+                event.getEntityLiving().addEffect(new EffectInstance(PotionList.FIRE_RESISTANCE_EFFECT.get(), event.getPotionEffect().getDuration()));
+                event.setResult(Result.DENY);
+            }
         }
     }
 
     @SubscribeEvent
     public static void onAddPotionEvent(PotionEvent.PotionAddedEvent event) {
         EffectInstance effect = event.getPotionEffect();
-        if (effect.getEffect() instanceof ElementalResistanceEffect) {
-            if (event.getEntityLiving().hasEffect(effect.getEffect())) {
-                EffectInstance currentEffect = event.getEntityLiving().getEffect(effect.getEffect());
+        if (effect != null && effect.getEffect() instanceof ElementalResistanceEffect) {
+            LivingEntity entity = event.getEntityLiving();
+            if (entity != null && entity.hasEffect(effect.getEffect())) {
+                EffectInstance currentEffect = entity.getEffect(effect.getEffect());
                 if (currentEffect.getAmplifier() < effect.getAmplifier()) {
                     ((ElementalResistanceEffect) effect.getEffect()).applyEffect(event.getEntityLiving(), effect);
                 }
@@ -127,7 +130,7 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onRemovePotionEvent(PotionEvent.PotionRemoveEvent event) {
         EffectInstance effect = event.getPotionEffect();
-        if (effect.getEffect() instanceof ElementalResistanceEffect) {
+        if (effect != null && effect.getEffect() instanceof ElementalResistanceEffect) {
             ((ElementalResistanceEffect) effect.getEffect()).removeEffect(event.getEntityLiving());
         }
     }
@@ -135,7 +138,7 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onExpirePotionEvent(PotionEvent.PotionExpiryEvent event) {
         EffectInstance effect = event.getPotionEffect();
-        if (effect.getEffect() instanceof ElementalResistanceEffect) {
+        if (effect != null && effect.getEffect() instanceof ElementalResistanceEffect) {
             ((ElementalResistanceEffect) effect.getEffect()).removeEffect(event.getEntityLiving());
         }
     }
@@ -223,7 +226,7 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onLivingDropsEvent(LivingDropsEvent event) {
         LivingEntity entity = event.getEntityLiving();
-        if (entity instanceof PlayerEntity) {
+        if (entity != null && entity instanceof PlayerEntity) {
             return;
         }
 

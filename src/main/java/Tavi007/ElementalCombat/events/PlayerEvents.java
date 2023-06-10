@@ -24,17 +24,19 @@ public class PlayerEvents {
     @SubscribeEvent
     public static void livingEquipmentChange(LivingEquipmentChangeEvent event) {
         LivingEntity entity = event.getEntityLiving();
-        // change defense properties
-        switch (event.getSlot().getType()) {
-        case ARMOR:
-            DefenseLayer defenseLayer = new DefenseLayer();
-            entity.getArmorSlots().forEach(stack -> {
-                DefenseData data = DefenseDataHelper.get(stack);
-                defenseLayer.addLayer(data.toLayer());
-            });
-            DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("armor"));
-        case HAND:
-            AttackDataHelper.updateItemLayer(entity);
+        if (entity != null) {
+            // change defense properties
+            switch (event.getSlot().getType()) {
+            case ARMOR:
+                DefenseLayer defenseLayer = new DefenseLayer();
+                entity.getArmorSlots().forEach(stack -> {
+                    DefenseData data = DefenseDataHelper.get(stack);
+                    defenseLayer.addLayer(data.toLayer());
+                });
+                DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("armor"));
+            case HAND:
+                AttackDataHelper.updateItemLayer(entity);
+            }
         }
     }
 
