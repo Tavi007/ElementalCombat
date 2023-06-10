@@ -63,6 +63,9 @@ public class AttackDataHelper {
 
     public static AttackData get(DamageSource damageSource) {
         AttackData data = new AttackData();
+        if (damageSource == null) {
+            return data;
+        }
 
         Entity immediateSource = damageSource.getDirectEntity();
         if (immediateSource != null) {
