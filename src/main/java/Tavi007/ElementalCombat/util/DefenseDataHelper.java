@@ -12,15 +12,14 @@ import net.minecraft.item.ItemStack;
 public class DefenseDataHelper {
 
     public static DefenseData get(LivingEntity entity) {
+        if(entity == null) {
+            return new DefenseData();
+        }
         DefenseData defenseData = (DefenseData) entity.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
         if (!defenseData.isInitialized()) {
             defenseData.initialize(entity);
         }
         return defenseData;
-    }
-
-    public static void updateItemLayer(LivingEntity entity) {
-
     }
 
     public static DefenseData get(ItemStack stack) {
