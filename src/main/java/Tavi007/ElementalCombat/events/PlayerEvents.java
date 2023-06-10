@@ -24,6 +24,9 @@ public class PlayerEvents {
     @SubscribeEvent
     public static void livingEquipmentChange(LivingEquipmentChangeEvent event) {
         LivingEntity entity = event.getEntityLiving();
+        if (entity == null) {
+            return;
+        }
         // change defense properties
         switch (event.getSlot().getType()) {
         case ARMOR:

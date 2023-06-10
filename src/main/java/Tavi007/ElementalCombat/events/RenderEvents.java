@@ -50,6 +50,9 @@ public class RenderEvents {
     @SubscribeEvent
     public static void onRenderLivingEventPre(RenderLivingEvent.Pre<LivingEntity, EntityModel<LivingEntity>> event) {
         LivingEntity entityIn = event.getEntity();
+        if (entityIn == null) {
+            return;
+        }
         ImmersionData data = (ImmersionData) entityIn.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
         if (entityIn.hurtTime > 0) {
             if (data.disableFlag) {
@@ -64,6 +67,9 @@ public class RenderEvents {
     @SubscribeEvent
     public static void onRenderLivingEventPost(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
         LivingEntity entityIn = event.getEntity();
+        if (entityIn == null) {
+            return;
+        }
         ImmersionData data = (ImmersionData) entityIn.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
         if (data.disableFlag && data.getHurtTime() > 0) {
             entityIn.hurtTime = data.getHurtTime();
@@ -114,6 +120,9 @@ public class RenderEvents {
     public static void onGatherTooltip(RenderTooltipEvent.GatherComponents event) {
         List<Either<FormattedText, TooltipComponent>> tooltip = event.getTooltipElements();
         ItemStack stack = event.getStack();
+        if (stack == null) {
+            return;
+        }
         AttackData attackData = AttackDataHelper.get(stack);
         DefenseData defenseData = DefenseDataHelper.get(stack);
 

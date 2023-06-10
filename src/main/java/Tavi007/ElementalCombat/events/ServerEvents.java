@@ -65,6 +65,9 @@ public class ServerEvents {
     public static void entityJoinWorld(EntityJoinWorldEvent event) {
         if (!event.getWorld().isClientSide()) { // only server side should check
             Entity entity = event.getEntity();
+            if (entity == null) {
+                return;
+            }
 
             // for synchronization after switching dimensions
             if (entity instanceof LivingEntity) {
@@ -88,7 +91,7 @@ public class ServerEvents {
     }
 
     private static void addLayerFromPotion(AttackData projectileData, Projectile projectile) {
-        if (projectile instanceof Arrow) {
+        if (projectile != null && projectile instanceof Arrow) {
             CompoundTag compound = new CompoundTag();
             ((Arrow) projectile).addAdditionalSaveData(compound);
             if (compound.contains("Potion", 8)) {
@@ -112,7 +115,7 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onAddPotionEvent(PotionEvent.PotionAddedEvent event) {
         MobEffectInstance effect = event.getPotionEffect();
-        if (effect.getEffect() instanceof ElementalResistanceEffect) {
+        if (effect != null && effect.getEffect() instanceof ElementalResistanceEffect) {
             if (event.getEntityLiving().hasEffect(effect.getEffect())) {
                 MobEffectInstance currentEffect = event.getEntityLiving().getEffect(effect.getEffect());
                 if (currentEffect.getAmplifier() < effect.getAmplifier()) {
@@ -127,7 +130,7 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onRemovePotionEvent(PotionEvent.PotionRemoveEvent event) {
         MobEffectInstance effect = event.getPotionEffect();
-        if (effect.getEffect() instanceof ElementalResistanceEffect) {
+        if (effect != null && effect.getEffect() instanceof ElementalResistanceEffect) {
             ((ElementalResistanceEffect) effect.getEffect()).removeEffect(event.getEntityLiving());
         }
     }
@@ -135,7 +138,7 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onExpirePotionEvent(PotionEvent.PotionExpiryEvent event) {
         MobEffectInstance effect = event.getPotionEffect();
-        if (effect.getEffect() instanceof ElementalResistanceEffect) {
+        if (effect != null && effect.getEffect() instanceof ElementalResistanceEffect) {
             ((ElementalResistanceEffect) effect.getEffect()).removeEffect(event.getEntityLiving());
         }
     }
@@ -151,7 +154,7 @@ public class ServerEvents {
         DamageSource damageSource = event.getSource();
 
         // no modification. Entity should take normal damage and die eventually.
-        if (damageSource == DamageSource.OUT_OF_WORLD) {
+        if (damageSource == null || damageSource == DamageSource.OUT_OF_WORLD) {
             return;
         }
 
@@ -223,7 +226,7 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onLivingDropsEvent(LivingDropsEvent event) {
         LivingEntity entity = event.getEntityLiving();
-        if (entity instanceof Player) {
+        if (entity == null || entity instanceof Player) {
             return;
         }
 
