@@ -67,7 +67,10 @@ public class ServerEvents {
             Entity entity = event.getEntity();
 
             // for synchronization after switching dimensions
-            if (entity != null && entity instanceof LivingEntity) {
+            if (entity != null) {
+                return;
+            }
+            if (entity instanceof LivingEntity) {
                 NetworkHelper.syncMessageForClients((LivingEntity) entity);
             } else if (entity instanceof ProjectileEntity && entity.tickCount == 0) {
                 // fill with default values in here.
