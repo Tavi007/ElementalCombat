@@ -106,6 +106,9 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void onCheckPotionEvent(PotionEvent.PotionApplicableEvent event) {
+        if (event.getPotionEffect() == null || event.getEntityLiving() == null) {
+            return;
+        }
         if (MobEffects.FIRE_RESISTANCE.equals(event.getPotionEffect().getEffect())) {
             event.getEntityLiving().addEffect(new MobEffectInstance(PotionList.FIRE_RESISTANCE_EFFECT.get(), event.getPotionEffect().getDuration()));
             event.setResult(Result.DENY);
