@@ -106,11 +106,12 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void onCheckPotionEvent(PotionEvent.PotionApplicableEvent event) {
-        if (event.getPotionEffect() != null) {
-            if (Effects.FIRE_RESISTANCE.equals(event.getPotionEffect().getEffect())) {
-                event.getEntityLiving().addEffect(new EffectInstance(PotionList.FIRE_RESISTANCE_EFFECT.get(), event.getPotionEffect().getDuration()));
-                event.setResult(Result.DENY);
-            }
+        if (event.getPotionEffect() == null || event.getEntityLiving() == null) {
+            return;
+        }
+        if (Effects.FIRE_RESISTANCE.equals(event.getPotionEffect().getEffect())) {
+            event.getEntityLiving().addEffect(new EffectInstance(PotionList.FIRE_RESISTANCE_EFFECT.get(), event.getPotionEffect().getDuration()));
+            event.setResult(Result.DENY);
         }
     }
 
@@ -157,7 +158,7 @@ public class ServerEvents {
         DamageSource damageSource = event.getSource();
 
         // no modification. Entity should take normal damage and die eventually.
-        if (DamageSource.OUT_OF_WORLD.equals(damageSource)) {
+        if (damageSource == null || DamageSource.OUT_OF_WORLD.equals(damageSource)) {
             return;
         }
 
