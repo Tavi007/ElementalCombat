@@ -12,14 +12,14 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 public class DefenseDataHelper {
 
     public static DefenseData get(LivingEntity entity) {
-        if (entity != null) {
-            DefenseData defenseData = (DefenseData) entity.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
-            if (!defenseData.isInitialized()) {
-                defenseData.initialize(entity);
-            }
-            return defenseData;
+        if (entity == null) {
+            return new DefenseData();
         }
-        return new DefenseData();
+        DefenseData defenseData = (DefenseData) entity.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
+        if (!defenseData.isInitialized()) {
+            defenseData.initialize(entity);
+        }
+        return defenseData;
     }
 
     public static DefenseData get(ItemStack stack) {

@@ -15,17 +15,20 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 public class AttackDataHelper {
 
     public static AttackData get(LivingEntity entity) {
-        if (entity != null) {
-            AttackData attackData = (AttackData) entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
-            if (!attackData.isInitialized()) {
-                attackData.initialize(entity);
-            }
-            return attackData;
+        if (entity == null) {
+            return new AttackData();
         }
-        return new AttackData();
+        AttackData attackData = (AttackData) entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+        if (!attackData.isInitialized()) {
+            attackData.initialize(entity);
+        }
+        return attackData;
     }
 
     public static void updateItemLayer(LivingEntity entity) {
+        if (entity == null) {
+            return;
+        }
         AttackData attackDataItem = get(entity.getMainHandItem());
         AttackDataAPI.putLayer(entity, attackDataItem.toLayer(), new ResourceLocation("item"));
     }
@@ -58,18 +61,19 @@ public class AttackDataHelper {
 
     public static AttackData get(DamageSource damageSource) {
         AttackData data = new AttackData();
-        if (damageSource != null) {
-            Entity immediateSource = damageSource.getDirectEntity();
-            if(immediateSource != null) {
-                if (immediateSource instanceof LivingEntity) {
-                    data.putLayer(new ResourceLocation("direct_entity"), get((LivingEntity) immediateSource).toLayer());
-                } else if (immediateSource instanceof Projectile) {
-                    data.putLayer(new ResourceLocation("direct_entity"), get((Projectile) immediateSource).toLayer());
-                }
-            }
-            // base values have higher priority, so they must be added last.
-            data.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(damageSource));
+        if (damageSource == null) {
+            return data;
         }
+        Entity immediateSource = damageSource.getDirectEntity();
+        if(immediateSource != null) {
+            if (immediateSource instanceof LivingEntity) {
+                data.putLayer(new ResourceLocation("direct_entity"), get((LivingEntity) immediateSource).toLayer());
+            } else if (immediateSource instanceof Projectile) {
+                data.putLayer(new ResourceLocation("direct_entity"), get((Projectile) immediateSource).toLayer());
+            }
+        }
+        // base values have higher priority, so they must be added last.
+        data.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(damageSource));
         return data;
     }
 
