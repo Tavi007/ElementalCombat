@@ -15,7 +15,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.network.BasePropertiesMessage;
+import Tavi007.ElementalCombat.network.clientbound.BasePropertiesPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -44,7 +44,7 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         super(GSON, "combat_properties");
     }
 
-    public void set(BasePropertiesMessage message) {
+    public void set(BasePropertiesPacket message) {
         baseAttackProperties = message.getBaseAttack();
         registeredMobData = message.getMobData();
         registeredItemData = message.getItemData();
@@ -65,8 +65,8 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         ElementalCombat.LOGGER.info(side + " loaded " + size + " combat properties for " + type);
     }
 
-    public BasePropertiesMessage createSyncMessage() {
-        return new BasePropertiesMessage(baseAttackProperties,
+    public BasePropertiesPacket createSyncMessage() {
+        return new BasePropertiesPacket(baseAttackProperties,
             registeredMobData,
             registeredItemData,
             registeredBiomeData,

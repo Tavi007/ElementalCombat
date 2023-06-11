@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.network;
+package Tavi007.ElementalCombat.network.clientbound;
 
 import java.util.Map;
 
@@ -10,10 +10,12 @@ import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
 import Tavi007.ElementalCombat.loading.ElementalCombatProperties;
 import Tavi007.ElementalCombat.loading.MobCombatProperties;
+import Tavi007.ElementalCombat.network.Packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.network.NetworkEvent.Context;
 
-public class BasePropertiesMessage extends MessageToClient {
+public class BasePropertiesPacket extends Packet {
 
     private AttackOnlyCombatProperties baseAttackProperties;
     private Map<ResourceLocation, MobCombatProperties> mobData;
@@ -22,10 +24,7 @@ public class BasePropertiesMessage extends MessageToClient {
     private Map<ResourceLocation, AttackOnlyCombatProperties> damageSourceData;
     private Map<ResourceLocation, AttackOnlyCombatProperties> projectileData;
 
-    private BasePropertiesMessage() {
-    }
-
-    public BasePropertiesMessage(AttackOnlyCombatProperties baseAttackProperties,
+    public BasePropertiesPacket(AttackOnlyCombatProperties baseAttackProperties,
             Map<ResourceLocation, MobCombatProperties> mobData,
             Map<ResourceLocation, ElementalCombatProperties> itemData,
             Map<ResourceLocation, BiomeCombatProperties> biomeData,
@@ -63,22 +62,13 @@ public class BasePropertiesMessage extends MessageToClient {
         return damageSourceData;
     }
 
-    public static BasePropertiesMessage decode(FriendlyByteBuf buf) {
-        BasePropertiesMessage ret = new BasePropertiesMessage();
-        try {
-            ret.baseAttackProperties = readBaseAttack(buf);
-            ret.mobData = readMob(buf);
-            ret.itemData = readItem(buf);
-            ret.biomeData = readBiome(buf);
-            ret.projectileData = readAttackOnly(buf, ret.baseAttackProperties);
-            ret.damageSourceData = readAttackOnly(buf, ret.baseAttackProperties);
-
-        } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
-            ElementalCombat.LOGGER.warn("Exception while reading BasePropertiesMessage: " + e);
-            return ret;
-        }
-        ret.messageIsValid = true;
-        return ret;
+    public BasePropertiesPacket(FriendlyByteBuf buf) {
+        this.baseAttackProperties = readBaseAttack(buf);
+        this.mobData = readMob(buf);
+        this.itemData = readItem(buf);
+        this.biomeData = readBiome(buf);
+        this.projectileData = readAttackOnly(buf, this.baseAttackProperties);
+        this.damageSourceData = readAttackOnly(buf, this.baseAttackProperties);
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -186,5 +176,20 @@ public class BasePropertiesMessage extends MessageToClient {
             builder.put(key, value);
         }
         return builder.build();
+    }
+
+    @Override
+    public void handle(Context context) {
+        context.enqueueWork(() -> {
+            if (!isValid()) {
+                return;
+            }
+            ElementalCombat.COMBAT_PROPERTIES_MANGER.set(this);
+            context.setPacketHandled(true);
+        });
+    }
+
+    private boolean isValid() {
+        return baseAttackProperties != null && mobData != null && itemData != null && biomeData != null && projectileData != null && damageSourceData != null;
     }
 }

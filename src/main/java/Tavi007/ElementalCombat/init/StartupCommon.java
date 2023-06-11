@@ -1,18 +1,10 @@
 package Tavi007.ElementalCombat.init;
 
-import java.util.Optional;
-
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
-import Tavi007.ElementalCombat.network.BasePropertiesMessage;
-import Tavi007.ElementalCombat.network.CreateEmitterMessage;
-import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
-import Tavi007.ElementalCombat.network.EntityAttackLayerMessage;
-import Tavi007.ElementalCombat.network.EntityDefenseLayerMessage;
-import Tavi007.ElementalCombat.network.PackageHandlerOnClient;
-import Tavi007.ElementalCombat.network.PackageHandlerOnServer;
+import Tavi007.ElementalCombat.network.PacketManager;
 import Tavi007.ElementalCombat.potions.SpecificPotionIngredient;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,8 +17,6 @@ import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
 
 public class StartupCommon {
 
@@ -130,45 +120,7 @@ public class StartupCommon {
     }
 
     private static void registerNetworking() {
-        ElementalCombat.simpleChannel = NetworkRegistry.newSimpleChannel(ElementalCombat.simpleChannelRL,
-            () -> MESSAGE_PROTOCOL_VERSION,
-            PackageHandlerOnClient::isThisProtocolAcceptedByClient,
-            PackageHandlerOnServer::isThisProtocolAcceptedByServer);
-
-        ElementalCombat.simpleChannel.registerMessage(ENTITY_ATTACKDATA_MESSAGE_TO_CLIENT_ID,
-            EntityAttackLayerMessage.class,
-            EntityAttackLayerMessage::encode,
-            EntityAttackLayerMessage::decode,
-            PackageHandlerOnClient::onMessageReceived,
-            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-
-        ElementalCombat.simpleChannel.registerMessage(ENTITY_DEFENSELAYER_MESSAGE_TO_CLIENT_ID,
-            EntityDefenseLayerMessage.class,
-            EntityDefenseLayerMessage::encode,
-            EntityDefenseLayerMessage::decode,
-            PackageHandlerOnClient::onMessageReceived,
-            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-
-        ElementalCombat.simpleChannel.registerMessage(DISABLERENDER_MESSAGE_TO_CLIENT_ID,
-            DisableDamageRenderMessage.class,
-            DisableDamageRenderMessage::encode,
-            DisableDamageRenderMessage::decode,
-            PackageHandlerOnClient::onMessageReceived,
-            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-
-        ElementalCombat.simpleChannel.registerMessage(CREATEEMITTER_MESSAGE_TO_CLIENT_ID,
-            CreateEmitterMessage.class,
-            CreateEmitterMessage::encode,
-            CreateEmitterMessage::decode,
-            PackageHandlerOnClient::onMessageReceived,
-            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-
-        ElementalCombat.simpleChannel.registerMessage(JSONSYNC_MESSAGE_TO_CLIENT_ID,
-            BasePropertiesMessage.class,
-            BasePropertiesMessage::encode,
-            BasePropertiesMessage::decode,
-            PackageHandlerOnClient::onMessageReceived,
-            Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        PacketManager.init();
     }
 
 }
