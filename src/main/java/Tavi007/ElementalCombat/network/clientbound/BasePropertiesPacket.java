@@ -67,8 +67,8 @@ public class BasePropertiesPacket extends Packet {
         this.mobData = readMob(buf);
         this.itemData = readItem(buf);
         this.biomeData = readBiome(buf);
-        this.projectileData = readAttackOnly(buf, this.baseAttackProperties);
-        this.damageSourceData = readAttackOnly(buf, this.baseAttackProperties);
+        this.projectileData = readAttackOnly(buf, baseAttackProperties);
+        this.damageSourceData = readAttackOnly(buf, baseAttackProperties);
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -166,12 +166,12 @@ public class BasePropertiesPacket extends Packet {
         return builder.build();
     }
 
-    private static Map<ResourceLocation, AttackOnlyCombatProperties> readAttackOnly(FriendlyByteBuf buf, AttackOnlyCombatProperties defaulProperty) {
+    private static Map<ResourceLocation, AttackOnlyCombatProperties> readAttackOnly(FriendlyByteBuf buf, AttackOnlyCombatProperties base) {
         Builder<ResourceLocation, AttackOnlyCombatProperties> builder = ImmutableMap.builder();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
             ResourceLocation key = new ResourceLocation(buf.readUtf());
-            AttackOnlyCombatProperties value = defaulProperty;
+            AttackOnlyCombatProperties value = new AttackOnlyCombatProperties(base.getAttackStyle(), base.getAttackElement());
             value.readFromBuffer(buf);
             builder.put(key, value);
         }

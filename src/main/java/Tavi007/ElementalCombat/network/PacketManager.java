@@ -10,6 +10,8 @@ import Tavi007.ElementalCombat.network.clientbound.EntityAttackLayerPacket;
 import Tavi007.ElementalCombat.network.clientbound.EntityDefenseLayerPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -41,6 +43,14 @@ public class PacketManager {
 
     public static void sendToAllClients(Packet packet) {
         CHANNEL.send(PacketDistributor.ALL.noArg(), packet);
+    }
+
+    public static void sendToClient(Packet packet, Player player) {
+        if (!player.level.isClientSide()) {
+            CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), packet);
+        } else {
+            throw new IllegalArgumentException("Player must be a server player!");
+        }
     }
 
     public static <MSG extends Packet> void register(Class<MSG> clazz, Function<FriendlyByteBuf, MSG> decoder) {

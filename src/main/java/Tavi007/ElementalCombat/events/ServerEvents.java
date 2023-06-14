@@ -217,7 +217,7 @@ public class ServerEvents {
             ServerPlayer serverplayerentity = world.players().get(j);
             BlockPos blockpos = serverplayerentity.blockPosition();
             if (blockpos.closerToCenterThan(entity.position(), 32.0D)) {
-                PacketManager.sendToAllClients(messageToClient);
+                PacketManager.sendToClient(messageToClient, serverplayerentity);
             }
         }
     }
