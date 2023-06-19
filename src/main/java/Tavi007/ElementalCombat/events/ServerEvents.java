@@ -66,6 +66,9 @@ public class ServerEvents {
     public static void entityJoinWorld(EntityJoinLevelEvent event) {
         if (!event.getLevel().isClientSide()) { // only server side should check
             Entity entity = event.getEntity();
+            if (entity == null) {
+                return;
+            }
 
             // for synchronization after switching dimensions
             if (entity instanceof LivingEntity) {
@@ -89,7 +92,7 @@ public class ServerEvents {
     }
 
     private static void addLayerFromPotion(AttackData projectileData, Projectile projectile) {
-        if (projectile instanceof Arrow) {
+        if (projectile != null && projectile instanceof Arrow) {
             CompoundTag compound = new CompoundTag();
             ((Arrow) projectile).addAdditionalSaveData(compound);
             if (compound.contains("Potion", 8)) {
@@ -104,6 +107,9 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void onCheckPotionEvent(MobEffectEvent.Applicable event) {
+        if (event.getEffectInstance() == null || event.getEntity() == null) {
+            return;
+        }
         if (MobEffects.FIRE_RESISTANCE.equals(event.getEffectInstance().getEffect())) {
             event.getEntity().addEffect(new MobEffectInstance(PotionList.FIRE_RESISTANCE_EFFECT.get(), event.getEffectInstance().getDuration()));
             event.setResult(Result.DENY);
@@ -113,7 +119,7 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onAddPotionEvent(MobEffectEvent.Added event) {
         MobEffectInstance effect = event.getEffectInstance();
-        if (effect.getEffect() instanceof ElementalResistanceEffect) {
+        if (effect != null && effect.getEffect() instanceof ElementalResistanceEffect) {
             if (event.getEntity().hasEffect(effect.getEffect())) {
                 MobEffectInstance currentEffect = event.getEntity().getEffect(effect.getEffect());
                 if (currentEffect.getAmplifier() < effect.getAmplifier()) {
@@ -128,7 +134,7 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onRemovePotionEvent(MobEffectEvent.Remove event) {
         MobEffectInstance effect = event.getEffectInstance();
-        if (effect.getEffect() instanceof ElementalResistanceEffect) {
+        if (effect != null && effect.getEffect() instanceof ElementalResistanceEffect) {
             ((ElementalResistanceEffect) effect.getEffect()).removeEffect(event.getEntity());
         }
     }
@@ -136,7 +142,7 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onExpirePotionEvent(MobEffectEvent.Expired event) {
         MobEffectInstance effect = event.getEffectInstance();
-        if (effect.getEffect() instanceof ElementalResistanceEffect) {
+        if (effect != null && effect.getEffect() instanceof ElementalResistanceEffect) {
             ((ElementalResistanceEffect) effect.getEffect()).removeEffect(event.getEntity());
         }
     }
@@ -152,7 +158,7 @@ public class ServerEvents {
         DamageSource damageSource = event.getSource();
 
         // no modification. Entity should take normal damage and die eventually.
-        if (damageSource.is(DamageTypes.OUT_OF_WORLD)) {
+        if (damageSource == null || damageSource.is(DamageTypes.OUT_OF_WORLD)) {
             return;
         }
 

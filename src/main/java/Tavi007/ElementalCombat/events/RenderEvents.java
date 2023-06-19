@@ -38,6 +38,9 @@ public class RenderEvents {
     @SubscribeEvent
     public static void onRenderLivingEventPre(RenderLivingEvent.Pre<LivingEntity, EntityModel<LivingEntity>> event) {
         LivingEntity entityIn = event.getEntity();
+        if (entityIn == null) {
+            return;
+        }
         ImmersionData data = entityIn.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
         if (entityIn.hurtTime > 0) {
             if (data.disableFlag) {
@@ -52,6 +55,9 @@ public class RenderEvents {
     @SubscribeEvent
     public static void onRenderLivingEventPost(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
         LivingEntity entityIn = event.getEntity();
+        if (entityIn == null) {
+            return;
+        }
         ImmersionData data = entityIn.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
         if (data.disableFlag && data.getHurtTime() > 0) {
             entityIn.hurtTime = data.getHurtTime();
