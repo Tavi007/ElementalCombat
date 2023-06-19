@@ -15,7 +15,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.network.BasePropertiesMessage;
+import Tavi007.ElementalCombat.network.clientbound.BasePropertiesPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -33,7 +33,7 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
     private Map<ResourceLocation, MobCombatProperties> registeredMobData = ImmutableMap.of();
     private Map<ResourceLocation, ElementalCombatProperties> registeredItemData = ImmutableMap.of();
     private Map<ResourceLocation, BiomeCombatProperties> registeredBiomeData = ImmutableMap.of();
-    private Map<ResourceLocation, AttackOnlyCombatProperties> registeredDamageSourceData = ImmutableMap.of();
+    private Map<ResourceLocation, AttackOnlyCombatProperties> registeredDamageTypeData = ImmutableMap.of();
     private Map<ResourceLocation, AttackOnlyCombatProperties> registeredProjectileData = ImmutableMap.of();
 
     private AttackOnlyCombatProperties baseAttackProperties = new AttackOnlyCombatProperties("hit", "normal");
@@ -44,13 +44,13 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         super(GSON, "combat_properties");
     }
 
-    public void set(BasePropertiesMessage message) {
+    public void set(BasePropertiesPacket message) {
         baseAttackProperties = message.getBaseAttack();
         registeredMobData = message.getMobData();
         registeredItemData = message.getItemData();
         registeredBiomeData = message.getBiomeData();
         registeredProjectileData = message.getProjectileData();
-        registeredDamageSourceData = message.getDamageSourceData();
+        registeredDamageTypeData = message.getDamageTypeData();
 
         ElementalCombat.LOGGER.info("Client loaded default attack style: " + baseAttackProperties.getAttackStyle());
         ElementalCombat.LOGGER.info("Client loaded default attack element: " + baseAttackProperties.getAttackElement());
@@ -58,19 +58,19 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         logLoading("client", registeredItemData.size() - 1, "items");
         logLoading("client", registeredBiomeData.size() - 1, "biomes");
         logLoading("client", registeredProjectileData.size() - 1, "projectiles");
-        logLoading("client", registeredDamageSourceData.size() - 1, "damage sources");
+        logLoading("client", registeredDamageTypeData.size() - 1, "damage types");
     }
 
     private void logLoading(String side, int size, String type) {
         ElementalCombat.LOGGER.info(side + " loaded " + size + " combat properties for " + type);
     }
 
-    public BasePropertiesMessage createSyncMessage() {
-        return new BasePropertiesMessage(baseAttackProperties,
+    public BasePropertiesPacket createSyncMessage() {
+        return new BasePropertiesPacket(baseAttackProperties,
             registeredMobData,
             registeredItemData,
             registeredBiomeData,
-            registeredDamageSourceData,
+            registeredDamageTypeData,
             registeredProjectileData);
     }
 
@@ -79,7 +79,7 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         Builder<ResourceLocation, MobCombatProperties> builderMob = ImmutableMap.builder();
         Builder<ResourceLocation, ElementalCombatProperties> builderItem = ImmutableMap.builder();
         Builder<ResourceLocation, BiomeCombatProperties> builderBiome = ImmutableMap.builder();
-        Builder<ResourceLocation, AttackOnlyCombatProperties> builderDamageSource = ImmutableMap.builder();
+        Builder<ResourceLocation, AttackOnlyCombatProperties> builderDamageType = ImmutableMap.builder();
         Builder<ResourceLocation, AttackOnlyCombatProperties> builderProjectile = ImmutableMap.builder();
 
         if (objectIn.remove(EMPTY_RESOURCELOCATION) != null) {
@@ -108,10 +108,10 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
                     BiomeCombatProperties combatProperties = loadData(GSON, rl, json, BiomeCombatProperties.class);
                     builderBiome.put(rl, combatProperties);
                     type = "biomes";
-                } else if (rl.getPath().contains("damage_sources/")) {
+                } else if (rl.getPath().contains("damage_types/")) {
                     AttackOnlyCombatProperties combatProperties = loadData(GSON, rl, json, AttackOnlyCombatProperties.class);
-                    builderDamageSource.put(rl, combatProperties);
-                    type = "damage_sources";
+                    builderDamageType.put(rl, combatProperties);
+                    type = "damage_types";
                 } else if (rl.getPath().contains("projectiles/")) {
                     AttackOnlyCombatProperties combatProperties = loadData(GSON, rl, json, AttackOnlyCombatProperties.class);
                     builderProjectile.put(rl, combatProperties);
@@ -144,13 +144,13 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         builderMob.put(EMPTY_RESOURCELOCATION, new MobCombatProperties());
         builderItem.put(EMPTY_RESOURCELOCATION, new ElementalCombatProperties());
         builderBiome.put(EMPTY_RESOURCELOCATION, new BiomeCombatProperties());
-        builderDamageSource.put(EMPTY_RESOURCELOCATION, baseAttackProperties);
+        builderDamageType.put(EMPTY_RESOURCELOCATION, baseAttackProperties);
         builderProjectile.put(EMPTY_RESOURCELOCATION, baseAttackProperties);
 
         registeredMobData = builderMob.build();
         registeredItemData = builderItem.build();
         registeredBiomeData = builderBiome.build();
-        registeredDamageSourceData = builderDamageSource.build();
+        registeredDamageTypeData = builderDamageType.build();
         registeredProjectileData = builderProjectile.build();
 
         ElementalCombat.LOGGER.info("Server loaded default attack style: " + baseAttackProperties.getAttackStyle());
@@ -167,7 +167,7 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         logLoading("server", registeredItemData.size(), "items");
         logLoading("server", registeredBiomeData.size(), "biomes");
         logLoading("server", registeredProjectileData.size(), "projectiles");
-        logLoading("server", registeredDamageSourceData.size(), "damage sources");
+        logLoading("server", registeredDamageTypeData.size(), "damage types");
     }
 
     @Nullable
@@ -206,8 +206,8 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         return new BiomeCombatProperties(registeredBiomeData.getOrDefault(rl, new BiomeCombatProperties()));
     }
 
-    public AttackOnlyCombatProperties getDamageSourceDataFromLocation(ResourceLocation rl) {
-        return new AttackOnlyCombatProperties(registeredDamageSourceData.getOrDefault(rl, baseAttackProperties));
+    public AttackOnlyCombatProperties getDamageTypeDataFromLocation(ResourceLocation rl) {
+        return new AttackOnlyCombatProperties(registeredDamageTypeData.getOrDefault(rl, baseAttackProperties));
     }
 
     public AttackOnlyCombatProperties getProjectileDataFromLocation(ResourceLocation rl) {
