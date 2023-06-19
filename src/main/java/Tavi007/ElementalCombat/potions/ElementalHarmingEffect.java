@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
+import net.minecraft.util.DamageSource;
 
 public class ElementalHarmingEffect extends Effect {
 
