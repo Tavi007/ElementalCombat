@@ -1,7 +1,5 @@
 package Tavi007.ElementalCombat.events;
 
-import java.util.function.Supplier;
-
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
@@ -12,9 +10,9 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.ItemList;
 import Tavi007.ElementalCombat.init.PotionList;
-import Tavi007.ElementalCombat.network.CreateEmitterMessage;
-import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
-import Tavi007.ElementalCombat.network.ServerPlayerSupplier;
+import Tavi007.ElementalCombat.network.PacketManager;
+import Tavi007.ElementalCombat.network.clientbound.CreateEmitterPacket;
+import Tavi007.ElementalCombat.network.clientbound.DisableDamageRenderPacket;
 import Tavi007.ElementalCombat.potions.ElementalResistanceEffect;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
@@ -200,7 +198,7 @@ public class ServerEvents {
             damageAmount = 0;
 
             // send message to disable the hurt animation and sound.
-            DisableDamageRenderMessage messageToClient = new DisableDamageRenderMessage(target.getId());
+            DisableDamageRenderPacket messageToClient = new DisableDamageRenderPacket(target.getId());
             ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
 
             // play a healing sound
@@ -213,7 +211,7 @@ public class ServerEvents {
 
     private static void sendParticleMessage(LivingEntity entity, String name, int amount) {
         // define message
-        CreateEmitterMessage messageToClient = new CreateEmitterMessage(entity.getId(), name, amount);
+        CreateEmitterPacket messageToClient = new CreateEmitterPacket(entity.getId(), name, amount);
 
         // send message to nearby players
         ServerLevel world = (ServerLevel) entity.level;
@@ -221,8 +219,7 @@ public class ServerEvents {
             ServerPlayer serverplayerentity = world.players().get(j);
             BlockPos blockpos = serverplayerentity.blockPosition();
             if (blockpos.closerToCenterThan(entity.position(), 32.0D)) {
-                Supplier<ServerPlayer> supplier = new ServerPlayerSupplier(serverplayerentity);
-                ElementalCombat.simpleChannel.send(PacketDistributor.PLAYER.with(supplier), messageToClient);
+                PacketManager.sendToClient(messageToClient, serverplayerentity);
             }
         }
     }

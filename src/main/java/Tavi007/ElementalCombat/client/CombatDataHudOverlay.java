@@ -99,7 +99,7 @@ public class CombatDataHudOverlay implements IGuiOverlay {
 
                 // render component
                 clientComponent.renderText(mc.font, poseStack, posX, posY);
-                clientComponent.renderImage(mc.font, posX, posY, poseStack, null);
+                clientComponent.renderImage(mc.font, posX, posY, poseStack, mc.getItemRenderer());
 
                 poseStack.popPose();
             }

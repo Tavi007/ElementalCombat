@@ -135,7 +135,7 @@ public class BasePropertiesAPI {
             String name = damageSource.getMsgId().toLowerCase();
             ResourceLocation rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + name);
             AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(
-                ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource));
+                ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageTypeDataFromLocation(rlDamageSource));
             return new AttackLayer(property.getAttackStyle(), property.getAttackElement());
         }
         return new AttackLayer();
