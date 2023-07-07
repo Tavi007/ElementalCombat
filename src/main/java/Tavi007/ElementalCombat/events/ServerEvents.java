@@ -49,7 +49,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Bus.FORGE)
 public class ServerEvents {
@@ -199,7 +198,7 @@ public class ServerEvents {
 
             // send message to disable the hurt animation and sound.
             DisableDamageRenderPacket messageToClient = new DisableDamageRenderPacket(target.getId());
-            ElementalCombat.simpleChannel.send(PacketDistributor.ALL.noArg(), messageToClient);
+            PacketManager.sendToAllClients(messageToClient);
 
             // play a healing sound
             SoundEvent sound = SoundEvents.PLAYER_LEVELUP; // need better sound

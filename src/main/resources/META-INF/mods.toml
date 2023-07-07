@@ -5,7 +5,7 @@ license="All rights reserved"
 #issueTrackerURL="http://my.issue.tracker/" #optional
 [[mods]] #mandatory
 modId = "elementalcombat" #mandatory
-version = "1.2.3.0" #mandatory
+version = "1.2.4.0" #mandatory
 
 displayName = "Elemental Combat" #mandatory
 #updateJSONURL = "http://myurl.me/" #optional
@@ -21,13 +21,13 @@ description= "This mod enhances the combat system by adding elemental and style 
 [[dependencies.elementalcombat]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[44,)" #mandatory
+    versionRange="[45,)" #mandatory
     ordering="NONE"
     side="BOTH"
 # Here's another dependency
 [[dependencies.elementalcombat]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.3]"
+    versionRange="[1.19.4]"
     ordering="NONE"
     side="BOTH"

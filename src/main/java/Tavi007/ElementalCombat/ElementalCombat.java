@@ -14,7 +14,6 @@ import Tavi007.ElementalCombat.init.PotionList;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
 import Tavi007.ElementalCombat.init.StartupCommon;
 import Tavi007.ElementalCombat.loading.CombatPropertiesManager;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -24,7 +23,6 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.simple.SimpleChannel;
 
 @Mod("elementalcombat")
 public class ElementalCombat {
@@ -34,9 +32,6 @@ public class ElementalCombat {
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static CombatPropertiesManager COMBAT_PROPERTIES_MANGER = new CombatPropertiesManager();
     public static IEventBus MOD_EVENT_BUS;
-
-    public static final ResourceLocation simpleChannelRL = new ResourceLocation(MOD_ID, "channel");
-    public static SimpleChannel simpleChannel; // used to transmit your network messages
 
     @SuppressWarnings("deprecation")
     public ElementalCombat() {
