@@ -15,6 +15,7 @@ import Tavi007.ElementalCombat.init.StartupClientOnly;
 import Tavi007.ElementalCombat.init.StartupCommon;
 import Tavi007.ElementalCombat.loading.CombatPropertiesManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -33,6 +34,7 @@ public class ElementalCombat {
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static CombatPropertiesManager COMBAT_PROPERTIES_MANGER = new CombatPropertiesManager();
     public static IEventBus MOD_EVENT_BUS;
+    public static final CreativeModeTab ELEMENTAL_COMBAT_GROUP = new ItemList.ElementalCombatItemGroup(MOD_ID);
 
     public static final ResourceLocation simpleChannelRL = new ResourceLocation(MOD_ID, "channel");
 

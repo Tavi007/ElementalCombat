@@ -1,7 +1,5 @@
 package Tavi007.ElementalCombat.client;
 
-import org.joml.Matrix4f;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferUploader;
@@ -9,6 +7,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Matrix4f;
 
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
@@ -16,7 +15,6 @@ import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;

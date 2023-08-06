@@ -21,13 +21,13 @@ description= "This mod enhances the combat system by adding elemental and style 
 [[dependencies.elementalcombat]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[44,)" #mandatory
+    versionRange="[43,)" #mandatory
     ordering="NONE"
     side="BOTH"
 # Here's another dependency
 [[dependencies.elementalcombat]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.3]"
+    versionRange="[1.19.2]"
     ordering="NONE"
     side="BOTH"
