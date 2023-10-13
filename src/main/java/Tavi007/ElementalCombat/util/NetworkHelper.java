@@ -23,7 +23,7 @@ public class NetworkHelper {
      *            A LivingEntity.
      */
     public static void syncMessageForClients(LivingEntity livingEntity) {
-        if (!livingEntity.level.isClientSide) {
+        if (!livingEntity.level().isClientSide) {
             AttackDataHelper.updateItemLayer(livingEntity);
             AttackData attackData = AttackDataHelper.get(livingEntity);
             attackData.getLayers().forEach((rl, layer) -> {
@@ -48,7 +48,7 @@ public class NetworkHelper {
      *            The DefenseData to be added to the defense values of the LivingEntity (on the client).
      */
     public static void syncDefenseLayerMessageForClients(LivingEntity livingEntity, DefenseLayer layer, ResourceLocation location) {
-        if (!livingEntity.level.isClientSide) {
+        if (!livingEntity.level().isClientSide) {
             DefenseDataHelper.get(livingEntity).putLayer(location, layer);
             EntityDefenseLayerPacket defenseMessageToClient = new EntityDefenseLayerPacket(layer, location, livingEntity.getId());
             PacketManager.sendToAllClients(defenseMessageToClient);
@@ -56,7 +56,7 @@ public class NetworkHelper {
     }
 
     public static void syncAttackLayerMessageForClients(LivingEntity livingEntity, AttackLayer layer, ResourceLocation location) {
-        if (!livingEntity.level.isClientSide) {
+        if (!livingEntity.level().isClientSide) {
             AttackDataHelper.get(livingEntity).putLayer(location, layer);
             ;
             EntityAttackLayerPacket attackMessageToClient = new EntityAttackLayerPacket(layer, location, livingEntity.getId());
@@ -65,7 +65,7 @@ public class NetworkHelper {
     }
 
     public static void syncJsonMessageForClients(Player player) {
-        if (!player.level.isClientSide && player instanceof ServerPlayer) {
+        if (!player.level().isClientSide && player instanceof ServerPlayer) {
             BasePropertiesPacket messageToClient = ElementalCombat.COMBAT_PROPERTIES_MANGER.createSyncMessage();
             PacketManager.sendToClient(messageToClient, player);
         }

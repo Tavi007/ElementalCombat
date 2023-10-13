@@ -7,6 +7,7 @@ import Tavi007.ElementalCombat.compatibility.curios.HandleCuriosInventory;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.BlockList;
+import Tavi007.ElementalCombat.init.CreativeTabList;
 import Tavi007.ElementalCombat.init.EnchantmentList;
 import Tavi007.ElementalCombat.init.ItemList;
 import Tavi007.ElementalCombat.init.ParticleList;
@@ -52,11 +53,11 @@ public class ElementalCombat {
         MOD_EVENT_BUS.register(PotionList.class);
 
         ItemList.ITEMS.register(ElementalCombat.MOD_EVENT_BUS);
-        MOD_EVENT_BUS.register(ItemList.class);
 
         BlockList.ITEMS.register(ElementalCombat.MOD_EVENT_BUS);
         BlockList.BLOCKS.register(ElementalCombat.MOD_EVENT_BUS);
-        MOD_EVENT_BUS.register(BlockList.class);
+
+        CreativeTabList.TABS.register(ElementalCombat.MOD_EVENT_BUS);
 
         // register common stuff
         MOD_EVENT_BUS.register(StartupCommon.class);

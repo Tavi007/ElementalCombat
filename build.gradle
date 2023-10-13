@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '[6.0,6.2)', changing: true
         classpath 'org.spongepowered:mixingradle:0.7.+'
     }
 }
@@ -169,31 +169,30 @@ jar {
 }
 
 // API jar
-task apiJar(type: Jar) {
-    classifier = 'api'
-    include 'Tavi007/ElementalCombat/api/*'
-    include 'Tavi007/ElementalCombat/capabilities/attack/AttackLayer.*'
-    include 'Tavi007/ElementalCombat/capabilities/defense/DefenseLayer.*'
-    include 'Tavi007/ElementalCombat/config/*'
-    from sourceSets.main.allSource
-    from sourceSets.main.output
-}
+//task apiJar(type: Jar) {
+//    classifier = 'api'
+//    include 'Tavi007/ElementalCombat/api/*'
+//    include 'Tavi007/ElementalCombat/capabilities/attack/AttackLayer.*'
+//    include 'Tavi007/ElementalCombat/capabilities/defense/DefenseLayer.*'
+//    include 'Tavi007/ElementalCombat/config/*'
+//    from sourceSets.main.allSource
+//    from sourceSets.main.output
+//}
 
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allJava
-}
+//task sourcesJar(type: Jar) {
+//    classifier = 'sources'
+//    from sourceSets.main.allJava
+//}
 
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
-}
+//task javadocJar(type: Jar) {
+//    classifier = 'javadoc'
+//    from javadoc
 
 test {
     useJUnitPlatform()
 }
 
-tasks.build.dependsOn apiJar, sourcesJar
+//tasks.build.dependsOn apiJar, sourcesJar
 
 // Example configuration to allow publishing using the maven-publish plugin
 // This is the preferred method to reobfuscate your jar file

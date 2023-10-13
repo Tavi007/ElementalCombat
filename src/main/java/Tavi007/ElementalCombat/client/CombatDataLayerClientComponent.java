@@ -4,16 +4,12 @@ import java.util.List;
 
 import org.joml.Matrix4f;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class CombatDataLayerClientComponent implements ClientTooltipComponent {
@@ -56,20 +52,21 @@ public class CombatDataLayerClientComponent implements ClientTooltipComponent {
         }
     }
 
-    public void renderText(Font font, PoseStack poseStack, int posX, int posY) {
+    public void renderText(Font font, GuiGraphics guiGraphics, int posX, int posY) {
         List<String> tooltip = component.getTooltip();
         for (int i = 0; i < tooltip.size(); i++) {
-            font.drawShadow(poseStack, tooltip.get(i), posX, posY + i * component.getLineHeight(font), 16777215);
+            guiGraphics.drawString(font, tooltip.get(i), posX, posY + i * component.getLineHeight(font), 16777215);
         }
     }
 
     @Override
-    public void renderImage(Font font, int x, int y, PoseStack poseStack, ItemRenderer itemRenderer) {
+    public void renderImage(Font font, int x, int y, GuiGraphics guiGraphics) {
         List<TextureData> textureData = component.getTextureData(font, x, y);
         textureData.forEach(data -> {
             ResourceLocation texture = new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + data.getName() + ".png");
-            RenderSystem.setShaderTexture(0, texture);
-            Gui.blit(poseStack,
+            // RenderSystem.setShaderTexture(0, texture);
+
+            guiGraphics.blit(texture,
                 data.getPosX(),
                 data.getPosY(),
                 0,

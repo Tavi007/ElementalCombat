@@ -57,7 +57,7 @@ public class AttackDataAPI {
      */
     public static void putLayer(LivingEntity entity, AttackLayer layer, ResourceLocation location) {
         AttackDataHelper.get(entity).putLayer(location, layer);
-        if (!entity.level.isClientSide) {
+        if (!entity.level().isClientSide) {
             NetworkHelper.syncAttackLayerMessageForClients(entity, layer, location);
         }
     }
@@ -73,7 +73,7 @@ public class AttackDataAPI {
     public static void deleteLayer(LivingEntity entity, ResourceLocation location) {
         AttackLayer layer = new AttackLayer();
         AttackDataHelper.get(entity).putLayer(location, layer);
-        if (!entity.level.isClientSide) {
+        if (!entity.level().isClientSide) {
             NetworkHelper.syncAttackLayerMessageForClients(entity, layer, location);
         }
     }

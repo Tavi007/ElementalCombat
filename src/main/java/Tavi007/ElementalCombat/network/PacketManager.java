@@ -46,7 +46,7 @@ public class PacketManager {
     }
 
     public static void sendToClient(Packet packet, Player player) {
-        if (!player.level.isClientSide()) {
+        if (!player.level().isClientSide()) {
             CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), packet);
         } else {
             throw new IllegalArgumentException("Player must be a server player!");

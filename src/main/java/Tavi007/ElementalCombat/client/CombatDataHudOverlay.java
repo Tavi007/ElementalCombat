@@ -16,6 +16,7 @@ import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
@@ -24,14 +25,12 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 public class CombatDataHudOverlay implements IGuiOverlay {
 
     // copied from Screen
-    private void renderHUDBox(PoseStack poseStack, int posX, int posY, int width, int height) {
+    private void renderHUDBox(GuiGraphics guiGraphics, int posX, int posY, int width, int height) {
         Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        TooltipRenderUtil.renderTooltipBackground((p_262872_, p_262873_, p_262874_, p_262875_, p_262876_, p_262877_, p_262878_, p_262879_, p_262880_) -> {
-            fillGradient(p_262872_, p_262873_, p_262874_, p_262875_, p_262876_, p_262877_, p_262878_, p_262879_, p_262880_);
-        }, poseStack.last().pose(), bufferbuilder, posX, posY, width, height, 400);
+        TooltipRenderUtil.renderTooltipBackground(guiGraphics, posX, posY, width, height, 400);
         BufferUploader.drawWithShader(bufferbuilder.end());
     }
 
@@ -53,7 +52,7 @@ public class CombatDataHudOverlay implements IGuiOverlay {
     }
 
     @Override
-    public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int screenWidth, int screenHeight) {
+    public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
 
         if (ClientConfig.isHUDEnabled()) {
             // see Screen#renderToolTips in client.gui.screen
@@ -92,14 +91,15 @@ public class CombatDataHudOverlay implements IGuiOverlay {
                 }
 
                 // rendering starts here
+                PoseStack poseStack = guiGraphics.pose();
                 poseStack.pushPose();
                 poseStack.scale(scale, scale, scale);
 
-                renderHUDBox(poseStack, posX, posY, listWidth, listHeight);
+                renderHUDBox(guiGraphics, posX, posY, listWidth, listHeight);
 
                 // render component
-                clientComponent.renderText(mc.font, poseStack, posX, posY);
-                clientComponent.renderImage(mc.font, posX, posY, poseStack, mc.getItemRenderer());
+                clientComponent.renderText(mc.font, guiGraphics, posX, posY);
+                clientComponent.renderImage(mc.font, posX, posY, guiGraphics);
 
                 poseStack.popPose();
             }

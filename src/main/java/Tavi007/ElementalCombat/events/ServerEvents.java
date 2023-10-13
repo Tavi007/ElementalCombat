@@ -155,7 +155,7 @@ public class ServerEvents {
         DamageSource damageSource = event.getSource();
 
         // no modification. Entity should take normal damage and die eventually.
-        if (damageSource == null || damageSource.is(DamageTypes.OUT_OF_WORLD)) {
+        if (damageSource == null || damageSource.is(DamageTypes.GENERIC)) {
             return;
         }
 
@@ -213,7 +213,7 @@ public class ServerEvents {
         CreateEmitterPacket messageToClient = new CreateEmitterPacket(entity.getId(), name, amount);
 
         // send message to nearby players
-        ServerLevel world = (ServerLevel) entity.level;
+        ServerLevel world = (ServerLevel) entity.level();
         for (int j = 0; j < world.players().size(); ++j) {
             ServerPlayer serverplayerentity = world.players().get(j);
             BlockPos blockpos = serverplayerentity.blockPosition();
