@@ -29,7 +29,7 @@ public class ElementalHarmingEffect extends MobEffect {
         Reference<DamageType> damageType = livingEntity.level
             .registryAccess()
             .registryOrThrow(Registries.DAMAGE_TYPE)
-            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(ElementalCombat.MOD_ID, element)));
+            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(ElementalCombat.MOD_ID, element + "_magic")));
         livingEntity.hurt(new DamageSource(damageType), (float) (6 << level));
     }
 
@@ -39,7 +39,7 @@ public class ElementalHarmingEffect extends MobEffect {
         Reference<DamageType> damageType = potionEntity.level
             .registryAccess()
             .registryOrThrow(Registries.DAMAGE_TYPE)
-            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(ElementalCombat.MOD_ID, element)));
+            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(ElementalCombat.MOD_ID, element + "_magic")));
         target.hurt(new DamageSource(damageType), (float) damage);
     }
 

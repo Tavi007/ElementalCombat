@@ -20,13 +20,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class StartupCommon {
 
-    private static final byte ENTITY_ATTACKDATA_MESSAGE_TO_CLIENT_ID = 1;
-    private static final byte ENTITY_DEFENSELAYER_MESSAGE_TO_CLIENT_ID = 2;
-    private static final byte DISABLERENDER_MESSAGE_TO_CLIENT_ID = 3;
-    private static final byte CREATEEMITTER_MESSAGE_TO_CLIENT_ID = 4;
-    private static final byte JSONSYNC_MESSAGE_TO_CLIENT_ID = 5;
-    public static final String MESSAGE_PROTOCOL_VERSION = "1.0";
-
     @SubscribeEvent
     public static void onCommonSetup(RegisterCapabilitiesEvent event) {
         // capabilities

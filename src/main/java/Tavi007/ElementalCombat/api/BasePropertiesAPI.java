@@ -131,14 +131,15 @@ public class BasePropertiesAPI {
      * @return copy of AttackData.
      */
     public static AttackLayer getAttackData(DamageSource damageSource) {
-        if (damageSource.getMsgId() != null) {
-            String name = damageSource.getMsgId().toLowerCase();
-            ResourceLocation rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + name);
+        AttackLayer layer = new AttackLayer();
+        damageSource.typeHolder().unwrapKey().ifPresent(resourceKey -> {
+            ResourceLocation rlDamageSource = resourceKey.location();
+            rlDamageSource = rlDamageSource.withPrefix("damage_types/");
             AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(
                 ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageTypeDataFromLocation(rlDamageSource));
-            return new AttackLayer(property.getAttackStyle(), property.getAttackElement());
-        }
-        return new AttackLayer();
+            layer.set(new AttackLayer(property.getAttackStyle(), property.getAttackElement()));
+        });
+        return layer;
     }
 
     /**
