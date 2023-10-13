@@ -45,11 +45,11 @@ public class StartupClientOnly {
 
     @SubscribeEvent
     public static void onRegisterParticleProvidersEvent(RegisterParticleProvidersEvent event) {
-        event.register(ParticleList.CRIT_ELEMENT.get(), CombatParticle.Factory::new);
-        event.register(ParticleList.CRIT_STYLE.get(), CombatParticle.Factory::new);
-        event.register(ParticleList.RESIST_ELEMENT.get(), CombatParticle.Factory::new);
-        event.register(ParticleList.RESIST_STYLE.get(), CombatParticle.Factory::new);
-        event.register(ParticleList.ABSORB.get(), CombatParticle.Factory::new);
+        event.registerSpriteSet(ParticleList.CRIT_ELEMENT.get(), CombatParticle.Factory::new);
+        event.registerSpriteSet(ParticleList.CRIT_STYLE.get(), CombatParticle.Factory::new);
+        event.registerSpriteSet(ParticleList.RESIST_ELEMENT.get(), CombatParticle.Factory::new);
+        event.registerSpriteSet(ParticleList.RESIST_STYLE.get(), CombatParticle.Factory::new);
+        event.registerSpriteSet(ParticleList.ABSORB.get(), CombatParticle.Factory::new);
 
         ElementalCombat.LOGGER.info("ElementalCombat particles factory registered.");
     }
