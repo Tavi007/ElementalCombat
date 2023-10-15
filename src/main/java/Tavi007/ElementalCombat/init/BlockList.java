@@ -1,5 +1,7 @@
 package Tavi007.ElementalCombat.init;
 
+import static Tavi007.ElementalCombat.init.CreativeTabList.addToTab;
+
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -36,22 +38,22 @@ public class BlockList {
     public static final RegistryObject<Block> ESSENCE_BLOCK_FLORA = BLOCKS.register("essence_block_flora",
         () -> new GlazedTerracottaBlock(Block.Properties.of()));
 
-    public static final RegistryObject<Item> ESSENCE_BLOCK_FIRE_ITEM = ITEMS.register("essence_block_fire",
-        () -> new BlockItem(ESSENCE_BLOCK_FIRE.get(), standardItemProperties));
-    public static final RegistryObject<Item> ESSENCE_BLOCK_ICE_ITEM = ITEMS.register("essence_block_ice",
-        () -> new BlockItem(ESSENCE_BLOCK_ICE.get(), standardItemProperties));
-    public static final RegistryObject<Item> ESSENCE_BLOCK_WATER_ITEM = ITEMS.register("essence_block_water",
-        () -> new BlockItem(ESSENCE_BLOCK_WATER.get(), standardItemProperties));
-    public static final RegistryObject<Item> ESSENCE_BLOCK_THUNDER_ITEM = ITEMS.register("essence_block_thunder",
-        () -> new BlockItem(ESSENCE_BLOCK_THUNDER.get(), standardItemProperties));
-    public static final RegistryObject<Item> ESSENCE_BLOCK_DARKNESS_ITEM = ITEMS.register("essence_block_darkness",
-        () -> new BlockItem(ESSENCE_BLOCK_DARKNESS.get(), standardItemProperties));
-    public static final RegistryObject<Item> ESSENCE_BLOCK_LIGHT_ITEM = ITEMS.register("essence_block_light",
-        () -> new BlockItem(ESSENCE_BLOCK_LIGHT.get(), standardItemProperties));
-    public static final RegistryObject<Item> ESSENCE_BLOCK_EARTH_ITEM = ITEMS.register("essence_block_earth",
-        () -> new BlockItem(ESSENCE_BLOCK_EARTH.get(), standardItemProperties));
-    public static final RegistryObject<Item> ESSENCE_BLOCK_WIND_ITEM = ITEMS.register("essence_block_wind",
-        () -> new BlockItem(ESSENCE_BLOCK_WIND.get(), standardItemProperties));
-    public static final RegistryObject<Item> ESSENCE_BLOCK_FLORA_ITEM = ITEMS.register("essence_block_flora",
-        () -> new BlockItem(ESSENCE_BLOCK_FLORA.get(), standardItemProperties));
+    public static final RegistryObject<Item> ESSENCE_BLOCK_FIRE_ITEM = addToTab(ITEMS.register("essence_block_fire",
+        () -> new BlockItem(ESSENCE_BLOCK_FIRE.get(), standardItemProperties)));
+    public static final RegistryObject<Item> ESSENCE_BLOCK_ICE_ITEM = addToTab(ITEMS.register("essence_block_ice",
+        () -> new BlockItem(ESSENCE_BLOCK_ICE.get(), standardItemProperties)));
+    public static final RegistryObject<Item> ESSENCE_BLOCK_WATER_ITEM = addToTab(ITEMS.register("essence_block_water",
+        () -> new BlockItem(ESSENCE_BLOCK_WATER.get(), standardItemProperties)));
+    public static final RegistryObject<Item> ESSENCE_BLOCK_THUNDER_ITEM = addToTab(ITEMS.register("essence_block_thunder",
+        () -> new BlockItem(ESSENCE_BLOCK_THUNDER.get(), standardItemProperties)));
+    public static final RegistryObject<Item> ESSENCE_BLOCK_DARKNESS_ITEM = addToTab(ITEMS.register("essence_block_darkness",
+        () -> new BlockItem(ESSENCE_BLOCK_DARKNESS.get(), standardItemProperties)));
+    public static final RegistryObject<Item> ESSENCE_BLOCK_LIGHT_ITEM = addToTab(ITEMS.register("essence_block_light",
+        () -> new BlockItem(ESSENCE_BLOCK_LIGHT.get(), standardItemProperties)));
+    public static final RegistryObject<Item> ESSENCE_BLOCK_EARTH_ITEM = addToTab(ITEMS.register("essence_block_earth",
+        () -> new BlockItem(ESSENCE_BLOCK_EARTH.get(), standardItemProperties)));
+    public static final RegistryObject<Item> ESSENCE_BLOCK_WIND_ITEM = addToTab(ITEMS.register("essence_block_wind",
+        () -> new BlockItem(ESSENCE_BLOCK_WIND.get(), standardItemProperties)));
+    public static final RegistryObject<Item> ESSENCE_BLOCK_FLORA_ITEM = addToTab(ITEMS.register("essence_block_flora",
+        () -> new BlockItem(ESSENCE_BLOCK_FLORA.get(), standardItemProperties)));
 }

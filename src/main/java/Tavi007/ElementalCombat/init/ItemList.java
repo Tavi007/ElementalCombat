@@ -1,5 +1,7 @@
 package Tavi007.ElementalCombat.init;
 
+import static Tavi007.ElementalCombat.init.CreativeTabList.addToTab;
+
 import Tavi007.ElementalCombat.ElementalCombat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
@@ -14,14 +16,14 @@ public class ItemList {
     private static Properties fullStack = new Item.Properties().stacksTo(64);
 
     // essence
-    public static final RegistryObject<Item> ESSENCE_FIRE = ITEMS.register("essence_fire", () -> new Item(fullStack));
-    public static final RegistryObject<Item> ESSENCE_ICE = ITEMS.register("essence_ice", () -> new Item(fullStack));
-    public static final RegistryObject<Item> ESSENCE_WATER = ITEMS.register("essence_water", () -> new Item(fullStack));
-    public static final RegistryObject<Item> ESSENCE_THUNDER = ITEMS.register("essence_thunder", () -> new Item(fullStack));
-    public static final RegistryObject<Item> ESSENCE_DARKNESS = ITEMS.register("essence_darkness", () -> new Item(fullStack));
-    public static final RegistryObject<Item> ESSENCE_LIGHT = ITEMS.register("essence_light", () -> new Item(fullStack));
-    public static final RegistryObject<Item> ESSENCE_EARTH = ITEMS.register("essence_earth", () -> new Item(fullStack));
-    public static final RegistryObject<Item> ESSENCE_WIND = ITEMS.register("essence_wind", () -> new Item(fullStack));
-    public static final RegistryObject<Item> ESSENCE_FLORA = ITEMS.register("essence_flora", () -> new Item(fullStack));
+    public static final RegistryObject<Item> ESSENCE_FIRE = addToTab(ITEMS.register("essence_fire", () -> new Item(fullStack)));
+    public static final RegistryObject<Item> ESSENCE_ICE = addToTab(ITEMS.register("essence_ice", () -> new Item(fullStack)));
+    public static final RegistryObject<Item> ESSENCE_WATER = addToTab(ITEMS.register("essence_water", () -> new Item(fullStack)));
+    public static final RegistryObject<Item> ESSENCE_THUNDER = addToTab(ITEMS.register("essence_thunder", () -> new Item(fullStack)));
+    public static final RegistryObject<Item> ESSENCE_DARKNESS = addToTab(ITEMS.register("essence_darkness", () -> new Item(fullStack)));
+    public static final RegistryObject<Item> ESSENCE_LIGHT = addToTab(ITEMS.register("essence_light", () -> new Item(fullStack)));
+    public static final RegistryObject<Item> ESSENCE_EARTH = addToTab(ITEMS.register("essence_earth", () -> new Item(fullStack)));
+    public static final RegistryObject<Item> ESSENCE_WIND = addToTab(ITEMS.register("essence_wind", () -> new Item(fullStack)));
+    public static final RegistryObject<Item> ESSENCE_FLORA = addToTab(ITEMS.register("essence_flora", () -> new Item(fullStack)));
 
 }
