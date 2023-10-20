@@ -19,6 +19,5 @@
 		"ice":25,
 		"thunder":25,
 		"flora":25
-	},
-	"biome_dependency":false
+	}
 }
