@@ -5,7 +5,7 @@ license="All rights reserved"
 #issueTrackerURL="http://my.issue.tracker/" #optional
 [[mods]] #mandatory
 modId = "elementalcombat" #mandatory
-version = "1.2.3.0" #mandatory
+version = "1.2.3.3" #mandatory
 
 displayName = "Elemental Combat" #mandatory
 #updateJSONURL = "http://myurl.me/" #optional
