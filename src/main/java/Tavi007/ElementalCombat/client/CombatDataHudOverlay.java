@@ -73,7 +73,7 @@ public class CombatDataHudOverlay implements IGuiOverlay {
                 poseStack.scale(scale, scale, scale);
 
                 // render component
-                TooltipRenderUtil.renderTooltipBackground(guiGraphics, posX, posY, listWidth, listHeight, 400);
+                TooltipRenderUtil.renderTooltipBackground(guiGraphics, posX, posY, listWidth, listHeight, 0);
                 clientComponent.renderImage(mc.font, posX, posY, guiGraphics);
                 clientComponent.renderText(mc.font, guiGraphics, posX, posY);
 
