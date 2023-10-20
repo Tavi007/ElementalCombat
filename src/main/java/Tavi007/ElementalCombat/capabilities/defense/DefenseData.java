@@ -99,17 +99,17 @@ public class DefenseData {
     }
 
     public void initialize(ItemStack stack) {
-        isInitialized = true;
         List<EffectInstance> potionEffects = PotionUtils.getMobEffects(stack);
         potionEffects.forEach(effect -> {
             defenseLayers.put(effect.getEffect().getRegistryName(), BasePropertiesAPI.getDefenseLayer(effect));
         });
         putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "base"), BasePropertiesAPI.getDefenseLayer(stack));
+        isInitialized = true;
     }
 
     public void initialize(LivingEntity entity) {
-        isInitialized = true;
         putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "base"), BasePropertiesAPI.getDefenseLayer(entity));
+        isInitialized = true;
     }
 
     public boolean isInitialized() {

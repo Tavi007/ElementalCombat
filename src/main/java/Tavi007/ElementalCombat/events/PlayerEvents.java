@@ -10,6 +10,7 @@ import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -28,15 +29,24 @@ public class PlayerEvents {
             return;
         }
         // change defense properties
+        DefenseLayer defenseLayer = new DefenseLayer();
         switch (event.getSlot().getType()) {
         case ARMOR:
-            DefenseLayer defenseLayer = new DefenseLayer();
             entity.getArmorSlots().forEach(stack -> {
                 DefenseData data = DefenseDataHelper.get(stack);
                 defenseLayer.addLayer(data.toLayer());
             });
             DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("armor"));
         case HAND:
+            if (entity.getOffhandItem().getItem() instanceof ShieldItem) {
+                defenseLayer.addLayer(DefenseDataHelper.get(entity.getOffhandItem()).toLayer());
+            }
+            if (entity.getMainHandItem().getItem() instanceof ShieldItem) {
+                defenseLayer.addLayer(DefenseDataHelper.get(entity.getOffhandItem()).toLayer());
+            }
+            if (!defenseLayer.isEmpty()) {
+                DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("hands"));
+            }
             AttackDataHelper.updateItemLayer(entity);
         }
     }
