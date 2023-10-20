@@ -27,16 +27,19 @@ public class PlayerEvents {
         if (entity == null) {
             return;
         }
+        DefenseLayer defenseLayer = new DefenseLayer();
         // change defense properties
         switch (event.getSlot().getType()) {
         case ARMOR:
-            DefenseLayer defenseLayer = new DefenseLayer();
             entity.getArmorSlots().forEach(stack -> {
                 DefenseData data = DefenseDataHelper.get(stack);
                 defenseLayer.addLayer(data.toLayer());
             });
             DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("armor"));
         case HAND:
+            defenseLayer.addLayer(DefenseDataHelper.get(entity.getOffhandItem()).toLayer());
+            defenseLayer.addLayer(DefenseDataHelper.get(entity.getMainHandItem()).toLayer());
+            DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("hands"));
             AttackDataHelper.updateItemLayer(entity);
         }
     }
