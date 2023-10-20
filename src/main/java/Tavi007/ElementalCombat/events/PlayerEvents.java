@@ -11,6 +11,7 @@ import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
@@ -36,9 +37,15 @@ public class PlayerEvents {
             });
             DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("armor"));
         case HAND:
-            defenseLayer.addLayer(DefenseDataHelper.get(entity.getOffhandItem()).toLayer());
-            defenseLayer.addLayer(DefenseDataHelper.get(entity.getMainHandItem()).toLayer());
-            DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("hands"));
+            if(entity.getOffhandItem().getItem() instanceof ShieldItem) {
+                defenseLayer.addLayer(DefenseDataHelper.get(entity.getOffhandItem()).toLayer());
+            }
+            if(entity.getMainHandItem().getItem() instanceof ShieldItem) {
+                defenseLayer.addLayer(DefenseDataHelper.get(entity.getOffhandItem()).toLayer());
+            }
+            if(!defenseLayer.isEmpty()) {
+                DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("hands"));
+            }
 
             AttackDataHelper.updateItemLayer(entity);
         }
