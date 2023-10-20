@@ -28,7 +28,6 @@ public class PlayerEvents {
             return;
         }
         DefenseLayer defenseLayer = new DefenseLayer();
-        // change defense properties
         switch (event.getSlot().getType()) {
         case ARMOR:
             entity.getArmorSlots().forEach(stack -> {
@@ -40,6 +39,7 @@ public class PlayerEvents {
             defenseLayer.addLayer(DefenseDataHelper.get(entity.getOffhandItem()).toLayer());
             defenseLayer.addLayer(DefenseDataHelper.get(entity.getMainHandItem()).toLayer());
             DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("hands"));
+            
             AttackDataHelper.updateItemLayer(entity);
         }
     }
