@@ -25,8 +25,6 @@ public class AttackDataAPI {
      * 
      * @param entity
      *            A LivingEntity.
-     * @param location
-     *            The ResourceLocation.
      */
     public static AttackLayer getFullDataAsLayer(LivingEntity entity) {
         return new AttackLayer(AttackDataHelper.get(entity).toLayer());
@@ -112,8 +110,6 @@ public class AttackDataAPI {
      * 
      * @param entity
      *            A Projectile.
-     * @param location
-     *            The ResourceLocation.
      */
     public static AttackLayer getFullDataAsLayer(Projectile entity) {
         return new AttackLayer(AttackDataHelper.get(entity).toLayer());
@@ -192,8 +188,6 @@ public class AttackDataAPI {
      * 
      * @param stack
      *            A ItemStack.
-     * @param location
-     *            The ResourceLocation.
      */
     public static AttackLayer getFullDataAsLayer(ItemStack stack) {
         return new AttackLayer(AttackDataHelper.get(stack).toLayer());
@@ -281,8 +275,6 @@ public class AttackDataAPI {
      * 
      * @param source
      *            A DamageSource.
-     * @param location
-     *            The ResourceLocation.
      */
     public static AttackLayer getFullDataAsLayer(DamageSource source) {
         return new AttackLayer(AttackDataHelper.get(source).toLayer());

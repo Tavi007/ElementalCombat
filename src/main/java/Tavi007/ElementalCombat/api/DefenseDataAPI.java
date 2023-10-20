@@ -21,8 +21,6 @@ public class DefenseDataAPI {
      * 
      * @param entity
      *            A LivingEntity.
-     * @param location
-     *            The ResourceLocation.
      */
     public static DefenseLayer getFullDataAsLayer(LivingEntity entity) {
         return new DefenseLayer(DefenseDataHelper.get(entity).toLayer());
@@ -108,8 +106,6 @@ public class DefenseDataAPI {
      * 
      * @param stack
      *            A ItemStack.
-     * @param location
-     *            The ResourceLocation.
      */
     public static DefenseLayer getFullDataAsLayer(ItemStack stack) {
         return new DefenseLayer(DefenseDataHelper.get(stack).toLayer());
@@ -117,7 +113,7 @@ public class DefenseDataAPI {
 
     /**
      * Get a copy of the {@link DefenseLayer} of the {@link ItemStack} at the {@link ResourceLocation}.
-     * Use {@link AttackDataAPI#putLayer(ItemStack, DefenseLayer, ResourceLocation, LivingEntity)} to apply changes.
+     * Use {@link DefenseDataAPI#putLayer(ItemStack, DefenseLayer, ResourceLocation)} to apply changes.
      * 
      * @param stack
      *            A ItemStack.
@@ -137,8 +133,6 @@ public class DefenseDataAPI {
      *            The ResourceLocation.
      * @param layer
      *            The attack layer to be set.
-     * @param entity
-     *            The LivingEntity, which might be holding the ItemStack. Needed to update 'item'-layer of the entity.
      */
     public static void putLayer(ItemStack stack, DefenseLayer layer, ResourceLocation location) {
         DefenseDataHelper.get(stack).putLayer(location, layer);

@@ -87,7 +87,7 @@ public class BasePropertiesAPI {
      * Returns a copy of the default {@link AttackData} of the {@link EffectInstance}.
      * Currently only checks for INSTANT_DAMAGE, which has the style 'magic'. Might rework at some point.
      * 
-     * @param effect
+     * @param effectInstance
      *            The EffectInstance.
      * @return copy of AttackData.
      */
@@ -143,7 +143,7 @@ public class BasePropertiesAPI {
     }
 
     /**
-     * Returns a copy of the default {@link AttackData} of any {@link ProjectileEntity}.
+     * Returns a copy of the default {@link AttackData} of any {@link Projectile}.
      * 
      * @param projectile
      *            The Projectile.
@@ -203,7 +203,7 @@ public class BasePropertiesAPI {
      * Returns a copy of the default {@link DefenseLayer} of the {@link EffectInstance}.
      * Currently only checks for my own Effect class and vanilla ones.
      * 
-     * @param effect
+     * @param effectInstance
      *            The EffectInstance.
      * @return copy of DefenseLayer.
      */
@@ -234,12 +234,10 @@ public class BasePropertiesAPI {
     }
 
     /**
-     * Returns a copy of the default {@link DefenseData} of a Biome at position {@link BlockPos}.
+     * Returns a copy of the default {@link DefenseData} of a Biome with the {@link ResourceLocation}.
      * 
-     * @param world
-     *            A World.
-     * @param position
-     *            The BlockPos
+     * @param rlBiome
+     *            ResourceLocation of the Biome.
      * @return copy of DefenseData.
      */
     public static DefenseLayer getDefenseLayer(ResourceLocation rlBiome) {

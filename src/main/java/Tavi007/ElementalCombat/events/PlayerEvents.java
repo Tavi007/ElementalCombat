@@ -39,7 +39,7 @@ public class PlayerEvents {
             defenseLayer.addLayer(DefenseDataHelper.get(entity.getOffhandItem()).toLayer());
             defenseLayer.addLayer(DefenseDataHelper.get(entity.getMainHandItem()).toLayer());
             DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("hands"));
-            
+
             AttackDataHelper.updateItemLayer(entity);
         }
     }
