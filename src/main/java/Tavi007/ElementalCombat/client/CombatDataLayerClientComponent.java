@@ -34,6 +34,10 @@ public class CombatDataLayerClientComponent implements ClientTooltipComponent {
         return component.getWidth(font);
     }
 
+    public void renderText(Font font, GuiGraphics guiGraphics, int posX, int posY) {
+        this.renderText(font, posX, posY, guiGraphics.pose().last().pose(), guiGraphics.bufferSource());
+    }
+
     @Override
     public void renderText(Font font, int x, int y, Matrix4f matrix4f, MultiBufferSource.BufferSource bufferSource) {
         List<String> tooltip = component.getTooltip();
@@ -52,20 +56,11 @@ public class CombatDataLayerClientComponent implements ClientTooltipComponent {
         }
     }
 
-    public void renderText(Font font, GuiGraphics guiGraphics, int posX, int posY) {
-        List<String> tooltip = component.getTooltip();
-        for (int i = 0; i < tooltip.size(); i++) {
-            guiGraphics.drawString(font, tooltip.get(i), posX, posY + i * component.getLineHeight(font), 16777215);
-        }
-    }
-
     @Override
     public void renderImage(Font font, int x, int y, GuiGraphics guiGraphics) {
         List<TextureData> textureData = component.getTextureData(font, x, y);
         textureData.forEach(data -> {
             ResourceLocation texture = new ResourceLocation(ElementalCombat.MOD_ID, "textures/icons/" + data.getName() + ".png");
-            // RenderSystem.setShaderTexture(0, texture);
-
             guiGraphics.blit(texture,
                 data.getPosX(),
                 data.getPosY(),
