@@ -103,7 +103,7 @@ public class AttackData implements INBTSerializable<CompoundTag> {
         attackLayers.put(new ResourceLocation("base"), base);
         List<MobEffectInstance> potionEffects = PotionUtils.getMobEffects(stack);
         potionEffects.forEach(effect -> {
-            attackLayers.put(effect.getEffect().getRegistryName(), BasePropertiesAPI.getAttackLayer(effect));
+            putLayer(effect.getEffect().getRegistryName(), BasePropertiesAPI.getAttackLayer(effect));
         });
         isInitialized = true;
     }
