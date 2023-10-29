@@ -1,0 +1,11 @@
+{
+	"attack_style":"projectile",
+	"defense_style":{
+		"projectile":12
+	},
+	"defense_element":{
+		"darkness":12,
+		"light":-12
+	},
+	"biome_dependency":false
+}

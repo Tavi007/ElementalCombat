@@ -1,0 +1,8 @@
+{
+	"attack_element":"darkness",
+	"defense_element":{
+		"wind":25,
+		"earth":12
+	},
+	"biome_dependency":false
+}
