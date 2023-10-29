@@ -1,0 +1,9 @@
+{
+	"attack_style":"magic",
+	"defense_style":{
+		"magic":12
+	},
+	"defense_element":{
+		"flora":12
+	}
+}

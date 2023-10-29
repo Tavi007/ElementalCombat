@@ -1,0 +1,7 @@
+{
+	"attack_element":"darkness",
+	"defense_element":{
+		"wind":25,
+		"earth":12
+	}
+}
