@@ -1,7 +1,0 @@
-{
-	"attack_element":"water",
-	"defense_element":{
-		"water":12
-	},
-	"biome_dependency":true
-}

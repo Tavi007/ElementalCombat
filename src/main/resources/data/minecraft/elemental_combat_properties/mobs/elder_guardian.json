@@ -1,0 +1,10 @@
+{
+	"attack_style":"magic",
+	"attack_element":"thunder",
+	"defense_element":{
+		"water":25,
+		"fire":12,
+		"ice":12
+	},
+	"biome_dependency":false
+}
