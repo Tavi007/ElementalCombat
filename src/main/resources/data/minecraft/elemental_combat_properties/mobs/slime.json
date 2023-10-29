@@ -1,0 +1,9 @@
+{
+	"defense_style":{
+		"magic":-25
+	},
+	"defense_element":{
+		"normal":12
+	},
+	"biome_dependency":true
+}
