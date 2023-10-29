@@ -41,7 +41,7 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
     private static ThreadLocal<Deque<CombatPropertiesContext>> dataContext = new ThreadLocal<Deque<CombatPropertiesContext>>();
 
     public CombatPropertiesManager() {
-        super(GSON, "combat_properties");
+        super(GSON, "elemental_combat_properties");
     }
 
     public void set(BasePropertiesPacket message) {
