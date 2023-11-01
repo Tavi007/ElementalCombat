@@ -22,11 +22,6 @@ public class MobCombatProperties extends ElementalCombatProperties {
         this.biomeDependency = false;
     }
 
-    public MobCombatProperties(MobCombatProperties entityData) {
-        super(entityData.getDefenseStyle(), entityData.getDefenseElement(), entityData.getAttackStyle(), entityData.getAttackElement());
-        this.biomeDependency = entityData.biomeDependency;
-    }
-
     public boolean getBiomeDependency() {
         return this.biomeDependency;
     }

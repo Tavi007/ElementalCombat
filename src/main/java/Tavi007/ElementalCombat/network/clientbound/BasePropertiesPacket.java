@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableMap.Builder;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
-import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
+import Tavi007.ElementalCombat.loading.DefenseOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.ElementalCombatProperties;
 import Tavi007.ElementalCombat.loading.MobCombatProperties;
 import Tavi007.ElementalCombat.network.Packet;
@@ -20,14 +20,14 @@ public class BasePropertiesPacket extends Packet {
     private AttackOnlyCombatProperties baseAttackProperties;
     private Map<ResourceLocation, MobCombatProperties> mobData;
     private Map<ResourceLocation, ElementalCombatProperties> itemData;
-    private Map<ResourceLocation, BiomeCombatProperties> biomeData;
+    private Map<ResourceLocation, DefenseOnlyCombatProperties> biomeData;
     private Map<ResourceLocation, AttackOnlyCombatProperties> damageSourceData;
     private Map<ResourceLocation, AttackOnlyCombatProperties> projectileData;
 
     public BasePropertiesPacket(AttackOnlyCombatProperties baseAttackProperties,
             Map<ResourceLocation, MobCombatProperties> mobData,
             Map<ResourceLocation, ElementalCombatProperties> itemData,
-            Map<ResourceLocation, BiomeCombatProperties> biomeData,
+            Map<ResourceLocation, DefenseOnlyCombatProperties> biomeData,
             Map<ResourceLocation, AttackOnlyCombatProperties> damageSourceData,
             Map<ResourceLocation, AttackOnlyCombatProperties> projectileData) {
         this.baseAttackProperties = baseAttackProperties;
@@ -50,7 +50,7 @@ public class BasePropertiesPacket extends Packet {
         return itemData;
     }
 
-    public Map<ResourceLocation, BiomeCombatProperties> getBiomeData() {
+    public Map<ResourceLocation, DefenseOnlyCombatProperties> getBiomeData() {
         return biomeData;
     }
 
@@ -154,12 +154,12 @@ public class BasePropertiesPacket extends Packet {
         return builder.build();
     }
 
-    private static Map<ResourceLocation, BiomeCombatProperties> readBiome(FriendlyByteBuf buf) {
-        Builder<ResourceLocation, BiomeCombatProperties> builder = ImmutableMap.builder();
+    private static Map<ResourceLocation, DefenseOnlyCombatProperties> readBiome(FriendlyByteBuf buf) {
+        Builder<ResourceLocation, DefenseOnlyCombatProperties> builder = ImmutableMap.builder();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
             ResourceLocation key = new ResourceLocation(buf.readUtf());
-            BiomeCombatProperties value = new BiomeCombatProperties();
+            DefenseOnlyCombatProperties value = new DefenseOnlyCombatProperties();
             value.readFromBuffer(buf);
             builder.put(key, value);
         }
@@ -171,7 +171,7 @@ public class BasePropertiesPacket extends Packet {
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
             ResourceLocation key = new ResourceLocation(buf.readUtf());
-            AttackOnlyCombatProperties value = new AttackOnlyCombatProperties(base.getAttackStyle(), base.getAttackElement());
+            AttackOnlyCombatProperties value = new AttackOnlyCombatProperties(base.getAttackStyleCopy(), base.getAttackElementCopy());
             value.readFromBuffer(buf);
             builder.put(key, value);
         }
