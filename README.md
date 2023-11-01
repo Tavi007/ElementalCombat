@@ -9,7 +9,7 @@ The directory structure:
 	
 	data
 	 ↳ <mod_id>
-	    ↳ combat_properties 
+	    ↳ elemental_combat_properties 
 	       ↳ biomes
 	       ↳ damage_sources
 	       ↳ items
