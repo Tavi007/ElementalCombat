@@ -9,13 +9,12 @@ import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.enchantments.IResistanceEnchantment;
 import Tavi007.ElementalCombat.init.PotionList;
 import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
-import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
+import Tavi007.ElementalCombat.loading.DefenseOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.ElementalCombatProperties;
 import Tavi007.ElementalCombat.loading.MobCombatProperties;
 import Tavi007.ElementalCombat.potions.ElementalHarmingEffect;
 import Tavi007.ElementalCombat.potions.ElementalResistanceEffect;
 import net.minecraft.client.renderer.EffectInstance;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -39,18 +38,18 @@ public class BasePropertiesAPI {
      * Returns the default attack style.
      */
     public static String getDefaultAttackStyle() {
-        return ElementalCombat.COMBAT_PROPERTIES_MANGER.getBaseAttackProperties().getAttackStyle();
+        return ElementalCombat.COMBAT_PROPERTIES_MANGER.getBaseAttackProperties().getAttackStyleCopy();
     }
 
     /**
      * Returns the default attack element.
      */
     public static String getDefaultAttackElement() {
-        return ElementalCombat.COMBAT_PROPERTIES_MANGER.getBaseAttackProperties().getAttackElement();
+        return ElementalCombat.COMBAT_PROPERTIES_MANGER.getBaseAttackProperties().getAttackElementCopy();
     }
 
     /**
-     * Returns a copy of the default {@link AttackData} of any {@link LivingEntity}.
+     * Returns a copy of the base {@link AttackData} of any {@link LivingEntity}.
      * 
      * @param livingEntity
      *            The LivingEntity.
@@ -62,12 +61,12 @@ public class BasePropertiesAPI {
             return new AttackLayer();
         }
         ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "mobs/" + rlEntity.getPath());
-        MobCombatProperties property = new MobCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getMobDataFromLocation(rlProperties));
-        return new AttackLayer(property.getAttackStyle(), property.getAttackElement());
+        MobCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getMobDataFromLocation(rlProperties);
+        return new AttackLayer(property.getAttackStyleCopy(), property.getAttackElementCopy());
     }
 
     /**
-     * Returns a copy of the default {@link AttackData} of any {@link ItemStack}.
+     * Returns a copy of the base {@link AttackData} of any {@link ItemStack}.
      * 
      * @param stack
      *            The ItemStack.
@@ -79,15 +78,15 @@ public class BasePropertiesAPI {
             return new AttackLayer();
         }
         ResourceLocation rlProperties = new ResourceLocation(rlItem.getNamespace(), "items/" + rlItem.getPath());
-        ElementalCombatProperties property = new ElementalCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
-        return new AttackLayer(property.getAttackStyle(), property.getAttackElement());
+        ElementalCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties);
+        return new AttackLayer(property.getAttackStyleCopy(), property.getAttackElementCopy());
     }
 
     /**
-     * Returns a copy of the default {@link AttackData} of the {@link EffectInstance}.
+     * Returns a copy of the {@link AttackData} of the {@link EffectInstance}.
      * Currently only checks for INSTANT_DAMAGE, which has the style 'magic'. Might rework at some point.
      * 
-     * @param effectInstance
+     * @param effect
      *            The EffectInstance.
      * @return copy of AttackData.
      */
@@ -103,7 +102,7 @@ public class BasePropertiesAPI {
     }
 
     /**
-     * Returns a copy of the default {@link AttackData} of the {@link Enchantment}.
+     * Returns a copy of the {@link AttackData} of the {@link Enchantment}.
      * Currently only checks hardcoded values. Might rework at some point.
      * 
      * @param ench
@@ -123,7 +122,7 @@ public class BasePropertiesAPI {
     }
 
     /**
-     * Returns a copy of the default {@link AttackData} of any {@link DamageSource}.
+     * Returns a copy of the {@link AttackData} of any {@link DamageSource}.
      * This includes lightning, burning, drowning, suffocating in a wall and so on.
      * 
      * @param damageSource
@@ -131,19 +130,17 @@ public class BasePropertiesAPI {
      * @return copy of AttackData.
      */
     public static AttackLayer getAttackData(DamageSource damageSource) {
-        AttackLayer layer = new AttackLayer();
-        damageSource.typeHolder().unwrapKey().ifPresent(resourceKey -> {
-            ResourceLocation rlDamageSource = resourceKey.location();
-            rlDamageSource = rlDamageSource.withPrefix("damage_types/");
-            AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(
-                ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageTypeDataFromLocation(rlDamageSource));
-            layer.set(new AttackLayer(property.getAttackStyle(), property.getAttackElement()));
-        });
-        return layer;
+        if (damageSource.getMsgId() != null) {
+            String name = damageSource.getMsgId().toLowerCase();
+            ResourceLocation rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + name);
+            AttackOnlyCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource);
+            return new AttackLayer(property.getAttackStyleCopy(), property.getAttackElementCopy());
+        }
+        return new AttackLayer();
     }
 
     /**
-     * Returns a copy of the default {@link AttackData} of any {@link Projectile}.
+     * Returns a copy of the base {@link AttackData} of any {@link ProjectileEntity}.
      * 
      * @param projectile
      *            The Projectile.
@@ -154,11 +151,10 @@ public class BasePropertiesAPI {
             ItemStack stack = ((ThrowableItemProjectile) projectile).getItem();
             return getAttackData(stack);
         }
-        ResourceLocation resourcelocation = ForgeRegistries.ENTITY_TYPES.getKey(projectile.getType());
-        ResourceLocation rlProjectile = new ResourceLocation(resourcelocation.getNamespace(), "projectiles/" + resourcelocation.getPath());
-        AttackOnlyCombatProperties property = new AttackOnlyCombatProperties(
-            ElementalCombat.COMBAT_PROPERTIES_MANGER.getProjectileDataFromLocation(rlProjectile));
-        return new AttackLayer(property.getAttackStyle(), property.getAttackElement());
+        ResourceLocation rlEntity = ForgeRegistries.ENTITY_TYPES.getKey(projectile.getType());
+        ResourceLocation rlProjectile = new ResourceLocation(rlEntity.getNamespace(), "projectiles/" + rlEntity.getPath());
+        AttackOnlyCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getProjectileDataFromLocation(rlProjectile);
+        return new AttackLayer(property.getAttackStyleCopy(), property.getAttackElementCopy());
     }
 
     /////////////////
@@ -166,7 +162,7 @@ public class BasePropertiesAPI {
     /////////////////
 
     /**
-     * Returns a copy of the default {@link DefenseData} of any {@link LivingEntity}.
+     * Returns a copy of the base {@link DefenseData} of any {@link LivingEntity}.
      * 
      * @param livingEntity
      *            The LivingEntity.
@@ -178,12 +174,12 @@ public class BasePropertiesAPI {
             return new DefenseLayer();
         }
         ResourceLocation rlProperties = new ResourceLocation(rlEntity.getNamespace(), "mobs/" + rlEntity.getPath());
-        MobCombatProperties property = new MobCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getMobDataFromLocation(rlProperties));
-        return new DefenseLayer(property.getDefenseStyle(), property.getDefenseElement());
+        MobCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getMobDataFromLocation(rlProperties);
+        return new DefenseLayer(property.getDefenseStyleCopy(), property.getDefenseElementCopy());
     }
 
     /**
-     * Returns a copy of the default {@link DefenseData} of any {@link ItemStack}.
+     * Returns a copy of the base {@link DefenseData} of any {@link ItemStack}.
      * 
      * @param stack
      *            The ItemStack.
@@ -195,31 +191,12 @@ public class BasePropertiesAPI {
             return new DefenseLayer();
         }
         ResourceLocation rlProperties = new ResourceLocation(rlItem.getNamespace(), "items/" + rlItem.getPath());
-        ElementalCombatProperties property = new ElementalCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties));
-        return new DefenseLayer(property.getDefenseStyle(), property.getDefenseElement());
+        ElementalCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getItemDataFromLocation(rlProperties);
+        return new DefenseLayer(property.getDefenseStyleCopy(), property.getDefenseElementCopy());
     }
 
     /**
-     * Returns a copy of the default {@link DefenseLayer} of the {@link EffectInstance}.
-     * Currently only checks for my own Effect class and vanilla ones.
-     * 
-     * @param effectInstance
-     *            The EffectInstance.
-     * @return copy of DefenseLayer.
-     */
-    public static DefenseLayer getDefenseLayer(MobEffectInstance effectInstance) {
-        DefenseLayer base = new DefenseLayer();
-        MobEffect effect = effectInstance.getEffect();
-        if (effect instanceof ElementalResistanceEffect) {
-            base = ((ElementalResistanceEffect) effect).getDefenseLayer(effectInstance);
-        } else if (MobEffects.FIRE_RESISTANCE.equals(effect)) {
-            base = ((ElementalResistanceEffect) PotionList.FIRE_RESISTANCE_EFFECT.get()).getDefenseLayer(effectInstance);
-        }
-        return base;
-    }
-
-    /**
-     * Returns a copy of the default {@link DefenseData} of any {@link Enchantment}.
+     * Returns a copy of the {@link DefenseData} of any {@link Enchantment}.
      * 
      * @param ench
      *            The Enchantment.
@@ -234,10 +211,10 @@ public class BasePropertiesAPI {
     }
 
     /**
-     * Returns a copy of the default {@link DefenseData} of a Biome with the {@link ResourceLocation}.
+     * Returns a copy of the {@link DefenseData} of a Biome of ResourceLocation {@link rlBiome}.
      * 
      * @param rlBiome
-     *            ResourceLocation of the Biome.
+     *            The ResourceLocation
      * @return copy of DefenseData.
      */
     public static DefenseLayer getDefenseLayer(ResourceLocation rlBiome) {
@@ -247,9 +224,27 @@ public class BasePropertiesAPI {
         }
         ResourceLocation rlProperties = new ResourceLocation(rlBiome.getNamespace(), "biomes/" + rlBiome.getPath());
         ;
-        BiomeCombatProperties property = new BiomeCombatProperties(ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties));
-        defData.addElement(property.getDefenseElement());
-        return defData;
+        DefenseOnlyCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties);
+        return new DefenseLayer(property.getDefenseStyleCopy(), property.getDefenseElementCopy());
+    }
+
+    /**
+     * Returns a copy of the {@link DefenseLayer} of the {@link EffectInstance}.
+     * Currently only checks for my own Effect class and vanilla ones.
+     * 
+     * @param effect
+     *            The EffectInstance.
+     * @return copy of DefenseLayer.
+     */
+    public static DefenseLayer getDefenseLayer(MobEffectInstance effectInstance) {
+        DefenseLayer base = new DefenseLayer();
+        MobEffect effect = effectInstance.getEffect();
+        if (effect instanceof ElementalResistanceEffect) {
+            base = ((ElementalResistanceEffect) effect).getDefenseLayer(effectInstance);
+        } else if (MobEffects.FIRE_RESISTANCE.equals(effect)) {
+            base = ((ElementalResistanceEffect) PotionList.FIRE_RESISTANCE_EFFECT.get()).getDefenseLayer(effectInstance);
+        }
+        return base;
     }
 
     /////////////////
@@ -257,7 +252,7 @@ public class BasePropertiesAPI {
     /////////////////
 
     /**
-     * Returns the default value of the biome_dependency of any {@link LivingEntity}.
+     * Returns the biome_dependency of any {@link LivingEntity}.
      * 
      * @param livingEntity
      *            The LivingEntity.
