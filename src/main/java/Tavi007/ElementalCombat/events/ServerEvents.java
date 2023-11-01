@@ -66,10 +66,11 @@ public class ServerEvents {
         if (!event.getWorld().isClientSide()) { // only server side should check
             Entity entity = event.getEntity();
 
-            // for synchronization after switching dimensions
-            if (entity != null) {
+            if (entity == null) {
                 return;
             }
+
+            // for synchronization after switching dimensions
             if (entity instanceof LivingEntity) {
                 NetworkHelper.syncMessageForClients((LivingEntity) entity);
             } else if (entity instanceof ProjectileEntity && entity.tickCount == 0) {
