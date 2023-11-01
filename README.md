@@ -55,13 +55,17 @@ Basically the same as the files for items. Again the file must be name according
 		"biome_dependency":boolean
 	}
 
-Note that it has the biome_dependency flag. When true, the mob will gain biome specific elemental defense properties.
+Note that it has the biome_dependency flag. When true, the mob will gain biome specific defense properties.
 
 ### Biomes
 
 	{	
 		"defense_element":{
 			"element1": int,
+			...
+		},
+		"defense_style":{
+			"style1": int,
 			...
 		}
 	}
