@@ -169,24 +169,20 @@ jar {
 }
 
 // API jar
-//task apiJar(type: Jar) {
-//    classifier = 'api'
-//    include 'Tavi007/ElementalCombat/api/*'
-//    include 'Tavi007/ElementalCombat/capabilities/attack/AttackLayer.*'
-//    include 'Tavi007/ElementalCombat/capabilities/defense/DefenseLayer.*'
-//    include 'Tavi007/ElementalCombat/config/*'
-//    from sourceSets.main.allSource
-//    from sourceSets.main.output
-//}
+task apiJar(type: Jar) {
+    archiveClassifier.set('api')
+    include 'Tavi007/ElementalCombat/api/*'
+    include 'Tavi007/ElementalCombat/capabilities/attack/AttackLayer.*'
+    include 'Tavi007/ElementalCombat/capabilities/defense/DefenseLayer.*'
+    include 'Tavi007/ElementalCombat/config/*'
+    from sourceSets.main.allSource
+    from sourceSets.main.output
+}
 
-//task sourcesJar(type: Jar) {
-//    classifier = 'sources'
-//    from sourceSets.main.allJava
-//}
-
-//task javadocJar(type: Jar) {
-//    classifier = 'javadoc'
-//    from javadoc
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allJava
+}
 
 test {
     useJUnitPlatform()
