@@ -13,8 +13,8 @@ public class AttackOnlyCombatProperties {
     private String attackElement;
 
     public AttackOnlyCombatProperties() {
-        this.attackStyle = ServerConfig.getDefaultStyle();
-        this.attackElement = ServerConfig.getDefaultElement();
+        attackStyle = ServerConfig.getDefaultStyle();
+        attackElement = ServerConfig.getDefaultElement();
     }
 
     public AttackOnlyCombatProperties(String attackStyle, String attackElement) {
@@ -30,16 +30,12 @@ public class AttackOnlyCombatProperties {
         }
     }
 
-    public AttackOnlyCombatProperties(AttackOnlyCombatProperties properties) {
-        this(properties.getAttackStyle(), properties.getAttackElement());
+    public String getAttackStyleCopy() {
+        return new String(attackStyle);
     }
 
-    public String getAttackStyle() {
-        return this.attackStyle;
-    }
-
-    public String getAttackElement() {
-        return this.attackElement;
+    public String getAttackElementCopy() {
+        return new String(attackElement);
     }
 
     public boolean isEmpty() {
