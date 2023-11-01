@@ -2,9 +2,10 @@ package Tavi007.ElementalCombat.loading;
 
 import java.util.HashMap;
 
-import com.google.common.base.Optional;
 import com.google.gson.annotations.SerializedName;
 
+import Tavi007.ElementalCombat.api.BasePropertiesAPI;
+import Tavi007.ElementalCombat.util.MapHelper;
 import Tavi007.ElementalCombat.util.PacketBufferHelper;
 import net.minecraft.network.FriendlyByteBuf;
 
@@ -23,45 +24,46 @@ public class ElementalCombatProperties {
     public ElementalCombatProperties(HashMap<String, Integer> defenseStyle, HashMap<String, Integer> defenseElement, String attackStyle, String attackElement) {
         this.defenseStyle = defenseStyle;
         this.defenseElement = defenseElement;
-        this.attackStyle = attackStyle;
-        this.attackElement = attackElement;
+        if (attackStyle == null || attackStyle.isEmpty()) {
+            this.attackStyle = BasePropertiesAPI.getDefaultAttackStyle();
+        } else {
+            this.attackStyle = attackStyle;
+        }
+        if (attackElement == null || attackElement.isEmpty()) {
+            this.attackElement = BasePropertiesAPI.getDefaultAttackElement();
+        } else {
+            this.attackElement = attackElement;
+        }
     }
 
     public ElementalCombatProperties() {
-        this.defenseStyle = new HashMap<String, Integer>();
-        this.defenseElement = new HashMap<String, Integer>();
-        this.attackStyle = "";
-        this.attackElement = "";
+        defenseStyle = new HashMap<String, Integer>();
+        defenseElement = new HashMap<String, Integer>();
+        attackStyle = BasePropertiesAPI.getDefaultAttackStyle();
+        attackElement = BasePropertiesAPI.getDefaultAttackElement();
     }
 
-    public ElementalCombatProperties(ElementalCombatProperties properties) {
-        this.defenseStyle = properties.getDefenseStyle();
-        this.defenseElement = properties.getDefenseElement();
-        this.attackStyle = properties.getAttackStyle();
-        this.attackElement = properties.getAttackElement();
+    public HashMap<String, Integer> getDefenseStyleCopy() {
+        return MapHelper.getDeepcopy(defenseStyle);
     }
 
-    public HashMap<String, Integer> getDefenseStyle() {
-        return Optional.fromNullable(defenseStyle).or(new HashMap<>());
+    public HashMap<String, Integer> getDefenseElementCopy() {
+        return MapHelper.getDeepcopy(defenseElement);
     }
 
-    public HashMap<String, Integer> getDefenseElement() {
-        return Optional.fromNullable(defenseElement).or(new HashMap<>());
+    public String getAttackStyleCopy() {
+        return new String(attackStyle);
     }
 
-    public String getAttackStyle() {
-        return Optional.fromNullable(this.attackStyle).or("");
-    }
-
-    public String getAttackElement() {
-        return Optional.fromNullable(this.attackElement).or("");
+    public String getAttackElementCopy() {
+        return new String(attackElement);
     }
 
     public void writeToBuffer(FriendlyByteBuf buf) {
-        PacketBufferHelper.writeHashMap(buf, getDefenseStyle());
-        PacketBufferHelper.writeHashMap(buf, getDefenseElement());
-        buf.writeUtf(getAttackStyle());
-        buf.writeUtf(getAttackElement());
+        PacketBufferHelper.writeHashMap(buf, defenseStyle);
+        PacketBufferHelper.writeHashMap(buf, defenseElement);
+        buf.writeUtf(attackStyle);
+        buf.writeUtf(attackElement);
     }
 
     public void readFromBuffer(FriendlyByteBuf buf) {
@@ -73,10 +75,10 @@ public class ElementalCombatProperties {
 
     @Override
     public String toString() {
-        return "\nDefStyle=" + getDefenseStyle().toString()
-            + "\nDefElement=" + getDefenseElement().toString()
-            + "\nAtckStyle=" + getAttackStyle().toString()
-            + "\nAtckElement=" + getAttackElement().toString();
+        return "\nDefStyle=" + defenseStyle.toString()
+            + "\nDefElement=" + defenseElement.toString()
+            + "\nAtckStyle=" + attackStyle.toString()
+            + "\nAtckElement=" + attackElement.toString();
     }
 
 }
