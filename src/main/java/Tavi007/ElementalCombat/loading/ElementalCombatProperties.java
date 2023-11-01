@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.google.gson.annotations.SerializedName;
 
 import Tavi007.ElementalCombat.config.ServerConfig;
+import Tavi007.ElementalCombat.util.MapHelper;
 import Tavi007.ElementalCombat.util.PacketBufferHelper;
 import net.minecraft.network.FriendlyByteBuf;
 
@@ -36,33 +37,26 @@ public class ElementalCombatProperties {
     }
 
     public ElementalCombatProperties() {
-        this.defenseStyle = new HashMap<String, Integer>();
-        this.defenseElement = new HashMap<String, Integer>();
-        this.attackStyle = ServerConfig.getDefaultStyle();
-        this.attackElement = ServerConfig.getDefaultElement();
+        defenseStyle = new HashMap<String, Integer>();
+        defenseElement = new HashMap<String, Integer>();
+        attackStyle = ServerConfig.getDefaultStyle();
+        attackElement = ServerConfig.getDefaultElement();
     }
 
-    public ElementalCombatProperties(ElementalCombatProperties properties) {
-        this.defenseStyle = properties.getDefenseStyle();
-        this.defenseElement = properties.getDefenseElement();
-        this.attackStyle = properties.getAttackStyle();
-        this.attackElement = properties.getAttackElement();
+    public HashMap<String, Integer> getDefenseStyleCopy() {
+        return MapHelper.getDeepcopy(defenseStyle);
     }
 
-    public HashMap<String, Integer> getDefenseStyle() {
-        return this.defenseStyle;
+    public HashMap<String, Integer> getDefenseElementCopy() {
+        return MapHelper.getDeepcopy(defenseElement);
     }
 
-    public HashMap<String, Integer> getDefenseElement() {
-        return this.defenseElement;
+    public String getAttackStyleCopy() {
+        return new String(attackStyle);
     }
 
-    public String getAttackStyle() {
-        return this.attackStyle;
-    }
-
-    public String getAttackElement() {
-        return this.attackElement;
+    public String getAttackElementCopy() {
+        return new String(attackElement);
     }
 
     public void writeToBuffer(FriendlyByteBuf buf) {
