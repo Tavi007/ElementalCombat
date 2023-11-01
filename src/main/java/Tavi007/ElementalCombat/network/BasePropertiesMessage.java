@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableMap.Builder;
 
 import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
-import Tavi007.ElementalCombat.loading.BiomeCombatProperties;
+import Tavi007.ElementalCombat.loading.DefenseOnlyCombatProperties;
 import Tavi007.ElementalCombat.loading.ElementalCombatProperties;
 import Tavi007.ElementalCombat.loading.MobCombatProperties;
 import net.minecraft.network.PacketBuffer;
@@ -17,7 +17,7 @@ public class BasePropertiesMessage extends MessageToClient {
 
     private Map<ResourceLocation, MobCombatProperties> mobData;
     private Map<ResourceLocation, ElementalCombatProperties> itemData;
-    private Map<ResourceLocation, BiomeCombatProperties> biomeData;
+    private Map<ResourceLocation, DefenseOnlyCombatProperties> biomeData;
     private Map<ResourceLocation, AttackOnlyCombatProperties> damageSourceData;
     private Map<ResourceLocation, AttackOnlyCombatProperties> projectileData;
 
@@ -26,7 +26,7 @@ public class BasePropertiesMessage extends MessageToClient {
 
     public BasePropertiesMessage(Map<ResourceLocation, MobCombatProperties> mobData,
             Map<ResourceLocation, ElementalCombatProperties> itemData,
-            Map<ResourceLocation, BiomeCombatProperties> biomeData,
+            Map<ResourceLocation, DefenseOnlyCombatProperties> biomeData,
             Map<ResourceLocation, AttackOnlyCombatProperties> damageSourceData,
             Map<ResourceLocation, AttackOnlyCombatProperties> projectileData) {
         this.mobData = mobData;
@@ -44,7 +44,7 @@ public class BasePropertiesMessage extends MessageToClient {
         return itemData;
     }
 
-    public Map<ResourceLocation, BiomeCombatProperties> getBiomeData() {
+    public Map<ResourceLocation, DefenseOnlyCombatProperties> getBiomeData() {
         return biomeData;
     }
 
@@ -145,12 +145,12 @@ public class BasePropertiesMessage extends MessageToClient {
         return builder.build();
     }
 
-    private static Map<ResourceLocation, BiomeCombatProperties> readBiome(PacketBuffer buf) {
-        Builder<ResourceLocation, BiomeCombatProperties> builder = ImmutableMap.builder();
+    private static Map<ResourceLocation, DefenseOnlyCombatProperties> readBiome(PacketBuffer buf) {
+        Builder<ResourceLocation, DefenseOnlyCombatProperties> builder = ImmutableMap.builder();
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
             ResourceLocation key = new ResourceLocation(buf.readUtf());
-            BiomeCombatProperties value = new BiomeCombatProperties();
+            DefenseOnlyCombatProperties value = new DefenseOnlyCombatProperties();
             value.readFromBuffer(buf);
             builder.put(key, value);
         }
