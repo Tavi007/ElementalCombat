@@ -12,8 +12,10 @@ import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.PotionItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -45,11 +47,9 @@ public class PlayerEvents {
                 defenseLayer.addLayer(DefenseDataHelper.get(entity.getOffhandItem()).toLayer());
             }
             if (canGiveDefenseFromHolding(entity.getMainHandItem())) {
-                defenseLayer.addLayer(DefenseDataHelper.get(entity.getOffhandItem()).toLayer());
+                defenseLayer.addLayer(DefenseDataHelper.get(entity.getMainHandItem()).toLayer());
             }
-            if (!defenseLayer.isEmpty()) {
-                DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("hands"));
-            }
+            DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("hands"));
             AttackDataHelper.updateItemLayer(entity);
         }
     }
@@ -57,6 +57,8 @@ public class PlayerEvents {
     private static boolean canGiveDefenseFromHolding(ItemStack stack) {
         Item item = stack.getItem();
         return !(item instanceof ArmorItem ||
+            item instanceof PotionItem ||
+            item instanceof EnchantedBookItem ||
             (ElementalCombat.isCuriosLoaded() && HandleCuriosInventory.isCurioItem(stack)));
     }
 
