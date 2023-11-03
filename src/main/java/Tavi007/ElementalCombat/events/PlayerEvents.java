@@ -6,11 +6,14 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
+import Tavi007.ElementalCombat.interaction.HandleCuriosInventory;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ShieldItem;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -38,10 +41,10 @@ public class PlayerEvents {
             });
             DefenseDataAPI.putLayer(entity, defenseLayer, new ResourceLocation("armor"));
         case HAND:
-            if (entity.getOffhandItem().getItem() instanceof ShieldItem) {
+            if (canGiveDefenseFromHolding(entity.getOffhandItem())) {
                 defenseLayer.addLayer(DefenseDataHelper.get(entity.getOffhandItem()).toLayer());
             }
-            if (entity.getMainHandItem().getItem() instanceof ShieldItem) {
+            if (canGiveDefenseFromHolding(entity.getMainHandItem())) {
                 defenseLayer.addLayer(DefenseDataHelper.get(entity.getOffhandItem()).toLayer());
             }
             if (!defenseLayer.isEmpty()) {
@@ -49,6 +52,12 @@ public class PlayerEvents {
             }
             AttackDataHelper.updateItemLayer(entity);
         }
+    }
+
+    private static boolean canGiveDefenseFromHolding(ItemStack stack) {
+        Item item = stack.getItem();
+        return !(item instanceof ArmorItem ||
+            (ElementalCombat.isCuriosLoaded() && HandleCuriosInventory.isCurioItem(stack)));
     }
 
     @SubscribeEvent

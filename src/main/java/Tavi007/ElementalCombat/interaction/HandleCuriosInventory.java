@@ -5,9 +5,11 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.curios.api.event.CurioChangeEvent;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 public class HandleCuriosInventory {
 
@@ -29,5 +31,9 @@ public class HandleCuriosInventory {
         layer.subtractLayer(defDataItemFrom.toLayer());
         layer.addLayer(defDataItemTo.toLayer());
         DefenseDataAPI.putLayer(entity, layer, rl);
+    }
+
+    public static boolean isCurioItem(ItemStack stack) {
+        return stack.getItem() instanceof ICurioItem;
     }
 }
