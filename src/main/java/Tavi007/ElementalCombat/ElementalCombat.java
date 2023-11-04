@@ -40,8 +40,6 @@ public class ElementalCombat {
     public static final ResourceLocation simpleChannelRL = new ResourceLocation(MOD_ID, "channel");
     public static SimpleChannel simpleChannel; // used to transmit your network messages
 
-    private static boolean isCuriosLoaded;
-
     @SuppressWarnings("deprecation")
     public ElementalCombat() {
         MOD_EVENT_BUS = FMLJavaModLoadingContext.get().getModEventBus();
