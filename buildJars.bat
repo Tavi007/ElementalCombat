@@ -1,0 +1,1 @@
+gradlew build &&gradlew apiJar &&gradlew sourceJar
