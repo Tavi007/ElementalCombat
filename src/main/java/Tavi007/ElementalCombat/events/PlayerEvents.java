@@ -54,7 +54,7 @@ public class PlayerEvents {
     @SubscribeEvent
     public static void gainDefenseFromEquipmentEvent(GainDefenseFromEquipmentEvent event) {
         ItemStack stack = event.getItemStack();
-        if (Potions.EMPTY.equals(PotionUtils.getPotion(stack))) {
+        if (!Potions.EMPTY.equals(PotionUtils.getPotion(stack))) {
             event.setCanceled(true);
             return;
         }
