@@ -40,8 +40,6 @@ public class ElementalCombat {
     public static final ResourceLocation simpleChannelRL = new ResourceLocation(MOD_ID, "channel");
     public static SimpleChannel simpleChannel; // used to transmit your network messages
 
-    private static boolean isCuriosLoaded;
-
     @SuppressWarnings("deprecation")
     public ElementalCombat() {
         MOD_EVENT_BUS = FMLJavaModLoadingContext.get().getModEventBus();
@@ -69,8 +67,7 @@ public class ElementalCombat {
 
         // register common stuff
         MOD_EVENT_BUS.register(StartupCommon.class);
-        isCuriosLoaded = ModList.get().isLoaded("curios");
-        if (isCuriosLoaded()) {
+        if (ModList.get().isLoaded("curios")) {
             MinecraftForge.EVENT_BUS.register(HandleCuriosInventory.class);
         }
 
@@ -83,9 +80,5 @@ public class ElementalCombat {
 
     public static void registerClientOnly() {
         MOD_EVENT_BUS.register(StartupClientOnly.class);
-    }
-
-    public static boolean isCuriosLoaded() {
-        return isCuriosLoaded;
     }
 }

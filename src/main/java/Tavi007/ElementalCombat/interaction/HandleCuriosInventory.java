@@ -1,11 +1,12 @@
 package Tavi007.ElementalCombat.interaction;
 
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
+import Tavi007.ElementalCombat.api.GainDefenseFromEquipmentEvent;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.curios.api.event.CurioChangeEvent;
@@ -33,7 +34,10 @@ public class HandleCuriosInventory {
         DefenseDataAPI.putLayer(entity, layer, rl);
     }
 
-    public static boolean isCurioItem(ItemStack stack) {
-        return stack.getItem() instanceof ICurioItem;
+    @SubscribeEvent
+    public static void gainDefenseFromEquipmentEvent(GainDefenseFromEquipmentEvent event) {
+        if (EquipmentSlotType.Group.HAND.equals(event.getEquipmentSlot().getType())) {
+            event.setCanceled(event.getItemStack().getItem() instanceof ICurioItem);
+        }
     }
 }

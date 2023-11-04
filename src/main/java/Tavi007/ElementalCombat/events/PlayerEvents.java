@@ -5,7 +5,6 @@ import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.api.GainDefenseFromEquipmentEvent;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
-import Tavi007.ElementalCombat.interaction.HandleCuriosInventory;
 import Tavi007.ElementalCombat.util.AttackDataHelper;
 import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
@@ -41,23 +40,21 @@ public class PlayerEvents {
 
         GainDefenseFromEquipmentEvent gainDefenseEvent = new GainDefenseFromEquipmentEvent(
             event.getTo(),
-            event.getSlot(),
-            DefenseDataHelper.get(event.getTo()).toLayer());
+            event.getSlot());
         MinecraftForge.EVENT_BUS.post(gainDefenseEvent);
         if (!gainDefenseEvent.isCanceled()) {
-            DefenseDataAPI.putLayer(entity, gainDefenseEvent.getDefenseLayer(), new ResourceLocation(event.getSlot().name().toLowerCase()));
+            DefenseDataAPI.putLayer(entity, DefenseDataHelper.get(event.getTo()).toLayer(), new ResourceLocation(event.getSlot().name().toLowerCase()));
         }
     }
 
     @SubscribeEvent
     public static void gainDefenseFromEquipmentEvent(GainDefenseFromEquipmentEvent event) {
-        if (EquipmentSlotType.Group.HAND.equals(event.getEquipmentSlotType().getType())) {
+        if (EquipmentSlotType.Group.HAND.equals(event.getEquipmentSlot().getType())) {
             ItemStack stack = event.getItemStack();
             Item item = stack.getItem();
             event.setCanceled(item instanceof ArmorItem ||
                 item instanceof PotionItem ||
-                item instanceof EnchantedBookItem ||
-                (ElementalCombat.isCuriosLoaded() && HandleCuriosInventory.isCurioItem(stack)));
+                item instanceof EnchantedBookItem);
         }
     }
 
