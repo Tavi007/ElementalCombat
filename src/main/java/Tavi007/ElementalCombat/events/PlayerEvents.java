@@ -14,7 +14,8 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.PotionItem;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.potion.Potions;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -49,11 +50,15 @@ public class PlayerEvents {
 
     @SubscribeEvent
     public static void gainDefenseFromEquipmentEvent(GainDefenseFromEquipmentEvent event) {
+        ItemStack stack = event.getItemStack();
+        if (Potions.EMPTY.equals(PotionUtils.getPotion(stack))) {
+            event.setCanceled(true);
+            return;
+        }
+
         if (EquipmentSlotType.Group.HAND.equals(event.getEquipmentSlot().getType())) {
-            ItemStack stack = event.getItemStack();
             Item item = stack.getItem();
             event.setCanceled(item instanceof ArmorItem ||
-                item instanceof PotionItem ||
                 item instanceof EnchantedBookItem);
         }
     }
