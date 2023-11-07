@@ -108,10 +108,10 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
                     DefenseOnlyCombatProperties combatProperties = loadData(GSON, rl, json, DefenseOnlyCombatProperties.class);
                     builderBiome.put(rl, combatProperties);
                     type = "biomes";
-                } else if (rl.getPath().contains("damage_sources/")) {
+                } else if (rl.getPath().contains("damage_types/")) {
                     AttackOnlyCombatProperties combatProperties = loadData(GSON, rl, json, AttackOnlyCombatProperties.class);
                     builderDamageSource.put(rl, combatProperties);
-                    type = "damage_sources";
+                    type = "damage_types";
                 } else if (rl.getPath().contains("projectiles/")) {
                     AttackOnlyCombatProperties combatProperties = loadData(GSON, rl, json, AttackOnlyCombatProperties.class);
                     builderProjectile.put(rl, combatProperties);
@@ -206,7 +206,7 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         return registeredBiomeData.getOrDefault(rl, new DefenseOnlyCombatProperties());
     }
 
-    public AttackOnlyCombatProperties getDamageSourceDataFromLocation(ResourceLocation rl) {
+    public AttackOnlyCombatProperties getDamageTypeDataFromLocation(ResourceLocation rl) {
         return registeredDamageSourceData.getOrDefault(rl, baseAttackProperties);
     }
 

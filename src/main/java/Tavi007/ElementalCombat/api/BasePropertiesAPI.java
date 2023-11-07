@@ -17,6 +17,7 @@ import Tavi007.ElementalCombat.potions.ElementalResistanceEffect;
 import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -130,13 +131,14 @@ public class BasePropertiesAPI {
      * @return copy of AttackData.
      */
     public static AttackLayer getAttackData(DamageSource damageSource) {
-        if (damageSource.getMsgId() != null) {
-            String name = damageSource.getMsgId().toLowerCase();
-            ResourceLocation rlDamageSource = new ResourceLocation("minecraft", "damage_sources/" + name);
-            AttackOnlyCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageSourceDataFromLocation(rlDamageSource);
-            return new AttackLayer(property.getAttackStyleCopy(), property.getAttackElementCopy());
-        }
-        return new AttackLayer();
+        AttackLayer layer = new AttackLayer();
+        damageSource.typeHolder().unwrapKey().ifPresent(resourceKey -> {
+            ResourceLocation rlDamageSource = resourceKey.location();
+            rlDamageSource = rlDamageSource.withPrefix("damage_types/");
+            AttackOnlyCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getDamageTypeDataFromLocation(rlDamageSource);
+            layer.set(new AttackLayer(property.getAttackStyleCopy(), property.getAttackElementCopy()));
+        });
+        return layer;
     }
 
     /**
