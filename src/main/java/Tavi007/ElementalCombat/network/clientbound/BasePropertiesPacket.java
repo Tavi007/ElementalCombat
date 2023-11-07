@@ -21,20 +21,20 @@ public class BasePropertiesPacket extends Packet {
     private Map<ResourceLocation, MobCombatProperties> mobData;
     private Map<ResourceLocation, ElementalCombatProperties> itemData;
     private Map<ResourceLocation, DefenseOnlyCombatProperties> biomeData;
-    private Map<ResourceLocation, AttackOnlyCombatProperties> damageSourceData;
+    private Map<ResourceLocation, AttackOnlyCombatProperties> damageTypeData;
     private Map<ResourceLocation, AttackOnlyCombatProperties> projectileData;
 
     public BasePropertiesPacket(AttackOnlyCombatProperties baseAttackProperties,
             Map<ResourceLocation, MobCombatProperties> mobData,
             Map<ResourceLocation, ElementalCombatProperties> itemData,
             Map<ResourceLocation, DefenseOnlyCombatProperties> biomeData,
-            Map<ResourceLocation, AttackOnlyCombatProperties> damageSourceData,
+            Map<ResourceLocation, AttackOnlyCombatProperties> damageTypeData,
             Map<ResourceLocation, AttackOnlyCombatProperties> projectileData) {
         this.baseAttackProperties = baseAttackProperties;
         this.mobData = mobData;
         this.itemData = itemData;
         this.biomeData = biomeData;
-        this.damageSourceData = damageSourceData;
+        this.damageTypeData = damageTypeData;
         this.projectileData = projectileData;
     }
 
@@ -58,8 +58,8 @@ public class BasePropertiesPacket extends Packet {
         return projectileData;
     }
 
-    public Map<ResourceLocation, AttackOnlyCombatProperties> getDamageSourceData() {
-        return damageSourceData;
+    public Map<ResourceLocation, AttackOnlyCombatProperties> getDamageTypeData() {
+        return damageTypeData;
     }
 
     public BasePropertiesPacket(FriendlyByteBuf buf) {
@@ -68,7 +68,7 @@ public class BasePropertiesPacket extends Packet {
         this.itemData = readItem(buf);
         this.biomeData = readBiome(buf);
         this.projectileData = readAttackOnly(buf, baseAttackProperties);
-        this.damageSourceData = readAttackOnly(buf, baseAttackProperties);
+        this.damageTypeData = readAttackOnly(buf, baseAttackProperties);
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -77,7 +77,7 @@ public class BasePropertiesPacket extends Packet {
         writeItem(buf);
         writeBiome(buf);
         writeProjectile(buf);
-        writeDamageSource(buf);
+        writeDamageType(buf);
     }
 
     private void writeBaseAttack(FriendlyByteBuf buf) {
@@ -116,9 +116,9 @@ public class BasePropertiesPacket extends Packet {
         });
     }
 
-    private void writeDamageSource(FriendlyByteBuf buf) {
-        buf.writeInt(damageSourceData.size());
-        damageSourceData.forEach((key, value) -> {
+    private void writeDamageType(FriendlyByteBuf buf) {
+        buf.writeInt(damageTypeData.size());
+        damageTypeData.forEach((key, value) -> {
             buf.writeUtf(key.toString());
             value.writeToBuffer(buf);
         });
@@ -190,6 +190,6 @@ public class BasePropertiesPacket extends Packet {
     }
 
     private boolean isValid() {
-        return baseAttackProperties != null && mobData != null && itemData != null && biomeData != null && projectileData != null && damageSourceData != null;
+        return baseAttackProperties != null && mobData != null && itemData != null && biomeData != null && projectileData != null && damageTypeData != null;
     }
 }

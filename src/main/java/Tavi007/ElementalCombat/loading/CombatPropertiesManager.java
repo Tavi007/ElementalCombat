@@ -50,7 +50,7 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         registeredItemData = message.getItemData();
         registeredBiomeData = message.getBiomeData();
         registeredProjectileData = message.getProjectileData();
-        registeredDamageTypeData = message.getDamageSourceData();
+        registeredDamageTypeData = message.getDamageTypeData();
 
         ElementalCombat.LOGGER.info("Client loaded default attack style: " + baseAttackProperties.getAttackStyleCopy());
         ElementalCombat.LOGGER.info("Client loaded default attack element: " + baseAttackProperties.getAttackElementCopy());
