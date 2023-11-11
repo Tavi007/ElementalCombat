@@ -6,10 +6,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.loading.AttackOnlyCombatProperties;
-import Tavi007.ElementalCombat.loading.DefenseOnlyCombatProperties;
-import Tavi007.ElementalCombat.loading.ElementalCombatProperties;
-import Tavi007.ElementalCombat.loading.MobCombatProperties;
+import Tavi007.ElementalCombat.data.AttackOnlyCombatProperties;
+import Tavi007.ElementalCombat.data.DefenseOnlyCombatProperties;
+import Tavi007.ElementalCombat.data.ElementalCombatProperties;
+import Tavi007.ElementalCombat.data.MobCombatProperties;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
