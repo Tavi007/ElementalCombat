@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.loading;
+package Tavi007.ElementalCombat.data;
 
 import java.util.HashSet;
 
