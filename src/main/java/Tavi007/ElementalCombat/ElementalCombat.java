@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.config.ServerConfig;
+import Tavi007.ElementalCombat.data.CombatPropertiesManager;
 import Tavi007.ElementalCombat.init.BlockList;
 import Tavi007.ElementalCombat.init.EnchantmentList;
 import Tavi007.ElementalCombat.init.ItemList;
@@ -13,7 +14,6 @@ import Tavi007.ElementalCombat.init.PotionList;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
 import Tavi007.ElementalCombat.init.StartupCommon;
 import Tavi007.ElementalCombat.interaction.HandleCuriosInventory;
-import Tavi007.ElementalCombat.loading.CombatPropertiesManager;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
