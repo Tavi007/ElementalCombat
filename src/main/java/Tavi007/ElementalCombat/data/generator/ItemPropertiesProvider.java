@@ -16,6 +16,7 @@ import Tavi007.ElementalCombat.data.generator.KeyWordsMapper.KeyWordsMapperType;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
+import net.minecraft.item.BlockItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -34,17 +35,25 @@ public class ItemPropertiesProvider extends AbstractCombatPropertiesProvider imp
         Map<ResourceLocation, ElementalCombatProperties> map = Maps.newHashMap();
 
         ForgeRegistries.ITEMS.forEach(item -> {
-            ResourceLocation itemRl = item.getRegistryName();
+            if (!(item instanceof BlockItem)) {
 
-            String attackStyle = getKeywordFromName(itemRl, KeyWordsMapperType.STYLE);
-            String attackElement = getKeywordFromName(itemRl, KeyWordsMapperType.ELEMENT);
+                ResourceLocation itemRl = item.getRegistryName();
 
-            HashMap<String, Integer> defenseStyle = null;
-            HashMap<String, Integer> defenseElement = null;
+                if (!(itemRl.getNamespace().equals("minecraft") || itemRl.getNamespace().equals(ElementalCombat.MOD_ID))) {
+                    System.out.println(itemRl);
+                }
 
-            if (attackStyle != null || attackElement != null || defenseStyle != null || defenseElement != null) {
-                ElementalCombatProperties property = new ElementalCombatProperties(defenseStyle, defenseElement, attackStyle, attackElement);
-                map.put(itemRl, property);
+                String attackStyle = getFirstMappedKeywordsFromName(itemRl, KeyWordsMapperType.STYLE);
+                String attackElement = getFirstMappedKeywordsFromName(itemRl, KeyWordsMapperType.ELEMENT);
+
+                HashMap<String, Integer> defenseStyle = null;
+                HashMap<String, Integer> defenseElement = null;
+
+                if (attackStyle != null || attackElement != null || defenseStyle != null || defenseElement != null) {
+                    ElementalCombatProperties property = new ElementalCombatProperties(defenseStyle, defenseElement, attackStyle, attackElement);
+                    map.put(itemRl, property);
+
+                }
             }
         });
 

@@ -88,6 +88,8 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
     testImplementation("junit:junit:4.13.2")
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.8.2")
+    
+    implementation fg.deobf(fileTree(dir: 'libs', include: '*.jar'))
 }
 
 repositories {
@@ -108,6 +110,10 @@ repositories {
         // location of the maven that hosts JEI files
         name = "jei"
         url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    
+    flatDir {
+        dirs("libs")
     }
 }
 
