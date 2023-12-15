@@ -1,4 +1,5 @@
 {
+	"attack_style":"bite",
 	"attack_element":"water",
 	"defense_element":{
 		"water":12,
