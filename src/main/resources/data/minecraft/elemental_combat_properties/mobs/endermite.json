@@ -1,4 +1,5 @@
 {
+	"attack_style":"bite",
 	"attack_element":"darkness",
 	"defense_element":{
 		"wind":25,
