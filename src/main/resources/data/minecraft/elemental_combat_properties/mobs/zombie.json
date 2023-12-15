@@ -1,4 +1,5 @@
 {
+	"attack_style":"bite",
 	"defense_element":{
 		"light":-12
 	},
