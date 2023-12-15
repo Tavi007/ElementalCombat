@@ -1,5 +1,7 @@
 {
+	"attack_style":"bite",
 	"defense_element":{
 		"ice":12
-	}
+	},
+	"biome_dependency":false
 }

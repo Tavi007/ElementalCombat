@@ -1,4 +1,5 @@
 {
+	"attack_style":"bite",
 	"attack_element":"fire",
 	"defense_element":{
 		"fire":4
