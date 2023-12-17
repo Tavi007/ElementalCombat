@@ -1,4 +1,5 @@
 {
+	"attack_style":"bash",
 	"defense_style":{
 		"magic":-25,
 		"stab":25,
