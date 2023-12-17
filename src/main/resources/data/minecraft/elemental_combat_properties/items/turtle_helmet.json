@@ -1,7 +1,4 @@
 {
-	"defense_style":{
-	},
-	
 	"defense_element":{
 		"water":12,
 		"thunder":-12
