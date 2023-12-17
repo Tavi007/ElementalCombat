@@ -6,6 +6,5 @@
 		"fire":12,
 		"ice":12,
 		"light":-25
-	},
-	"biome_dependency":false
+	}
 }
