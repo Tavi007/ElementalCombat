@@ -4,5 +4,6 @@
 		"darkness":12,
 		"light":-25,
 		"fire":12
-	}
+	},
+	"biome_dependency":false
 }

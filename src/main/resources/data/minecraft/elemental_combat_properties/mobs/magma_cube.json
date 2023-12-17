@@ -7,5 +7,6 @@
 		"fire":25,
 		"ice":-25,
 		"normal":12
-	}
+	},
+	"biome_dependency":false
 }

@@ -5,5 +5,6 @@
 	},
 	"defense_element":{
 		"flora":12
-	}
+	},
+	"biome_dependency":false
 }

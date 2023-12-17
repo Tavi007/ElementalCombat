@@ -1,3 +1,4 @@
 {
-	"attack_element":"water"
+	"attack_element":"water",
+	"biome_dependency":false
 }

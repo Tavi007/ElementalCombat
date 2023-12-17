@@ -3,5 +3,6 @@
 	"attack_element":"thunder",
 	"defense_element":{
 		"water":25
-	}
+	},
+	"biome_dependency":false
 }
