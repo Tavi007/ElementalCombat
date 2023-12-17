@@ -4,6 +4,5 @@
 		"wind":-12,
 		"earth":12,
 		"light":-25
-	},
-	"biome_dependency":false
+	}
 }
