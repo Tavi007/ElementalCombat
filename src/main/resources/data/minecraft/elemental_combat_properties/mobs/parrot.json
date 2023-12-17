@@ -1,6 +1,5 @@
 {
 	"defense_element":{
 		"wind":-12
-	},
-	"biome_dependency":false
+	}
 }
