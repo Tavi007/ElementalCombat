@@ -10,6 +10,7 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.ItemList;
 import Tavi007.ElementalCombat.init.PotionList;
+import Tavi007.ElementalCombat.items.LensItem;
 import Tavi007.ElementalCombat.network.PacketManager;
 import Tavi007.ElementalCombat.network.clientbound.CreateEmitterPacket;
 import Tavi007.ElementalCombat.network.clientbound.DisableDamageRenderPacket;
@@ -19,6 +20,7 @@ import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -205,6 +207,15 @@ public class ServerEvents {
         }
 
         event.setAmount(damageAmount);
+
+        // handle lens items
+        if (event.getEntity().getOffhandItem().getItem() instanceof LensItem ||
+            event.getEntity().getMainHandItem().getItem() instanceof LensItem) {
+            target.sendSystemMessage(Component.literal("Attack properties of damage source " + damageSource.getMsgId() + ":"));
+            sourceData.getLayers().forEach((rl, layer) -> {
+                target.sendSystemMessage(Component.literal(" - " + rl + ": " + layer));
+            });
+        }
     }
 
     private static void sendParticleMessage(LivingEntity entity, String name, int amount) {
