@@ -3,6 +3,7 @@ package Tavi007.ElementalCombat.init;
 import static Tavi007.ElementalCombat.init.CreativeTabList.addToTab;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.items.LensItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraftforge.registries.DeferredRegister;
@@ -25,5 +26,7 @@ public class ItemList {
     public static final RegistryObject<Item> ESSENCE_EARTH = addToTab(ITEMS.register("essence_earth", () -> new Item(fullStack)));
     public static final RegistryObject<Item> ESSENCE_WIND = addToTab(ITEMS.register("essence_wind", () -> new Item(fullStack)));
     public static final RegistryObject<Item> ESSENCE_FLORA = addToTab(ITEMS.register("essence_flora", () -> new Item(fullStack)));
+
+    public static final RegistryObject<Item> LENS = addToTab(ITEMS.register("combat_data_lens", () -> new LensItem(fullStack)));
 
 }
