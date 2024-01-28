@@ -30,7 +30,7 @@ public class AttackLayer {
 
     @Override
     public String toString() {
-        return "[" + element + " " + style + "]";
+        return "[element:" + element + "; style:" + style + "]";
     }
 
     public void set(AttackLayer data) {
