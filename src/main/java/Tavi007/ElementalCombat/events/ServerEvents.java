@@ -12,6 +12,7 @@ import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.ItemList;
 import Tavi007.ElementalCombat.init.PotionList;
+import Tavi007.ElementalCombat.items.LensItem;
 import Tavi007.ElementalCombat.network.CreateEmitterMessage;
 import Tavi007.ElementalCombat.network.DisableDamageRenderMessage;
 import Tavi007.ElementalCombat.network.ServerPlayerSupplier;
@@ -210,6 +211,16 @@ public class ServerEvents {
         }
 
         event.setAmount(damageAmount);
+
+        // handle lens items
+        event.getEntityLiving().getHandSlots().forEach(stack -> {
+            if (stack.getItem() instanceof LensItem) {
+                AttackDataAPI.putLayer(stack,
+                    sourceData.toLayer(),
+                    new ResourceLocation(ElementalCombat.MOD_ID, "lens"),
+                    event.getEntityLiving());
+            }
+        });
     }
 
     private static void sendParticleMessage(LivingEntity entity, String name, int amount) {
