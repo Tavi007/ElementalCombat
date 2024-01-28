@@ -88,7 +88,7 @@ public class DefenseLayer {
     }
 
     public String toString() {
-        return elementFactor.toString() + " | " + styleFactor.toString();
+        return "[element: " + elementFactor.toString() + "; stlye:" + styleFactor.toString() + "]";
     }
 
     private class DefenseMap {

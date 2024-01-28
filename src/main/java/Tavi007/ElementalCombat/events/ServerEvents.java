@@ -39,6 +39,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -213,14 +214,14 @@ public class ServerEvents {
         event.setAmount(damageAmount);
 
         // handle lens items
-        event.getEntityLiving().getHandSlots().forEach(stack -> {
-            if (stack.getItem() instanceof LensItem) {
-                AttackDataAPI.putLayer(stack,
-                    sourceData.toLayer(),
-                    new ResourceLocation(ElementalCombat.MOD_ID, "lens"),
-                    event.getEntityLiving());
-            }
-        });
+        if (event.getEntityLiving().getOffhandItem().getItem() instanceof LensItem ||
+            event.getEntityLiving().getMainHandItem().getItem() instanceof LensItem) {
+            target.sendMessage(new StringTextComponent("Attack properties of damage source " + damageSource.getMsgId() + ":"), target.getUUID());
+            sourceData.getLayers().forEach((rl, layer) -> {
+                target.sendMessage(new StringTextComponent(" - " + rl + ": " + layer), target.getUUID());
+            });
+        }
+
     }
 
     private static void sendParticleMessage(LivingEntity entity, String name, int amount) {
