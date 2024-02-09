@@ -2,6 +2,6 @@
     "parent": "minecraft:item/generated",
     "textures": 
 	{
-        "layer0": "elementalcombat:item/lens"
+        "layer0": "elementalcombat:item/combat_data_lens"
     }
 }

@@ -39,7 +39,7 @@ public class ItemList {
     public static final RegistryObject<Item> ESSENCE_WIND = ITEMS.register("essence_wind", () -> new Item(fullStack));
     public static final RegistryObject<Item> ESSENCE_FLORA = ITEMS.register("essence_flora", () -> new Item(fullStack));
 
-    public static final RegistryObject<Item> MIRRRO = ITEMS.register("lens",
+    public static final RegistryObject<Item> COMBAT_DATA_LENS = ITEMS.register("combat_data_lens",
         () -> new LensItem(
             new Item.Properties().tab(ElementalCombat.ELEMENTAL_COMBAT_GROUP).stacksTo(1)));
 

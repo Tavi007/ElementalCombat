@@ -1,7 +1,7 @@
 {
     "itemGroup.elementalcombat" : "Elemental Combat",
     
-    "item.elementalcombat.lens" : "Combat Data Lens",
+    "item.elementalcombat.combat_data_lens" : "Combat Data Lens",
     
     "block.elementalcombat.essence_block_fire" : "Fire Essence Block",
     "block.elementalcombat.essence_block_ice" : "Ice Essence Block",
