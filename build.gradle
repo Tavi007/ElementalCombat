@@ -75,12 +75,6 @@ dependencies {
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}")
-    
-    
-    compileOnly fg.deobf("mcp.mobius.waila:wthit-api:forge-${version_wthit}")
-	
-    // compileOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}:api")
-    // runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${version_waila}")
 	
     compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
@@ -97,14 +91,6 @@ repositories {
     maven { 
         name = "curios"
         url = "https://maven.theillusivec4.top/" 
-    }
-//    maven {
-//      name = "hwyla"
-//      url = "https://maven.tehnut.info" 
-//  }
-    maven { 
-        name = "wthit"
-        url = "https://maven.bai.lol"
     }
     maven {
         // location of the maven that hosts JEI files

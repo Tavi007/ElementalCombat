@@ -16,7 +16,7 @@ public class ClientConfig {
 
     private static boolean enableHUD = true;
 
-    private final EnumValue hudAnchor;
+    private final EnumValue<HudAnchor> hudAnchor;
     private final IntValue xOffSet;
     private final IntValue yOffSet;
     private final DoubleValue scale;
@@ -24,8 +24,6 @@ public class ClientConfig {
 
     private final BooleanValue doubleRowDefenseHUD;
     private final BooleanValue doubleRowDefenseTooltip;
-    private final BooleanValue activeHWYLA;
-    private final BooleanValue doubleRowDefenseHWYLA;
 
     static {
         Pair<ClientConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
@@ -56,12 +54,6 @@ public class ClientConfig {
         doubleRowDefenseTooltip = builder
             .comment("If true, displays the defense values of the item tooltip in two rows (split in element and style).")
             .define("doubleRowDefenseTooltip", true);
-        activeHWYLA = builder
-            .comment("Activate/Deactivate WAILA/HWYLA plugin.")
-            .define("activateWaila", true);
-        doubleRowDefenseHWYLA = builder
-            .comment("If true, displays the defense values of the WAILA/HWYLA tooltip in two rows (split in element and style).")
-            .define("doubleRowDefenseHWYLA", true);
     }
 
     public static boolean isHUDEnabled() {
@@ -108,13 +100,5 @@ public class ClientConfig {
 
     public static boolean isDoubleRowDefenseTooltip() {
         return CLIENT.doubleRowDefenseTooltip.get();
-    }
-
-    public static boolean isHWYLAActive() {
-        return CLIENT.activeHWYLA.get();
-    }
-
-    public static boolean isDoubleRowDefenseHWYLA() {
-        return CLIENT.doubleRowDefenseHWYLA.get();
     }
 }

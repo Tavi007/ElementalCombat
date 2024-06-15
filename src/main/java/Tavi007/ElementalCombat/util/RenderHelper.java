@@ -9,8 +9,7 @@ import javax.annotation.Nullable;
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.capabilities.attack.AttackData;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -65,46 +64,38 @@ public class RenderHelper {
         return -1;
     }
 
-    private static String getCurrentDefenseName(DefenseData data) {
+    private static String getCurrentDefenseName(DefenseLayer defenseLayer) {
         HashMap<String, Integer> map = new HashMap<String, Integer>();
-        map.putAll(data.getElementFactor());
-        map.putAll(data.getStyleFactor());
+        map.putAll(defenseLayer.getElementFactor());
+        map.putAll(defenseLayer.getStyleFactor());
         return (new ArrayList<String>(map.keySet())).get(iteratorCounter % map.size());
     }
 
-    private static int getCurrentDefenseFactor(DefenseData data) {
+    private static int getCurrentDefenseFactor(DefenseLayer defenseLayer) {
         HashMap<String, Integer> map = new HashMap<String, Integer>();
-        map.putAll(data.getElementFactor());
-        map.putAll(data.getStyleFactor());
+        map.putAll(defenseLayer.getElementFactor());
+        map.putAll(defenseLayer.getStyleFactor());
         return (new ArrayList<Integer>(map.values())).get(iteratorCounter % map.size());
     }
 
-    private static boolean isCurrentDefenseFactorStyle(DefenseData data) {
-        return iteratorCounter >= data.getElementFactor().size();
+    private static boolean isCurrentDefenseFactorStyle(DefenseLayer defenseLayer) {
+        return iteratorCounter >= defenseLayer.getElementFactor().size();
     }
 
-    private static String getCurrentElementDefenseName(DefenseData data) {
-        DefenseData onlyElement = new DefenseData();
-        onlyElement.putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "render"), new DefenseLayer(new HashMap<>(), data.getElementFactor()));
-        return getCurrentDefenseName(onlyElement);
+    private static String getCurrentElementDefenseName(DefenseLayer defenseLayer) {
+        return getCurrentDefenseName(new DefenseLayer(new HashMap<>(), defenseLayer.getElementFactor()));
     }
 
-    private static int getCurrentElementDefenseFactor(DefenseData data) {
-        DefenseData onlyElement = new DefenseData();
-        onlyElement.putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "render"), new DefenseLayer(new HashMap<>(), data.getElementFactor()));
-        return getCurrentDefenseFactor(onlyElement);
+    private static int getCurrentElementDefenseFactor(DefenseLayer defenseLayer) {
+        return getCurrentDefenseFactor(new DefenseLayer(new HashMap<>(), defenseLayer.getElementFactor()));
     }
 
-    private static String getCurrentStyleDefenseName(DefenseData data) {
-        DefenseData onlyStyle = new DefenseData();
-        onlyStyle.putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "render"), new DefenseLayer(data.getStyleFactor(), new HashMap<>()));
-        return getCurrentDefenseName(onlyStyle);
+    private static String getCurrentStyleDefenseName(DefenseLayer defenseLayer) {
+        return getCurrentDefenseName(new DefenseLayer(defenseLayer.getStyleFactor(), new HashMap<>()));
     }
 
-    private static int getCurrentStyleDefenseFactor(DefenseData data) {
-        DefenseData onlyStyle = new DefenseData();
-        onlyStyle.putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "render"), new DefenseLayer(data.getStyleFactor(), new HashMap<>()));
-        return getCurrentDefenseFactor(onlyStyle);
+    private static int getCurrentStyleDefenseFactor(DefenseLayer defenseLayer) {
+        return getCurrentDefenseFactor(new DefenseLayer(defenseLayer.getStyleFactor(), new HashMap<>()));
     }
 
     // Tooltip stuff
@@ -122,23 +113,23 @@ public class RenderHelper {
         }
     }
 
-    public static void addTooltip(List<ITextComponent> tooltip, boolean inTwoRows, @Nullable AttackData attackData, @Nullable DefenseData defenseData) {
-        if (attackData != null) {
+    public static void addTooltip(List<ITextComponent> tooltip, boolean inTwoRows, @Nullable AttackLayer attackLayer, @Nullable DefenseLayer defenseLayer) {
+        if (attackLayer != null) {
             tooltip.add(new StringTextComponent(TextFormatting.GRAY + textAttack));
         }
-        if (defenseData != null && !defenseData.isEmpty()) {
+        if (defenseLayer != null && !defenseLayer.isEmpty()) {
             if (inTwoRows) {
-                if (!defenseData.getElementFactor().isEmpty()) {
-                    int factor = getCurrentElementDefenseFactor(defenseData);
+                if (!defenseLayer.getElementFactor().isEmpty()) {
+                    int factor = getCurrentElementDefenseFactor(defenseLayer);
                     tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor, false)));
                 }
-                if (!defenseData.getStyleFactor().isEmpty()) {
-                    int factor = getCurrentStyleDefenseFactor(defenseData);
+                if (!defenseLayer.getStyleFactor().isEmpty()) {
+                    int factor = getCurrentStyleDefenseFactor(defenseLayer);
                     tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor, true)));
                 }
             } else {
-                int factor = getCurrentDefenseFactor(defenseData);
-                boolean isStyle = isCurrentDefenseFactorStyle(defenseData);
+                int factor = getCurrentDefenseFactor(defenseLayer);
+                boolean isStyle = isCurrentDefenseFactorStyle(defenseLayer);
                 tooltip.add(new StringTextComponent(TextFormatting.GRAY + textDefense + "   " + getPercentage(factor, isStyle)));
             }
         }
@@ -169,23 +160,23 @@ public class RenderHelper {
 
     // icon render stuff
     // posX and posY are the start coords of the "Attack: "- String. Calculation will be relative from there on out.
-    public static void renderAttackIcons(AttackData data, MatrixStack matrixStack, int posX, int posY) {
-        renderIcon(data.getElement(), matrixStack, posX + widthAttack, posY);
-        renderIcon(data.getStyle(), matrixStack, posX + widthAttack + iconSize + 2, posY);
+    public static void renderAttackIcons(AttackLayer layer, MatrixStack matrixStack, int posX, int posY) {
+        renderIcon(layer.getElement(), matrixStack, posX + widthAttack, posY);
+        renderIcon(layer.getStyle(), matrixStack, posX + widthAttack + iconSize + 2, posY);
     }
 
     // posX and posY are the start coords of the "Defense: "- String. Calculation will be relative from there on out.
-    public static void renderDefenseIcons(DefenseData data, boolean inTwoRows, MatrixStack matrixStack, int posX, int posY) {
+    public static void renderDefenseIcons(DefenseLayer layer, boolean inTwoRows, MatrixStack matrixStack, int posX, int posY) {
         if (inTwoRows) {
-            if (!data.getElementFactor().isEmpty()) {
-                renderIcon(getCurrentElementDefenseName(data), matrixStack, posX + widthDefense, posY);
+            if (!layer.getElementFactor().isEmpty()) {
+                renderIcon(getCurrentElementDefenseName(layer), matrixStack, posX + widthDefense, posY);
                 posY += maxLineHeight;
             }
-            if (!data.getStyleFactor().isEmpty()) {
-                renderIcon(getCurrentStyleDefenseName(data), matrixStack, posX + widthDefense, posY);
+            if (!layer.getStyleFactor().isEmpty()) {
+                renderIcon(getCurrentStyleDefenseName(layer), matrixStack, posX + widthDefense, posY);
             }
         } else {
-            renderIcon(getCurrentDefenseName(data), matrixStack, posX + widthDefense, posY);
+            renderIcon(getCurrentDefenseName(layer), matrixStack, posX + widthDefense, posY);
         }
     }
 

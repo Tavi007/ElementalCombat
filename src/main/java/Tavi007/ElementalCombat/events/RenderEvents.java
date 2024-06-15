@@ -1,14 +1,17 @@
 package Tavi007.ElementalCombat.events;
 
-import java.util.ArrayList;
+import java.awt.Dimension;
 import java.util.List;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.api.ElementalCombatDataRenderAPI;
 import Tavi007.ElementalCombat.capabilities.attack.AttackData;
+import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionData;
 import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
 import Tavi007.ElementalCombat.config.ClientConfig;
@@ -129,10 +132,10 @@ public class RenderEvents {
             RenderHelper.addTooltipSeperator(tooltip, hasDefenseData);
         }
         if (!attackData.isDefault()) {
-            RenderHelper.addTooltip(tooltip, false, attackData, null);
+            RenderHelper.addTooltip(tooltip, false, attackData.toLayer(), null);
         }
         if (hasDefenseData) {
-            RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseTooltip(), null, defenseData);
+            RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseTooltip(), null, defenseData.toLayer());
         }
     }
 
@@ -146,11 +149,11 @@ public class RenderEvents {
         DefenseData defenseData = DefenseDataHelper.get(stack);
         if (!attackData.isDefault()) {
             int tooltipIndexAttack = RenderHelper.getTooltipIndexAttack(event.getLines());
-            RenderHelper.renderAttackIcons(attackData, matrixStack, event.getX(), event.getY() + 2 + tooltipIndexAttack * RenderHelper.maxLineHeight);
+            RenderHelper.renderAttackIcons(attackData.toLayer(), matrixStack, event.getX(), event.getY() + 2 + tooltipIndexAttack * RenderHelper.maxLineHeight);
         }
         if (!defenseData.isEmpty()) {
             int tooltipIndexDefense = RenderHelper.getTooltipIndexDefense(event.getLines());
-            RenderHelper.renderDefenseIcons(defenseData,
+            RenderHelper.renderDefenseIcons(defenseData.toLayer(),
                 ClientConfig.isDoubleRowDefenseTooltip(),
                 matrixStack,
                 event.getX(),
@@ -180,31 +183,34 @@ public class RenderEvents {
                 if (mc.player != null) {
                     MatrixStack matrixStack = event.getMatrixStack();
                     float scale = (float) ClientConfig.scale();
-                    AttackData attackData = AttackDataHelper.get(mc.player);
-                    DefenseData defenseData = DefenseDataHelper.get(mc.player);
+                    AttackLayer attackLayer = AttackDataHelper.get(mc.player).toLayer();
+                    DefenseLayer defenseLayer = DefenseDataHelper.get(mc.player).toLayer();
 
-                    // the width of the box.
-                    int listWidth = RenderHelper.maxLineWidth;
-
-                    // computes the height of the list
-                    int listHeight = RenderHelper.maxLineHeight;
-                    if (!defenseData.isEmpty()) {
-                        listHeight += RenderHelper.maxLineHeight;
-                        if (ClientConfig.isDoubleRowDefenseHUD() && !defenseData.getElementFactor().isEmpty() && !defenseData.getStyleFactor().isEmpty()) {
-                            listHeight += RenderHelper.maxLineHeight;
-                        }
-                    }
+                    Dimension dimension = ElementalCombatDataRenderAPI.getTooltipDimension(ClientConfig.isDoubleRowDefenseHUD(), attackLayer, defenseLayer);
+                    int width = (int) dimension.getWidth();
+                    int height = (int) dimension.getHeight();
+                    // // the width of the box.
+                    // int listWidth = RenderHelper.maxLineWidth;
+                    //
+                    // // computes the height of the list
+                    // int listHeight = RenderHelper.maxLineHeight;
+                    // if (!defenseData.isEmpty()) {
+                    // listHeight += RenderHelper.maxLineHeight;
+                    // if (ClientConfig.isDoubleRowDefenseHUD() && !defenseData.getElementFactor().isEmpty() && !defenseData.getStyleFactor().isEmpty()) {
+                    // listHeight += RenderHelper.maxLineHeight;
+                    // }
+                    // }
 
                     // moves the coords so the text and box appear correct
                     int posX = 0;
-                    int maxPosX = (int) (event.getWindow().getGuiScaledWidth() / scale) - listWidth - 12;
+                    int maxPosX = (int) (event.getWindow().getGuiScaledWidth() / scale) - width - 12;
                     if (ClientConfig.isLeft()) {
                         posX = Math.min(12 + ClientConfig.getXOffset(), maxPosX);
                     } else {
                         posX = Math.max(12, maxPosX - ClientConfig.getXOffset());
                     }
                     int posY = 0;
-                    int maxPosY = (int) (event.getWindow().getGuiScaledHeight() / scale) - listHeight - 12;
+                    int maxPosY = (int) (event.getWindow().getGuiScaledHeight() / scale) - height - 12;
                     if (ClientConfig.isTop()) {
                         posY = Math.min(12 + ClientConfig.getYOffset(), maxPosY);
                     } else {
@@ -219,44 +225,44 @@ public class RenderEvents {
                     BufferBuilder bufferbuilder = tessellator.getBuilder();
                     bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
                     Matrix4f matrix4f = matrixStack.last().pose();
-                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 4, posX + listWidth + 3, posY - 3, 400, -267386864, -267386864);
+                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 4, posX + width + 3, posY - 3, 400, -267386864, -267386864);
                     func_238462_a_(matrix4f,
                         bufferbuilder,
                         posX - 3,
-                        posY + listHeight + 1,
-                        posX + listWidth + 3,
-                        posY + listHeight + 2,
+                        posY + height + 1,
+                        posX + width + 3,
+                        posY + height + 2,
                         400,
                         -267386864,
                         -267386864);
-                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + listWidth + 3, posY + listHeight + 1, 400, -267386864, -267386864);
-                    func_238462_a_(matrix4f, bufferbuilder, posX - 4, posY - 3, posX - 3, posY + listHeight + 1, 400, -267386864, -267386864);
+                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + width + 3, posY + height + 1, 400, -267386864, -267386864);
+                    func_238462_a_(matrix4f, bufferbuilder, posX - 4, posY - 3, posX - 3, posY + height + 1, 400, -267386864, -267386864);
                     func_238462_a_(matrix4f,
                         bufferbuilder,
-                        posX + listWidth + 3,
+                        posX + width + 3,
                         posY - 3,
-                        posX + listWidth + 4,
-                        posY + listHeight + 1,
+                        posX + width + 4,
+                        posY + height + 1,
                         400,
                         -267386864,
                         -267386864);
-                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3 + 1, posX - 3 + 1, posY + listHeight, 400, 1347420415, 1344798847);
+                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3 + 1, posX - 3 + 1, posY + height, 400, 1347420415, 1344798847);
                     func_238462_a_(matrix4f,
                         bufferbuilder,
-                        posX + listWidth + 2,
+                        posX + width + 2,
                         posY - 3 + 1,
-                        posX + listWidth + 3,
-                        posY + listHeight,
+                        posX + width + 3,
+                        posY + height,
                         400,
                         1347420415,
                         1344798847);
-                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + listWidth + 3, posY - 3 + 1, 400, 1347420415, 1347420415);
+                    func_238462_a_(matrix4f, bufferbuilder, posX - 3, posY - 3, posX + width + 3, posY - 3 + 1, 400, 1347420415, 1347420415);
                     func_238462_a_(matrix4f,
                         bufferbuilder,
                         posX - 3,
-                        posY + listHeight,
-                        posX + listWidth + 3,
-                        posY + listHeight + 1,
+                        posY + height,
+                        posX + width + 3,
+                        posY + height + 1,
                         400,
                         1344798847,
                         1344798847);
@@ -274,19 +280,20 @@ public class RenderEvents {
                     matrixStack.translate(0.0D, 0.0D, 400.0D);
                     irendertypebuffer$impl.endBatch();
 
+                    ElementalCombatDataRenderAPI.renderTextAndIcons(matrixStack, posX, posY, ClientConfig.isDoubleRowDefenseHUD(), attackLayer, defenseLayer);
                     // fill and render tooltip
-                    List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
-                    RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseHUD(), attackData, defenseData);
-                    RenderHelper.renderTooltip(tooltip, matrixStack, posX, posY);
-
-                    // render attackData icons
-                    RenderHelper.renderAttackIcons(attackData, matrixStack, posX, posY);
-
-                    // render defenseData icons
-                    if (!defenseData.isEmpty()) {
-                        posY += RenderHelper.maxLineHeight;
-                        RenderHelper.renderDefenseIcons(defenseData, ClientConfig.isDoubleRowDefenseHUD(), matrixStack, posX, posY);
-                    }
+                    // List<ITextComponent> tooltip = new ArrayList<ITextComponent>();
+                    // RenderHelper.addTooltip(tooltip, ClientConfig.isDoubleRowDefenseHUD(), attackData, defenseData);
+                    // RenderHelper.renderTooltip(tooltip, matrixStack, posX, posY);
+                    //
+                    // // render attackData icons
+                    // RenderHelper.renderAttackIcons(attackData, matrixStack, posX, posY);
+                    //
+                    // // render defenseData icons
+                    // if (!defenseData.isEmpty()) {
+                    // posY += RenderHelper.maxLineHeight;
+                    // RenderHelper.renderDefenseIcons(defenseData, ClientConfig.isDoubleRowDefenseHUD(), matrixStack, posX, posY);
+                    // }
                     matrixStack.popPose();
                 }
             }
