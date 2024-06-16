@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.interaction;
+package Tavi007.ElementalCombat.compatibility;
 
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.api.GainDefenseFromEquipmentEvent;
