@@ -138,12 +138,6 @@ dependencies {
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}")
-    
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    
-    compileOnly fg.deobf("mcp.mobius.waila:wthit-api:forge-${version_wthit}")
-    runtimeOnly fg.deobf("mcp.mobius.waila:wthit:forge-${version_wthit}")
-    runtimeOnly fg.deobf("lol.bai:badpackets:forge-0.2.0")
 	
     //compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
     //runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
@@ -157,12 +151,12 @@ dependencies {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "elementalcombat",
-                "Specification-Vendor"    : "tavi007",
+                "Specification-Title"     : "${mod_id}",
+                "Specification-Vendor"    : "${mod_author}",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "tavi007",
+                "Implementation-Vendor"   : "${mod_author}",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
