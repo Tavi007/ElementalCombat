@@ -122,10 +122,6 @@ repositories {
         name = "curios"
         url = "https://maven.theillusivec4.top/" 
     }
-    maven { 
-        name = "wthit"
-        url = "https://maven.bai.lol"
-    }
     maven {
         // location of the maven that hosts JEI files
         name = "jei"
@@ -138,12 +134,7 @@ dependencies {
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}")
-    
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    
-    compileOnly fg.deobf("mcp.mobius.waila:wthit-api:forge-${version_wthit}")
-    runtimeOnly fg.deobf("mcp.mobius.waila:wthit:forge-${version_wthit}")
-    runtimeOnly fg.deobf("lol.bai:badpackets:forge-0.2.0")
+
 	
     //compileOnly fg.deobf("mezz.jei:jei-${version_jei}:api")
     //runtimeOnly fg.deobf("mezz.jei:jei-${version_jei}")
