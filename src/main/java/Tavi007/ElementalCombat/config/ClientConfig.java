@@ -15,7 +15,7 @@ public class ClientConfig {
 
     private static boolean enableHUD = true;
 
-    private final EnumValue hudAnchor;
+    private final EnumValue<HudAnchor> hudAnchor;
     private final IntValue xOffSet;
     private final IntValue yOffSet;
     private final DoubleValue scale;
@@ -23,8 +23,6 @@ public class ClientConfig {
 
     private final BooleanValue doubleRowDefenseHUD;
     private final BooleanValue doubleRowDefenseTooltip;
-    private final BooleanValue activeHWYLA;
-    private final BooleanValue doubleRowDefenseHWYLA;
 
     static {
         Pair<ClientConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
