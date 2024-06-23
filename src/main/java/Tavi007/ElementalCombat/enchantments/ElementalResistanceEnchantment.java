@@ -13,6 +13,8 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class ElementalResistanceEnchantment extends Enchantment implements IResistanceEnchantment {
 
+    public static final ElementalResistanceEnchantment FIRE_RESISTANCE = new ElementalResistanceEnchantment(Type.FIRE);
+
     private static final EquipmentSlot[] ARMOR_SLOTS = new EquipmentSlot[] {
         EquipmentSlot.HEAD,
         EquipmentSlot.CHEST,

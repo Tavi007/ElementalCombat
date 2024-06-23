@@ -5,9 +5,6 @@ import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.enchantments.StyleResistanceEnchantment;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraftforge.event.RegistryEvent.Register;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -56,18 +53,4 @@ public class EnchantmentList {
     public static final RegistryObject<Enchantment> WIND_ASPECT = ENCHANTMENTS.register("wind_aspect",
         () -> new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.WIND));
 
-    @SubscribeEvent
-    public static void registerEnchantments(Register<Enchantment> event) {
-        // overwriting of vanilla enchantments
-        ElementalCombat.LOGGER.info("Expected overrides");
-        event.getRegistry()
-            .register(
-                new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.FIRE).setRegistryName(Enchantments.FIRE_PROTECTION.getRegistryName()));
-        event.getRegistry()
-            .register(new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.PROJECTILE)
-                .setRegistryName(Enchantments.PROJECTILE_PROTECTION.getRegistryName()));
-        event.getRegistry()
-            .register(
-                new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.EXPLOSION).setRegistryName(Enchantments.BLAST_PROTECTION.getRegistryName()));
-    }
 }
