@@ -9,8 +9,10 @@ import Tavi007.ElementalCombat.data.AttackOnlyCombatProperties;
 import Tavi007.ElementalCombat.data.DefenseOnlyCombatProperties;
 import Tavi007.ElementalCombat.data.ElementalCombatProperties;
 import Tavi007.ElementalCombat.data.MobCombatProperties;
+import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.enchantments.IResistanceEnchantment;
+import Tavi007.ElementalCombat.enchantments.StyleResistanceEnchantment;
 import Tavi007.ElementalCombat.init.PotionList;
 import Tavi007.ElementalCombat.potions.ElementalHarmingEffect;
 import Tavi007.ElementalCombat.potions.ElementalResistanceEffect;
@@ -26,6 +28,7 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ProtectionEnchantment;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class BasePropertiesAPI {
@@ -204,8 +207,18 @@ public class BasePropertiesAPI {
      */
     public static DefenseLayer getDefenseLayer(Enchantment ench, int level) {
         DefenseLayer defenseLayer = new DefenseLayer();
-        if (level != 0 && ench instanceof IResistanceEnchantment) {
-            defenseLayer = ((IResistanceEnchantment) ench).getDefenseLayer(level);
+        if (level != 0) {
+            if (ench instanceof IResistanceEnchantment resistEnchantment) {
+                defenseLayer = resistEnchantment.getDefenseLayer(level);
+            } else if (ench instanceof ProtectionEnchantment protectEnchantment) { // vanilla enchantments
+                if (protectEnchantment.type == ProtectionEnchantment.Type.FIRE) {
+                    defenseLayer = ElementalResistanceEnchantment.FIRE_RESISTANCE.getDefenseLayer(level);
+                } else if (protectEnchantment.type == ProtectionEnchantment.Type.EXPLOSION) {
+                    defenseLayer = StyleResistanceEnchantment.EXPLOSION_RESISTANCE.getDefenseLayer(level);
+                } else if (protectEnchantment.type == ProtectionEnchantment.Type.PROJECTILE) {
+                    defenseLayer = StyleResistanceEnchantment.PROJECTILE_RESISTANCE.getDefenseLayer(level);
+                }
+            }
         }
         return defenseLayer;
     }

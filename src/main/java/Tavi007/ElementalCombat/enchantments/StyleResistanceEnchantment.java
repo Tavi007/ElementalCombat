@@ -10,6 +10,9 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class StyleResistanceEnchantment extends Enchantment implements IResistanceEnchantment {
 
+    public static final StyleResistanceEnchantment EXPLOSION_RESISTANCE = new StyleResistanceEnchantment(Type.EXPLOSION);
+    public static final StyleResistanceEnchantment PROJECTILE_RESISTANCE = new StyleResistanceEnchantment(Type.PROJECTILE);
+
     private static final EquipmentSlot[] ARMOR_SLOTS = new EquipmentSlot[] {
         EquipmentSlot.HEAD,
         EquipmentSlot.CHEST,
