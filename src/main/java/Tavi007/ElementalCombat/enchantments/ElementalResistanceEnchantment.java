@@ -13,6 +13,8 @@ import net.minecraft.inventory.EquipmentSlotType;
 
 public class ElementalResistanceEnchantment extends Enchantment implements IResistanceEnchantment {
 
+    public static final ElementalResistanceEnchantment FIRE_RESISTANCE = new ElementalResistanceEnchantment(Type.FIRE);
+
     private static final EquipmentSlotType[] ARMOR_SLOTS = new EquipmentSlotType[] { EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS,
         EquipmentSlotType.FEET };
 
