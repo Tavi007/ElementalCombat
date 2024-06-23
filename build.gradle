@@ -143,6 +143,12 @@ dependencies {
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.8.2")
 }
 
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+
+    config "${mod_id}.mixins.json"
+}
+
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {
