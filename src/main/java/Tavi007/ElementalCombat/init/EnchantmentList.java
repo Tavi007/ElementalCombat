@@ -52,13 +52,4 @@ public class EnchantmentList {
         () -> new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.EARTH));
     public static final RegistryObject<Enchantment> WIND_ASPECT = ENCHANTMENTS.register("wind_aspect",
         () -> new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.WIND));
-
-    public static final DeferredRegister<Enchantment> VANILLA_ENCHANTMENTS = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, "minecraft");
-    public static final RegistryObject<Enchantment> FIRE_PROTECTION = VANILLA_ENCHANTMENTS.register("fire_protection",
-        () -> new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.FIRE));
-    public static final RegistryObject<Enchantment> PROJECTILE_PROTECTION = VANILLA_ENCHANTMENTS.register("projectile_protection",
-        () -> new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.PROJECTILE));
-    public static final RegistryObject<Enchantment> BLAST_PROTECTION = VANILLA_ENCHANTMENTS.register("blast_protection",
-        () -> new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.EXPLOSION));
-
 }
