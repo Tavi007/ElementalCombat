@@ -13,7 +13,7 @@ import net.minecraft.world.item.enchantment.ProtectionEnchantment;
 @Mixin(ProtectionEnchantment.class)
 public class MixinProtectionEnchantment {
 
-    @Inject(at = @At("HEAD"), method = "getDamageProtection(ILnet/minecraft/util/DamageSource;)I", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "getDamageProtection(ILnet/minecraft/world/damagesource/DamageSource;)I", cancellable = true)
     private void getDamageProtection(int level, DamageSource damageSource, CallbackInfoReturnable<Integer> callback) {
         if (damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             callback.setReturnValue(0);
