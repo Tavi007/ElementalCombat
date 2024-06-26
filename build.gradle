@@ -134,6 +134,8 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
+    
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}")
