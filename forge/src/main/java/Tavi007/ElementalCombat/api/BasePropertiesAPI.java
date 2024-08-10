@@ -1,21 +1,19 @@
 package Tavi007.ElementalCombat.api;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.capabilities.attack.AttackData;
-import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
-import Tavi007.ElementalCombat.data.AttackOnlyCombatProperties;
-import Tavi007.ElementalCombat.data.DefenseOnlyCombatProperties;
-import Tavi007.ElementalCombat.data.ElementalCombatProperties;
-import Tavi007.ElementalCombat.data.MobCombatProperties;
-import Tavi007.ElementalCombat.enchantments.ElementalResistanceEnchantment;
-import Tavi007.ElementalCombat.enchantments.ElementalWeaponEnchantment;
-import Tavi007.ElementalCombat.enchantments.IResistanceEnchantment;
-import Tavi007.ElementalCombat.enchantments.StyleResistanceEnchantment;
+import Tavi007.ElementalCombat.common.api.data.AttackLayer;
+import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
+import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
+import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
+import Tavi007.ElementalCombat.common.data.datapack.ElementalCombatProperties;
+import Tavi007.ElementalCombat.common.data.datapack.MobCombatProperties;
+import Tavi007.ElementalCombat.common.enchantments.ElementalResistanceEnchantment;
+import Tavi007.ElementalCombat.common.enchantments.ElementalWeaponEnchantment;
+import Tavi007.ElementalCombat.common.enchantments.IResistanceEnchantment;
+import Tavi007.ElementalCombat.common.enchantments.StyleResistanceEnchantment;
+import Tavi007.ElementalCombat.common.potions.ElementalHarmingEffect;
+import Tavi007.ElementalCombat.common.potions.ElementalResistanceEffect;
 import Tavi007.ElementalCombat.init.PotionList;
-import Tavi007.ElementalCombat.potions.ElementalHarmingEffect;
-import Tavi007.ElementalCombat.potions.ElementalResistanceEffect;
 import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
@@ -53,9 +51,8 @@ public class BasePropertiesAPI {
 
     /**
      * Returns a copy of the base {@link AttackData} of any {@link LivingEntity}.
-     * 
-     * @param livingEntity
-     *            The LivingEntity.
+     *
+     * @param livingEntity The LivingEntity.
      * @return copy of AttackData.
      */
     public static AttackLayer getAttackData(LivingEntity livingEntity) {
@@ -70,9 +67,8 @@ public class BasePropertiesAPI {
 
     /**
      * Returns a copy of the base {@link AttackData} of any {@link ItemStack}.
-     * 
-     * @param stack
-     *            The ItemStack.
+     *
+     * @param stack The ItemStack.
      * @return copy of AttackData.
      */
     public static AttackLayer getAttackData(ItemStack stack) {
@@ -88,9 +84,8 @@ public class BasePropertiesAPI {
     /**
      * Returns a copy of the {@link AttackData} of the {@link EffectInstance}.
      * Currently only checks for INSTANT_DAMAGE, which has the style 'magic'. Might rework at some point.
-     * 
-     * @param effect
-     *            The EffectInstance.
+     *
+     * @param effect The EffectInstance.
      * @return copy of AttackData.
      */
     public static AttackLayer getAttackLayer(MobEffectInstance effectInstance) {
@@ -107,9 +102,8 @@ public class BasePropertiesAPI {
     /**
      * Returns a copy of the {@link AttackData} of the {@link Enchantment}.
      * Currently only checks hardcoded values. Might rework at some point.
-     * 
-     * @param ench
-     *            The Enchantment.
+     *
+     * @param ench The Enchantment.
      * @return copy of AttackData.
      */
     public static AttackLayer getAttackLayer(Enchantment ench) {
@@ -127,9 +121,8 @@ public class BasePropertiesAPI {
     /**
      * Returns a copy of the {@link AttackData} of any {@link DamageSource}.
      * This includes lightning, burning, drowning, suffocating in a wall and so on.
-     * 
-     * @param damageSource
-     *            The DamageSource.
+     *
+     * @param damageSource The DamageSource.
      * @return copy of AttackData.
      */
     public static AttackLayer getAttackData(DamageSource damageSource) {
@@ -145,9 +138,8 @@ public class BasePropertiesAPI {
 
     /**
      * Returns a copy of the base {@link AttackData} of any {@link ProjectileEntity}.
-     * 
-     * @param projectile
-     *            The Projectile.
+     *
+     * @param projectile The Projectile.
      * @return copy of AttackData.
      */
     public static AttackLayer getAttackData(Projectile projectile) {
@@ -167,9 +159,8 @@ public class BasePropertiesAPI {
 
     /**
      * Returns a copy of the base {@link DefenseData} of any {@link LivingEntity}.
-     * 
-     * @param livingEntity
-     *            The LivingEntity.
+     *
+     * @param livingEntity The LivingEntity.
      * @return copy of DefenseData.
      */
     public static DefenseLayer getDefenseLayer(LivingEntity livingEntity) {
@@ -184,9 +175,8 @@ public class BasePropertiesAPI {
 
     /**
      * Returns a copy of the base {@link DefenseData} of any {@link ItemStack}.
-     * 
-     * @param stack
-     *            The ItemStack.
+     *
+     * @param stack The ItemStack.
      * @return copy of DefenseData.
      */
     public static DefenseLayer getDefenseLayer(ItemStack stack) {
@@ -201,9 +191,8 @@ public class BasePropertiesAPI {
 
     /**
      * Returns a copy of the {@link DefenseData} of any {@link Enchantment}.
-     * 
-     * @param ench
-     *            The Enchantment.
+     *
+     * @param ench The Enchantment.
      * @return copy of DefenseData.
      */
     public static DefenseLayer getDefenseLayer(Enchantment ench, int level) {
@@ -226,9 +215,8 @@ public class BasePropertiesAPI {
 
     /**
      * Returns a copy of the {@link DefenseData} of a Biome of ResourceLocation {@link rlBiome}.
-     * 
-     * @param rlBiome
-     *            The ResourceLocation
+     *
+     * @param rlBiome The ResourceLocation
      * @return copy of DefenseData.
      */
     public static DefenseLayer getDefenseLayer(ResourceLocation rlBiome) {
@@ -237,7 +225,6 @@ public class BasePropertiesAPI {
             return defData;
         }
         ResourceLocation rlProperties = new ResourceLocation(rlBiome.getNamespace(), "biomes/" + rlBiome.getPath());
-        ;
         DefenseOnlyCombatProperties property = ElementalCombat.COMBAT_PROPERTIES_MANGER.getBiomeDataFromLocation(rlProperties);
         return new DefenseLayer(property.getDefenseStyleCopy(), property.getDefenseElementCopy());
     }
@@ -245,9 +232,8 @@ public class BasePropertiesAPI {
     /**
      * Returns a copy of the {@link DefenseLayer} of the {@link EffectInstance}.
      * Currently only checks for my own Effect class and vanilla ones.
-     * 
-     * @param effect
-     *            The EffectInstance.
+     *
+     * @param effect The EffectInstance.
      * @return copy of DefenseLayer.
      */
     public static DefenseLayer getDefenseLayer(MobEffectInstance effectInstance) {
@@ -267,9 +253,8 @@ public class BasePropertiesAPI {
 
     /**
      * Returns the biome_dependency of any {@link LivingEntity}.
-     * 
-     * @param livingEntity
-     *            The LivingEntity.
+     *
+     * @param livingEntity The LivingEntity.
      * @return boolean isBiomeDependent.
      */
     public static boolean isBiomeDependent(LivingEntity livingEntity) {

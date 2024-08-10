@@ -1,20 +1,11 @@
 package Tavi007.ElementalCombat;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.compatibility.curios.HandleCuriosInventory;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.data.CombatPropertiesManager;
-import Tavi007.ElementalCombat.init.BlockList;
-import Tavi007.ElementalCombat.init.CreativeTabList;
-import Tavi007.ElementalCombat.init.EnchantmentList;
-import Tavi007.ElementalCombat.init.ItemList;
-import Tavi007.ElementalCombat.init.ParticleList;
-import Tavi007.ElementalCombat.init.PotionList;
-import Tavi007.ElementalCombat.init.StartupClientOnly;
-import Tavi007.ElementalCombat.init.StartupCommon;
+import Tavi007.ElementalCombat.init.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -29,8 +20,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class ElementalCombat {
 
     public static ElementalCombat instance;
-    public static final String MOD_ID = "elementalcombat";
-    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static CombatPropertiesManager COMBAT_PROPERTIES_MANGER = new CombatPropertiesManager();
     public static IEventBus MOD_EVENT_BUS;
 
@@ -39,8 +28,8 @@ public class ElementalCombat {
         MOD_EVENT_BUS = FMLJavaModLoadingContext.get().getModEventBus();
 
         // config (cause they must be in the main class)
-        ModLoadingContext.get().registerConfig(Type.CLIENT, ClientConfig.CONFIG_SPEC, ElementalCombat.MOD_ID + "-client.toml");
-        ModLoadingContext.get().registerConfig(Type.SERVER, ServerConfig.CONFIG_SPEC, ElementalCombat.MOD_ID + "-server.toml");
+        ModLoadingContext.get().registerConfig(Type.CLIENT, ClientConfig.CONFIG_SPEC, Constants.MOD_ID + "-client.toml");
+        ModLoadingContext.get().registerConfig(Type.SERVER, ServerConfig.CONFIG_SPEC, Constants.MOD_ID + "-server.toml");
 
         // register
         ParticleList.PARTICLES.register(ElementalCombat.MOD_EVENT_BUS);

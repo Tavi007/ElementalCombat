@@ -1,11 +1,17 @@
 {
-    "required": true,
-    "package": "Tavi007.ElementalCombat.mixin",
-    "compatibilityLevel": "JAVA_17",
-    "refmap": "elementalcombat.refmap.json",
-    "mixins": [
-    ],
-    "client": [
-    ],
-    "minVersion": "0.8"
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_17",
+  "package": "Tavi007.ElementalCombat.mixin",
+  "refmap": "elementalcombat.refmap.json",
+  "mixins": [
+    "Tavi007.ElementalCombat.common.mixin.MixinProtectionEnchantment"
+  ],
+  "client": [
+  ],
+  "server": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

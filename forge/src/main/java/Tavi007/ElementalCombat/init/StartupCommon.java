@@ -1,11 +1,10 @@
 package Tavi007.ElementalCombat.init;
 
-import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.capabilities.attack.AttackDataCapability;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseDataCapability;
-import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
+import Tavi007.ElementalCombat.capabilities.AttackDataCapability;
+import Tavi007.ElementalCombat.capabilities.DefenseDataCapability;
+import Tavi007.ElementalCombat.capabilities.ImmersionDataCapability;
+import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.network.PacketManager;
-import Tavi007.ElementalCombat.potions.SpecificPotionIngredient;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -32,7 +31,7 @@ public class StartupCommon {
     public static void onCommonSetup(FMLCommonSetupEvent event) {
         registerBrewingRecipes();
         registerNetworking();
-        ElementalCombat.LOGGER.info("setup method registered.");
+        Constants.LOG.info("setup method registered.");
     }
 
     private static void registerBrewingRecipes() {
@@ -99,17 +98,17 @@ public class StartupCommon {
 
     private static void register(Potion from, Item with, Potion to) {
         BrewingRecipeRegistry.addRecipe(
-            new SpecificPotionIngredient(PotionUtils.setPotion(new ItemStack(Items.POTION), from)),
-            Ingredient.of(new ItemStack(with)),
-            PotionUtils.setPotion(new ItemStack(Items.POTION), to));
+                Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), from)),
+                Ingredient.of(new ItemStack(with)),
+                PotionUtils.setPotion(new ItemStack(Items.POTION), to));
         BrewingRecipeRegistry.addRecipe(
-            new SpecificPotionIngredient(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), from)),
-            Ingredient.of(new ItemStack(with)),
-            PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), to));
+                Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), from)),
+                Ingredient.of(new ItemStack(with)),
+                PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), to));
         BrewingRecipeRegistry.addRecipe(
-            new SpecificPotionIngredient(PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), from)),
-            Ingredient.of(new ItemStack(with)),
-            PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), to));
+                Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), from)),
+                Ingredient.of(new ItemStack(with)),
+                PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), to));
     }
 
     private static void registerNetworking() {

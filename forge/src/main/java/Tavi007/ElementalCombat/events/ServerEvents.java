@@ -4,19 +4,20 @@ import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.AttackDataAPI;
 import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.api.ElementifyDamageSourceEvent;
-import Tavi007.ElementalCombat.capabilities.attack.AttackData;
-import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.common.Constants;
+import Tavi007.ElementalCombat.common.api.data.AttackLayer;
+import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
+import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
+import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
+import Tavi007.ElementalCombat.common.items.LensItem;
+import Tavi007.ElementalCombat.common.potions.ElementalResistanceEffect;
+import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.config.ServerConfig;
 import Tavi007.ElementalCombat.init.ItemList;
 import Tavi007.ElementalCombat.init.PotionList;
-import Tavi007.ElementalCombat.items.LensItem;
 import Tavi007.ElementalCombat.network.PacketManager;
 import Tavi007.ElementalCombat.network.clientbound.CreateEmitterPacket;
 import Tavi007.ElementalCombat.network.clientbound.DisableDamageRenderPacket;
-import Tavi007.ElementalCombat.potions.ElementalResistanceEffect;
-import Tavi007.ElementalCombat.util.AttackDataHelper;
-import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -52,13 +53,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
-@Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Bus.FORGE)
+@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Bus.FORGE)
 public class ServerEvents {
 
     @SubscribeEvent
     public static void addReloadListenerEvent(AddReloadListenerEvent event) {
         event.addListener(ElementalCombat.COMBAT_PROPERTIES_MANGER);
-        ElementalCombat.LOGGER.info("ReloadListener for combat data registered.");
+        Constants.LOG.info("ReloadListener for combat data registered.");
     }
 
     @SubscribeEvent
@@ -72,10 +73,9 @@ public class ServerEvents {
             // for synchronization after switching dimensions
             if (entity instanceof LivingEntity) {
                 NetworkHelper.syncMessageForClients((LivingEntity) entity);
-            } else if (entity instanceof Projectile && entity.tickCount == 0) {
+            } else if (entity instanceof Projectile projectile && entity.tickCount == 0) {
                 // fill with default values in here.
-                Projectile projectile = (Projectile) entity;
-                AttackData projectileData = AttackDataHelper.get(projectile);
+                AttackData projectileData = DatapackDataAccessor.get(projectile);
                 projectileData.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(projectile));
                 addLayerFromSource(projectileData, projectile.getOwner());
                 addLayerFromPotion(projectileData, projectile);
@@ -85,7 +85,7 @@ public class ServerEvents {
 
     private static void addLayerFromSource(AttackData projectileData, Entity source) {
         if (source != null && source instanceof LivingEntity) {
-            AttackData sourceData = AttackDataHelper.get((LivingEntity) source);
+            AttackData sourceData = DatapackDataAccessor.get((LivingEntity) source);
             projectileData.putLayer(new ResourceLocation("mob"), sourceData.toLayer());
         }
     }
@@ -149,7 +149,7 @@ public class ServerEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onElementifyDamageSource(ElementifyDamageSourceEvent event) {
         DamageSource damageSource = event.getDamageSource();
-        event.addLayer(new ResourceLocation("base"), AttackDataHelper.get(damageSource).toLayer());
+        event.addLayer(new ResourceLocation("base"), DatapackDataAccessor.getDamageTypeDefaultLayer(damageSource.type()));
     }
 
     @SubscribeEvent
@@ -173,7 +173,7 @@ public class ServerEvents {
         float damageAmount = event.getAmount();
         float defenseStyleScaling = DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceData.getStyle(), true);
         float defenseElementScaling = DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceData.getElement(), false);
-        damageAmount = (float) (damageAmount * defenseStyleScaling * defenseElementScaling);
+        damageAmount = damageAmount * defenseStyleScaling * defenseElementScaling;
 
         // display particles
         int maxParticle = 12;
@@ -211,7 +211,7 @@ public class ServerEvents {
 
         // handle lens items
         if (event.getEntity().getOffhandItem().getItem() instanceof LensItem ||
-            event.getEntity().getMainHandItem().getItem() instanceof LensItem) {
+                event.getEntity().getMainHandItem().getItem() instanceof LensItem) {
             target.sendSystemMessage(Component.literal("Attack properties of damage source " + damageSource.getMsgId() + ":"));
             sourceData.getLayers().forEach((rl, layer) -> {
                 target.sendSystemMessage(Component.literal(" - " + rl + ": " + layer));
@@ -257,26 +257,26 @@ public class ServerEvents {
 
     private static Item getEssenceItem(String element) {
         switch (element) {
-        case "fire":
-            return ItemList.ESSENCE_FIRE.get();
-        case "ice":
-            return ItemList.ESSENCE_ICE.get();
-        case "water":
-            return ItemList.ESSENCE_WATER.get();
-        case "thunder":
-            return ItemList.ESSENCE_THUNDER.get();
-        case "darkness":
-            return ItemList.ESSENCE_DARKNESS.get();
-        case "light":
-            return ItemList.ESSENCE_LIGHT.get();
-        case "earth":
-            return ItemList.ESSENCE_EARTH.get();
-        case "wind":
-            return ItemList.ESSENCE_WIND.get();
-        case "flora":
-            return ItemList.ESSENCE_FLORA.get();
-        default:
-            return null;
+            case "fire":
+                return ItemList.ESSENCE_FIRE.get();
+            case "ice":
+                return ItemList.ESSENCE_ICE.get();
+            case "water":
+                return ItemList.ESSENCE_WATER.get();
+            case "thunder":
+                return ItemList.ESSENCE_THUNDER.get();
+            case "darkness":
+                return ItemList.ESSENCE_DARKNESS.get();
+            case "light":
+                return ItemList.ESSENCE_LIGHT.get();
+            case "earth":
+                return ItemList.ESSENCE_EARTH.get();
+            case "wind":
+                return ItemList.ESSENCE_WIND.get();
+            case "flora":
+                return ItemList.ESSENCE_FLORA.get();
+            default:
+                return null;
         }
     }
 

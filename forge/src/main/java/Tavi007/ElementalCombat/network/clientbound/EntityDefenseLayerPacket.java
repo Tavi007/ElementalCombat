@@ -1,11 +1,9 @@
 package Tavi007.ElementalCombat.network.clientbound;
 
-import java.util.Optional;
-
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
+import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
+import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.network.Packet;
-import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.PacketBufferHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -16,11 +14,13 @@ import net.minecraftforge.common.util.LogicalSidedProvider;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent.Context;
 
+import java.util.Optional;
+
 public class EntityDefenseLayerPacket extends Packet {
 
-    private Integer id;
-    private String location;
-    private DefenseLayer defenseLayer;
+    private final Integer id;
+    private final String location;
+    private final DefenseLayer defenseLayer;
 
     public EntityDefenseLayerPacket(DefenseLayer defenseLayer, ResourceLocation location, Integer id) {
         this.defenseLayer = defenseLayer;
@@ -62,8 +62,7 @@ public class EntityDefenseLayerPacket extends Packet {
 
     private void processMessage(Level level) {
         Entity entity = level.getEntity(id);
-        if (entity instanceof LivingEntity) {
-            LivingEntity livingEntity = (LivingEntity) entity;
+        if (entity instanceof LivingEntity livingEntity) {
             DefenseDataHelper.get(livingEntity).putLayer(new ResourceLocation(location), defenseLayer);
         }
     }

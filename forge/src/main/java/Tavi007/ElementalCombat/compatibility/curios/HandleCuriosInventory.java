@@ -2,9 +2,9 @@ package Tavi007.ElementalCombat.compatibility.curios;
 
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.api.GainDefenseFromEquipmentEvent;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
-import Tavi007.ElementalCombat.util.DefenseDataHelper;
+import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
+import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
+import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;

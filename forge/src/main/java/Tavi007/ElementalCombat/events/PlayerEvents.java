@@ -1,15 +1,15 @@
 package Tavi007.ElementalCombat.events;
 
-import Tavi007.ElementalCombat.ElementalCombat;
 import Tavi007.ElementalCombat.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.api.GainDefenseFromEquipmentEvent;
-import Tavi007.ElementalCombat.capabilities.attack.AttackData;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.common.Constants;
+import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
+import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
+import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
+import Tavi007.ElementalCombat.common.items.LensItem;
+import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.config.ClientConfig;
 import Tavi007.ElementalCombat.init.StartupClientOnly;
-import Tavi007.ElementalCombat.items.LensItem;
-import Tavi007.ElementalCombat.util.AttackDataHelper;
-import Tavi007.ElementalCombat.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.util.NetworkHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -33,7 +33,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Bus.FORGE)
+@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Bus.FORGE)
 public class PlayerEvents {
 
     @SubscribeEvent
@@ -44,18 +44,18 @@ public class PlayerEvents {
         }
 
         if (EquipmentSlot.MAINHAND.equals(event.getSlot())) {
-            AttackDataHelper.updateItemLayer(entity);
+            DatapackDataAccessor.updateItemLayer(entity);
         }
 
         GainDefenseFromEquipmentEvent gainDefenseEvent = new GainDefenseFromEquipmentEvent(
-            event.getTo(),
-            event.getSlot());
+                event.getTo(),
+                event.getSlot());
         MinecraftForge.EVENT_BUS.post(gainDefenseEvent);
         if (!gainDefenseEvent.isCanceled()) {
             DefenseDataAPI.putLayer(
-                entity,
-                DefenseDataHelper.get(event.getTo()).toLayer(),
-                new ResourceLocation(event.getSlot().name().toLowerCase()));
+                    entity,
+                    DefenseDataHelper.get(event.getTo()).toLayer(),
+                    new ResourceLocation(event.getSlot().name().toLowerCase()));
         }
     }
 
@@ -69,7 +69,7 @@ public class PlayerEvents {
         if (EquipmentSlot.Type.HAND.equals(event.getEquipmentSlot().getType())) {
             Item item = stack.getItem();
             event.setCanceled(item instanceof ArmorItem ||
-                item instanceof EnchantedBookItem);
+                    item instanceof EnchantedBookItem);
         }
     }
 
@@ -95,7 +95,7 @@ public class PlayerEvents {
 
                 player.sendSystemMessage(Component.literal("Elemental Combat properties of mob " + rlEntity));
 
-                AttackData attackData = AttackDataHelper.get(target);
+                AttackData attackData = DatapackDataAccessor.get(target);
                 if (attackData.getLayers().isEmpty()) {
                     player.sendSystemMessage(Component.literal("Has no attack layers"));
                 } else {
@@ -122,7 +122,7 @@ public class PlayerEvents {
                 Projectile target = (Projectile) event.getTarget();
                 player.sendSystemMessage(Component.literal("Elemental Combat properties of projectile " + rlEntity));
 
-                AttackData attackData = AttackDataHelper.get(target);
+                AttackData attackData = DatapackDataAccessor.get(target);
                 if (attackData.getLayers().isEmpty()) {
                     player.sendSystemMessage(Component.literal("Has no attack layers"));
                 } else {

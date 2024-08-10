@@ -1,19 +1,16 @@
 package Tavi007.ElementalCombat.network.clientbound;
 
-import java.util.Map;
-
+import Tavi007.ElementalCombat.ElementalCombat;
+import Tavi007.ElementalCombat.common.data.datapack.ElementalCombatProperties;
+import Tavi007.ElementalCombat.common.data.datapack.MobCombatProperties;
+import Tavi007.ElementalCombat.network.Packet;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
-
-import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.data.AttackOnlyCombatProperties;
-import Tavi007.ElementalCombat.data.DefenseOnlyCombatProperties;
-import Tavi007.ElementalCombat.data.ElementalCombatProperties;
-import Tavi007.ElementalCombat.data.MobCombatProperties;
-import Tavi007.ElementalCombat.network.Packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkEvent.Context;
+
+import java.util.Map;
 
 public class BasePropertiesPacket extends Packet {
 
@@ -25,41 +22,17 @@ public class BasePropertiesPacket extends Packet {
     private Map<ResourceLocation, AttackOnlyCombatProperties> projectileData;
 
     public BasePropertiesPacket(AttackOnlyCombatProperties baseAttackProperties,
-            Map<ResourceLocation, MobCombatProperties> mobData,
-            Map<ResourceLocation, ElementalCombatProperties> itemData,
-            Map<ResourceLocation, DefenseOnlyCombatProperties> biomeData,
-            Map<ResourceLocation, AttackOnlyCombatProperties> damageTypeData,
-            Map<ResourceLocation, AttackOnlyCombatProperties> projectileData) {
+                                Map<ResourceLocation, MobCombatProperties> mobData,
+                                Map<ResourceLocation, ElementalCombatProperties> itemData,
+                                Map<ResourceLocation, DefenseOnlyCombatProperties> biomeData,
+                                Map<ResourceLocation, AttackOnlyCombatProperties> damageTypeData,
+                                Map<ResourceLocation, AttackOnlyCombatProperties> projectileData) {
         this.baseAttackProperties = baseAttackProperties;
         this.mobData = mobData;
         this.itemData = itemData;
         this.biomeData = biomeData;
         this.damageTypeData = damageTypeData;
         this.projectileData = projectileData;
-    }
-
-    public AttackOnlyCombatProperties getBaseAttack() {
-        return baseAttackProperties;
-    }
-
-    public Map<ResourceLocation, MobCombatProperties> getMobData() {
-        return mobData;
-    }
-
-    public Map<ResourceLocation, ElementalCombatProperties> getItemData() {
-        return itemData;
-    }
-
-    public Map<ResourceLocation, DefenseOnlyCombatProperties> getBiomeData() {
-        return biomeData;
-    }
-
-    public Map<ResourceLocation, AttackOnlyCombatProperties> getProjectileData() {
-        return projectileData;
-    }
-
-    public Map<ResourceLocation, AttackOnlyCombatProperties> getDamageTypeData() {
-        return damageTypeData;
     }
 
     public BasePropertiesPacket(FriendlyByteBuf buf) {
@@ -69,59 +42,6 @@ public class BasePropertiesPacket extends Packet {
         this.biomeData = readBiome(buf);
         this.projectileData = readAttackOnly(buf, baseAttackProperties);
         this.damageTypeData = readAttackOnly(buf, baseAttackProperties);
-    }
-
-    public void encode(FriendlyByteBuf buf) {
-        writeBaseAttack(buf);
-        writeMob(buf);
-        writeItem(buf);
-        writeBiome(buf);
-        writeProjectile(buf);
-        writeDamageType(buf);
-    }
-
-    private void writeBaseAttack(FriendlyByteBuf buf) {
-        baseAttackProperties.writeToBuffer(buf);
-    }
-
-    private void writeMob(FriendlyByteBuf buf) {
-        buf.writeInt(mobData.size());
-        mobData.forEach((key, value) -> {
-            buf.writeUtf(key.toString());
-            value.writeToBuffer(buf);
-        });
-    }
-
-    private void writeItem(FriendlyByteBuf buf) {
-        buf.writeInt(itemData.size());
-        itemData.forEach((key, value) -> {
-            buf.writeUtf(key.toString());
-            value.writeToBuffer(buf);
-        });
-    }
-
-    private void writeBiome(FriendlyByteBuf buf) {
-        buf.writeInt(biomeData.size());
-        biomeData.forEach((key, value) -> {
-            buf.writeUtf(key.toString());
-            value.writeToBuffer(buf);
-        });
-    }
-
-    private void writeProjectile(FriendlyByteBuf buf) {
-        buf.writeInt(projectileData.size());
-        projectileData.forEach((key, value) -> {
-            buf.writeUtf(key.toString());
-            value.writeToBuffer(buf);
-        });
-    }
-
-    private void writeDamageType(FriendlyByteBuf buf) {
-        buf.writeInt(damageTypeData.size());
-        damageTypeData.forEach((key, value) -> {
-            buf.writeUtf(key.toString());
-            value.writeToBuffer(buf);
-        });
     }
 
     private static AttackOnlyCombatProperties readBaseAttack(FriendlyByteBuf buf) {
@@ -176,6 +96,83 @@ public class BasePropertiesPacket extends Packet {
             builder.put(key, value);
         }
         return builder.build();
+    }
+
+    public AttackOnlyCombatProperties getBaseAttack() {
+        return baseAttackProperties;
+    }
+
+    public Map<ResourceLocation, MobCombatProperties> getMobData() {
+        return mobData;
+    }
+
+    public Map<ResourceLocation, ElementalCombatProperties> getItemData() {
+        return itemData;
+    }
+
+    public Map<ResourceLocation, DefenseOnlyCombatProperties> getBiomeData() {
+        return biomeData;
+    }
+
+    public Map<ResourceLocation, AttackOnlyCombatProperties> getProjectileData() {
+        return projectileData;
+    }
+
+    public Map<ResourceLocation, AttackOnlyCombatProperties> getDamageTypeData() {
+        return damageTypeData;
+    }
+
+    public void encode(FriendlyByteBuf buf) {
+        writeBaseAttack(buf);
+        writeMob(buf);
+        writeItem(buf);
+        writeBiome(buf);
+        writeProjectile(buf);
+        writeDamageType(buf);
+    }
+
+    private void writeBaseAttack(FriendlyByteBuf buf) {
+        baseAttackProperties.writeToBuffer(buf);
+    }
+
+    private void writeMob(FriendlyByteBuf buf) {
+        buf.writeInt(mobData.size());
+        mobData.forEach((key, value) -> {
+            buf.writeUtf(key.toString());
+            value.writeToBuffer(buf);
+        });
+    }
+
+    private void writeItem(FriendlyByteBuf buf) {
+        buf.writeInt(itemData.size());
+        itemData.forEach((key, value) -> {
+            buf.writeUtf(key.toString());
+            value.writeToBuffer(buf);
+        });
+    }
+
+    private void writeBiome(FriendlyByteBuf buf) {
+        buf.writeInt(biomeData.size());
+        biomeData.forEach((key, value) -> {
+            buf.writeUtf(key.toString());
+            value.writeToBuffer(buf);
+        });
+    }
+
+    private void writeProjectile(FriendlyByteBuf buf) {
+        buf.writeInt(projectileData.size());
+        projectileData.forEach((key, value) -> {
+            buf.writeUtf(key.toString());
+            value.writeToBuffer(buf);
+        });
+    }
+
+    private void writeDamageType(FriendlyByteBuf buf) {
+        buf.writeInt(damageTypeData.size());
+        damageTypeData.forEach((key, value) -> {
+            buf.writeUtf(key.toString());
+            value.writeToBuffer(buf);
+        });
     }
 
     @Override

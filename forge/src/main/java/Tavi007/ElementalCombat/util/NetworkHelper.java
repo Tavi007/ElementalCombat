@@ -1,10 +1,12 @@
 package Tavi007.ElementalCombat.util;
 
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.capabilities.attack.AttackData;
-import Tavi007.ElementalCombat.capabilities.attack.AttackLayer;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseLayer;
+import Tavi007.ElementalCombat.common.api.data.AttackLayer;
+import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
+import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
+import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
+import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
+import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.network.PacketManager;
 import Tavi007.ElementalCombat.network.clientbound.BasePropertiesPacket;
 import Tavi007.ElementalCombat.network.clientbound.EntityAttackLayerPacket;
@@ -18,14 +20,13 @@ public class NetworkHelper {
 
     /**
      * Sends a message to all clients and syncronize the DefenseData {@link DefenseData} and AttackData {@link AttackData} of the {@link LivingEntity}.
-     * 
-     * @param livingEntity
-     *            A LivingEntity.
+     *
+     * @param livingEntity A LivingEntity.
      */
     public static void syncMessageForClients(LivingEntity livingEntity) {
         if (!livingEntity.level().isClientSide) {
-            AttackDataHelper.updateItemLayer(livingEntity);
-            AttackData attackData = AttackDataHelper.get(livingEntity);
+            DatapackDataAccessor.updateItemLayer(livingEntity);
+            AttackData attackData = DatapackDataAccessor.get(livingEntity);
             attackData.getLayers().forEach((rl, layer) -> {
                 EntityAttackLayerPacket attackMessageToClient = new EntityAttackLayerPacket(layer, rl, livingEntity.getId());
                 PacketManager.sendToAllClients(attackMessageToClient);
@@ -41,11 +42,9 @@ public class NetworkHelper {
     /**
      * Sends a message to all clients. The provided DefenseLayer {@link DefenseData} will be put to the entity on the client.
      * In addition the message syncs the AttackData {@link AttackData} of the {@link LivingEntity}.
-     * 
-     * @param livingEntity
-     *            A LivingEntity.
-     * @param defenseDataToAdd
-     *            The DefenseData to be added to the defense values of the LivingEntity (on the client).
+     *
+     * @param livingEntity     A LivingEntity.
+     * @param defenseDataToAdd The DefenseData to be added to the defense values of the LivingEntity (on the client).
      */
     public static void syncDefenseLayerMessageForClients(LivingEntity livingEntity, DefenseLayer layer, ResourceLocation location) {
         if (!livingEntity.level().isClientSide) {
@@ -57,8 +56,7 @@ public class NetworkHelper {
 
     public static void syncAttackLayerMessageForClients(LivingEntity livingEntity, AttackLayer layer, ResourceLocation location) {
         if (!livingEntity.level().isClientSide) {
-            AttackDataHelper.get(livingEntity).putLayer(location, layer);
-            ;
+            DatapackDataAccessor.get(livingEntity).putLayer(location, layer);
             EntityAttackLayerPacket attackMessageToClient = new EntityAttackLayerPacket(layer, location, livingEntity.getId());
             PacketManager.sendToAllClients(attackMessageToClient);
         }

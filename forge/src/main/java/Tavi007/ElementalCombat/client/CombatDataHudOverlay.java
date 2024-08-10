@@ -1,29 +1,16 @@
 package Tavi007.ElementalCombat.client;
 
-import org.joml.Matrix4f;
-
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-
-import Tavi007.ElementalCombat.capabilities.attack.AttackData;
-import Tavi007.ElementalCombat.capabilities.defense.DefenseData;
+import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
+import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
+import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
+import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
 import Tavi007.ElementalCombat.config.ClientConfig;
-import Tavi007.ElementalCombat.util.AttackDataHelper;
-import Tavi007.ElementalCombat.util.DefenseDataHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-
-import java.util.Collections;
-import java.util.Optional;
 
 public class CombatDataHudOverlay implements IGuiOverlay {
 
@@ -35,7 +22,7 @@ public class CombatDataHudOverlay implements IGuiOverlay {
             Minecraft mc = Minecraft.getInstance();
             if (mc.player != null) {
                 float scale = (float) ClientConfig.scale();
-                AttackData attackData = AttackDataHelper.get(mc.player);
+                AttackData attackData = DatapackDataAccessor.get(mc.player);
                 DefenseData defenseData = DefenseDataHelper.get(mc.player);
 
                 CombatDataLayerComponent component = new CombatDataLayerComponent(

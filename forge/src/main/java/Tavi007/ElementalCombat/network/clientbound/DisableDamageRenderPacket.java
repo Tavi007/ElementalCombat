@@ -1,10 +1,8 @@
 package Tavi007.ElementalCombat.network.clientbound;
 
-import java.util.Optional;
-
 import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.capabilities.immersion.ImmersionData;
-import Tavi007.ElementalCombat.capabilities.immersion.ImmersionDataCapability;
+import Tavi007.ElementalCombat.capabilities.ImmersionDataCapability;
+import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
 import Tavi007.ElementalCombat.network.Packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
@@ -13,6 +11,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LogicalSidedProvider;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent.Context;
+
+import java.util.Optional;
 
 public class DisableDamageRenderPacket extends Packet {
 
@@ -66,7 +66,7 @@ public class DisableDamageRenderPacket extends Packet {
         if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
             ImmersionData data = (ImmersionData) livingEntity.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null)
-                .orElse(new ImmersionData());
+                    .orElse(new ImmersionData());
             data.disableFlag = true;
         }
     }
