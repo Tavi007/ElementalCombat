@@ -4,7 +4,6 @@ import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
-import Tavi007.ElementalCombat.config.ClientConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

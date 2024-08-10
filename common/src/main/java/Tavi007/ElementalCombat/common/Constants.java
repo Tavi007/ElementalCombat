@@ -9,6 +9,18 @@ public class Constants {
     public static final String MOD_NAME = "Elemental Combat";
     public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
 
+    // Elements
+    public static final String FIRE = "fire";
+    public static final String ICE = "ice";
+    public static final String WATER = "water";
+    public static final String THUNDER = "thunder";
+    public static final String DARKNESS = "darkness";
+    public static final String LIGHT = "light";
+    public static final String EARTH = "earth";
+    public static final String WIND = "wind";
+    public static final String FLORA = "flora";
+
+
     // Blocks
     public static final String ESSENCE_BLOCK_FIRE = "essence_block_fire";
     public static final String ESSENCE_BLOCK_ICE = "essence_block_ice";

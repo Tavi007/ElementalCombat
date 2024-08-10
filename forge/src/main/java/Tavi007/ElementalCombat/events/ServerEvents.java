@@ -1,24 +1,24 @@
 package Tavi007.ElementalCombat.events;
 
-import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.api.AttackDataAPI;
-import Tavi007.ElementalCombat.api.BasePropertiesAPI;
-import Tavi007.ElementalCombat.api.ElementifyDamageSourceEvent;
 import Tavi007.ElementalCombat.common.Constants;
+import Tavi007.ElementalCombat.common.ElementalCombat;
+import Tavi007.ElementalCombat.common.api.AttackDataAPI;
+import Tavi007.ElementalCombat.common.api.BasePropertiesAPI;
+import Tavi007.ElementalCombat.common.api.ElementifyDamageSourceEvent;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
+import Tavi007.ElementalCombat.common.init.ItemList;
+import Tavi007.ElementalCombat.common.init.PotionList;
 import Tavi007.ElementalCombat.common.items.LensItem;
+import Tavi007.ElementalCombat.common.network.PacketManager;
+import Tavi007.ElementalCombat.common.network.clientbound.CreateEmitterPacket;
+import Tavi007.ElementalCombat.common.network.clientbound.DisableDamageRenderPacket;
 import Tavi007.ElementalCombat.common.potions.ElementalResistanceEffect;
 import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
-import Tavi007.ElementalCombat.config.ServerConfig;
-import Tavi007.ElementalCombat.init.ItemList;
-import Tavi007.ElementalCombat.init.PotionList;
-import Tavi007.ElementalCombat.network.PacketManager;
-import Tavi007.ElementalCombat.network.clientbound.CreateEmitterPacket;
-import Tavi007.ElementalCombat.network.clientbound.DisableDamageRenderPacket;
-import Tavi007.ElementalCombat.util.NetworkHelper;
+import Tavi007.ElementalCombat.common.util.NetworkHelper;
+import Tavi007.ElementalCombat.server.ServerConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -257,23 +257,23 @@ public class ServerEvents {
 
     private static Item getEssenceItem(String element) {
         switch (element) {
-            case "fire":
+            case Constants.FIRE:
                 return ItemList.ESSENCE_FIRE.get();
-            case "ice":
+            case Constants.ICE:
                 return ItemList.ESSENCE_ICE.get();
-            case "water":
+            case Constants.WATER:
                 return ItemList.ESSENCE_WATER.get();
-            case "thunder":
+            case Constants.THUNDER:
                 return ItemList.ESSENCE_THUNDER.get();
-            case "darkness":
+            case Constants.DARKNESS:
                 return ItemList.ESSENCE_DARKNESS.get();
-            case "light":
+            case Constants.LIGHT:
                 return ItemList.ESSENCE_LIGHT.get();
-            case "earth":
+            case Constants.EARTH:
                 return ItemList.ESSENCE_EARTH.get();
-            case "wind":
+            case Constants.WIND:
                 return ItemList.ESSENCE_WIND.get();
-            case "flora":
+            case Constants.FLORA:
                 return ItemList.ESSENCE_FLORA.get();
             default:
                 return null;

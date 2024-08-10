@@ -1,16 +1,16 @@
 package Tavi007.ElementalCombat.events;
 
-import Tavi007.ElementalCombat.api.DefenseDataAPI;
-import Tavi007.ElementalCombat.api.GainDefenseFromEquipmentEvent;
+import Tavi007.ElementalCombat.client.ClientConfig;
 import Tavi007.ElementalCombat.common.Constants;
+import Tavi007.ElementalCombat.common.api.DefenseDataAPI;
+import Tavi007.ElementalCombat.common.api.GainDefenseFromEquipmentEvent;
 import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
+import Tavi007.ElementalCombat.common.init.StartupClientOnly;
 import Tavi007.ElementalCombat.common.items.LensItem;
 import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
-import Tavi007.ElementalCombat.config.ClientConfig;
-import Tavi007.ElementalCombat.init.StartupClientOnly;
-import Tavi007.ElementalCombat.util.NetworkHelper;
+import Tavi007.ElementalCombat.common.util.NetworkHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;

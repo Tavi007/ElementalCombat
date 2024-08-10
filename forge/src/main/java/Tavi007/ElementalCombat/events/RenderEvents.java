@@ -1,14 +1,14 @@
 package Tavi007.ElementalCombat.events;
 
-import Tavi007.ElementalCombat.capabilities.ImmersionDataCapability;
+import Tavi007.ElementalCombat.client.ClientConfig;
 import Tavi007.ElementalCombat.client.CombatDataLayerComponent;
 import Tavi007.ElementalCombat.common.Constants;
+import Tavi007.ElementalCombat.common.capabilities.ImmersionDataCapability;
 import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
 import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
-import Tavi007.ElementalCombat.config.ClientConfig;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
