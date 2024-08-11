@@ -3,7 +3,7 @@ package Tavi007.ElementalCombat.common.network.clientbound;
 import Tavi007.ElementalCombat.common.ElementalCombat;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.network.Packet;
-import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
+import Tavi007.ElementalCombat.common.util.DamageCalculationHelper;
 import Tavi007.ElementalCombat.common.util.PacketBufferHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -63,7 +63,7 @@ public class EntityDefenseLayerPacket extends Packet {
     private void processMessage(Level level) {
         Entity entity = level.getEntity(id);
         if (entity instanceof LivingEntity livingEntity) {
-            DefenseDataHelper.get(livingEntity).putLayer(new ResourceLocation(location), defenseLayer);
+            DamageCalculationHelper.get(livingEntity).putLayer(new ResourceLocation(location), defenseLayer);
         }
     }
 

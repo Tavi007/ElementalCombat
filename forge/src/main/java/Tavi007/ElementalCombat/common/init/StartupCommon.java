@@ -2,8 +2,12 @@ package Tavi007.ElementalCombat.common.init;
 
 import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.capabilities.AttackDataCapability;
+import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
 import Tavi007.ElementalCombat.common.capabilities.DefenseDataCapability;
 import Tavi007.ElementalCombat.common.capabilities.ImmersionDataCapability;
+import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
+import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
+import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
 import Tavi007.ElementalCombat.common.network.PacketManager;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,11 +24,83 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 public class StartupCommon {
 
     @SubscribeEvent
-    public static void onCommonSetup(RegisterCapabilitiesEvent event) {
+    public static void onRegisterCapabilitiesEvent(RegisterCapabilitiesEvent event) {
         // capabilities
+        ImmersionDataCapability.register(event);
         AttackDataCapability.register(event);
         DefenseDataCapability.register(event);
-        ImmersionDataCapability.register(event);
+
+        CapabilitiesAccessors.setMobImmersionDataAccessor((entity) -> {
+            if (entity == null) {
+                return new ImmersionData();
+            }
+            ImmersionData immersionData = entity.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
+            return immersionData;
+        });
+
+        CapabilitiesAccessors.setMobAttackDataAccessor((entity) -> {
+            if (entity == null) {
+                return new AttackData();
+            }
+            AttackData attackData = entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+//            if (!attackData.isInitialized()) {
+//                attackData.initialize(entity);
+//            }
+            return attackData;
+        });
+
+        CapabilitiesAccessors.setItemAttackDataAccessor((stack) -> {
+            if (stack == null) {
+                return new AttackData();
+            }
+            AttackData attackData = stack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+//            if (!attackData.isInitialized()) {
+//                attackData.initialize(stack);
+//            }
+//            if (!attackData.areEnchantmentChangesApplied()) {
+//                attackData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
+//            }
+            return attackData;
+        });
+
+        CapabilitiesAccessors.setProjectileAttackDataAccessor((projectile) -> {
+            if (projectile == null) {
+                return new AttackData();
+            }
+            AttackData attackData = projectile.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+//            if (!attackData.isInitialized()) {
+//                attackData.initialize(stack);
+//            }
+//            if (!attackData.areEnchantmentChangesApplied()) {
+//                attackData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
+//            }
+            return attackData;
+        });
+
+        CapabilitiesAccessors.setMobDefenseDataAccessor((entity) -> {
+            if (entity == null) {
+                return new DefenseData();
+            }
+            DefenseData defenseData = entity.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
+//            if (!defenseData.isInitialized()) {
+//                defenseData.initialize(entity);
+//            }
+            return defenseData;
+        });
+
+        CapabilitiesAccessors.setItemDefenseDataAccessor((stack) -> {
+            if (stack == null) {
+                return new DefenseData();
+            }
+            DefenseData defenseData = stack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
+//            if (!defenseData.isInitialized()) {
+//                defenseData.initialize(stack);
+//            }
+//            if (!defenseData.areEnchantmentChangesApplied()) {
+//                defenseData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
+//            }
+            return defenseData;
+        });
     }
 
     @SubscribeEvent

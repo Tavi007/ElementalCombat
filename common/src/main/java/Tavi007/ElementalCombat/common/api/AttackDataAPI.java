@@ -1,6 +1,7 @@
 package Tavi007.ElementalCombat.common.api;
 
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
+import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
 import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.util.ElementalCombatNBTHelper;
 import Tavi007.ElementalCombat.common.util.NetworkHelper;
@@ -26,7 +27,7 @@ public class AttackDataAPI {
      * @param entity A LivingEntity.
      */
     public static AttackLayer getFullDataAsLayer(LivingEntity entity) {
-        return new AttackLayer(DatapackDataAccessor.get(entity).toLayer());
+        return new AttackLayer(CapabilitiesAccessors.getAttackData(entity).toLayer());
     }
 
     /**
@@ -37,7 +38,7 @@ public class AttackDataAPI {
      * @param location The ResourceLocation.
      */
     public static AttackLayer getLayer(LivingEntity entity, ResourceLocation location) {
-        return new AttackLayer(DatapackDataAccessor.get(entity).getLayer(location));
+        return new AttackLayer(CapabilitiesAccessors.getAttackData(entity).getLayer(location));
     }
 
     /**
@@ -48,7 +49,7 @@ public class AttackDataAPI {
      * @param layer    The attack layer to be set.
      */
     public static void putLayer(LivingEntity entity, AttackLayer layer, ResourceLocation location) {
-        DatapackDataAccessor.get(entity).putLayer(location, layer);
+        CapabilitiesAccessors.getAttackData(entity).putLayer(location, layer);
         if (!entity.level().isClientSide) {
             NetworkHelper.syncAttackLayerMessageForClients(entity, layer, location);
         }
@@ -62,7 +63,7 @@ public class AttackDataAPI {
      */
     public static void deleteLayer(LivingEntity entity, ResourceLocation location) {
         AttackLayer layer = new AttackLayer();
-        DatapackDataAccessor.get(entity).putLayer(location, layer);
+        CapabilitiesAccessors.getAttackData(entity).putLayer(location, layer);
         if (!entity.level().isClientSide) {
             NetworkHelper.syncAttackLayerMessageForClients(entity, layer, location);
         }
@@ -75,7 +76,7 @@ public class AttackDataAPI {
      * @param nbt    The CompoundTag.
      */
     public static void writeToNBT(CompoundTag nbt, LivingEntity entity) {
-        ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, DatapackDataAccessor.get(entity));
+        ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, CapabilitiesAccessors.getAttackData(entity));
     }
 
     /**
@@ -85,7 +86,7 @@ public class AttackDataAPI {
      * @param nbt    The CompoundTag.
      */
     public static void readFromNBT(CompoundTag nbt, LivingEntity entity) {
-        DatapackDataAccessor.get(entity).set(ElementalCombatNBTHelper.readAttackDataFromNBT(nbt));
+        CapabilitiesAccessors.getAttackData(entity).set(ElementalCombatNBTHelper.readAttackDataFromNBT(nbt));
     }
 
     //////////////////////
@@ -99,7 +100,7 @@ public class AttackDataAPI {
      * @param entity A Projectile.
      */
     public static AttackLayer getFullDataAsLayer(Projectile entity) {
-        return new AttackLayer(DatapackDataAccessor.get(entity).toLayer());
+        return new AttackLayer(CapabilitiesAccessors.getAttackData(entity).toLayer());
     }
 
     /**
@@ -110,7 +111,7 @@ public class AttackDataAPI {
      * @param location The ResourceLocation.
      */
     public static AttackLayer getLayer(Projectile entity, ResourceLocation location) {
-        return new AttackLayer(DatapackDataAccessor.get(entity).getLayer(location));
+        return new AttackLayer(CapabilitiesAccessors.getAttackData(entity).getLayer(location));
     }
 
     /**
@@ -121,7 +122,7 @@ public class AttackDataAPI {
      * @param layer    The attack layer to be set.
      */
     public static void putLayer(Projectile entity, AttackLayer layer, ResourceLocation location) {
-        DatapackDataAccessor.get(entity).putLayer(location, layer);
+        CapabilitiesAccessors.getAttackData(entity).putLayer(location, layer);
     }
 
     /**
@@ -131,7 +132,7 @@ public class AttackDataAPI {
      * @param location The ResourceLocation.
      */
     public static void deleteLayer(Projectile entity, ResourceLocation location) {
-        DatapackDataAccessor.get(entity).putLayer(location, new AttackLayer());
+        CapabilitiesAccessors.getAttackData(entity).putLayer(location, new AttackLayer());
     }
 
     /**
@@ -141,7 +142,7 @@ public class AttackDataAPI {
      * @param nbt    The CompoundTag.
      */
     public static void writeToNBT(CompoundTag nbt, Projectile entity) {
-        ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, DatapackDataAccessor.get(entity));
+        ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, CapabilitiesAccessors.getAttackData(entity));
     }
 
     /**
@@ -151,7 +152,7 @@ public class AttackDataAPI {
      * @param nbt    The CompoundTag.
      */
     public static void readFromNBT(CompoundTag nbt, Projectile entity) {
-        DatapackDataAccessor.get(entity).set(ElementalCombatNBTHelper.readAttackDataFromNBT(nbt));
+        CapabilitiesAccessors.getAttackData(entity).set(ElementalCombatNBTHelper.readAttackDataFromNBT(nbt));
     }
 
     ///////////////
@@ -165,7 +166,7 @@ public class AttackDataAPI {
      * @param stack A ItemStack.
      */
     public static AttackLayer getFullDataAsLayer(ItemStack stack) {
-        return new AttackLayer(DatapackDataAccessor.get(stack).toLayer());
+        return new AttackLayer(CapabilitiesAccessors.getAttackData(stack).toLayer());
     }
 
     /**
@@ -176,7 +177,7 @@ public class AttackDataAPI {
      * @param location The ResourceLocation.
      */
     public static AttackLayer getLayer(ItemStack stack, ResourceLocation location) {
-        return new AttackLayer(DatapackDataAccessor.get(stack).getLayer(location));
+        return new AttackLayer(CapabilitiesAccessors.getAttackData(stack).getLayer(location));
     }
 
     /**
@@ -188,7 +189,7 @@ public class AttackDataAPI {
      * @param entity   The LivingEntity, which might be holding the ItemStack. Needed to update 'item'-layer of the entity.
      */
     public static void putLayer(ItemStack stack, AttackLayer layer, ResourceLocation location, @Nullable LivingEntity entity) {
-        DatapackDataAccessor.get(stack).putLayer(location, layer);
+        CapabilitiesAccessors.getAttackData(stack).putLayer(location, layer);
         if (entity != null) {
             DatapackDataAccessor.updateItemLayer(entity);
         }
@@ -202,7 +203,7 @@ public class AttackDataAPI {
      */
     public static void deleteLayer(ItemStack stack, ResourceLocation location, @Nullable LivingEntity entity) {
         AttackLayer layer = new AttackLayer();
-        DatapackDataAccessor.get(stack).putLayer(location, layer);
+        CapabilitiesAccessors.getAttackData(stack).putLayer(location, layer);
         if (entity != null) {
             DatapackDataAccessor.updateItemLayer(entity);
         }
@@ -215,7 +216,7 @@ public class AttackDataAPI {
      * @param nbt   The CompoundTag.
      */
     public static void writeToNBT(CompoundTag nbt, ItemStack stack) {
-        ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, DatapackDataAccessor.get(stack));
+        ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, CapabilitiesAccessors.getAttackData(stack));
     }
 
     /**
@@ -225,7 +226,7 @@ public class AttackDataAPI {
      * @param nbt   The CompoundTag.
      */
     public static void readFromNBT(CompoundTag nbt, ItemStack stack) {
-        DatapackDataAccessor.get(stack).set(ElementalCombatNBTHelper.readAttackDataFromNBT(nbt));
+        CapabilitiesAccessors.getAttackData(stack).set(ElementalCombatNBTHelper.readAttackDataFromNBT(nbt));
     }
 
     //////////////////

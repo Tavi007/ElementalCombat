@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.common.api;
 
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
-import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
+import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
 import Tavi007.ElementalCombat.common.util.ElementalCombatNBTHelper;
 import Tavi007.ElementalCombat.common.util.NetworkHelper;
 import net.minecraft.nbt.CompoundTag;
@@ -22,7 +22,7 @@ public class DefenseDataAPI {
      * @param entity A LivingEntity.
      */
     public static DefenseLayer getFullDataAsLayer(LivingEntity entity) {
-        return new DefenseLayer(DefenseDataHelper.get(entity).toLayer());
+        return new DefenseLayer(CapabilitiesAccessors.getDefenseData(entity).toLayer());
     }
 
     /**
@@ -33,7 +33,7 @@ public class DefenseDataAPI {
      * @param location The ResourceLocation.
      */
     public static DefenseLayer getLayer(LivingEntity entity, ResourceLocation location) {
-        return new DefenseLayer(DefenseDataHelper.get(entity).getLayer(location));
+        return new DefenseLayer(CapabilitiesAccessors.getDefenseData(entity).getLayer(location));
     }
 
     /**
@@ -44,7 +44,7 @@ public class DefenseDataAPI {
      * @param layer    The attack layer to be set.
      */
     public static void putLayer(LivingEntity entity, DefenseLayer layer, ResourceLocation location) {
-        DefenseDataHelper.get(entity).putLayer(location, layer);
+        CapabilitiesAccessors.getDefenseData(entity).putLayer(location, layer);
         if (!entity.level().isClientSide) {
             NetworkHelper.syncDefenseLayerMessageForClients(entity, layer, location);
         }
@@ -58,7 +58,7 @@ public class DefenseDataAPI {
      */
     public static void deleteLayer(LivingEntity entity, ResourceLocation location) {
         DefenseLayer layer = new DefenseLayer();
-        DefenseDataHelper.get(entity).putLayer(location, layer);
+        CapabilitiesAccessors.getDefenseData(entity).putLayer(location, layer);
         if (!entity.level().isClientSide) {
             NetworkHelper.syncDefenseLayerMessageForClients(entity, layer, location);
         }
@@ -71,7 +71,7 @@ public class DefenseDataAPI {
      * @param nbt    The CompoundTag.
      */
     public static void writeToNBT(CompoundTag nbt, LivingEntity entity) {
-        ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, DefenseDataHelper.get(entity));
+        ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, CapabilitiesAccessors.getDefenseData(entity));
     }
 
     /**
@@ -81,7 +81,7 @@ public class DefenseDataAPI {
      * @param nbt    The CompoundTag.
      */
     public static void readFromNBT(CompoundTag nbt, LivingEntity entity) {
-        DefenseDataHelper.get(entity).set(ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt));
+        CapabilitiesAccessors.getDefenseData(entity).set(ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt));
     }
 
     ///////////////
@@ -95,7 +95,7 @@ public class DefenseDataAPI {
      * @param stack A ItemStack.
      */
     public static DefenseLayer getFullDataAsLayer(ItemStack stack) {
-        return new DefenseLayer(DefenseDataHelper.get(stack).toLayer());
+        return new DefenseLayer(CapabilitiesAccessors.getDefenseData(stack).toLayer());
     }
 
     /**
@@ -106,7 +106,7 @@ public class DefenseDataAPI {
      * @param location The ResourceLocation.
      */
     public static DefenseLayer getLayer(ItemStack stack, ResourceLocation location) {
-        return new DefenseLayer(DefenseDataHelper.get(stack).getLayer(location));
+        return new DefenseLayer(CapabilitiesAccessors.getDefenseData(stack).getLayer(location));
     }
 
     /**
@@ -117,7 +117,7 @@ public class DefenseDataAPI {
      * @param layer    The attack layer to be set.
      */
     public static void putLayer(ItemStack stack, DefenseLayer layer, ResourceLocation location) {
-        DefenseDataHelper.get(stack).putLayer(location, layer);
+        CapabilitiesAccessors.getDefenseData(stack).putLayer(location, layer);
     }
 
     /**
@@ -128,7 +128,7 @@ public class DefenseDataAPI {
      */
     public static void deleteLayer(ItemStack stack, ResourceLocation location) {
         DefenseLayer layer = new DefenseLayer();
-        DefenseDataHelper.get(stack).putLayer(location, layer);
+        CapabilitiesAccessors.getDefenseData(stack).putLayer(location, layer);
     }
 
     /**
@@ -138,7 +138,7 @@ public class DefenseDataAPI {
      * @param nbt   The CompoundTag.
      */
     public static void writeToNBT(CompoundTag nbt, ItemStack stack) {
-        ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, DefenseDataHelper.get(stack));
+        ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, CapabilitiesAccessors.getDefenseData(stack));
     }
 
     /**
@@ -148,6 +148,6 @@ public class DefenseDataAPI {
      * @param nbt   The CompoundTag.
      */
     public static void readFromNBT(CompoundTag nbt, ItemStack stack) {
-        DefenseDataHelper.get(stack).set(ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt));
+        CapabilitiesAccessors.getDefenseData(stack).set(ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt));
     }
 }

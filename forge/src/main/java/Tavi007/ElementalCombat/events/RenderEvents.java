@@ -8,7 +8,7 @@ import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
-import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
+import Tavi007.ElementalCombat.common.util.DamageCalculationHelper;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
@@ -110,7 +110,7 @@ public class RenderEvents {
         List<Either<FormattedText, TooltipComponent>> tooltip = event.getTooltipElements();
         ItemStack stack = event.getItemStack();
         AttackData attackData = DatapackDataAccessor.get(stack);
-        DefenseData defenseData = DefenseDataHelper.get(stack);
+        DefenseData defenseData = DamageCalculationHelper.get(stack);
 
         tooltip.add(Either.right(new CombatDataLayerComponent(
                 attackData.toLayer(),

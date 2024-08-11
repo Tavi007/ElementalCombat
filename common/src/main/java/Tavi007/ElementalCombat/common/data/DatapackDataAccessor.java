@@ -4,6 +4,7 @@ import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.api.data.ElementalCombatLayer;
+import Tavi007.ElementalCombat.common.api.data.ElementalCombatMobData;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.Map;
 
 public class DatapackDataAccessor {
 
-    private static final Map<ResourceLocation, ElementalCombatLayer> loadedMobLayers = new HashMap<>();
+    private static final Map<ResourceLocation, ElementalCombatMobData> loadedMobLayers = new HashMap<>();
     private static final Map<ResourceLocation, ElementalCombatLayer> loadedItemLayers = new HashMap<>();
     private static final Map<ResourceLocation, DefenseLayer> loadedBiomeLayers = new HashMap<>();
     private static final Map<ResourceLocation, AttackLayer> loadedProjectileLayers = new HashMap<>();
@@ -34,11 +35,11 @@ public class DatapackDataAccessor {
         return DatapackDataAccessor.defaultAttack.getElement();
     }
 
-    public static void putMobDefaultLayer(ResourceLocation rl, ElementalCombatLayer data) {
+    public static void putMobDefaultData(ResourceLocation rl, ElementalCombatMobData data) {
         DatapackDataAccessor.loadedMobLayers.put(rl, data);
     }
 
-    public static ElementalCombatLayer getMobLayer(ResourceLocation rl) {
+    public static ElementalCombatMobData getMobDefaultData(ResourceLocation rl) {
         return DatapackDataAccessor.loadedMobLayers.get(rl);
     }
 

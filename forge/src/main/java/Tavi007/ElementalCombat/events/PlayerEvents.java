@@ -9,7 +9,7 @@ import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.init.StartupClientOnly;
 import Tavi007.ElementalCombat.common.items.LensItem;
-import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
+import Tavi007.ElementalCombat.common.util.DamageCalculationHelper;
 import Tavi007.ElementalCombat.common.util.NetworkHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -54,7 +54,7 @@ public class PlayerEvents {
         if (!gainDefenseEvent.isCanceled()) {
             DefenseDataAPI.putLayer(
                     entity,
-                    DefenseDataHelper.get(event.getTo()).toLayer(),
+                    DamageCalculationHelper.get(event.getTo()).toLayer(),
                     new ResourceLocation(event.getSlot().name().toLowerCase()));
         }
     }
@@ -107,7 +107,7 @@ public class PlayerEvents {
                 player.sendSystemMessage(Component.literal("Resulting attack values: "));
                 player.sendSystemMessage(Component.literal(attackData.toLayer().toString()));
 
-                DefenseData defenseData = DefenseDataHelper.get(target);
+                DefenseData defenseData = DamageCalculationHelper.get(target);
                 if (defenseData.getLayers().isEmpty()) {
                     player.sendSystemMessage(Component.literal("Has no defense layers"));
                 } else {

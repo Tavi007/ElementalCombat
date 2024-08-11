@@ -2,7 +2,7 @@ package Tavi007.ElementalCombat.client;
 
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
-import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
+import Tavi007.ElementalCombat.common.util.DamageCalculationHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -42,7 +42,7 @@ public class CombatDataLayerComponent implements TooltipComponent {
     }
 
     private static String getPercentage(Integer factor, boolean isStyle) {
-        Integer percentage = Math.round(DefenseDataHelper.getPercentage(factor, isStyle) * 100);
+        Integer percentage = Math.round(DamageCalculationHelper.getPercentage(factor, isStyle) * 100);
         ChatFormatting ChatFormatting = net.minecraft.ChatFormatting.GRAY;
         if (percentage < 0) {
             ChatFormatting = net.minecraft.ChatFormatting.RED;

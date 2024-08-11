@@ -2,12 +2,12 @@ package Tavi007.ElementalCombat.common.util;
 
 import java.util.HashMap;
 
-public class DefenseDataHelper {
+public class DamageCalculationHelper {
 
     private static int maxFactor = 1;
 
     public static void setMaxFactor(int maxFactor) {
-        DefenseDataHelper.maxFactor = maxFactor;
+        DamageCalculationHelper.maxFactor = maxFactor;
     }
 
     public static float getScaling(HashMap<String, Integer> map, String key, boolean isStyle) {

@@ -30,7 +30,7 @@ public class NetworkHelper {
                 EntityAttackLayerPacket attackMessageToClient = new EntityAttackLayerPacket(layer, rl, livingEntity.getId());
                 PacketManager.sendToAllClients(attackMessageToClient);
             });
-            DefenseData defenseData = DefenseDataHelper.get(livingEntity);
+            DefenseData defenseData = DamageCalculationHelper.get(livingEntity);
             defenseData.getLayers().forEach((rl, layer) -> {
                 EntityDefenseLayerPacket defenseMessageToClient = new EntityDefenseLayerPacket(layer, rl, livingEntity.getId());
                 PacketManager.sendToAllClients(defenseMessageToClient);
@@ -47,7 +47,7 @@ public class NetworkHelper {
      */
     public static void syncDefenseLayerMessageForClients(LivingEntity livingEntity, DefenseLayer layer, ResourceLocation location) {
         if (!livingEntity.level().isClientSide) {
-            DefenseDataHelper.get(livingEntity).putLayer(location, layer);
+            DamageCalculationHelper.get(livingEntity).putLayer(location, layer);
             EntityDefenseLayerPacket defenseMessageToClient = new EntityDefenseLayerPacket(layer, location, livingEntity.getId());
             PacketManager.sendToAllClients(defenseMessageToClient);
         }

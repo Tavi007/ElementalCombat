@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class ElementalCombatNBTHelper {
@@ -98,8 +99,8 @@ public class ElementalCombatNBTHelper {
     private static DefenseLayer fromNBTToDefenseLayer(CompoundTag nbtCompound) {
         DefenseLayer layer = new DefenseLayer();
         if (nbtCompound != null) {
-            layer.addStyle(fromNBTToDefenseMap((CompoundTag) nbtCompound.get("style")));
-            layer.addElement(fromNBTToDefenseMap((CompoundTag) nbtCompound.get("element")));
+            layer.addStyles(fromNBTToDefenseMap((CompoundTag) nbtCompound.get("styles")));
+            layer.addElements(fromNBTToDefenseMap((CompoundTag) nbtCompound.get("elements")));
         }
         return layer;
     }
@@ -149,13 +150,13 @@ public class ElementalCombatNBTHelper {
     private static CompoundTag fromDefenseLayerToNBT(DefenseLayer layer) {
         CompoundTag nbt = new CompoundTag();
         if (layer != null) {
-            nbt.put("style", fromDefenseMapToNBT(layer.getStyleFactor()));
-            nbt.put("element", fromDefenseMapToNBT(layer.getElementFactor()));
+            nbt.put("styles", fromDefenseMapToNBT(layer.getStyles()));
+            nbt.put("elements", fromDefenseMapToNBT(layer.getElements()));
         }
         return nbt;
     }
 
-    private static CompoundTag fromDefenseMapToNBT(HashMap<String, Integer> map) {
+    private static CompoundTag fromDefenseMapToNBT(Map<String, Integer> map) {
         CompoundTag nbt = new CompoundTag();
         if (map != null) {
             map.forEach((elemString, value) -> {

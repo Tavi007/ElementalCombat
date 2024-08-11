@@ -4,6 +4,7 @@ import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.ElementalCombat;
 import Tavi007.ElementalCombat.common.api.AttackDataAPI;
 import Tavi007.ElementalCombat.common.api.BasePropertiesAPI;
+import Tavi007.ElementalCombat.common.api.DatapackDataAPI;
 import Tavi007.ElementalCombat.common.api.ElementifyDamageSourceEvent;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
@@ -16,7 +17,7 @@ import Tavi007.ElementalCombat.common.network.PacketManager;
 import Tavi007.ElementalCombat.common.network.clientbound.CreateEmitterPacket;
 import Tavi007.ElementalCombat.common.network.clientbound.DisableDamageRenderPacket;
 import Tavi007.ElementalCombat.common.potions.ElementalResistanceEffect;
-import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
+import Tavi007.ElementalCombat.common.util.DamageCalculationHelper;
 import Tavi007.ElementalCombat.common.util.NetworkHelper;
 import Tavi007.ElementalCombat.server.ServerConfig;
 import net.minecraft.core.BlockPos;
@@ -76,7 +77,7 @@ public class ServerEvents {
             } else if (entity instanceof Projectile projectile && entity.tickCount == 0) {
                 // fill with default values in here.
                 AttackData projectileData = DatapackDataAccessor.get(projectile);
-                projectileData.putLayer(new ResourceLocation("base"), BasePropertiesAPI.getAttackData(projectile));
+                projectileData.putLayer(new ResourceLocation("base"), DatapackDataAPI.getAttackLayer(projectile));
                 addLayerFromSource(projectileData, projectile.getOwner());
                 addLayerFromPotion(projectileData, projectile);
             }
@@ -167,12 +168,12 @@ public class ServerEvents {
 
         // Get the protection data from target
         LivingEntity target = event.getEntity();
-        DefenseData defCap = DefenseDataHelper.get(target);
+        DefenseData defCap = DamageCalculationHelper.get(target);
 
         // compute new Damage value
         float damageAmount = event.getAmount();
-        float defenseStyleScaling = DefenseDataHelper.getScaling(defCap.getStyleFactor(), sourceData.getStyle(), true);
-        float defenseElementScaling = DefenseDataHelper.getScaling(defCap.getElementFactor(), sourceData.getElement(), false);
+        float defenseStyleScaling = DamageCalculationHelper.getScaling(defCap.getStyleFactor(), sourceData.getStyle(), true);
+        float defenseElementScaling = DamageCalculationHelper.getScaling(defCap.getElementFactor(), sourceData.getElement(), false);
         damageAmount = damageAmount * defenseStyleScaling * defenseElementScaling;
 
         // display particles

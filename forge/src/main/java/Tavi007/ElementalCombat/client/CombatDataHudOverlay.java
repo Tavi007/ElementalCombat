@@ -3,7 +3,7 @@ package Tavi007.ElementalCombat.client;
 import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
-import Tavi007.ElementalCombat.common.util.DefenseDataHelper;
+import Tavi007.ElementalCombat.common.util.DamageCalculationHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -22,7 +22,7 @@ public class CombatDataHudOverlay implements IGuiOverlay {
             if (mc.player != null) {
                 float scale = (float) ClientConfig.scale();
                 AttackData attackData = DatapackDataAccessor.get(mc.player);
-                DefenseData defenseData = DefenseDataHelper.get(mc.player);
+                DefenseData defenseData = DamageCalculationHelper.get(mc.player);
 
                 CombatDataLayerComponent component = new CombatDataLayerComponent(
                         attackData.toLayer(),
