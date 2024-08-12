@@ -7,9 +7,9 @@ import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.network.PacketManager;
-import Tavi007.ElementalCombat.common.network.clientbound.BasePropertiesPacket;
-import Tavi007.ElementalCombat.common.network.clientbound.EntityAttackLayerPacket;
-import Tavi007.ElementalCombat.common.network.clientbound.EntityDefenseLayerPacket;
+import Tavi007.ElementalCombat.common.network.packets.SyncronizeDatapackPacket;
+import Tavi007.ElementalCombat.common.network.packets.UpdateEntityAttackLayerPacket;
+import Tavi007.ElementalCombat.common.network.packets.UpdateEntityDefenseLayerPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,12 +27,12 @@ public class NetworkHelper {
             DatapackDataAccessor.updateItemLayer(livingEntity);
             AttackData attackData = DatapackDataAccessor.get(livingEntity);
             attackData.getLayers().forEach((rl, layer) -> {
-                EntityAttackLayerPacket attackMessageToClient = new EntityAttackLayerPacket(layer, rl, livingEntity.getId());
+                UpdateEntityAttackLayerPacket attackMessageToClient = new UpdateEntityAttackLayerPacket(layer, rl, livingEntity.getId());
                 PacketManager.sendToAllClients(attackMessageToClient);
             });
             DefenseData defenseData = DamageCalculationHelper.get(livingEntity);
             defenseData.getLayers().forEach((rl, layer) -> {
-                EntityDefenseLayerPacket defenseMessageToClient = new EntityDefenseLayerPacket(layer, rl, livingEntity.getId());
+                UpdateEntityDefenseLayerPacket defenseMessageToClient = new UpdateEntityDefenseLayerPacket(layer, rl, livingEntity.getId());
                 PacketManager.sendToAllClients(defenseMessageToClient);
             });
         }
@@ -48,7 +48,7 @@ public class NetworkHelper {
     public static void syncDefenseLayerMessageForClients(LivingEntity livingEntity, DefenseLayer layer, ResourceLocation location) {
         if (!livingEntity.level().isClientSide) {
             DamageCalculationHelper.get(livingEntity).putLayer(location, layer);
-            EntityDefenseLayerPacket defenseMessageToClient = new EntityDefenseLayerPacket(layer, location, livingEntity.getId());
+            UpdateEntityDefenseLayerPacket defenseMessageToClient = new UpdateEntityDefenseLayerPacket(layer, location, livingEntity.getId());
             PacketManager.sendToAllClients(defenseMessageToClient);
         }
     }
@@ -56,14 +56,14 @@ public class NetworkHelper {
     public static void syncAttackLayerMessageForClients(LivingEntity livingEntity, AttackLayer layer, ResourceLocation location) {
         if (!livingEntity.level().isClientSide) {
             DatapackDataAccessor.get(livingEntity).putLayer(location, layer);
-            EntityAttackLayerPacket attackMessageToClient = new EntityAttackLayerPacket(layer, location, livingEntity.getId());
+            UpdateEntityAttackLayerPacket attackMessageToClient = new UpdateEntityAttackLayerPacket(layer, location, livingEntity.getId());
             PacketManager.sendToAllClients(attackMessageToClient);
         }
     }
 
     public static void syncJsonMessageForClients(Player player) {
         if (!player.level().isClientSide && player instanceof ServerPlayer) {
-            BasePropertiesPacket messageToClient = ElementalCombat.COMBAT_PROPERTIES_MANGER.createSyncMessage();
+            SyncronizeDatapackPacket messageToClient = ElementalCombat.COMBAT_PROPERTIES_MANGER.createSyncMessage();
             PacketManager.sendToClient(messageToClient, player);
         }
     }

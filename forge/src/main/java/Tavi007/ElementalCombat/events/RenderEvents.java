@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.events;
 
 import Tavi007.ElementalCombat.client.ClientConfig;
-import Tavi007.ElementalCombat.client.CombatDataLayerComponent;
+import Tavi007.ElementalCombat.client.gui.CombatDataLayerComponent;
 import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.capabilities.ImmersionDataCapability;
 import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;

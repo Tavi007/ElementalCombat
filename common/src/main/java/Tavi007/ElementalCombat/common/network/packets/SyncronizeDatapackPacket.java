@@ -1,9 +1,8 @@
-package Tavi007.ElementalCombat.common.network.clientbound;
+package Tavi007.ElementalCombat.common.network.packets;
 
 import Tavi007.ElementalCombat.common.ElementalCombat;
 import Tavi007.ElementalCombat.common.data.datapack.ElementalCombatProperties;
 import Tavi007.ElementalCombat.common.data.datapack.MobCombatProperties;
-import Tavi007.ElementalCombat.common.network.Packet;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,7 +11,7 @@ import net.minecraftforge.network.NetworkEvent.Context;
 
 import java.util.Map;
 
-public class BasePropertiesPacket extends Packet {
+public class SyncronizeDatapackPacket extends AbstractPacket {
 
     private final AttackOnlyCombatProperties baseAttackProperties;
     private final Map<ResourceLocation, MobCombatProperties> mobData;
@@ -21,12 +20,12 @@ public class BasePropertiesPacket extends Packet {
     private final Map<ResourceLocation, AttackOnlyCombatProperties> damageTypeData;
     private final Map<ResourceLocation, AttackOnlyCombatProperties> projectileData;
 
-    public BasePropertiesPacket(AttackOnlyCombatProperties baseAttackProperties,
-                                Map<ResourceLocation, MobCombatProperties> mobData,
-                                Map<ResourceLocation, ElementalCombatProperties> itemData,
-                                Map<ResourceLocation, DefenseOnlyCombatProperties> biomeData,
-                                Map<ResourceLocation, AttackOnlyCombatProperties> damageTypeData,
-                                Map<ResourceLocation, AttackOnlyCombatProperties> projectileData) {
+    public SyncronizeDatapackPacket(AttackOnlyCombatProperties baseAttackProperties,
+                                    Map<ResourceLocation, MobCombatProperties> mobData,
+                                    Map<ResourceLocation, ElementalCombatProperties> itemData,
+                                    Map<ResourceLocation, DefenseOnlyCombatProperties> biomeData,
+                                    Map<ResourceLocation, AttackOnlyCombatProperties> damageTypeData,
+                                    Map<ResourceLocation, AttackOnlyCombatProperties> projectileData) {
         this.baseAttackProperties = baseAttackProperties;
         this.mobData = mobData;
         this.itemData = itemData;
@@ -35,7 +34,7 @@ public class BasePropertiesPacket extends Packet {
         this.projectileData = projectileData;
     }
 
-    public BasePropertiesPacket(FriendlyByteBuf buf) {
+    public SyncronizeDatapackPacket(FriendlyByteBuf buf) {
         this.baseAttackProperties = readBaseAttack(buf);
         this.mobData = readMob(buf);
         this.itemData = readItem(buf);

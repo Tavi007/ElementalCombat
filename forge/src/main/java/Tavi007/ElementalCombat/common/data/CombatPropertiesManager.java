@@ -4,7 +4,7 @@ import Tavi007.ElementalCombat.common.ElementalCombat;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.api.data.ElementalCombatLayer;
-import Tavi007.ElementalCombat.common.network.clientbound.BasePropertiesPacket;
+import Tavi007.ElementalCombat.common.network.packets.SyncronizeDatapackPacket;
 import com.google.common.collect.Queues;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,7 +34,7 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         super(GSON, "elemental_combat_properties");
     }
 
-    public void set(BasePropertiesPacket message) {
+    public void set(SyncronizeDatapackPacket message) {
 //        baseAttackProperties = message.getBaseAttack();
 //        registeredMobData = message.getMobData();
 //        registeredItemData = message.getItemData();
@@ -55,8 +55,8 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         ElementalCombat.LOGGER.info(side + " loaded " + size + " combat properties for " + type);
     }
 
-    public BasePropertiesPacket createSyncMessage() {
-        return new BasePropertiesPacket(baseAttackProperties,
+    public SyncronizeDatapackPacket createSyncMessage() {
+        return new SyncronizeDatapackPacket(baseAttackProperties,
                 registeredMobData,
                 registeredItemData,
                 registeredBiomeData,

@@ -1,8 +1,7 @@
-package Tavi007.ElementalCombat.common.network.clientbound;
+package Tavi007.ElementalCombat.common.network.packets;
 
 import Tavi007.ElementalCombat.common.ElementalCombat;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
-import Tavi007.ElementalCombat.common.network.Packet;
 import Tavi007.ElementalCombat.common.util.DamageCalculationHelper;
 import Tavi007.ElementalCombat.common.util.PacketBufferHelper;
 import net.minecraft.network.FriendlyByteBuf;
@@ -16,19 +15,19 @@ import net.minecraftforge.network.NetworkEvent.Context;
 
 import java.util.Optional;
 
-public class EntityDefenseLayerPacket extends Packet {
+public class UpdateEntityDefenseLayerPacket extends AbstractPacket {
 
     private final Integer id;
     private final String location;
     private final DefenseLayer defenseLayer;
 
-    public EntityDefenseLayerPacket(DefenseLayer defenseLayer, ResourceLocation location, Integer id) {
+    public UpdateEntityDefenseLayerPacket(DefenseLayer defenseLayer, ResourceLocation location, Integer id) {
         this.defenseLayer = defenseLayer;
         this.location = location.toString();
         this.id = id;
     }
 
-    public EntityDefenseLayerPacket(FriendlyByteBuf buf) {
+    public UpdateEntityDefenseLayerPacket(FriendlyByteBuf buf) {
         this.id = buf.readInt();
         this.location = buf.readUtf();
         this.defenseLayer = new DefenseLayer(PacketBufferHelper.readHashMap(buf), PacketBufferHelper.readHashMap(buf));

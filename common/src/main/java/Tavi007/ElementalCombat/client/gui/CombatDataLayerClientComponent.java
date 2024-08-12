@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.client;
+package Tavi007.ElementalCombat.client.gui;
 
 import Tavi007.ElementalCombat.common.Constants;
 import net.minecraft.client.Minecraft;

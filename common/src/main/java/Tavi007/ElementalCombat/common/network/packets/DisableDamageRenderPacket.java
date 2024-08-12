@@ -1,9 +1,8 @@
-package Tavi007.ElementalCombat.common.network.clientbound;
+package Tavi007.ElementalCombat.common.network.packets;
 
 import Tavi007.ElementalCombat.common.ElementalCombat;
 import Tavi007.ElementalCombat.common.capabilities.ImmersionDataCapability;
 import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
-import Tavi007.ElementalCombat.common.network.Packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,7 +13,7 @@ import net.minecraftforge.network.NetworkEvent.Context;
 
 import java.util.Optional;
 
-public class DisableDamageRenderPacket extends Packet {
+public class DisableDamageRenderPacket extends AbstractPacket {
 
     private Integer id;
 

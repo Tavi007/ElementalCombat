@@ -1,5 +1,7 @@
 package Tavi007.ElementalCombat.common;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +10,12 @@ public class Constants {
     public static final String MOD_ID = "elementalcombat";
     public static final String MOD_NAME = "Elemental Combat";
     public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
+    public static final Minecraft INSTANCE = Minecraft.getInstance();
+
+    // Capabilities
+    public static final ResourceLocation ATTACK_DATA_CAPABILITY = new ResourceLocation(MOD_ID, "attack");
+    public static final ResourceLocation DEFENSE_DATA_CAPABILITY = new ResourceLocation(MOD_ID, "defense");
+    public static final ResourceLocation IMMERSION_DATA_CAPABILITY = new ResourceLocation(MOD_ID, "immersion");
 
     // Elements
     public static final String FIRE = "fire";

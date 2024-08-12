@@ -1,5 +1,6 @@
 package Tavi007.ElementalCombat.client;
 
+import Tavi007.ElementalCombat.client.gui.HudAnchor;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;

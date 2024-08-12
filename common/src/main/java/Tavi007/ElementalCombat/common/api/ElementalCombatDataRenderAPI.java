@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.common.api;
 
-import Tavi007.ElementalCombat.client.CombatDataLayerClientComponent;
-import Tavi007.ElementalCombat.client.CombatDataLayerComponent;
+import Tavi007.ElementalCombat.client.gui.CombatDataLayerClientComponent;
+import Tavi007.ElementalCombat.client.gui.CombatDataLayerComponent;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import net.minecraft.client.Minecraft;

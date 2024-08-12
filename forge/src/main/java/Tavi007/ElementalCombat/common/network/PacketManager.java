@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.common.network;
 
 import Tavi007.ElementalCombat.common.ElementalCombat;
-import Tavi007.ElementalCombat.common.network.clientbound.*;
+import Tavi007.ElementalCombat.common.network.packets.*;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,20 +28,20 @@ public class PacketManager {
     }
 
     public static void init() {
-        register(BasePropertiesPacket.class, BasePropertiesPacket::new);
+        register(SyncronizeDatapackPacket.class, SyncronizeDatapackPacket::new);
         register(CreateEmitterPacket.class, CreateEmitterPacket::new);
         register(DisableDamageRenderPacket.class, DisableDamageRenderPacket::new);
-        register(EntityAttackLayerPacket.class, EntityAttackLayerPacket::new);
-        register(EntityDefenseLayerPacket.class, EntityDefenseLayerPacket::new);
+        register(UpdateEntityAttackLayerPacket.class, UpdateEntityAttackLayerPacket::new);
+        register(UpdateEntityDefenseLayerPacket.class, UpdateEntityDefenseLayerPacket::new);
 
         ElementalCombat.LOGGER.info("Registered {} packets", NUM_PACKETS);
     }
 
-    public static void sendToAllClients(Packet packet) {
+    public static void sendToAllClients(AbstractPacket packet) {
         CHANNEL.send(PacketDistributor.ALL.noArg(), packet);
     }
 
-    public static void sendToClient(Packet packet, Player player) {
+    public static void sendToClient(AbstractPacket packet, Player player) {
         if (!player.level().isClientSide()) {
             CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), packet);
         } else {
@@ -49,9 +49,9 @@ public class PacketManager {
         }
     }
 
-    public static <MSG extends Packet> void register(Class<MSG> clazz, Function<FriendlyByteBuf, MSG> decoder) {
+    public static <MSG extends AbstractPacket> void register(Class<MSG> clazz, Function<FriendlyByteBuf, MSG> decoder) {
         CHANNEL.messageBuilder(clazz, NUM_PACKETS++)
-                .encoder(Packet::encode)
+                .encoder(AbstractPacket::encode)
                 .decoder(decoder)
                 .consumerMainThread((msg, ctx) -> msg.handle(ctx.get()))
                 .add();

@@ -1,5 +1,7 @@
 package Tavi007.ElementalCombat.client;
 
+import Tavi007.ElementalCombat.client.gui.CombatDataLayerClientComponent;
+import Tavi007.ElementalCombat.client.gui.CombatDataLayerComponent;
 import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;

@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.client;
+package Tavi007.ElementalCombat.client.gui;
 
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;

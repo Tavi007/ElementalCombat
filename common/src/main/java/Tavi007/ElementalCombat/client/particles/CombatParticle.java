@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.client;
+package Tavi007.ElementalCombat.client.particles;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
@@ -9,9 +9,9 @@ public class CombatParticle extends TextureSheetParticle {
 
     private CombatParticle(ClientLevel world, double x, double y, double z, double xd, double yd, double zd) {
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
-        this.xd *= (double) 0.1F;
-        this.yd *= (double) 0.1F;
-        this.zd *= (double) 0.1F;
+        this.xd *= 0.1F;
+        this.yd *= 0.1F;
+        this.zd *= 0.1F;
         this.xd += xd * 0.4D;
         this.yd += yd * 0.4D;
         this.zd += zd * 0.4D;
@@ -33,13 +33,13 @@ public class CombatParticle extends TextureSheetParticle {
             this.remove();
         } else {
             this.move(this.xd, this.yd, this.zd);
-            this.xd *= (double) 0.7F;
-            this.yd *= (double) 0.7F;
-            this.zd *= (double) 0.7F;
-            this.yd -= (double) 0.02F;
+            this.xd *= 0.7F;
+            this.yd *= 0.7F;
+            this.zd *= 0.7F;
+            this.yd -= 0.02F;
             if (this.onGround) {
-                this.xd *= (double) 0.7F;
-                this.zd *= (double) 0.7F;
+                this.xd *= 0.7F;
+                this.zd *= 0.7F;
             }
         }
     }
