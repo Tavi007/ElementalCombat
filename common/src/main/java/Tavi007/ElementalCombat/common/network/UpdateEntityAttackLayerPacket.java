@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.common.network.packets;
+package Tavi007.ElementalCombat.common.network;
 
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;

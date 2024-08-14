@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.common.network.packets;
+package Tavi007.ElementalCombat.common.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 

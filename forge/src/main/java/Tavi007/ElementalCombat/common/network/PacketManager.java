@@ -1,7 +1,6 @@
 package Tavi007.ElementalCombat.common.network;
 
 import Tavi007.ElementalCombat.common.ElementalCombat;
-import Tavi007.ElementalCombat.common.network.packets.*;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;

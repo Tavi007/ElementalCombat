@@ -1,6 +1,7 @@
 package Tavi007.ElementalCombat.common.init;
 
 import Tavi007.ElementalCombat.common.Constants;
+import Tavi007.ElementalCombat.common.registry.ModItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -22,7 +23,7 @@ public class CreativeTabList {
     public static final RegistryObject<CreativeModeTab> TAB = TABS.register("tab",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.elementalcombat"))
-                    .icon(ItemList.ESSENCE_FIRE.get()::getDefaultInstance)
+                    .icon(ModItems.ESSENCE_FIRE::getDefaultInstance)
                     .displayItems((displayParams, output) -> TAB_ITEMS.forEach(itemLike -> output.accept(itemLike.get())))
                     .build());
 

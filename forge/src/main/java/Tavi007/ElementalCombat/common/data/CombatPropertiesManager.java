@@ -4,7 +4,7 @@ import Tavi007.ElementalCombat.common.ElementalCombat;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.api.data.ElementalCombatLayer;
-import Tavi007.ElementalCombat.common.network.packets.SyncronizeDatapackPacket;
+import Tavi007.ElementalCombat.common.network.SyncronizeDatapackPacket;
 import com.google.common.collect.Queues;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
