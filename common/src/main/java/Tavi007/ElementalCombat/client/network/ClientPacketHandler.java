@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 
 public class ClientPacketHandler {
 
+
     private void handlePacket(CreateEmitterPacket packet, Level level) {
         if (!packet.isValid()) {
             Constants.LOG.warn("Invalid " + packet.getClass().getName() + " encountered. Skip emitting.");

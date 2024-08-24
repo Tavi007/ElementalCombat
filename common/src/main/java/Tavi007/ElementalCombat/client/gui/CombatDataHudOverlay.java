@@ -1,30 +1,26 @@
-package Tavi007.ElementalCombat.client;
+package Tavi007.ElementalCombat.client.gui;
 
-import Tavi007.ElementalCombat.client.gui.CombatDataLayerClientComponent;
-import Tavi007.ElementalCombat.client.gui.CombatDataLayerComponent;
-import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
+import Tavi007.ElementalCombat.client.ClientConfig;
+import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
-import Tavi007.ElementalCombat.common.util.DamageCalculationHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
-public class CombatDataHudOverlay implements IGuiOverlay {
+public class CombatDataHudOverlay {
 
-    @Override
-    public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
+    // might have to split this method
+    public static void render(GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
 
         if (ClientConfig.isHUDEnabled()) {
             // see Screen#renderToolTips in client.gui.screen
             Minecraft mc = Minecraft.getInstance();
             if (mc.player != null) {
-                float scale = (float) ClientConfig.scale();
-                AttackData attackData = DatapackDataAccessor.get(mc.player);
-                DefenseData defenseData = DamageCalculationHelper.get(mc.player);
+                float scale = (float) ClientConfig.getScale();
+                AttackData attackData = CapabilitiesAccessors.getAttackData(mc.player);
+                DefenseData defenseData = CapabilitiesAccessors.getDefenseData(mc.player);
 
                 CombatDataLayerComponent component = new CombatDataLayerComponent(
                         attackData.toLayer(),

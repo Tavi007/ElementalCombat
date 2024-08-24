@@ -1,6 +1,6 @@
 package Tavi007.ElementalCombat.common.init;
 
-import Tavi007.ElementalCombat.client.CombatDataHudOverlay;
+import Tavi007.ElementalCombat.client.ForgeCombatDataHudOverlay;
 import Tavi007.ElementalCombat.client.gui.CombatDataLayerClientComponent;
 import Tavi007.ElementalCombat.client.gui.CombatDataLayerComponent;
 import Tavi007.ElementalCombat.client.particles.CombatParticle;
@@ -38,7 +38,7 @@ public class StartupClientOnly {
 
     @SubscribeEvent
     public static void onRegisterGuiOverlays(RegisterGuiOverlaysEvent event) {
-        event.registerAboveAll("elemental_combat_player_data", new CombatDataHudOverlay());
+        event.registerAboveAll("elemental_combat_player_data", new ForgeCombatDataHudOverlay());
         Constants.LOG.info("ElementalCombat hud overlay registered.");
     }
 

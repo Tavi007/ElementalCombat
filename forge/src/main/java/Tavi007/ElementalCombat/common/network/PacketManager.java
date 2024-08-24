@@ -1,6 +1,6 @@
 package Tavi007.ElementalCombat.common.network;
 
-import Tavi007.ElementalCombat.common.ElementalCombat;
+import Tavi007.ElementalCombat.common.Constants;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,7 +16,7 @@ public class PacketManager {
     private static final String PROTOCOL_VERSION = "1";
 
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(ElementalCombat.MOD_ID, "main"),
+            new ResourceLocation(Constants.MOD_ID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals);
@@ -33,7 +33,7 @@ public class PacketManager {
         register(UpdateEntityAttackLayerPacket.class, UpdateEntityAttackLayerPacket::new);
         register(UpdateEntityDefenseLayerPacket.class, UpdateEntityDefenseLayerPacket::new);
 
-        ElementalCombat.LOGGER.info("Registered {} packets", NUM_PACKETS);
+        Constants.LOG.info("Registered {} packets", NUM_PACKETS);
     }
 
     public static void sendToAllClients(AbstractPacket packet) {
