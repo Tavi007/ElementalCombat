@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.common.enchantments;
 
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
-import Tavi007.ElementalCombat.config.ServerConfig;
+import Tavi007.ElementalCombat.server.ServerConfig;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;

@@ -79,5 +79,55 @@ public class Constants {
     public static final String WIND_ASPECT = "wind_aspect";
     public static final String FLORA_ASPECT = "flora_aspect";
 
+    // MobEffects and Potions
+    public static final String FIRE_RESISTANCE = "fire_resistance";
+    public static final String ICE_RESISTANCE = "ice_resistance";
+    public static final String WATER_RESISTANCE = "water_resistance";
+    public static final String THUNDER_RESISTANCE = "thunder_resistance";
+    public static final String DARKNESS_RESISTANCE = "darkness_resistance";
+    public static final String LIGHT_RESISTANCE = "light_resistance";
+    public static final String EARTH_RESISTANCE = "earth_resistance";
+    public static final String WIND_RESISTANCE = "wind_resistance";
+    public static final String FLORA_RESISTANCE = "flora_resistance";
+    public static final String FIRE_HARMING = "fire_harming";
+    public static final String ICE_HARMING = "ice_harming";
+    public static final String WATER_HARMING = "water_harming";
+    public static final String THUNDER_HARMING = "thunder_harming";
+    public static final String DARKNESS_HARMING = "darkness_harming";
+    public static final String LIGHT_HARMING = "light_harming";
+    public static final String EARTH_HARMING = "earth_harming";
+    public static final String WIND_HARMING = "wind_harming";
+    public static final String FLORA_HARMING = "flora_harming";
 
+    // Strong Potions
+    public static final String STRONG_FIRE_RESISTANCE = "strong_fire_resistance";
+    public static final String STRONG_ICE_RESISTANCE = "strong_ice_resistance";
+    public static final String STRONG_WATER_RESISTANCE = "strong_water_resistance";
+    public static final String STRONG_THUNDER_RESISTANCE = "strong_thunder_resistance";
+    public static final String STRONG_DARKNESS_RESISTANCE = "strong_darkness_resistance";
+    public static final String STRONG_LIGHT_RESISTANCE = "strong_light_resistance";
+    public static final String STRONG_EARTH_RESISTANCE = "strong_earth_resistance";
+    public static final String STRONG_WIND_RESISTANCE = "strong_wind_resistance";
+    public static final String STRONG_FLORA_RESISTANCE = "strong_flora_resistance";
+    public static final String STRONG_FIRE_HARMING = "strong_fire_harming";
+    public static final String STRONG_ICE_HARMING = "strong_ice_harming";
+    public static final String STRONG_WATER_HARMING = "strong_water_harming";
+    public static final String STRONG_THUNDER_HARMING = "strong_thunder_harming";
+    public static final String STRONG_DARKNESS_HARMING = "strong_darkness_harming";
+    public static final String STRONG_LIGHT_HARMING = "strong_light_harming";
+    public static final String STRONG_EARTH_HARMING = "strong_earth_harming";
+    public static final String STRONG_WIND_HARMING = "strong_wind_harming";
+    public static final String STRONG_FLORA_HARMING = "strong_flora_harming";
+
+
+    // Long Potions
+    public static final String LONG_FIRE_RESISTANCE = "long_fire_resistance";
+    public static final String LONG_ICE_RESISTANCE = "long_ice_resistance";
+    public static final String LONG_WATER_RESISTANCE = "long_water_resistance";
+    public static final String LONG_THUNDER_RESISTANCE = "long_thunder_resistance";
+    public static final String LONG_DARKNESS_RESISTANCE = "long_darkness_resistance";
+    public static final String LONG_LIGHT_RESISTANCE = "long_light_resistance";
+    public static final String LONG_EARTH_RESISTANCE = "long_earth_resistance";
+    public static final String LONG_WIND_RESISTANCE = "long_wind_resistance";
+    public static final String LONG_FLORA_RESISTANCE = "long_flora_resistance";
 }

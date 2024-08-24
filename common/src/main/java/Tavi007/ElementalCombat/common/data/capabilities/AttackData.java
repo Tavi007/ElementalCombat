@@ -1,7 +1,10 @@
 package Tavi007.ElementalCombat.common.data.capabilities;
 
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
+import Tavi007.ElementalCombat.common.capabilities.AttackDataNBT;
 import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
+import Tavi007.ElementalCombat.common.util.ElementalCombatNBTHelper;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -76,7 +79,8 @@ public class AttackData {
         return getElement().equals(DatapackDataAccessor.getDefaultElement())
                 && getStyle().equals(DatapackDataAccessor.getDefaultStyle());
     }
-//
+
+    //
 //    public void applyEnchantmentChanges(Map<Enchantment, Integer> currentEnchantments) {
 //        AttackLayer layer = new AttackLayer();
 //        for (Enchantment ench : currentEnchantments.keySet()) {
@@ -138,18 +142,18 @@ public class AttackData {
 //        return false;
 //    }
 //
-//    @Override
-//    public String toString() {
-//        StringBuilder builder = new StringBuilder();
-//        builder.append("isInitialized: " + isInitialized + "\n");
-//        builder.append("areEnchantmentChangesApplied: " + areEnchantmentChangesApplied + "\n");
-//        builder.append("as layer: " + toLayer().toString() + "\n");
-//        builder.append("layers: \n");
-//        attackLayers.forEach((rl, layer) -> {
-//            builder.append(rl.toString() + ":" + layer.toString() + "\n");
-//        });
-//        return builder.toString();
-//    }
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("isInitialized: " + isInitialized + "\n");
+        builder.append("areEnchantmentChangesApplied: " + areEnchantmentChangesApplied + "\n");
+        builder.append("as layer: " + toLayer().toString() + "\n");
+        builder.append("layers: \n");
+        attackLayers.forEach((rl, layer) -> {
+            builder.append(rl.toString() + ":" + layer.toString() + "\n");
+        });
+        return builder.toString();
+    }
 //
 //    public boolean isInitialized() {
 //        return isInitialized;
@@ -160,17 +164,14 @@ public class AttackData {
 //    }
 //
 
-//
-//    @Override
-//    public CompoundTag serializeNBT() {
-//        AttackDataNBT nbt = new AttackDataNBT();
-//        ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, this);
-//        return nbt;
-//    }
-//
-//    @Override
-//    public void deserializeNBT(CompoundTag nbt) {
-//        AttackData data = ElementalCombatNBTHelper.readAttackDataFromNBT(nbt);
-//        set(data);
-//    }
+    public CompoundTag serializeNBT() {
+        AttackDataNBT nbt = new AttackDataNBT();
+        ElementalCombatNBTHelper.writeAttackDataToNBT(nbt, this);
+        return nbt;
+    }
+
+    public void deserializeNBT(CompoundTag nbt) {
+        AttackData data = ElementalCombatNBTHelper.readAttackDataFromNBT(nbt);
+        set(data);
+    }
 }

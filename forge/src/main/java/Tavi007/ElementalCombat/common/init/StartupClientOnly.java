@@ -4,6 +4,7 @@ import Tavi007.ElementalCombat.client.CombatDataHudOverlay;
 import Tavi007.ElementalCombat.client.gui.CombatDataLayerClientComponent;
 import Tavi007.ElementalCombat.client.gui.CombatDataLayerComponent;
 import Tavi007.ElementalCombat.client.particles.CombatParticle;
+import Tavi007.ElementalCombat.client.registry.ModParticles;
 import Tavi007.ElementalCombat.common.Constants;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
@@ -43,11 +44,11 @@ public class StartupClientOnly {
 
     @SubscribeEvent
     public static void onRegisterParticleProvidersEvent(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(ParticleList.CRIT_ELEMENT.get(), CombatParticle.Factory::new);
-        event.registerSpriteSet(ParticleList.CRIT_STYLE.get(), CombatParticle.Factory::new);
-        event.registerSpriteSet(ParticleList.RESIST_ELEMENT.get(), CombatParticle.Factory::new);
-        event.registerSpriteSet(ParticleList.RESIST_STYLE.get(), CombatParticle.Factory::new);
-        event.registerSpriteSet(ParticleList.ABSORB.get(), CombatParticle.Factory::new);
+        event.registerSpriteSet(ModParticles.CRIT_ELEMENT, CombatParticle.Factory::new);
+        event.registerSpriteSet(ModParticles.CRIT_STYLE, CombatParticle.Factory::new);
+        event.registerSpriteSet(ModParticles.RESIST_ELEMENT, CombatParticle.Factory::new);
+        event.registerSpriteSet(ModParticles.RESIST_STYLE, CombatParticle.Factory::new);
+        event.registerSpriteSet(ModParticles.ABSORB, CombatParticle.Factory::new);
 
         Constants.LOG.info("ElementalCombat particles factory registered.");
     }

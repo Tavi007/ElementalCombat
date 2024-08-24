@@ -1,28 +1,23 @@
 package Tavi007.ElementalCombat.common.data.capabilities;
 
-import Tavi007.ElementalCombat.ElementalCombat;
-import Tavi007.ElementalCombat.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.capabilities.DefenseDataNBT;
-import Tavi007.ElementalCombat.util.ElementalCombatNBTHelper;
+import Tavi007.ElementalCombat.common.util.ElementalCombatNBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraftforge.common.util.INBTSerializable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
-public class DefenseData implements INBTSerializable<CompoundTag> {
+public class DefenseData {
 
     private HashMap<ResourceLocation, DefenseLayer> defenseLayers = new HashMap<>();
     private boolean isInitialized = false;
 
     // for itemstack
-    private boolean areEnchantmentChangesApplied = false;
+    private final boolean areEnchantmentChangesApplied = false;
 
     public DefenseData() {
     }
@@ -32,26 +27,26 @@ public class DefenseData implements INBTSerializable<CompoundTag> {
         this.isInitialized = data.isInitialized;
     }
 
-    public HashMap<String, Integer> getStyleFactor() {
+    public Map<String, Integer> getStyles() {
         DefenseLayer sum = new DefenseLayer();
         defenseLayers.forEach((rl, layer) -> {
-            sum.addStyle(layer.getStyleFactor());
+            sum.addStyles(layer.getStyles());
         });
-        return sum.getStyleFactor();
+        return sum.getStyles();
     }
 
-    public HashMap<String, Integer> getElementFactor() {
+    public Map<String, Integer> getElements() {
         DefenseLayer sum = new DefenseLayer();
         defenseLayers.forEach((rl, layer) -> {
-            sum.addElement(layer.getElementFactor());
+            sum.addElements(layer.getElements());
         });
-        return sum.getElementFactor();
+        return sum.getElements();
     }
 
     public DefenseLayer toLayer() {
         DefenseLayer layer = new DefenseLayer();
-        layer.addElement(getElementFactor());
-        layer.addStyle(getStyleFactor());
+        layer.addElements(getElements());
+        layer.addStyles(getStyles());
         return layer;
     }
 
@@ -72,19 +67,19 @@ public class DefenseData implements INBTSerializable<CompoundTag> {
     }
 
     public boolean isEmpty() {
-        return getStyleFactor().isEmpty() && getElementFactor().isEmpty();
+        return getStyles().isEmpty() && getElements().isEmpty();
     }
 
-    public void applyEnchantmentChanges(Map<Enchantment, Integer> enchantments) {
-        DefenseData data = new DefenseData();
-        enchantments.forEach((ench, level) -> {
-            data.putLayer(new ResourceLocation(ench.getDescriptionId()), BasePropertiesAPI.getDefenseLayer(ench, level));
-        });
-        if (!data.isEmpty()) {
-            defenseLayers.put(new ResourceLocation("enchantment"), data.toLayer());
-        }
-        areEnchantmentChangesApplied = true;
-    }
+//    public void applyEnchantmentChanges(Map<Enchantment, Integer> enchantments) {
+//        DefenseData data = new DefenseData();
+//        enchantments.forEach((ench, level) -> {
+//            data.putLayer(new ResourceLocation(ench.getDescriptionId()), BasePropertiesAPI.getDefenseLayer(ench, level));
+//        });
+//        if (!data.isEmpty()) {
+//            defenseLayers.put(new ResourceLocation("enchantment"), data.toLayer());
+//        }
+//        areEnchantmentChangesApplied = true;
+//    }
 
     @Override
     public String toString() {
@@ -98,21 +93,21 @@ public class DefenseData implements INBTSerializable<CompoundTag> {
         });
         return builder.toString();
     }
-
-    public void initialize(ItemStack stack) {
-        putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "base"), BasePropertiesAPI.getDefenseLayer(stack));
-
-        List<MobEffectInstance> potionEffects = PotionUtils.getMobEffects(stack);
-        potionEffects.forEach(effect -> {
-            putLayer(new ResourceLocation("potion_" + effect.getDescriptionId()), BasePropertiesAPI.getDefenseLayer(effect));
-        });
-        isInitialized = true;
-    }
-
-    public void initialize(LivingEntity entity) {
-        putLayer(new ResourceLocation(ElementalCombat.MOD_ID, "base"), BasePropertiesAPI.getDefenseLayer(entity));
-        isInitialized = true;
-    }
+//
+//    public void initialize(ItemStack stack) {
+//        putLayer(new ResourceLocation(Constants.MOD_ID, "base"), BasePropertiesAPI.getDefenseLayer(stack));
+//
+//        List<MobEffectInstance> potionEffects = PotionUtils.getMobEffects(stack);
+//        potionEffects.forEach(effect -> {
+//            putLayer(new ResourceLocation("potion_" + effect.getDescriptionId()), BasePropertiesAPI.getDefenseLayer(effect));
+//        });
+//        isInitialized = true;
+//    }
+//
+//    public void initialize(LivingEntity entity) {
+//        putLayer(new ResourceLocation(Constants.MOD_ID, "base"), BasePropertiesAPI.getDefenseLayer(entity));
+//        isInitialized = true;
+//    }
 
     public boolean isInitialized() {
         return isInitialized;
@@ -147,14 +142,12 @@ public class DefenseData implements INBTSerializable<CompoundTag> {
         return false;
     }
 
-    @Override
     public CompoundTag serializeNBT() {
         DefenseDataNBT nbt = new DefenseDataNBT();
         ElementalCombatNBTHelper.writeDefenseDataToNBT(nbt, this);
         return nbt;
     }
 
-    @Override
     public void deserializeNBT(CompoundTag nbt) {
         DefenseData data = ElementalCombatNBTHelper.readDefenseDataFromNBT(nbt);
         set(data);

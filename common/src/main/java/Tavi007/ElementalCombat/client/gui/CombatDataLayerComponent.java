@@ -10,6 +10,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CombatDataLayerComponent implements TooltipComponent {
 
@@ -105,14 +106,14 @@ public class CombatDataLayerComponent implements TooltipComponent {
         if (shouldDefenseLayerBeDisplayed()) {
             if (showDefenseInDoubleRow) {
                 if (hasStyleDefense()) {
-                    int factor = getCurrentFactor(defenseLayer.getStyleFactor());
+                    int factor = getCurrentFactor(defenseLayer.getStyles());
                     tooltip.add(ChatFormatting.GRAY +
                             textDefense +
                             "   " +
                             getPercentage(factor, false));
                 }
                 if (hasElementDefense()) {
-                    int factor = getCurrentFactor(defenseLayer.getElementFactor());
+                    int factor = getCurrentFactor(defenseLayer.getElements());
                     tooltip.add(ChatFormatting.GRAY +
                             textDefense +
                             "   " +
@@ -120,8 +121,8 @@ public class CombatDataLayerComponent implements TooltipComponent {
                 }
             } else {
                 HashMap<String, Integer> map = new HashMap<>();
-                map.putAll(defenseLayer.getStyleFactor());
-                map.putAll(defenseLayer.getElementFactor());
+                map.putAll(defenseLayer.getStyles());
+                map.putAll(defenseLayer.getElements());
                 int factor = getCurrentFactor(map);
                 if (!map.isEmpty()) {
                     tooltip.add(ChatFormatting.GRAY +
@@ -156,21 +157,21 @@ public class CombatDataLayerComponent implements TooltipComponent {
             if (showDefenseInDoubleRow) {
                 if (hasStyleDefense()) {
                     textureData.add(new TextureData(
-                            getCurrentName(defenseLayer.getStyleFactor()),
+                            getCurrentName(defenseLayer.getStyles()),
                             posX + widthDefense,
                             posY));
                     posY += maxLineHeight;
                 }
                 if (hasElementDefense()) {
                     textureData.add(new TextureData(
-                            getCurrentName(defenseLayer.getElementFactor()),
+                            getCurrentName(defenseLayer.getElements()),
                             posX + widthDefense,
                             posY));
                 }
             } else {
                 HashMap<String, Integer> map = new HashMap<>();
-                map.putAll(defenseLayer.getStyleFactor());
-                map.putAll(defenseLayer.getElementFactor());
+                map.putAll(defenseLayer.getStyles());
+                map.putAll(defenseLayer.getElements());
                 if (!map.isEmpty()) {
                     textureData.add(new TextureData(
                             getCurrentName(map),
@@ -206,12 +207,12 @@ public class CombatDataLayerComponent implements TooltipComponent {
         return !defenseLayer.isStyleEmpty();
     }
 
-    private int getCurrentFactor(HashMap<String, Integer> map) {
+    private int getCurrentFactor(Map<String, Integer> map) {
         int index = iteratorCounter % map.size();
         return (new ArrayList<Integer>(map.values())).get(index);
     }
 
-    private String getCurrentName(HashMap<String, Integer> map) {
+    private String getCurrentName(Map<String, Integer> map) {
         int index = iteratorCounter % map.size();
         return (new ArrayList<String>(map.keySet())).get(index);
     }
