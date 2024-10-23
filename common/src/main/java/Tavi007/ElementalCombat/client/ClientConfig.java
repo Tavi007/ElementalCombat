@@ -2,21 +2,27 @@ package Tavi007.ElementalCombat.client;
 
 import Tavi007.ElementalCombat.client.gui.HudAnchor;
 
+import java.util.function.Supplier;
+
 public class ClientConfig {
 
 
     private static boolean enableHUD = true;
+    private static Supplier<Integer> xOffset;
+    private static Supplier<Integer> yOffset;
+    private static Supplier<Double> scale;
+    private static Supplier<Integer> iterationSpeed;
+    private static Supplier<Boolean> doubleRowDefenseHUD;
+    private static Supplier<Boolean> doubleRowDefenseTooltip;
+    private static Supplier<HudAnchor> hudAnchor;
 
-    private static HudAnchor hudAnchor;
-    private static int xOffset;
-    private static int yOffset;
-    private static double scale;
-    private static int iterationSpeed;
-    private static boolean doubleRowDefenseHUD;
-    private static boolean doubleRowDefenseTooltip;
-
-
-    public static void init(HudAnchor hudAnchor, int xOffset, int yOffset, double scale, int iterationSpeed, boolean doubleRowDefenseHUD, boolean doubleRowDefenseTooltip) {
+    public static void init(Supplier<HudAnchor> hudAnchor,
+                            Supplier<Integer> xOffset,
+                            Supplier<Integer> yOffset,
+                            Supplier<Double> scale,
+                            Supplier<Integer> iterationSpeed,
+                            Supplier<Boolean> doubleRowDefenseHUD,
+                            Supplier<Boolean> doubleRowDefenseTooltip) {
         ClientConfig.hudAnchor = hudAnchor;
         ClientConfig.xOffset = xOffset;
         ClientConfig.yOffset = yOffset;
@@ -27,31 +33,31 @@ public class ClientConfig {
     }
 
     public static HudAnchor getHudAnchor() {
-        return ClientConfig.hudAnchor;
+        return ClientConfig.hudAnchor.get();
     }
 
     public static int getXOffset() {
-        return ClientConfig.xOffset;
+        return ClientConfig.xOffset.get();
     }
 
     public static int getYOffset() {
-        return ClientConfig.yOffset;
+        return ClientConfig.yOffset.get();
     }
 
     public static double getScale() {
-        return ClientConfig.scale;
+        return ClientConfig.scale.get();
     }
 
     public static int getIterationSpeed() {
-        return ClientConfig.iterationSpeed;
+        return ClientConfig.iterationSpeed.get();
     }
 
     public static boolean isDoubleRowDefenseHUD() {
-        return ClientConfig.doubleRowDefenseHUD;
+        return ClientConfig.doubleRowDefenseHUD.get();
     }
 
     public static boolean isDoubleRowDefenseTooltip() {
-        return ClientConfig.doubleRowDefenseTooltip;
+        return ClientConfig.doubleRowDefenseTooltip.get();
     }
 
     public static boolean isHUDEnabled() {
@@ -63,12 +69,12 @@ public class ClientConfig {
     }
 
     public static boolean isLeft() {
-        return HudAnchor.BOTTOM_LEFT.equals(hudAnchor)
-                || HudAnchor.TOP_LEFT.equals(ClientConfig.hudAnchor);
+        return HudAnchor.BOTTOM_LEFT.equals(hudAnchor.get())
+                || HudAnchor.TOP_LEFT.equals(ClientConfig.hudAnchor.get());
     }
 
     public static boolean isTop() {
-        return HudAnchor.TOP_LEFT.equals(ClientConfig.hudAnchor)
-                || HudAnchor.TOP_RIGHT.equals(ClientConfig.hudAnchor);
+        return HudAnchor.TOP_LEFT.equals(ClientConfig.hudAnchor.get())
+                || HudAnchor.TOP_RIGHT.equals(ClientConfig.hudAnchor.get());
     }
 }
