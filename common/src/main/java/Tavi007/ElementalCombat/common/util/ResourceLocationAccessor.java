@@ -53,6 +53,7 @@ public class ResourceLocationAccessor {
         damageTypeAccessor = accessor;
     }
 
+    // TODO: change to DamageSource?
     public static ResourceLocation getResourceLocation(DamageType damageType) {
         return damageTypeAccessor.apply(damageType);
     }

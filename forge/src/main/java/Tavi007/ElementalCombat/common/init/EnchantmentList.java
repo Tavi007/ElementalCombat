@@ -12,7 +12,7 @@ public class EnchantmentList {
 
     public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, Constants.MOD_ID);
 
-    private static void register() {
+    static {
         BiConsumer<String, Enchantment> registerConsumer = (name, enchantment) -> {
             ENCHANTMENTS.register(name, () -> enchantment);
         };

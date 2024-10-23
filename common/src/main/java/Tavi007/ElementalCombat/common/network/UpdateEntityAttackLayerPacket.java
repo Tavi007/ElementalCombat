@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.common.network;
 
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
-import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
+import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -11,18 +11,18 @@ import net.minecraft.world.level.Level;
 public class UpdateEntityAttackLayerPacket extends AbstractPacket {
 
     private final Integer id;
-    private final String location;
+    private final ResourceLocation resourceLocation;
     private final AttackLayer attackLayer;
 
-    public UpdateEntityAttackLayerPacket(AttackLayer attackLayer, ResourceLocation location, Integer id) {
+    public UpdateEntityAttackLayerPacket(AttackLayer attackLayer, ResourceLocation resourceLocation, Integer id) {
         this.attackLayer = attackLayer;
-        this.location = location.toString();
+        this.resourceLocation = resourceLocation;
         this.id = id;
     }
 
     public UpdateEntityAttackLayerPacket(FriendlyByteBuf buf) {
         this.id = buf.readInt();
-        this.location = buf.readUtf();
+        this.resourceLocation = buf.readResourceLocation();
         // rest of the combat properties
         this.attackLayer = new AttackLayer(buf.readUtf(), buf.readUtf());
     }
@@ -30,7 +30,7 @@ public class UpdateEntityAttackLayerPacket extends AbstractPacket {
     public void encode(FriendlyByteBuf buf) {
         // get entity through id
         buf.writeInt(id);
-        buf.writeUtf(location);
+        buf.writeResourceLocation(resourceLocation);
         // write rest of the combat properties
         buf.writeUtf(attackLayer.getStyle());
         buf.writeUtf(attackLayer.getElement());
@@ -55,14 +55,16 @@ public class UpdateEntityAttackLayerPacket extends AbstractPacket {
 //        });
 //    }
 
-    private boolean isValid() {
-        return id != null && location != null && attackLayer != null && attackLayer.getStyle() != null && attackLayer.getElement() != null;
+    @Override
+    public boolean isValid() {
+        return id != null && resourceLocation != null && attackLayer != null && attackLayer.getStyle() != null && attackLayer.getElement() != null;
     }
 
-    private void processMessage(Level level) {
+    @Override
+    public void processPacket(Level level) {
         Entity entity = level.getEntity(id);
         if (entity instanceof LivingEntity livingEntity) {
-            DatapackDataAccessor.get(livingEntity).putLayer(new ResourceLocation(location), attackLayer);
+            CapabilitiesAccessors.getAttackData(livingEntity).putLayer(resourceLocation, attackLayer);
         }
     }
 }

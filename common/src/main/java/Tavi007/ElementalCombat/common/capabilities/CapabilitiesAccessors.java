@@ -1,8 +1,12 @@
 package Tavi007.ElementalCombat.common.capabilities;
 
+import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
@@ -50,7 +54,7 @@ public class CapabilitiesAccessors {
     public static AttackData getAttackData(ItemStack stack) {
         return itemAttackDataAccessor.apply(stack);
     }
-    
+
     public static void setItemDefenseDataAccessor(Function<ItemStack, DefenseData> accessor) {
         itemDefenseDataAccessor = accessor;
     }
@@ -67,4 +71,28 @@ public class CapabilitiesAccessors {
     public static AttackData getAttackData(Projectile projectile) {
         return projectileAttackDataAccessor.apply(projectile);
     }
+
+    public static AttackData getAttackData(DamageSource damageSource) {
+        AttackData data = new AttackData();
+        if (damageSource == null) {
+            return data;
+        }
+
+        damageSource.typeHolder().unwrapKey().ifPresent(resourceKey -> {
+            ResourceLocation resourceLocation = resourceKey.location();
+            data.putLayer(new ResourceLocation("base"), DatapackDataAccessor.getDamageTypeDefaultLayer(resourceLocation));
+        });
+
+        Entity immediateSource = damageSource.getDirectEntity();
+        if (immediateSource != null) {
+            if (immediateSource instanceof LivingEntity) {
+                data.putLayer(new ResourceLocation("direct_entity"), getAttackData((LivingEntity) immediateSource).toLayer());
+            } else if (immediateSource instanceof Projectile) {
+                data.putLayer(new ResourceLocation("direct_entity"), getAttackData((Projectile) immediateSource).toLayer());
+            }
+        }
+
+        return data;
+    }
+
 }

@@ -11,8 +11,8 @@ import java.util.function.BiConsumer;
 public class ItemList {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID);
-    
-    private static void register() {
+
+    static {
         BiConsumer<String, Item> registerConsumer = (name, item) -> {
             CreativeTabList.addToTab(ITEMS.register(name, () -> item));
         };

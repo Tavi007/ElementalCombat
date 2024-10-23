@@ -8,9 +8,9 @@ import Tavi007.ElementalCombat.common.enchantments.ElementalResistanceEnchantmen
 import Tavi007.ElementalCombat.common.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.common.enchantments.IResistanceEnchantment;
 import Tavi007.ElementalCombat.common.enchantments.StyleResistanceEnchantment;
-import Tavi007.ElementalCombat.common.init.PotionList;
 import Tavi007.ElementalCombat.common.potions.ElementalHarmingEffect;
 import Tavi007.ElementalCombat.common.potions.ElementalResistanceEffect;
+import Tavi007.ElementalCombat.common.registry.ModMobEffects;
 import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -101,7 +101,7 @@ public class BasePropertiesAPI {
         if (effect instanceof ElementalResistanceEffect) {
             base = ((ElementalResistanceEffect) effect).getDefenseLayer(effectInstance);
         } else if (MobEffects.FIRE_RESISTANCE.equals(effect)) {
-            base = ((ElementalResistanceEffect) PotionList.FIRE_RESISTANCE_EFFECT.get()).getDefenseLayer(effectInstance);
+            base = ((ElementalResistanceEffect) ModMobEffects.FIRE_RESISTANCE).getDefenseLayer(effectInstance);
         }
         return base;
     }

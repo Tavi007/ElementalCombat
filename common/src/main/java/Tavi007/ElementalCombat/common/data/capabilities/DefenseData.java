@@ -13,11 +13,10 @@ import java.util.Set;
 
 public class DefenseData {
 
-    private HashMap<ResourceLocation, DefenseLayer> defenseLayers = new HashMap<>();
-    private boolean isInitialized = false;
-
     // for itemstack
     private final boolean areEnchantmentChangesApplied = false;
+    private HashMap<ResourceLocation, DefenseLayer> defenseLayers = new HashMap<>();
+    private boolean isInitialized = false;
 
     public DefenseData() {
     }
@@ -70,6 +69,7 @@ public class DefenseData {
         return getStyles().isEmpty() && getElements().isEmpty();
     }
 
+    //TODO: fix
 //    public void applyEnchantmentChanges(Map<Enchantment, Integer> enchantments) {
 //        DefenseData data = new DefenseData();
 //        enchantments.forEach((ench, level) -> {
@@ -93,6 +93,8 @@ public class DefenseData {
         });
         return builder.toString();
     }
+    
+    //TODO: fix
 //
 //    public void initialize(ItemStack stack) {
 //        putLayer(new ResourceLocation(Constants.MOD_ID, "base"), BasePropertiesAPI.getDefenseLayer(stack));

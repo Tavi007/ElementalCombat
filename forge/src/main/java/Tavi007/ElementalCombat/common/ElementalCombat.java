@@ -1,10 +1,10 @@
 package Tavi007.ElementalCombat.common;
 
-import Tavi007.ElementalCombat.client.ClientConfig;
+import Tavi007.ElementalCombat.client.ForgeClientConfig;
 import Tavi007.ElementalCombat.common.compatibility.curios.HandleCuriosInventory;
 import Tavi007.ElementalCombat.common.data.CombatPropertiesManager;
 import Tavi007.ElementalCombat.common.init.*;
-import Tavi007.ElementalCombat.server.ServerConfig;
+import Tavi007.ElementalCombat.server.ForgeServerConfig;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@Mod("elementalcombat")
+@Mod(Constants.MOD_ID)
 public class ElementalCombat {
 
     public static ElementalCombat instance;
@@ -27,8 +27,8 @@ public class ElementalCombat {
         MOD_EVENT_BUS = FMLJavaModLoadingContext.get().getModEventBus();
 
         // config (cause they must be in the main class)
-        ModLoadingContext.get().registerConfig(Type.CLIENT, ClientConfig.CONFIG_SPEC, Constants.MOD_ID + "-client.toml");
-        ModLoadingContext.get().registerConfig(Type.SERVER, ServerConfig.CONFIG_SPEC, Constants.MOD_ID + "-server.toml");
+        ModLoadingContext.get().registerConfig(Type.CLIENT, ForgeClientConfig.CONFIG_SPEC, Constants.MOD_ID + "-client.toml");
+        ModLoadingContext.get().registerConfig(Type.SERVER, ForgeServerConfig.CONFIG_SPEC, Constants.MOD_ID + "-server.toml");
 
         // register
         ParticleList.PARTICLES.register(ElementalCombat.MOD_EVENT_BUS);
@@ -36,13 +36,11 @@ public class ElementalCombat {
         EnchantmentList.ENCHANTMENTS.register(ElementalCombat.MOD_EVENT_BUS);
         MOD_EVENT_BUS.register(EnchantmentList.class);
 
-        PotionList.POTION_EFFECTS.register(ElementalCombat.MOD_EVENT_BUS);
-        PotionList.POTION_TYPES.register(ElementalCombat.MOD_EVENT_BUS);
+        PotionList.MOB_EFFECTS.register(ElementalCombat.MOD_EVENT_BUS);
+        PotionList.POTIONS.register(ElementalCombat.MOD_EVENT_BUS);
         MOD_EVENT_BUS.register(PotionList.class);
 
         ItemList.ITEMS.register(ElementalCombat.MOD_EVENT_BUS);
-
-        BlockList.ITEMS.register(ElementalCombat.MOD_EVENT_BUS);
         BlockList.BLOCKS.register(ElementalCombat.MOD_EVENT_BUS);
 
         CreativeTabList.TABS.register(ElementalCombat.MOD_EVENT_BUS);

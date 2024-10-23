@@ -12,7 +12,7 @@ public class BlockList {
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MOD_ID);
 
-    private static void register() {
+    static {
         BiConsumer<String, Block> registerConsumer = (name, block) -> {
             BLOCKS.register(name, () -> block);
         };

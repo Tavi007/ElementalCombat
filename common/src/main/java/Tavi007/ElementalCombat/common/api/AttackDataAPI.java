@@ -2,9 +2,9 @@ package Tavi007.ElementalCombat.common.api;
 
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
-import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
+import Tavi007.ElementalCombat.common.capabilities.CapabilitiesHelper;
 import Tavi007.ElementalCombat.common.util.ElementalCombatNBTHelper;
-import Tavi007.ElementalCombat.common.util.NetworkHelper;
+import Tavi007.ElementalCombat.server.network.NetworkHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
@@ -191,7 +191,7 @@ public class AttackDataAPI {
     public static void putLayer(ItemStack stack, AttackLayer layer, ResourceLocation location, @Nullable LivingEntity entity) {
         CapabilitiesAccessors.getAttackData(stack).putLayer(location, layer);
         if (entity != null) {
-            DatapackDataAccessor.updateItemLayer(entity);
+            CapabilitiesHelper.updateMainHandItemLayer(entity);
         }
     }
 
@@ -205,7 +205,7 @@ public class AttackDataAPI {
         AttackLayer layer = new AttackLayer();
         CapabilitiesAccessors.getAttackData(stack).putLayer(location, layer);
         if (entity != null) {
-            DatapackDataAccessor.updateItemLayer(entity);
+            CapabilitiesHelper.updateMainHandItemLayer(entity);
         }
     }
 
@@ -240,6 +240,6 @@ public class AttackDataAPI {
      * @param source A DamageSource.
      */
     public static AttackLayer getFullDataAsLayer(DamageSource source) {
-        return new AttackLayer(DatapackDataAccessor.get(source).toLayer());
+        return new AttackLayer(CapabilitiesAccessors.getAttackData(source).toLayer());
     }
 }

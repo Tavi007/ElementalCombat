@@ -3,7 +3,7 @@ package Tavi007.ElementalCombat.common.api;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
 import Tavi007.ElementalCombat.common.util.ElementalCombatNBTHelper;
-import Tavi007.ElementalCombat.common.util.NetworkHelper;
+import Tavi007.ElementalCombat.server.network.NetworkHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;

@@ -1,9 +1,10 @@
 package Tavi007.ElementalCombat.common.data;
 
-import Tavi007.ElementalCombat.common.ElementalCombat;
+import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.api.data.ElementalCombatLayer;
+import Tavi007.ElementalCombat.common.api.data.ElementalCombatMobData;
 import Tavi007.ElementalCombat.common.network.SyncronizeDatapackPacket;
 import com.google.common.collect.Queues;
 import com.google.gson.Gson;
@@ -22,10 +23,10 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid = ElementalCombat.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
 
-    public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(ElementalCombat.MOD_ID, "empty");
+    public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(Constants.MOD_ID, "empty");
     public static final ResourceLocation BASE_ATTACK = new ResourceLocation("base_attack");
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
     private static final ThreadLocal<Deque<CombatPropertiesContext>> dataContext = new ThreadLocal<Deque<CombatPropertiesContext>>();
@@ -52,22 +53,23 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
     }
 
     private void logLoading(String side, int size, String type) {
-        ElementalCombat.LOGGER.info(side + " loaded " + size + " combat properties for " + type);
+        Constants.LOG.info(side + " loaded " + size + " combat properties for " + type);
     }
 
     public SyncronizeDatapackPacket createSyncMessage() {
-        return new SyncronizeDatapackPacket(baseAttackProperties,
-                registeredMobData,
-                registeredItemData,
-                registeredBiomeData,
-                registeredDamageTypeData,
-                registeredProjectileData);
+//        return new SyncronizeDatapackPacket(baseAttackProperties,
+//                registeredMobData,
+//                registeredItemData,
+//                registeredBiomeData,
+//                registeredDamageTypeData,
+//                registeredProjectileData);
+        return null;
     }
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> objectIn, ResourceManager resourceManagerIn, ProfilerFiller profilerIn) {
         if (objectIn.remove(EMPTY_RESOURCELOCATION) != null) {
-            ElementalCombat.LOGGER.warn("Datapack tried to redefine {} elemental entity data, ignoring", EMPTY_RESOURCELOCATION);
+            Constants.LOG.warn("Datapack tried to redefine {} elemental entity data, ignoring", EMPTY_RESOURCELOCATION);
         }
 
         Map<String, Map<String, Integer>> counter = new HashMap<String, Map<String, Integer>>();
@@ -81,7 +83,7 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
                 if (rl.equals(BASE_ATTACK)) {
                     DatapackDataAccessor.setDefaultAttackLayer(loadData(GSON, rl, json, AttackLayer.class));
                 } else if (rl.getPath().contains("mobs/")) {
-                    DatapackDataAccessor.putMobDefaultLayer(rl, loadData(GSON, rl, json, ElementalCombatLayer.class));
+                    DatapackDataAccessor.putMobDefaultData(rl, loadData(GSON, rl, json, ElementalCombatMobData.class));
                     type = "mobs";
                 } else if (rl.getPath().contains("items/")) {
                     DatapackDataAccessor.putItemDefaultLayer(rl, loadData(GSON, rl, json, ElementalCombatLayer.class));
@@ -111,15 +113,15 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
                     }
                 }
             } catch (Exception exception) {
-                ElementalCombat.LOGGER.error("Couldn't parse combat properties {}", rl, exception);
+                Constants.LOG.error("Couldn't parse combat properties {}", rl, exception);
             }
         });
 
 
         counter.forEach((modid, propertyCounter) -> {
-            ElementalCombat.LOGGER.info("The mod " + modid + " loaded: ");
+            Constants.LOG.info("The mod " + modid + " loaded: ");
             propertyCounter.forEach((type, amount) -> {
-                ElementalCombat.LOGGER.info(amount + " " + type);
+                Constants.LOG.info(amount + " " + type);
             });
         });
 

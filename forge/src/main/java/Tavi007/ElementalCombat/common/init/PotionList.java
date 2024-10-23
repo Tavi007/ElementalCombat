@@ -15,14 +15,14 @@ public class PotionList {
     public static final DeferredRegister<MobEffect> MOB_EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, Constants.MOD_ID);
     public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTIONS, Constants.MOD_ID);
 
-    private static void registerMobEffects() {
+    static {
         BiConsumer<String, MobEffect> registerConsumer = (name, effect) -> {
             MOB_EFFECTS.register(name, () -> effect);
         };
         ModMobEffects.register(registerConsumer);
     }
 
-    private static void registerPotions() {
+    static {
         BiConsumer<String, Potion> registerConsumer = (name, potion) -> {
             POTIONS.register(name, () -> potion);
         };

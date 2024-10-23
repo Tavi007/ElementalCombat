@@ -8,15 +8,15 @@ import net.minecraftforge.common.ForgeConfigSpec.EnumValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class ClientConfig {
+public class ForgeClientConfig {
 
     public static final ForgeConfigSpec CONFIG_SPEC;
-    private static final ClientConfig CLIENT;
+    private static final ForgeClientConfig CLIENT;
 
-    private static boolean enableHUD = true;
+    private static final boolean enableHUD = true;
 
     static {
-        Pair<ClientConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
+        Pair<ForgeClientConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ForgeClientConfig::new);
 
         CONFIG_SPEC = specPair.getRight();
         CLIENT = specPair.getLeft();
@@ -30,7 +30,7 @@ public class ClientConfig {
     private final BooleanValue doubleRowDefenseHUD;
     private final BooleanValue doubleRowDefenseTooltip;
 
-    ClientConfig(ForgeConfigSpec.Builder builder) {
+    ForgeClientConfig(ForgeConfigSpec.Builder builder) {
         hudAnchor = builder
                 .comment("Decides in which corner the Hud should be displayed.")
                 .defineEnum("hudAnchor", HudAnchor.BOTTOM_RIGHT);
@@ -52,47 +52,55 @@ public class ClientConfig {
         doubleRowDefenseTooltip = builder
                 .comment("If true, displays the defense values of the item tooltip in two rows (split in element and style).")
                 .define("doubleRowDefenseTooltip", true);
-    }
 
-    public static boolean isHUDEnabled() {
-        return enableHUD;
+        ClientConfig.init(hudAnchor.get(),
+                xOffSet.get(),
+                yOffSet.get(),
+                scale.get(),
+                iterationSpeed.get(),
+                doubleRowDefenseHUD.get(),
+                doubleRowDefenseTooltip.get());
     }
-
-    public static void toogleHUD() {
-        enableHUD = !enableHUD;
-    }
-
-    public static boolean isLeft() {
-        return HudAnchor.BOTTOM_LEFT.equals(CLIENT.hudAnchor.get())
-                || HudAnchor.TOP_LEFT.equals(CLIENT.hudAnchor.get());
-    }
-
-    public static boolean isTop() {
-        return HudAnchor.TOP_LEFT.equals(CLIENT.hudAnchor.get())
-                || HudAnchor.TOP_RIGHT.equals(CLIENT.hudAnchor.get());
-    }
-
-    public static int getXOffset() {
-        return CLIENT.xOffSet.get();
-    }
-
-    public static int getYOffset() {
-        return CLIENT.yOffSet.get();
-    }
-
-    public static double scale() {
-        return CLIENT.scale.get();
-    }
-
-    public static int iterationSpeed() {
-        return CLIENT.iterationSpeed.get();
-    }
-
-    public static boolean isDoubleRowDefenseHUD() {
-        return CLIENT.doubleRowDefenseHUD.get();
-    }
-
-    public static boolean isDoubleRowDefenseTooltip() {
-        return CLIENT.doubleRowDefenseTooltip.get();
-    }
+//
+//    public static boolean isHUDEnabled() {
+//        return enableHUD;
+//    }
+//
+//    public static void toogleHUD() {
+//        enableHUD = !enableHUD;
+//    }
+//
+//    public static boolean isLeft() {
+//        return HudAnchor.BOTTOM_LEFT.equals(CLIENT.hudAnchor.get())
+//                || HudAnchor.TOP_LEFT.equals(CLIENT.hudAnchor.get());
+//    }
+//
+//    public static boolean isTop() {
+//        return HudAnchor.TOP_LEFT.equals(CLIENT.hudAnchor.get())
+//                || HudAnchor.TOP_RIGHT.equals(CLIENT.hudAnchor.get());
+//    }
+//
+//    public static int getXOffset() {
+//        return CLIENT.xOffSet.get();
+//    }
+//
+//    public static int getYOffset() {
+//        return CLIENT.yOffSet.get();
+//    }
+//
+//    public static double scale() {
+//        return CLIENT.scale.get();
+//    }
+//
+//    public static int iterationSpeed() {
+//        return CLIENT.iterationSpeed.get();
+//    }
+//
+//    public static boolean isDoubleRowDefenseHUD() {
+//        return CLIENT.doubleRowDefenseHUD.get();
+//    }
+//
+//    public static boolean isDoubleRowDefenseTooltip() {
+//        return CLIENT.doubleRowDefenseTooltip.get();
+//    }
 }

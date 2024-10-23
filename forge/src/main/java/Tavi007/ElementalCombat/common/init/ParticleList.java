@@ -12,8 +12,7 @@ public class ParticleList {
 
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Constants.MOD_ID);
 
-
-    private static void register() {
+    static {
         BiConsumer<String, ParticleType<?>> registerConsumer = (name, particle) -> {
             PARTICLES.register(name, () -> particle);
         };

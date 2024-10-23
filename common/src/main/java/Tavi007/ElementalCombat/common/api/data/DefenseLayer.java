@@ -2,8 +2,8 @@ package Tavi007.ElementalCombat.common.api.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.FriendlyByteBuf;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
@@ -31,7 +31,7 @@ public class DefenseLayer {
         this.elements = elements;
     }
 
-    public DefenseLayer(HashMap<String, Integer> style, HashMap<String, Integer> element) {
+    public DefenseLayer(Map<String, Integer> style, Map<String, Integer> element) {
         addStyles(style);
         addElements(element);
     }
@@ -115,5 +115,15 @@ public class DefenseLayer {
 
     public String toString() {
         return "[element: " + elements + "; stlye:" + styles + "]";
+    }
+
+    public void writeToBuffer(FriendlyByteBuf buf) {
+//        buf.writeUtf(style);
+//        buf.writeUtf(element);
+    }
+
+    public void readFromBuffer(FriendlyByteBuf buf) {
+//        style = buf.readUtf();
+//        element = buf.readUtf();
     }
 }

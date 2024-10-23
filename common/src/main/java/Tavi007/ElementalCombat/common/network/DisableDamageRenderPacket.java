@@ -1,17 +1,11 @@
 package Tavi007.ElementalCombat.common.network;
 
-import Tavi007.ElementalCombat.common.ElementalCombat;
-import Tavi007.ElementalCombat.common.capabilities.ImmersionDataCapability;
+import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
 import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.LogicalSidedProvider;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent.Context;
-
-import java.util.Optional;
 
 public class DisableDamageRenderPacket extends AbstractPacket {
 
@@ -37,34 +31,35 @@ public class DisableDamageRenderPacket extends AbstractPacket {
         buf.writeInt(this.id);
     }
 
+//    @Override
+//    public void handle(Context context) {
+//        LogicalSide sideReceived = context.getDirection().getReceptionSide();
+//        context.enqueueWork(() -> {
+//            if (!isValid()) {
+//                return;
+//            }
+//
+//            Optional<Level> level = LogicalSidedProvider.CLIENTWORLD.get(sideReceived);
+//            if (!level.isPresent()) {
+//                ElementalCombat.LOGGER.warn(" context could not provide a ClientLevel.");
+//                return;
+//            }
+//
+//            processMessage(level.get());
+//            context.setPacketHandled(true);
+//        });
+//    }
+
     @Override
-    public void handle(Context context) {
-        LogicalSide sideReceived = context.getDirection().getReceptionSide();
-        context.enqueueWork(() -> {
-            if (!isValid()) {
-                return;
-            }
-
-            Optional<Level> level = LogicalSidedProvider.CLIENTWORLD.get(sideReceived);
-            if (!level.isPresent()) {
-                ElementalCombat.LOGGER.warn(" context could not provide a ClientLevel.");
-                return;
-            }
-
-            processMessage(level.get());
-            context.setPacketHandled(true);
-        });
-    }
-
-    private boolean isValid() {
+    public boolean isValid() {
         return id != null;
     }
 
-    private void processMessage(Level level) {
+    @Override
+    public void processPacket(Level level) {
         Entity entity = level.getEntity(id);
         if (entity instanceof LivingEntity livingEntity) {
-            ImmersionData data = livingEntity.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null)
-                    .orElse(new ImmersionData());
+            ImmersionData data = CapabilitiesAccessors.getImmersionData(livingEntity);
             data.disableFlag = true;
         }
     }

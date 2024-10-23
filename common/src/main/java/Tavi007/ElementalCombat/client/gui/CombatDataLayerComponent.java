@@ -1,5 +1,6 @@
 package Tavi007.ElementalCombat.client.gui;
 
+import Tavi007.ElementalCombat.client.ClientConfig;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.util.DamageCalculationHelper;
@@ -17,6 +18,7 @@ public class CombatDataLayerComponent implements TooltipComponent {
     public static final int iconSize = 8;
     private static final String textAttack = "Attack:";
     private static final String textDefense = "Defense:";
+    private static int tickCounter = 0;
     private static int iteratorCounter = 0;
 
     private AttackLayer attackLayer = new AttackLayer();
@@ -35,10 +37,14 @@ public class CombatDataLayerComponent implements TooltipComponent {
         this.showDefenseInDoubleRow = showDefenseInDoubleRow;
     }
 
-    public static void increaseIteratorCounter() {
-        iteratorCounter++;
-        if (iteratorCounter == Integer.MAX_VALUE) {
-            iteratorCounter = 0;
+    public static void increaseTickCounter() { // call once per game tick
+        tickCounter++;
+        if (tickCounter >= ClientConfig.getIterationSpeed()) {
+            iteratorCounter++;
+            if (iteratorCounter == Integer.MAX_VALUE) {
+                iteratorCounter = 0;
+            }
+            tickCounter = 0;
         }
     }
 

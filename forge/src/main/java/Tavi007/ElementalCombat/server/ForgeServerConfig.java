@@ -5,13 +5,13 @@ import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class ServerConfig {
+public class ForgeServerConfig {
 
     public static final ForgeConfigSpec CONFIG_SPEC;
-    private static final ServerConfig SERVER;
+    private static final ForgeServerConfig SERVER;
 
     static {
-        Pair<ServerConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
+        Pair<ForgeServerConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ForgeServerConfig::new);
 
         CONFIG_SPEC = specPair.getRight();
         SERVER = specPair.getLeft();
@@ -23,7 +23,7 @@ public class ServerConfig {
     private final IntValue potionScaling;
     private final DoubleValue essenceSpawnWeight;
 
-    ServerConfig(ForgeConfigSpec.Builder builder) {
+    ForgeServerConfig(ForgeConfigSpec.Builder builder) {
         maxFactor = builder
                 .comment("The maximal combat factor. See vanilla Enchantment Protection Factor.")
                 .defineInRange("maxFactor", 100, 1, 200);
@@ -40,25 +40,13 @@ public class ServerConfig {
                 .comment(
                         "Weight for the essence item to spawn depending on the attack element of the mob. 0 disables this features. 1 is normal spawning rate.")
                 .defineInRange("essenceSpawnWeight", 0.5, 0, 1);
+
+        ServerConfig.init(maxFactor.get(),
+                enchantmentScalingElement.get(),
+                enchantmentScalingStyle.get(),
+                potionScaling.get(),
+                essenceSpawnWeight.get());
     }
 
-    public static int getMaxFactor() {
-        return SERVER.maxFactor.get();
-    }
 
-    public static int getEnchantmentScalingElement() {
-        return SERVER.enchantmentScalingElement.get();
-    }
-
-    public static int getEnchantmentScalingStyle() {
-        return SERVER.enchantmentScalingStyle.get();
-    }
-
-    public static int getPotionScaling() {
-        return SERVER.potionScaling.get();
-    }
-
-    public static double getEssenceSpawnWeight() {
-        return SERVER.essenceSpawnWeight.get();
-    }
 }

@@ -80,7 +80,7 @@ public class AttackData {
                 && getStyle().equals(DatapackDataAccessor.getDefaultStyle());
     }
 
-    //
+    //TODO: fix
 //    public void applyEnchantmentChanges(Map<Enchantment, Integer> currentEnchantments) {
 //        AttackLayer layer = new AttackLayer();
 //        for (Enchantment ench : currentEnchantments.keySet()) {

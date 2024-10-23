@@ -21,7 +21,7 @@ public class PacketManager {
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals);
 
-    private static int NUM_PACKETS = 0;
+    private static final int NUM_PACKETS = 0;
 
     private PacketManager() {
     }
@@ -49,10 +49,10 @@ public class PacketManager {
     }
 
     public static <MSG extends AbstractPacket> void register(Class<MSG> clazz, Function<FriendlyByteBuf, MSG> decoder) {
-        CHANNEL.messageBuilder(clazz, NUM_PACKETS++)
-                .encoder(AbstractPacket::encode)
-                .decoder(decoder)
-                .consumerMainThread((msg, ctx) -> msg.handle(ctx.get()))
-                .add();
+//        CHANNEL.messageBuilder(clazz, NUM_PACKETS++)
+//                .encoder(AbstractPacket::encode)
+//                .decoder(decoder)
+//                .consumerMainThread((msg, ctx) -> msg.handle(ctx.get()))
+//                .add();
     }
 }
