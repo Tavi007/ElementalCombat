@@ -135,23 +135,23 @@ public class CombatEvents {
     private static Item getEssenceItem(String element) {
         switch (element) {
             case Constants.FIRE:
-                return ModItems.ESSENCE_FIRE;
+                return ModItems.ESSENCE_FIRE.get();
             case Constants.ICE:
-                return ModItems.ESSENCE_ICE;
+                return ModItems.ESSENCE_ICE.get();
             case Constants.WATER:
-                return ModItems.ESSENCE_WATER;
+                return ModItems.ESSENCE_WATER.get();
             case Constants.THUNDER:
-                return ModItems.ESSENCE_THUNDER;
+                return ModItems.ESSENCE_THUNDER.get();
             case Constants.DARKNESS:
-                return ModItems.ESSENCE_DARKNESS;
+                return ModItems.ESSENCE_DARKNESS.get();
             case Constants.LIGHT:
-                return ModItems.ESSENCE_LIGHT;
+                return ModItems.ESSENCE_LIGHT.get();
             case Constants.EARTH:
-                return ModItems.ESSENCE_EARTH;
+                return ModItems.ESSENCE_EARTH.get();
             case Constants.WIND:
-                return ModItems.ESSENCE_WIND;
+                return ModItems.ESSENCE_WIND.get();
             case Constants.FLORA:
-                return ModItems.ESSENCE_FLORA;
+                return ModItems.ESSENCE_FLORA.get();
             default:
                 return null;
         }

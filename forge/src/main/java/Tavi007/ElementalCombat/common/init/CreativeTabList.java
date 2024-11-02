@@ -23,7 +23,7 @@ public class CreativeTabList {
     public static final RegistryObject<CreativeModeTab> TAB = TABS.register("tab",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.elementalcombat"))
-                    .icon(ModItems.ESSENCE_FIRE::getDefaultInstance)
+                    .icon(ModItems.ESSENCE_FIRE.get()::getDefaultInstance)
                     .displayItems((displayParams, output) -> TAB_ITEMS.forEach(itemLike -> output.accept(itemLike.get())))
                     .build());
 
