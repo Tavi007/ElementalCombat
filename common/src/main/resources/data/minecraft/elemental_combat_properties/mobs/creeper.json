@@ -1,6 +1,6 @@
 {
-	"attack_style":"explosion",
-	"defense_element":{
+	"style":"explosion",
+	"element":{
 		"thunder":12
 	},
 	"biome_dependency":true

@@ -1,4 +1,4 @@
 {
-    "attack_style":"hit",
-    "attack_element":"normal"
+  "style": "hit",
+  "element": "normal"
 }

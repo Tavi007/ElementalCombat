@@ -1,6 +1,6 @@
 {
-	"attack_element":"ice",
-	"defense_element":{
+	"element":"ice",
+	"element":{
 		"ice":12,
 		"fire":-12
 	}

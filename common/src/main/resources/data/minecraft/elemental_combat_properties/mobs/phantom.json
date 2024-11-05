@@ -1,7 +1,7 @@
 {
-	"attack_style":"bite",
-	"attack_element":"darkness",
-	"defense_element":{
+	"style":"bite",
+	"element":"darkness",
+	"element":{
 		"wind":-12,
 		"earth":6,
 		"light":-12

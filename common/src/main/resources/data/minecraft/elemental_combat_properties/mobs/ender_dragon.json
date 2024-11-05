@@ -1,6 +1,6 @@
 {
-	"attack_style":"magic",
-	"defense_element":{
+	"style":"magic",
+	"element":{
 		"wind":-25,
 		"fire":12,
 		"ice":12,

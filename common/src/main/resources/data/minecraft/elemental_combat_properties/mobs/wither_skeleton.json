@@ -1,6 +1,6 @@
 {
-	"attack_element":"darkness",
-	"defense_element":{
+	"element":"darkness",
+	"element":{
 		"darkness":12,
 		"light":-25,
 		"fire":12

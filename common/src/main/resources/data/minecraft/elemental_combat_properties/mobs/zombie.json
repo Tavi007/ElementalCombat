@@ -1,6 +1,6 @@
 {
-	"attack_style":"bite",
-	"defense_element":{
+	"style":"bite",
+	"element":{
 		"light":-12
 	},
 	"biome_dependency":true

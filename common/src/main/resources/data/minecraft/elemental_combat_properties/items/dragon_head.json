@@ -1,8 +1,8 @@
 {
-	"defense_style":{
+	"style":{
 		"projectile":-10
 	},
-	"defense_element":{
+	"element":{
 		"fire":10,
 		"ice":10,
 		"water":10,

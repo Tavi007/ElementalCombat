@@ -1,6 +1,6 @@
 {
-	"attack_style":"bash",
-	"defense_style":{
+	"style":"bash",
+	"style":{
 		"magic":-25,
 		"stab":25,
 		"hit":25,
@@ -11,7 +11,7 @@
 		"bite":25,
 		"bash":25
 	},
-	"defense_element":{
+	"element":{
 		"earth":-25,
 		"water":-25,
 		"normal":25,

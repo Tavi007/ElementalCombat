@@ -1,6 +1,6 @@
 {
-	"attack_element":"darkness",
-	"defense_element":{
+	"element":"darkness",
+	"element":{
 		"water":-25
 	}
 }

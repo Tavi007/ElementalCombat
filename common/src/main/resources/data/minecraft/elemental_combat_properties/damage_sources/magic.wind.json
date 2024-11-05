@@ -1,4 +1,4 @@
 {
-	"attack_style":"magic",
-	"attack_element":"wind"
+	"style":"magic",
+	"element":"wind"
 }

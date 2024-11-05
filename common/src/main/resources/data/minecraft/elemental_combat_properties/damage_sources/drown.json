@@ -1,4 +1,4 @@
 {
-	"attack_style":"environment",
-	"attack_element":"water"
+	"style":"environment",
+	"element":"water"
 }

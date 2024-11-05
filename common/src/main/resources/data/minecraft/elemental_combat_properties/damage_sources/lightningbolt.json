@@ -1,4 +1,4 @@
 {
-	"attack_style":"environment",
-	"attack_element":"thunder"
+	"style":"environment",
+	"element":"thunder"
 }

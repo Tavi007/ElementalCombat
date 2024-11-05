@@ -1,9 +1,9 @@
 {
-	"attack_element":"fire",
-	"defense_style":{
+	"element":"fire",
+	"style":{
 		"magic":2.0
 	},
-	"defense_element":{
+	"element":{
 		"fire":25,
 		"ice":-25,
 		"normal":12

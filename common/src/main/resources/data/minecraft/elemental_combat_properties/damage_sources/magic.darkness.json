@@ -1,4 +1,4 @@
 {
-	"attack_style":"magic",
-	"attack_element":"darkness"
+	"style":"magic",
+	"element":"darkness"
 }

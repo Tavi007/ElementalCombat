@@ -1,8 +1,8 @@
 {
-	"defense_style":{
+	"style":{
 		"projectile":5
 	},
-	"defense_element":{
+	"element":{
 		"darkness":5
 	}
 }

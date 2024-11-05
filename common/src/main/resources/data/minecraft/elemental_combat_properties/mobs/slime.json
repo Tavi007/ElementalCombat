@@ -1,8 +1,8 @@
 {
-	"defense_style":{
+	"style":{
 		"magic":-25
 	},
-	"defense_element":{
+	"element":{
 		"normal":12
 	},
 	"biome_dependency":true

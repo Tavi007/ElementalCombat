@@ -1,4 +1,4 @@
 {
-	"attack_element":"fire",
-	"attack_style":"projectile"
+	"element":"fire",
+	"style":"projectile"
 }

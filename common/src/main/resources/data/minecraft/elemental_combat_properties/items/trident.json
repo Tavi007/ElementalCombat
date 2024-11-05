@@ -1,4 +1,4 @@
 {
-	"attack_style":"stab",
-	"attack_element":"water"
+	"style":"stab",
+	"element":"water"
 }

@@ -61,7 +61,10 @@ public class AttackLayer {
     }
 
     public String getElement() {
-        return this.element;
+        if (element == null || element.trim().isEmpty()) {
+            element = DatapackDataAccessor.getDefaultElement();
+        }
+        return element;
     }
 
     public void setElement(String element) {
@@ -73,7 +76,10 @@ public class AttackLayer {
     }
 
     public String getStyle() {
-        return this.style;
+        if (style == null || style.trim().isEmpty()) {
+            style = DatapackDataAccessor.getDefaultElement();
+        }
+        return style;
     }
 
     public void setStyle(String style) {
@@ -95,6 +101,8 @@ public class AttackLayer {
     }
 
     public boolean isDefault() {
+        String element = getElement();
+        String style = getStyle();
         return element.isEmpty() || element.equals(DatapackDataAccessor.getDefaultElement())
                 && (style.isEmpty() || style.equals(DatapackDataAccessor.getDefaultStyle()));
     }

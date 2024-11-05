@@ -1,8 +1,8 @@
 {
-	"defense_style":{
+	"style":{
 		"explosion":-5
 	},
-	"defense_element":{
+	"element":{
 		"thunder":5
 	}
 }

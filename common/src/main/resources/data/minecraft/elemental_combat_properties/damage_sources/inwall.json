@@ -1,4 +1,4 @@
 {
-	"attack_style":"environment",
-	"attack_element":"earth"
+	"style":"environment",
+	"element":"earth"
 }

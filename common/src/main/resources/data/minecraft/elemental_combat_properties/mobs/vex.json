@@ -1,6 +1,6 @@
 {
-	"attack_style":"slash",
-	"defense_element":{
+	"style":"slash",
+	"element":{
 		"wind":-12,
 		"earth":12,
 		"light":-25
