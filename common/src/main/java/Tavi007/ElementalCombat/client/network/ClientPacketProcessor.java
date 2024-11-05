@@ -1,16 +1,24 @@
 package Tavi007.ElementalCombat.client.network;
 
+import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.network.AbstractPacket;
 import net.minecraft.world.level.Level;
 
 public class ClientPacketProcessor {
 
-    public static void processPacket(AbstractPacket packet, Level level) {
+    public static boolean processPacket(AbstractPacket packet, Level level) {
+        Constants.LOG.info("handling " + packet.getClass().getName() + " on client.");
         if (!packet.isValid()) {
-            //TODO: add logging
-            return;
+            Constants.LOG.warn("invalid " + packet.getClass().getName() + " encountered.");
+            return false;
         }
 
-        packet.processPacket(level);
+        try {
+            packet.processPacket(level);
+            return true;
+        } catch (Exception e) {
+            Constants.LOG.warn("failed to handle " + packet.getClass().getName());
+            return false;
+        }
     }
 }

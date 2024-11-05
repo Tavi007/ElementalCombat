@@ -1,5 +1,9 @@
 package Tavi007.ElementalCombat.common.data.capabilities;
 
+import net.minecraft.nbt.ByteTag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntTag;
+
 public class ImmersionData {
 
     public boolean disableFlag; // used to disable sound an rendering
@@ -27,24 +31,18 @@ public class ImmersionData {
         }
     }
 
-//    @Override
-//    public CompoundTag serializeNBT() {
-//        CompoundTag nbt = new CompoundTag();
-//        nbt.put("hurt_time", IntTag.valueOf(getHurtTime()));
-//        nbt.put("disable_flag", ByteTag.valueOf(disableFlag));
-//        return nbt;
-//    }
-//
-//    @Override
-//    public void deserializeNBT(CompoundTag nbt) {
-//        IntTag timeNBT = (IntTag) nbt.get("hurt_time");
-//        ByteTag redNBT = (ByteTag) nbt.get("disable_flag");
-//
-//        setHurtTime(timeNBT.getAsInt());
-//        if (redNBT.equals(ByteTag.ONE)) {
-//            disableFlag = true;
-//        } else {
-//            disableFlag = false;
-//        }
-//    }
+    public CompoundTag serializeNBT() {
+        CompoundTag nbt = new CompoundTag();
+        nbt.put("hurt_time", IntTag.valueOf(getHurtTime()));
+        nbt.put("disable_flag", ByteTag.valueOf(disableFlag));
+        return nbt;
+    }
+
+    public void deserializeNBT(CompoundTag nbt) {
+        IntTag timeNBT = (IntTag) nbt.get("hurt_time");
+        ByteTag redNBT = (ByteTag) nbt.get("disable_flag");
+
+        setHurtTime(timeNBT.getAsInt());
+        disableFlag = redNBT.equals(ByteTag.ONE);
+    }
 }

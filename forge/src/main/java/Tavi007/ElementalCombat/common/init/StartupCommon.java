@@ -1,10 +1,7 @@
 package Tavi007.ElementalCombat.common.init;
 
 import Tavi007.ElementalCombat.common.Constants;
-import Tavi007.ElementalCombat.common.capabilities.AttackDataCapability;
-import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
-import Tavi007.ElementalCombat.common.capabilities.DefenseDataCapability;
-import Tavi007.ElementalCombat.common.capabilities.ImmersionDataCapability;
+import Tavi007.ElementalCombat.common.capabilities.*;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
@@ -32,7 +29,7 @@ public class StartupCommon {
             if (entity == null) {
                 return new ImmersionData();
             }
-            ImmersionData immersionData = entity.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionData());
+            ImmersionData immersionData = entity.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionDataSerializer()).getData();
             return immersionData;
         });
 
@@ -40,7 +37,7 @@ public class StartupCommon {
             if (entity == null) {
                 return new AttackData();
             }
-            AttackData attackData = entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+            AttackData attackData = entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackDataSerializer()).getData();
 //            if (!attackData.isInitialized()) {
 //                attackData.initialize(entity);
 //            }
@@ -51,7 +48,7 @@ public class StartupCommon {
             if (stack == null) {
                 return new AttackData();
             }
-            AttackData attackData = stack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+            AttackData attackData = stack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackDataSerializer()).getData();
 //            if (!attackData.isInitialized()) {
 //                attackData.initialize(stack);
 //            }
@@ -65,7 +62,7 @@ public class StartupCommon {
             if (projectile == null) {
                 return new AttackData();
             }
-            AttackData attackData = projectile.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackData());
+            AttackData attackData = projectile.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackDataSerializer()).getData();
 //            if (!attackData.isInitialized()) {
 //                attackData.initialize(stack);
 //            }
@@ -79,7 +76,7 @@ public class StartupCommon {
             if (entity == null) {
                 return new DefenseData();
             }
-            DefenseData defenseData = entity.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
+            DefenseData defenseData = entity.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseDataSerializer()).getData();
 //            if (!defenseData.isInitialized()) {
 //                defenseData.initialize(entity);
 //            }
@@ -90,7 +87,7 @@ public class StartupCommon {
             if (stack == null) {
                 return new DefenseData();
             }
-            DefenseData defenseData = stack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseData());
+            DefenseData defenseData = stack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseDataSerializer()).getData();
 //            if (!defenseData.isInitialized()) {
 //                defenseData.initialize(stack);
 //            }

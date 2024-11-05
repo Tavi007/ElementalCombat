@@ -1,13 +1,17 @@
 package Tavi007.ElementalCombat.common.network;
 
+import Tavi007.ElementalCombat.client.network.ClientPacketProcessor;
 import Tavi007.ElementalCombat.common.Constants;
+import Tavi007.ElementalCombat.server.network.ServerPacketSender;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -21,7 +25,7 @@ public class PacketManager {
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals);
 
-    private static final int NUM_PACKETS = 0;
+    private static int NUM_PACKETS = 0;
 
     private PacketManager() {
     }
@@ -33,6 +37,12 @@ public class PacketManager {
         register(UpdateEntityAttackLayerPacket.class, UpdateEntityAttackLayerPacket::new);
         register(UpdateEntityDefenseLayerPacket.class, UpdateEntityDefenseLayerPacket::new);
 
+        ServerPacketSender.initSender(
+                (packet, player) -> sendToClient(packet, player),
+                packet -> sendToAllClients(packet),
+                packet -> sendToAllClients(packet),
+                packet -> sendToAllClients(packet),
+                packet -> sendToAllClients(packet));
         Constants.LOG.info("Registered {} packets", NUM_PACKETS);
     }
 
@@ -40,7 +50,7 @@ public class PacketManager {
         CHANNEL.send(PacketDistributor.ALL.noArg(), packet);
     }
 
-    public static void sendToClient(AbstractPacket packet, Player player) {
+    public static void sendToClient(AbstractPacket packet, @NotNull Player player) {
         if (!player.level().isClientSide()) {
             CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), packet);
         } else {
@@ -49,10 +59,13 @@ public class PacketManager {
     }
 
     public static <MSG extends AbstractPacket> void register(Class<MSG> clazz, Function<FriendlyByteBuf, MSG> decoder) {
-//        CHANNEL.messageBuilder(clazz, NUM_PACKETS++)
-//                .encoder(AbstractPacket::encode)
-//                .decoder(decoder)
-//                .consumerMainThread((msg, ctx) -> msg.handle(ctx.get()))
-//                .add();
+        CHANNEL.messageBuilder(clazz, NUM_PACKETS++)
+                .encoder(MSG::encode)
+                .decoder(decoder)
+                .consumerMainThread((msg, ctx) -> {
+                    Level level = ctx.get().getSender().level();
+                    ctx.get().setPacketHandled(ClientPacketProcessor.processPacket(msg, level));
+                })
+                .add();
     }
 }
