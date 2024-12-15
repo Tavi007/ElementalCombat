@@ -1,6 +1,6 @@
 {
-	"attack": {
-		"style":"stab",
-		"elements":"water"
-	}
+  "attack": {
+    "style": "stab",
+    "element": "water"
+  }
 }
