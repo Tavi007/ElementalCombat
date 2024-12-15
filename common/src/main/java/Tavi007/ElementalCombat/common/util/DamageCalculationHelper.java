@@ -11,8 +11,9 @@ import java.util.Map;
 
 public class DamageCalculationHelper {
 
-    private static int maxFactor = 1;
+    private static int maxFactor = 100;
 
+    // TODO: use the function
     public static void setMaxFactor(int maxFactor) {
         DamageCalculationHelper.maxFactor = maxFactor;
     }

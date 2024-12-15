@@ -77,7 +77,7 @@ public class AttackLayer {
 
     public String getStyle() {
         if (style == null || style.trim().isEmpty()) {
-            style = DatapackDataAccessor.getDefaultElement();
+            style = DatapackDataAccessor.getDefaultStyle();
         }
         return style;
     }
