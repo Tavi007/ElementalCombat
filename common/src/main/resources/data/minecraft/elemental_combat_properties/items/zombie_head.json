@@ -1,5 +1,7 @@
 {
-	"element":{
-		"darkness":5
+	"defense": {
+		"elements":{
+			"darkness":5
+		}
 	}
 }

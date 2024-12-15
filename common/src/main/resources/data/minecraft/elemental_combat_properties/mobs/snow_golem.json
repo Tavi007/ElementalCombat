@@ -1,7 +1,11 @@
 {
-	"element":"ice",
-	"element":{
-		"ice":12,
-		"fire":-12
+	"attack": {
+		"element":"ice"
+	},
+	"defense": {
+		"elements":{
+			"ice":12,
+			"fire":-12
+		}
 	}
 }

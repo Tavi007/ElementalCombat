@@ -1,9 +1,11 @@
 {
-	"style":{
-		"projectile":12
-	},
-	"element":{
-		"darkness":12,
-		"light":-12
+	"defense": {
+		"styles":{
+			"projectile":12
+		},
+		"elements":{
+			"darkness":12,
+			"light":-12
+		}
 	}
 }

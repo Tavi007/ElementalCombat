@@ -1,7 +1,11 @@
 {
-	"element":"water",
-	"element":{
-		"water":12
+	"attack": {
+		"element":"water"
+	},
+	"defense": {
+		"elements":{
+			"water":12
+		}
 	},
 	"biome_dependency":true
 }

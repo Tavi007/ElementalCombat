@@ -1,6 +1,10 @@
 {
-	"style":"bite",
-	"element":{
-		"ice":12
+	"attack": {
+		"style":"bite"
+	},
+	"defense": {
+		"elements":{
+			"ice":12
+		}
 	}
 }

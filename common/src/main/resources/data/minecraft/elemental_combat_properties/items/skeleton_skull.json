@@ -1,8 +1,10 @@
 {
-	"style":{
-		"projectile":5
-	},
-	"element":{
-		"darkness":5
+	"defense": {
+		"styless":{
+			"projectile":5
+		},
+		"elements":{
+			"darkness":5
+		}
 	}
 }

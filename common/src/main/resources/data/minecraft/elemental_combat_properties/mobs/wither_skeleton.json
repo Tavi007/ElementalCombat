@@ -1,8 +1,12 @@
 {
-	"element":"darkness",
-	"element":{
-		"darkness":12,
-		"light":-25,
-		"fire":12
+	"attack": {
+		"element":"darkness"
+	},
+	"defense": {
+		"elements":{
+			"darkness":12,
+			"light":-25,
+			"fire":12
+		}
 	}
 }

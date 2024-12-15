@@ -1,9 +1,13 @@
 {
-	"style":"magic",
-	"style":{
-		"magic":12
+	"attack": {
+		"style":"magic"
 	},
-	"element":{
-		"flora":12
+	"defense": {
+		"styles":{
+			"magic":12
+		},
+		"elements":{
+			"flora":12
+		}
 	}
 }

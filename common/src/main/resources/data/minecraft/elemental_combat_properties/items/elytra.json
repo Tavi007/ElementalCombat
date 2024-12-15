@@ -1,6 +1,8 @@
 {
-	"element":{
-		"wind":-12,
-		"earth":10
+	"defense": {
+		"elements":{
+			"wind":-12,
+			"earth":10
+		}
 	}
 }

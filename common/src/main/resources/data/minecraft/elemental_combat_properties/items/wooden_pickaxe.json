@@ -1,3 +1,5 @@
 {
-	"style":"stab"
+	"attack": {
+		"style":"stab"
+	}
 }

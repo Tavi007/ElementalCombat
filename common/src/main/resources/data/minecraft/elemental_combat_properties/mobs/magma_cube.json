@@ -1,11 +1,15 @@
 {
-	"element":"fire",
-	"style":{
-		"magic":2.0
+	"attack": {
+		"element":"fire"
 	},
-	"element":{
-		"fire":25,
-		"ice":-25,
-		"normal":12
+	"defense": {
+		"styles":{
+			"magic":2.0
+		},
+		"elements":{
+			"fire":25,
+			"ice":-25,
+			"normal":12
+		}
 	}
 }

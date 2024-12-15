@@ -1,10 +1,14 @@
 {
-	"style":"magic",
-	"element":{
-		"wind":-25,
-		"fire":12,
-		"ice":12,
-		"thunder":12,
-		"water":12
+	"attack": {
+		"style":"magic"
+	},
+	"defense": {
+		"elements":{
+			"wind":-25,
+			"fire":12,
+			"ice":12,
+			"thunder":12,
+			"water":12
+		}
 	}
 }

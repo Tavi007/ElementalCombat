@@ -1,4 +1,6 @@
 {
-	"style":"bite",
+	"attack": {
+		"style":"bite"
+	},
 	"biome_dependency":true
 }

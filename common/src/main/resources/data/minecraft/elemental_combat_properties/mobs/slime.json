@@ -1,9 +1,11 @@
 {
-	"style":{
-		"magic":-25
-	},
-	"element":{
-		"normal":12
+	"defense": {
+		"styles":{
+			"magic":-25
+		},
+		"elements":{
+			"normal":12
+		}
 	},
 	"biome_dependency":true
 }

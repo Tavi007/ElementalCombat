@@ -1,5 +1,7 @@
 {
-	"element":{
-		"wind":-12
+	"defense": {
+		"elements":{
+			"wind":-12
+		}
 	}
 }

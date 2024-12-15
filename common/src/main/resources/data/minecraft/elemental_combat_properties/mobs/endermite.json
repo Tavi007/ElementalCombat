@@ -1,8 +1,12 @@
 {
-	"style":"bite",
-	"element":"darkness",
-	"element":{
-		"wind":25,
-		"earth":12
+	"attack": {
+		"style":"bite",
+		"element":"darkness"
+	},
+	"defense": {
+		"elements":{
+			"wind":25,
+			"earth":12
+		}
 	}
 }

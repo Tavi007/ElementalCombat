@@ -1,5 +1,7 @@
 {
-	"element":{
-		"flora":12
+	"defense": {
+		"elements":{
+			"flora":12
+		}
 	}
 }

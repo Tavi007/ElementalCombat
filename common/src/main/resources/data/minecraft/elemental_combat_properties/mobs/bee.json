@@ -1,7 +1,9 @@
 {
-	"element":{
-		"wind":-12,
-		"flora":-12
+	"defense": {
+		"elements":{
+			"wind":-12,
+			"flora":-12
+		}
 	},
 	"biome_dependency":true
 }

@@ -1,8 +1,10 @@
 {
-	"style":{
-		"explosion":-5
-	},
-	"element":{
-		"thunder":5
+	"defense": {
+		"styles":{
+			"explosion":-5
+		},
+		"elements":{
+			"thunder":5
+		}
 	}
 }

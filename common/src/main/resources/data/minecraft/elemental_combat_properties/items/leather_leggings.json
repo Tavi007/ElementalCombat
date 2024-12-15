@@ -1,5 +1,7 @@
 {
-	"style":{
-		"bite":10
+	"defense": {
+		"styles":{
+			"bite":10
+		}
 	}
 }

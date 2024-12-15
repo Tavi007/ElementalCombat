@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -38,9 +39,9 @@ public class StartupCommon {
                 return new AttackData();
             }
             AttackData attackData = entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackDataSerializer()).getData();
-//            if (!attackData.isInitialized()) {
-//                attackData.initialize(entity);
-//            }
+            if (!attackData.isInitialized()) {
+                attackData.initialize(entity);
+            }
             return attackData;
         });
 
@@ -49,12 +50,12 @@ public class StartupCommon {
                 return new AttackData();
             }
             AttackData attackData = stack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackDataSerializer()).getData();
-//            if (!attackData.isInitialized()) {
-//                attackData.initialize(stack);
-//            }
-//            if (!attackData.areEnchantmentChangesApplied()) {
-//                attackData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
-//            }
+            if (!attackData.isInitialized()) {
+                attackData.initialize(stack);
+            }
+            if (!attackData.areEnchantmentChangesApplied()) {
+                attackData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
+            }
             return attackData;
         });
 
@@ -63,12 +64,9 @@ public class StartupCommon {
                 return new AttackData();
             }
             AttackData attackData = projectile.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackDataSerializer()).getData();
-//            if (!attackData.isInitialized()) {
-//                attackData.initialize(stack);
-//            }
-//            if (!attackData.areEnchantmentChangesApplied()) {
-//                attackData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
-//            }
+            if (!attackData.isInitialized()) {
+                attackData.initialize(projectile);
+            }
             return attackData;
         });
 
@@ -77,9 +75,9 @@ public class StartupCommon {
                 return new DefenseData();
             }
             DefenseData defenseData = entity.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseDataSerializer()).getData();
-//            if (!defenseData.isInitialized()) {
-//                defenseData.initialize(entity);
-//            }
+            if (!defenseData.isInitialized()) {
+                defenseData.initialize(entity);
+            }
             return defenseData;
         });
 
@@ -88,12 +86,12 @@ public class StartupCommon {
                 return new DefenseData();
             }
             DefenseData defenseData = stack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseDataSerializer()).getData();
-//            if (!defenseData.isInitialized()) {
-//                defenseData.initialize(stack);
-//            }
-//            if (!defenseData.areEnchantmentChangesApplied()) {
-//                defenseData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
-//            }
+            if (!defenseData.isInitialized()) {
+                defenseData.initialize(stack);
+            }
+            if (!defenseData.areEnchantmentChangesApplied()) {
+                defenseData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
+            }
             return defenseData;
         });
     }

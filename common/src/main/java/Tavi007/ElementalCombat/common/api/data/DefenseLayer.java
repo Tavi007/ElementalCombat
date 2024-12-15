@@ -1,5 +1,6 @@
 package Tavi007.ElementalCombat.common.api.data;
 
+import Tavi007.ElementalCombat.common.util.PacketBufferHelper;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
@@ -118,12 +119,12 @@ public class DefenseLayer {
     }
 
     public void writeToBuffer(FriendlyByteBuf buf) {
-//        buf.writeUtf(style);
-//        buf.writeUtf(element);
+        PacketBufferHelper.writeMap(buf, styles.getMap());
+        PacketBufferHelper.writeMap(buf, elements.getMap());
     }
 
     public void readFromBuffer(FriendlyByteBuf buf) {
-//        style = buf.readUtf();
-//        element = buf.readUtf();
+        styles = new DefenseMap(PacketBufferHelper.readMap(buf));
+        elements = new DefenseMap(PacketBufferHelper.readMap(buf));
     }
 }

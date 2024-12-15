@@ -1,6 +1,10 @@
 {
-	"element":"darkness",
-	"element":{
-		"water":-25
+	"attack": {
+		"element":"darkness"
+	},
+	"defense": {
+		"elements":{
+			"water":-25
+		}
 	}
 }

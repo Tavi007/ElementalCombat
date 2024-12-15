@@ -1,5 +1,7 @@
 {
-	"style":{
-		"slash":15
+	"defense": {
+		"styles":{
+			"slash":15
+		}
 	}
 }

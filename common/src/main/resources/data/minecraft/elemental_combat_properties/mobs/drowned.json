@@ -1,9 +1,13 @@
 {
-	"style":"bite",
-	"element":"water",
-	"element":{
-		"water":12,
-		"thunder":-6
+	"attack": {
+		"style":"bite",
+		"element":"water"
+	},
+	"defense": {
+		"elements":{
+			"water":12,
+			"thunder":-6
+		}
 	},
 	"biome_dependency":true
 }

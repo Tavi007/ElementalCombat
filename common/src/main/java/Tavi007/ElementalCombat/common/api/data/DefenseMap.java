@@ -64,6 +64,9 @@ public class DefenseMap {
      */
     public void add(Map<String, Integer> otherMap) {
         if (otherMap != null) {
+            if (otherMap.size() != 0) {
+                int a = 0;
+            }
             otherMap.forEach((key, value) -> {
                 if (!map.containsKey(key)) {
                     map.put(key, value);

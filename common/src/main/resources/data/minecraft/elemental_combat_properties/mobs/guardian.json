@@ -1,7 +1,11 @@
 {
-	"style":"magic",
-	"element":"thunder",
-	"element":{
-		"water":25
+	"attack": {
+		"style":"magic",
+		"element":"thunder"
+	},
+	"defense": {
+		"elements":{
+			"water":25
+		}
 	}
 }

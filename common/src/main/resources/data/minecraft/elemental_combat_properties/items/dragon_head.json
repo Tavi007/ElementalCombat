@@ -1,11 +1,13 @@
 {
-	"style":{
-		"projectile":-10
-	},
-	"element":{
-		"fire":10,
-		"ice":10,
-		"water":10,
-		"thunder":10
+	"defense": {
+		"styles":{
+			"projectile":-10
+		},
+		"elements":{
+			"fire":10,
+			"ice":10,
+			"water":10,
+			"thunder":10
+		}
 	}
 }

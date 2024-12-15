@@ -1,20 +1,26 @@
 package Tavi007.ElementalCombat.common.data.capabilities;
 
+import Tavi007.ElementalCombat.common.Constants;
+import Tavi007.ElementalCombat.common.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.capabilities.DefenseDataNBT;
+import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.util.ElementalCombatNBTHelper;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.enchantment.Enchantment;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class DefenseData {
 
     // for itemstack
-    private final boolean areEnchantmentChangesApplied = false;
+    private boolean areEnchantmentChangesApplied = false;
     private HashMap<ResourceLocation, DefenseLayer> defenseLayers = new HashMap<>();
     private boolean isInitialized = false;
 
@@ -69,17 +75,16 @@ public class DefenseData {
         return getStyles().isEmpty() && getElements().isEmpty();
     }
 
-    //TODO: fix
-//    public void applyEnchantmentChanges(Map<Enchantment, Integer> enchantments) {
-//        DefenseData data = new DefenseData();
-//        enchantments.forEach((ench, level) -> {
-//            data.putLayer(new ResourceLocation(ench.getDescriptionId()), BasePropertiesAPI.getDefenseLayer(ench, level));
-//        });
-//        if (!data.isEmpty()) {
-//            defenseLayers.put(new ResourceLocation("enchantment"), data.toLayer());
-//        }
-//        areEnchantmentChangesApplied = true;
-//    }
+    public void applyEnchantmentChanges(Map<Enchantment, Integer> enchantments) {
+        DefenseData data = new DefenseData();
+        enchantments.forEach((ench, level) -> {
+            data.putLayer(new ResourceLocation(ench.getDescriptionId()), BasePropertiesAPI.getDefenseLayer(ench, level));
+        });
+        if (!data.isEmpty()) {
+            defenseLayers.put(new ResourceLocation("enchantment"), data.toLayer());
+        }
+        areEnchantmentChangesApplied = true;
+    }
 
     @Override
     public String toString() {
@@ -93,23 +98,23 @@ public class DefenseData {
         });
         return builder.toString();
     }
-    
-    //TODO: fix
-//
-//    public void initialize(ItemStack stack) {
-//        putLayer(new ResourceLocation(Constants.MOD_ID, "base"), BasePropertiesAPI.getDefenseLayer(stack));
-//
-//        List<MobEffectInstance> potionEffects = PotionUtils.getMobEffects(stack);
-//        potionEffects.forEach(effect -> {
-//            putLayer(new ResourceLocation("potion_" + effect.getDescriptionId()), BasePropertiesAPI.getDefenseLayer(effect));
-//        });
-//        isInitialized = true;
-//    }
-//
-//    public void initialize(LivingEntity entity) {
-//        putLayer(new ResourceLocation(Constants.MOD_ID, "base"), BasePropertiesAPI.getDefenseLayer(entity));
-//        isInitialized = true;
-//    }
+
+    public void initialize(ItemStack stack) {
+        ResourceLocation itemRl = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        putLayer(new ResourceLocation(Constants.MOD_ID, "base"), DatapackDataAccessor.getItemDefaultLayer(itemRl).getDefense());
+
+        List<MobEffectInstance> potionEffects = PotionUtils.getMobEffects(stack);
+        potionEffects.forEach(effect -> {
+            putLayer(new ResourceLocation("potion_" + effect.getDescriptionId()), BasePropertiesAPI.getDefenseLayer(effect));
+        });
+        isInitialized = true;
+    }
+
+    public void initialize(LivingEntity entity) {
+        ResourceLocation entityRl = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
+        putLayer(new ResourceLocation(Constants.MOD_ID, "base"), DatapackDataAccessor.getMobDefaultData(entityRl).getDefense());
+        isInitialized = true;
+    }
 
     public boolean isInitialized() {
         return isInitialized;

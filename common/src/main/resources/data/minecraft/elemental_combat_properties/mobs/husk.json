@@ -1,8 +1,12 @@
 {
-	"style":"bite",
-	"element":"fire",
-	"element":{
-		"fire":4
+	"attack": {
+		"style":"bite",
+		"element":"fire"
+	},
+	"defense": {
+		"elements":{
+			"fire":4
+		}
 	},
 	"biome_dependency":true
 }

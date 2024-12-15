@@ -1,9 +1,13 @@
 {
-	"style":"projectile",
-	"element":"ice",
-	"element":{
-		"ice":12,
-		"fire":-12
+	"attack": {
+		"style":"projectile",
+		"element":"ice"
+	},
+	"defense": {
+		"elements":{
+			"ice":12,
+			"fire":-12
+		}
 	},
 	"biome_dependency":true
 }

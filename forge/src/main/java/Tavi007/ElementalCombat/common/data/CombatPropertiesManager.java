@@ -1,10 +1,8 @@
 package Tavi007.ElementalCombat.common.data;
 
 import Tavi007.ElementalCombat.common.Constants;
-import Tavi007.ElementalCombat.common.api.data.AttackLayer;
-import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
-import Tavi007.ElementalCombat.common.api.data.ElementalCombatLayer;
-import Tavi007.ElementalCombat.common.api.data.ElementalCombatMobData;
+import Tavi007.ElementalCombat.common.api.data.*;
+import Tavi007.ElementalCombat.common.data.datapack.DefenseMapAdapater;
 import Tavi007.ElementalCombat.common.network.SyncronizeDatapackPacket;
 import com.google.common.collect.Queues;
 import com.google.gson.Gson;
@@ -28,7 +26,11 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
 
     public static final ResourceLocation EMPTY_RESOURCELOCATION = new ResourceLocation(Constants.MOD_ID, "empty");
     public static final ResourceLocation BASE_ATTACK = new ResourceLocation("base_attack");
-    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
+    private static final Gson GSON = new GsonBuilder()
+            .setPrettyPrinting()
+            .disableHtmlEscaping()
+            .registerTypeAdapter(DefenseMap.class, new DefenseMapAdapater())
+            .create();
     private static final ThreadLocal<Deque<CombatPropertiesContext>> dataContext = new ThreadLocal<Deque<CombatPropertiesContext>>();
 
     public CombatPropertiesManager() {
@@ -83,19 +85,24 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
                 if (rl.equals(BASE_ATTACK)) {
                     DatapackDataAccessor.setDefaultAttackLayer(loadData(GSON, rl, json, AttackLayer.class));
                 } else if (rl.getPath().contains("mobs/")) {
-                    DatapackDataAccessor.putMobDefaultData(rl, loadData(GSON, rl, json, ElementalCombatMobData.class));
+                    ResourceLocation new_rl = new ResourceLocation(modid, rl.getPath().replace("mobs/", ""));
+                    DatapackDataAccessor.putMobDefaultData(new_rl, loadData(GSON, rl, json, ElementalCombatMobData.class));
                     type = "mobs";
                 } else if (rl.getPath().contains("items/")) {
-                    DatapackDataAccessor.putItemDefaultLayer(rl, loadData(GSON, rl, json, ElementalCombatLayer.class));
+                    ResourceLocation new_rl = new ResourceLocation(modid, rl.getPath().replace("items/", ""));
+                    DatapackDataAccessor.putItemDefaultLayer(new_rl, loadData(GSON, rl, json, ElementalCombatLayer.class));
                     type = "items";
                 } else if (rl.getPath().contains("biomes/")) {
-                    DatapackDataAccessor.putBiomeDefaultLayer(rl, loadData(GSON, rl, json, DefenseLayer.class));
+                    ResourceLocation new_rl = new ResourceLocation(modid, rl.getPath().replace("biomes/", ""));
+                    DatapackDataAccessor.putBiomeDefaultLayer(new_rl, loadData(GSON, rl, json, DefenseLayer.class));
                     type = "biomes";
                 } else if (rl.getPath().contains("damage_types/")) {
-                    DatapackDataAccessor.putDamageTypeDefaultLayer(rl, loadData(GSON, rl, json, AttackLayer.class));
+                    ResourceLocation new_rl = new ResourceLocation(modid, rl.getPath().replace("damage_types/", ""));
+                    DatapackDataAccessor.putDamageTypeDefaultLayer(new_rl, loadData(GSON, rl, json, AttackLayer.class));
                     type = "damage_types";
                 } else if (rl.getPath().contains("projectiles/")) {
-                    DatapackDataAccessor.putProjectileDefaultLayer(rl, loadData(GSON, rl, json, AttackLayer.class));
+                    ResourceLocation new_rl = new ResourceLocation(modid, rl.getPath().replace("projectiles/", ""));
+                    DatapackDataAccessor.putProjectileDefaultLayer(new_rl, loadData(GSON, rl, json, AttackLayer.class));
                     type = "projectiles";
                 }
 

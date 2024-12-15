@@ -1,7 +1,11 @@
 {
-	"style":"bite",
-	"element":{
-		"light":-12
+	"attack": {
+		"style":"bite"
+	},
+	"defense": {
+		"elements":{
+			"light":-12
+		}
 	},
 	"biome_dependency":true
 }

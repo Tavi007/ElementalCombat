@@ -1,8 +1,12 @@
 {
-	"style":"slash",
-	"element":{
-		"wind":-12,
-		"earth":12,
-		"light":-25
+	"attack": {
+		"style":"slash"
+	},
+	"defense": {
+		"elements":{
+			"wind":-12,
+			"earth":12,
+			"light":-25
+		}
 	}
 }

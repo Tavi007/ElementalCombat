@@ -1,6 +1,8 @@
 {
-	"element":{
-		"water":12,
-		"thunder":-12
+	"defense": {
+		"elements":{
+			"water":12,
+			"thunder":-12
+		}
 	}
 }

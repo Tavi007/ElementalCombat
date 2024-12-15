@@ -1,3 +1,5 @@
 {
-	"element":"water"
+	"attack": {
+		"element":"water"
+	}
 }

@@ -1,10 +1,14 @@
 {
-	"style":"magic",
-	"element":"darkness",
-	"element":{
-		"darkness":25,
-		"fire":12,
-		"ice":12,
-		"light":-25
+	"attack": {
+		"style":"magic",
+		"element":"darkness"
+	},
+	"defense": {
+		"elements":{
+			"darkness":25,
+			"fire":12,
+			"ice":12,
+			"light":-25
+		}
 	}
 }

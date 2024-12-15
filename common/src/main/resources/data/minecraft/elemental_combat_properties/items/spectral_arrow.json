@@ -1,4 +1,6 @@
 {
-	"style":"magic",
-	"element":"light"
+	"attack":{
+		"style":"magic",
+		"element":"light"
+	}
 }

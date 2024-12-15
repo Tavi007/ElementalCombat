@@ -1,6 +1,8 @@
 {
-	"element":{
-		"fire":25,
-		"ice":-25
+	"defense": {
+		"elements":{
+			"fire":25,
+			"ice":-25
+		}
 	}
 }

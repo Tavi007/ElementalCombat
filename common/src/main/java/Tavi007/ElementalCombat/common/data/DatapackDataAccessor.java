@@ -17,11 +17,38 @@ public class DatapackDataAccessor {
     private static final Map<ResourceLocation, DefenseLayer> loadedBiomeLayers = new HashMap<>();
     private static final Map<ResourceLocation, AttackLayer> loadedProjectileLayers = new HashMap<>();
     private static final Map<ResourceLocation, AttackLayer> loadedDamageTypeLayers = new HashMap<>();
-    private static AttackLayer defaultAttack = new AttackLayer("hit", "normal");
+    private static final AttackLayer defaultAttack = new AttackLayer("hit", "normal");
+
+    private static AttackLayer fillWithDefault(AttackLayer attackLayer) {
+        if (attackLayer == null) {
+            return DatapackDataAccessor.defaultAttack;
+        }
+        if (attackLayer.getStyle() != null) {
+            attackLayer.setStyle(defaultAttack.getStyle());
+        }
+        if (attackLayer.getElement() != null) {
+            attackLayer.setElement(defaultAttack.getElement());
+        }
+        return attackLayer;
+    }
+
+    private static DefenseLayer fillWithDefault(DefenseLayer defenseLayer) {
+        if (defenseLayer == null) {
+            return new DefenseLayer();
+        }
+        if (defenseLayer.getStyles() != null) {
+        }
+        return defenseLayer;
+    }
 
     public static void setDefaultAttackLayer(AttackLayer defaultAttack) {
         if (defaultAttack != null) {
-            DatapackDataAccessor.defaultAttack = defaultAttack;
+            if (defaultAttack.getStyle() != null) {
+                DatapackDataAccessor.defaultAttack.setStyle(defaultAttack.getStyle());
+            }
+            if (defaultAttack.getElement() != null) {
+                DatapackDataAccessor.defaultAttack.setElement(defaultAttack.getElement());
+            }
         }
         Constants.LOG.info("Server loaded default attack style: " + DatapackDataAccessor.defaultAttack.getStyle());
         Constants.LOG.info("Server loaded default attack element: " + DatapackDataAccessor.defaultAttack.getElement());
@@ -40,7 +67,7 @@ public class DatapackDataAccessor {
     }
 
     public static ElementalCombatMobData getMobDefaultData(ResourceLocation rl) {
-        return DatapackDataAccessor.loadedMobLayers.get(rl);
+        return DatapackDataAccessor.loadedMobLayers.getOrDefault(rl, new ElementalCombatMobData());
     }
 
     public static void putItemDefaultLayer(ResourceLocation rl, ElementalCombatLayer data) {
@@ -48,7 +75,7 @@ public class DatapackDataAccessor {
     }
 
     public static ElementalCombatLayer getItemDefaultLayer(ResourceLocation rl) {
-        return DatapackDataAccessor.loadedItemLayers.get(rl);
+        return DatapackDataAccessor.loadedItemLayers.getOrDefault(rl, new ElementalCombatLayer());
     }
 
     public static void putBiomeDefaultLayer(ResourceLocation rl, DefenseLayer data) {
@@ -56,7 +83,7 @@ public class DatapackDataAccessor {
     }
 
     public static DefenseLayer getBiomeDefaultLayer(ResourceLocation rl) {
-        return DatapackDataAccessor.loadedBiomeLayers.get(rl);
+        return DatapackDataAccessor.loadedBiomeLayers.getOrDefault(rl, new DefenseLayer());
     }
 
     public static void putProjectileDefaultLayer(ResourceLocation rl, AttackLayer data) {
@@ -64,7 +91,7 @@ public class DatapackDataAccessor {
     }
 
     public static AttackLayer getProjectileDefaultLayer(ResourceLocation rl) {
-        return DatapackDataAccessor.loadedProjectileLayers.get(rl);
+        return DatapackDataAccessor.loadedProjectileLayers.getOrDefault(rl, new AttackLayer());
     }
 
     public static void putDamageTypeDefaultLayer(ResourceLocation rl, AttackLayer data) {
@@ -72,7 +99,7 @@ public class DatapackDataAccessor {
     }
 
     public static AttackLayer getDamageTypeDefaultLayer(ResourceLocation rl) {
-        return DatapackDataAccessor.loadedDamageTypeLayers.get(rl);
+        return DatapackDataAccessor.loadedDamageTypeLayers.getOrDefault(rl, new AttackLayer());
     }
 
 }

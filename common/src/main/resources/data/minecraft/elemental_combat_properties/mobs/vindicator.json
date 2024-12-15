@@ -1,4 +1,6 @@
 {
-	"style":"slash",
+	"attack": {
+		"style":"slash"
+	},
 	"biome_dependency":true
 }

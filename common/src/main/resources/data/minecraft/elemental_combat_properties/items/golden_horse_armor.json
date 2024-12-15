@@ -1,5 +1,7 @@
 {
-	"style":{
-		"magic":35
+	"defense": {
+		"styles":{
+			"magic":35
+		}
 	}
 }
