@@ -5,7 +5,10 @@ import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.api.data.ElementalCombatLayer;
 import Tavi007.ElementalCombat.common.api.data.ElementalCombatMobData;
+import Tavi007.ElementalCombat.common.network.SyncronizeDatapackPacket;
+import Tavi007.ElementalCombat.server.network.ServerPacketSender;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +42,15 @@ public class DatapackDataAccessor {
         if (defenseLayer.getStyles() != null) {
         }
         return defenseLayer;
+    }
+
+    public static void clear() {
+        defaultAttack.set("hit", "normal");
+        loadedMobLayers.clear();
+        loadedItemLayers.clear();
+        loadedBiomeLayers.clear();
+        loadedProjectileLayers.clear();
+        loadedDamageTypeLayers.clear();
     }
 
     public static void setDefaultAttackLayer(AttackLayer defaultAttack) {
@@ -102,4 +114,26 @@ public class DatapackDataAccessor {
         return DatapackDataAccessor.loadedDamageTypeLayers.getOrDefault(rl, new AttackLayer());
     }
 
+    public static void logLoadedData() {
+        logLoadedData("server", loadedMobLayers.size(), "mobs");
+        logLoadedData("server", loadedItemLayers.size(), "items");
+        logLoadedData("server", loadedBiomeLayers.size(), "biomes");
+        logLoadedData("server", loadedProjectileLayers.size(), "projectiles");
+        logLoadedData("server", loadedDamageTypeLayers.size(), "damage sources");
+    }
+
+    private static void logLoadedData(String side, int size, String type) {
+        Constants.LOG.info(side + " loaded " + size + " combat properties for " + type);
+    }
+
+    public static void sendSyncMessage(ServerPlayer player) {
+        SyncronizeDatapackPacket packet = new SyncronizeDatapackPacket(
+                defaultAttack,
+                loadedMobLayers,
+                loadedItemLayers,
+                loadedBiomeLayers,
+                loadedProjectileLayers,
+                loadedDamageTypeLayers);
+        ServerPacketSender.sendPacket(packet, player);
+    }
 }

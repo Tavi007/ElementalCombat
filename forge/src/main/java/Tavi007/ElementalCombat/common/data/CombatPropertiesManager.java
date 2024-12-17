@@ -3,7 +3,6 @@ package Tavi007.ElementalCombat.common.data;
 import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.api.data.*;
 import Tavi007.ElementalCombat.common.data.datapack.DefenseMapAdapater;
-import Tavi007.ElementalCombat.common.network.SyncronizeDatapackPacket;
 import com.google.common.collect.Queues;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,43 +36,13 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
         super(GSON, "elemental_combat_properties");
     }
 
-    public void set(SyncronizeDatapackPacket message) {
-//        baseAttackProperties = message.getBaseAttack();
-//        registeredMobData = message.getMobData();
-//        registeredItemData = message.getItemData();
-//        registeredBiomeData = message.getBiomeData();
-//        registeredProjectileData = message.getProjectileData();
-//        registeredDamageTypeData = message.getDamageTypeData();
-//
-//        ElementalCombat.LOGGER.info("Client loaded default attack style: " + baseAttackProperties.getAttackStyleCopy());
-//        ElementalCombat.LOGGER.info("Client loaded default attack element: " + baseAttackProperties.getAttackElementCopy());
-//        logLoading("client", registeredMobData.size() - 1, "mobs");
-//        logLoading("client", registeredItemData.size() - 1, "items");
-//        logLoading("client", registeredBiomeData.size() - 1, "biomes");
-//        logLoading("client", registeredProjectileData.size() - 1, "projectiles");
-//        logLoading("client", registeredDamageTypeData.size() - 1, "damage sources");
-    }
-
-    private void logLoading(String side, int size, String type) {
-        Constants.LOG.info(side + " loaded " + size + " combat properties for " + type);
-    }
-
-    public SyncronizeDatapackPacket createSyncMessage() {
-//        return new SyncronizeDatapackPacket(baseAttackProperties,
-//                registeredMobData,
-//                registeredItemData,
-//                registeredBiomeData,
-//                registeredDamageTypeData,
-//                registeredProjectileData);
-        return null;
-    }
-
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> objectIn, ResourceManager resourceManagerIn, ProfilerFiller profilerIn) {
         if (objectIn.remove(EMPTY_RESOURCELOCATION) != null) {
             Constants.LOG.warn("Datapack tried to redefine {} elemental entity data, ignoring", EMPTY_RESOURCELOCATION);
         }
 
+        DatapackDataAccessor.clear();
         Map<String, Map<String, Integer>> counter = new HashMap<String, Map<String, Integer>>();
         objectIn.forEach((rl, json) -> {
             try {
@@ -124,7 +93,6 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
             }
         });
 
-
         counter.forEach((modid, propertyCounter) -> {
             Constants.LOG.info("The mod " + modid + " loaded: ");
             propertyCounter.forEach((type, amount) -> {
@@ -132,11 +100,7 @@ public class CombatPropertiesManager extends SimpleJsonResourceReloadListener {
             });
         });
 
-//        logLoading("server", registeredMobData.size(), "mobs");
-//        logLoading("server", registeredItemData.size(), "items");
-//        logLoading("server", registeredBiomeData.size(), "biomes");
-//        logLoading("server", registeredProjectileData.size(), "projectiles");
-//        logLoading("server", registeredDamageTypeData.size(), "damage sources");
+        DatapackDataAccessor.logLoadedData();
     }
 
     @Nullable

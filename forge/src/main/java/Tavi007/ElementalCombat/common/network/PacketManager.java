@@ -40,7 +40,7 @@ public class PacketManager {
         ServerPacketSender.initSender(
                 (packet, player) -> sendToClient(packet, player),
                 packet -> sendToAllClients(packet),
-                packet -> sendToAllClients(packet),
+                (packet, player) -> sendToClient(packet, player),
                 packet -> sendToAllClients(packet),
                 packet -> sendToAllClients(packet));
         Constants.LOG.info("Registered {} packets", NUM_PACKETS);

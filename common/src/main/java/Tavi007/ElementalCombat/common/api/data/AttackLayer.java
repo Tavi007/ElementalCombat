@@ -37,8 +37,8 @@ public class AttackLayer {
     @Override
     public boolean equals(Object object) {
         if (object instanceof AttackLayer other) {
-            return this.element.equals(other.element)
-                    && this.style.equals(other.style);
+            return this.getElement().equals(other.getElement())
+                    && this.getStyle().equals(other.getStyle());
         }
         return false;
     }
@@ -91,8 +91,8 @@ public class AttackLayer {
     }
 
     public void writeToBuffer(FriendlyByteBuf buf) {
-        buf.writeUtf(style);
-        buf.writeUtf(element);
+        buf.writeUtf(getStyle());
+        buf.writeUtf(getElement());
     }
 
     public void readFromBuffer(FriendlyByteBuf buf) {

@@ -4,11 +4,13 @@ import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesHelper;
+import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.network.UpdateEntityAttackLayerPacket;
 import Tavi007.ElementalCombat.common.network.UpdateEntityDefenseLayerPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
@@ -59,9 +61,8 @@ public class NetworkHelper {
     }
 
     public static void syncJsonMessageForClients(Player player) {
-//        if (!player.level().isClientSide && player instanceof ServerPlayer) {
-//            SyncronizeDatapackPacket messageToClient = ElementalCombat.COMBAT_PROPERTIES_MANGER.createSyncMessage();
-//            ServerPacketSender.sendPacket(messageToClient, player);
-//        }
+        if (!player.level().isClientSide && player instanceof ServerPlayer) {
+            DatapackDataAccessor.sendSyncMessage((ServerPlayer) player);
+        }
     }
 }

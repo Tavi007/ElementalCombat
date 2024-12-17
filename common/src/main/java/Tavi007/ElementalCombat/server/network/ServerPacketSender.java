@@ -11,13 +11,13 @@ public class ServerPacketSender {
 
     private static BiConsumer<CreateEmitterPacket, ServerPlayer> createEmitterPacketSender;
     private static Consumer<DisableDamageRenderPacket> disableDamageRenderPacketSender;
-    private static Consumer<SyncronizeDatapackPacket> syncronizeDatapackPacketSender;
+    private static BiConsumer<SyncronizeDatapackPacket, ServerPlayer> syncronizeDatapackPacketSender;
     private static Consumer<UpdateEntityAttackLayerPacket> updateEntityAttackLayerPacketSender;
     private static Consumer<UpdateEntityDefenseLayerPacket> updateEntityDefenseLayerPacketSender;
 
     public static void initSender(BiConsumer<CreateEmitterPacket, ServerPlayer> createEmitterPacketSender,
                                   Consumer<DisableDamageRenderPacket> disableDamageRenderPacketSender,
-                                  Consumer<SyncronizeDatapackPacket> syncronizeDatapackPacketSender,
+                                  BiConsumer<SyncronizeDatapackPacket, ServerPlayer> syncronizeDatapackPacketSender,
                                   Consumer<UpdateEntityAttackLayerPacket> updateEntityAttackLayerPacketSender,
                                   Consumer<UpdateEntityDefenseLayerPacket> updateEntityDefenseLayerPacketSender) {
         ServerPacketSender.createEmitterPacketSender = createEmitterPacketSender;
@@ -35,8 +35,8 @@ public class ServerPacketSender {
         disableDamageRenderPacketSender.accept(packet);
     }
 
-    public static void sendPacket(SyncronizeDatapackPacket packet) {
-        syncronizeDatapackPacketSender.accept(packet);
+    public static void sendPacket(SyncronizeDatapackPacket packet, ServerPlayer player) {
+        syncronizeDatapackPacketSender.accept(packet, player);
     }
 
     public static void sendPacket(UpdateEntityAttackLayerPacket packet) {

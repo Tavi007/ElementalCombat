@@ -4,6 +4,7 @@ import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.api.data.ElementalCombatLayer;
 import Tavi007.ElementalCombat.common.api.data.ElementalCombatMobData;
+import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import net.minecraft.network.FriendlyByteBuf;
@@ -177,7 +178,13 @@ public class SyncronizeDatapackPacket extends AbstractPacket {
 
     @Override
     public void processPacket(Level level) {
-        //DatapackDataAccessor.;
+        DatapackDataAccessor.clear();
+        DatapackDataAccessor.setDefaultAttackLayer(baseAttackProperties);
+        mobData.forEach((rl, data) -> DatapackDataAccessor.putMobDefaultData(rl, data));
+        itemData.forEach((rl, data) -> DatapackDataAccessor.putItemDefaultLayer(rl, data));
+        biomeData.forEach((rl, data) -> DatapackDataAccessor.putBiomeDefaultLayer(rl, data));
+        projectileData.forEach((rl, data) -> DatapackDataAccessor.putProjectileDefaultLayer(rl, data));
+        damageTypeData.forEach((rl, data) -> DatapackDataAccessor.putDamageTypeDefaultLayer(rl, data));
     }
 
     @Override
