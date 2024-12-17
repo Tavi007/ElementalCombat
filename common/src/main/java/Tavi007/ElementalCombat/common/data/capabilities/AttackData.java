@@ -37,11 +37,10 @@ public class AttackData {
     }
 
     public String getElement() {
-        List<ResourceLocation> keys = new ArrayList<ResourceLocation>(attackLayers.keySet());
-        Collections.reverse(keys);
-        for (ResourceLocation rl : keys) {
-            AttackLayer layer = attackLayers.get(rl);
-            String element = layer.getElement();
+        List<AttackLayer> values = new ArrayList<AttackLayer>(attackLayers.values());
+        Collections.reverse(values);
+        for (AttackLayer value : values) {
+            String element = value.getElement();
             if (!element.equals(DatapackDataAccessor.getDefaultElement())) {
                 return element;
             }
@@ -50,11 +49,10 @@ public class AttackData {
     }
 
     public String getStyle() {
-        List<ResourceLocation> keys = new ArrayList<ResourceLocation>(attackLayers.keySet());
-        Collections.reverse(keys);
-        for (ResourceLocation rl : keys) {
-            AttackLayer layer = attackLayers.get(rl);
-            String style = layer.getStyle();
+        List<AttackLayer> values = new ArrayList<AttackLayer>(attackLayers.values());
+        Collections.reverse(values);
+        for (AttackLayer value : values) {
+            String style = value.getStyle();
             if (!style.equals(DatapackDataAccessor.getDefaultStyle())) {
                 return style;
             }
