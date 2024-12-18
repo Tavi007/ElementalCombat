@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
@@ -39,7 +40,9 @@ public class ElementalHarmingEffect extends MobEffect {
         Reference<DamageType> damageType = potionEntity.level()
                 .registryAccess()
                 .registryOrThrow(Registries.DAMAGE_TYPE)
-                .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Constants.MOD_ID, element + "_magic")));
+                .getHolderOrThrow(DamageTypes.MAGIC); // temporary fix
+        // TODO: register this damage type?
+        //.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Constants.MOD_ID, element + "_magic")));
         target.hurt(new DamageSource(damageType), (float) damage);
     }
 
