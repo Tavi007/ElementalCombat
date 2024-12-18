@@ -50,7 +50,7 @@ public class Constants {
     public static final String ESSENCE_EARTH = "essence_earth";
     public static final String ESSENCE_WIND = "essence_wind";
     public static final String ESSENCE_FLORA = "essence_flora";
-    public static final String LENS = "lens";
+    public static final String LENS = "combat_data_lens";
 
     // Particles
     public static final String CRIT_ELEMENT = "crit_element";
