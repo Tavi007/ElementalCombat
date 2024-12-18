@@ -3,6 +3,7 @@ package Tavi007.ElementalCombat.common.util;
 import Tavi007.ElementalCombat.common.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
+import Tavi007.ElementalCombat.server.ServerConfig;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,20 +12,13 @@ import java.util.Map;
 
 public class DamageCalculationHelper {
 
-    private static int maxFactor = 100;
-
-    // TODO: use the function
-    public static void setMaxFactor(int maxFactor) {
-        DamageCalculationHelper.maxFactor = maxFactor;
-    }
-
     public static float getScaling(Map<String, Integer> map, String key, boolean isStyle) {
         Integer factor = map.getOrDefault(key, 0);
         return 1.0f - getPercentage(factor, isStyle);
     }
 
     public static float getPercentage(Integer factor, boolean isStyle) {
-        float percentage = ((float) factor) / maxFactor;
+        float percentage = ((float) factor) / ServerConfig.getMaxFactor();
         if (isStyle) {
             return Math.min(1.0f, percentage);
         }
