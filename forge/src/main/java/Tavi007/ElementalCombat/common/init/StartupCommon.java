@@ -7,6 +7,7 @@ import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
 import Tavi007.ElementalCombat.common.network.PacketManager;
 import Tavi007.ElementalCombat.common.registry.ModBrewingRecipes;
+import Tavi007.ElementalCombat.common.util.ResourceLocationAccessor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -16,6 +17,7 @@ import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class StartupCommon {
 
@@ -101,6 +103,7 @@ public class StartupCommon {
     public static void onCommonSetup(FMLCommonSetupEvent event) {
         registerBrewingRecipes();
         registerNetworking();
+        registerResourceLocationAccessor();
         Constants.LOG.info("setup method registered.");
     }
 
@@ -123,6 +126,31 @@ public class StartupCommon {
 
     private static void registerNetworking() {
         PacketManager.init();
+    }
+
+    private static void registerResourceLocationAccessor() {
+        ResourceLocationAccessor.setEntityAccessor((entity) -> {
+            return ForgeRegistries.ENTITY_TYPES.getKey(entity.getType());
+        });
+        ResourceLocationAccessor.setItemAccessor((stack) -> {
+            return ForgeRegistries.ITEMS.getKey(stack.getItem());
+        });
+        ResourceLocationAccessor.setBiomeAccessor((biome) -> {
+            return ForgeRegistries.BIOMES.getKey(biome);
+        });
+        ResourceLocationAccessor.setEnchantmentAccessor((enchantment) -> {
+            return ForgeRegistries.ENCHANTMENTS.getKey(enchantment);
+        });
+        //TODO: fix
+//        ResourceLocationAccessor.setDamageTypeAccessor((damageType) -> {
+//            ResourceKey<DamageType> damageTypeKey = BuiltInRegistries. .getResourceKey(damageType)
+//                    .orElse(null);
+//
+//            VanillaRegistries.createLookup()
+//                    .lookup(Registries.DAMAGE_TYPE)
+//                    .get()
+//                    .get(damageType)
+//        });
     }
 
 }

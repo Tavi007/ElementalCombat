@@ -42,6 +42,7 @@ public class CombatEvents {
             return damageAmount;
         }
 
+        // TODO: fix
         // Get the attack data from the damage source
         AttackData sourceData = new AttackData();
         //MinecraftForge.EVENT_BUS.post(new ElementifyDamageSourceEvent(damageSource, sourceData));
