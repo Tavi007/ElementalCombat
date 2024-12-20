@@ -1,11 +1,14 @@
 package Tavi007.ElementalCombat.common.network;
 
+import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
 import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+
+import java.util.Optional;
 
 public class DisableDamageRenderPacket extends AbstractPacket {
 
@@ -56,8 +59,12 @@ public class DisableDamageRenderPacket extends AbstractPacket {
     }
 
     @Override
-    public void processPacket(Level level) {
-        Entity entity = level.getEntity(id);
+    public void processPacket(Optional<Level> level) {
+        if (level.isEmpty()) {
+            Constants.LOG.warn("Sender without level encountered. Skip DisableDamageRenderPacket.");
+            return;
+        }
+        Entity entity = level.get().getEntity(id);
         if (entity instanceof LivingEntity livingEntity) {
             ImmersionData data = CapabilitiesAccessors.getImmersionData(livingEntity);
             data.disableFlag = true;

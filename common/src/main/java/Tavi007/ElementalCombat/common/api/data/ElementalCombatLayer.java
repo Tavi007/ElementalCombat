@@ -26,9 +26,29 @@ public class ElementalCombatLayer {
     }
 
     public void writeToBuffer(FriendlyByteBuf buf) {
+        boolean hasAttack = attack != null;
+        buf.writeBoolean(hasAttack);
+        if (hasAttack) {
+            attack.writeToBuffer(buf);
+        }
+        boolean hasDefense = defense != null;
+        buf.writeBoolean(hasAttack);
+        if (hasDefense) {
+            defense.writeToBuffer(buf);
+        }
     }
 
     public void readFromBuffer(FriendlyByteBuf buf) {
+        boolean hasAttack = buf.readBoolean();
+        if (hasAttack) {
+            attack = new AttackLayer();
+            attack.readFromBuffer(buf);
+        }
+        boolean hasDefense = buf.readBoolean();
+        if (hasDefense) {
+            defense = new DefenseLayer();
+            defense.readFromBuffer(buf);
+        }
     }
 
     @Override

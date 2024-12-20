@@ -10,6 +10,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
+import java.util.Optional;
+
 public class CreateEmitterPacket extends AbstractPacket {
 
     private final Integer entityId;
@@ -69,18 +71,17 @@ public class CreateEmitterPacket extends AbstractPacket {
 //    }
 
 
-    public void processPacket(Level level) {
-        if (!isValid()) {
-            Constants.LOG.warn("Invalid CreateEmitterPacket encountered. Skip emitting.");
+    @Override
+    public void processPacket(Optional<Level> level) {
+        if (level.isEmpty()) {
+            Constants.LOG.warn("Sender without level encountered. Skip CreateEmitterPacket.");
             return;
         }
+
         if (amount == 0) {
-            return;
+            return; // Nothing to do
         }
-
-        ParticleEngine engine = Minecraft.getInstance().particleEngine;
-
-        Entity entity = level.getEntity(entityId);
+        Entity entity = level.get().getEntity(entityId);
         SimpleParticleType particle = ParticleTypes.CRIT;
         switch (particleName) {
             case Constants.CRIT_ELEMENT:
@@ -103,6 +104,7 @@ public class CreateEmitterPacket extends AbstractPacket {
                 return;
         }
 
+        ParticleEngine engine = Minecraft.getInstance().particleEngine;
         for (int i = 0; i < amount; i++) {
             double vy = Math.random() - 0.75;
             double vx = Math.sin(Math.random() * 2 * Math.PI) * 0.5;

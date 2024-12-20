@@ -78,6 +78,7 @@ public class DatapackDataAccessor {
         DatapackDataAccessor.loadedMobLayers.put(rl, data);
     }
 
+
     public static ElementalCombatMobData getMobDefaultData(ResourceLocation rl) {
         return DatapackDataAccessor.loadedMobLayers.getOrDefault(rl, new ElementalCombatMobData());
     }

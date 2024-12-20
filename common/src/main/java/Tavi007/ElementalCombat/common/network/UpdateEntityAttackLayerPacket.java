@@ -1,5 +1,6 @@
 package Tavi007.ElementalCombat.common.network;
 
+import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
 import net.minecraft.network.FriendlyByteBuf;
@@ -7,6 +8,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+
+import java.util.Optional;
 
 public class UpdateEntityAttackLayerPacket extends AbstractPacket {
 
@@ -61,8 +64,12 @@ public class UpdateEntityAttackLayerPacket extends AbstractPacket {
     }
 
     @Override
-    public void processPacket(Level level) {
-        Entity entity = level.getEntity(id);
+    public void processPacket(Optional<Level> level) {
+        if (level.isEmpty()) {
+            Constants.LOG.warn("Sender without level encountered. Skip UpdateEntityAttackLayerPacket.");
+            return;
+        }
+        Entity entity = level.get().getEntity(id);
         if (entity instanceof LivingEntity livingEntity) {
             CapabilitiesAccessors.getAttackData(livingEntity).putLayer(resourceLocation, attackLayer);
         }

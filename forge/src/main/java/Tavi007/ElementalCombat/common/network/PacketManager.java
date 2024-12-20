@@ -8,11 +8,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.LogicalSidedProvider;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public class PacketManager {
@@ -63,8 +67,12 @@ public class PacketManager {
                 .encoder(MSG::encode)
                 .decoder(decoder)
                 .consumerMainThread((msg, ctx) -> {
-                    Level level = ctx.get().getSender().level();
-                    ctx.get().setPacketHandled(ClientPacketProcessor.processPacket(msg, level));
+                    NetworkEvent.Context context = ctx.get();
+                    context.enqueueWork(() -> {
+                        LogicalSide sideReceived = context.getDirection().getReceptionSide();
+                        Optional<Level> level = LogicalSidedProvider.CLIENTWORLD.get(sideReceived);
+                        context.setPacketHandled(ClientPacketProcessor.processPacket(msg, level));
+                    });
                 })
                 .add();
     }

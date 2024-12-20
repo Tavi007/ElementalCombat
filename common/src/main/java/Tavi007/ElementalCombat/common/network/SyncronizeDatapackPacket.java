@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class SyncronizeDatapackPacket extends AbstractPacket {
 
@@ -177,7 +178,7 @@ public class SyncronizeDatapackPacket extends AbstractPacket {
     }
 
     @Override
-    public void processPacket(Level level) {
+    public void processPacket(Optional<Level> level) {
         DatapackDataAccessor.clear();
         DatapackDataAccessor.setDefaultAttackLayer(baseAttackProperties);
         mobData.forEach((rl, data) -> DatapackDataAccessor.putMobDefaultData(rl, data));
