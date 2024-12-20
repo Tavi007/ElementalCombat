@@ -1,6 +1,7 @@
 package Tavi007.ElementalCombat.common.potions;
 
 import Tavi007.ElementalCombat.common.Constants;
+import Tavi007.ElementalCombat.common.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.server.ServerConfig;
 import net.minecraft.resources.ResourceLocation;
@@ -41,8 +42,7 @@ public class ElementalResistanceEffect extends MobEffect {
     }
 
     public void applyEffect(LivingEntity target, MobEffectInstance instance) {
-        // TODO: fix
-        // DefenseDataAPI.putLayer(target, getDefenseLayer(instance), getResourceLocation());
+        DefenseDataAPI.putLayer(target, getDefenseLayer(instance), getResourceLocation());
     }
 
     public ResourceLocation getResourceLocation() {
@@ -50,7 +50,6 @@ public class ElementalResistanceEffect extends MobEffect {
     }
 
     public void removeEffect(LivingEntity target) {
-        // TODO: fix
-        // DefenseDataAPI.deleteLayer(target, getResourceLocation());
+        DefenseDataAPI.deleteLayer(target, getResourceLocation());
     }
 }
