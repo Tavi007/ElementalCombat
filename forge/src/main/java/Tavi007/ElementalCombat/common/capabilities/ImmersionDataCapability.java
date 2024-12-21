@@ -7,6 +7,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 public class ImmersionDataCapability {
@@ -27,11 +29,13 @@ public class ImmersionDataCapability {
     @Mod.EventBusSubscriber(modid = Constants.MOD_ID)
     private static class EventHandler {
 
+        @SubscribeEvent(priority = EventPriority.LOWEST)
         public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
-            if (event.getObject() instanceof LivingEntity) {
-                final ImmersionData immersionData = new ImmersionData();
-                Constants.LOG.info("ImmersionData entity");
-                event.addCapability(Constants.IMMERSION_DATA_CAPABILITY, createProvider(immersionData));
+            if (!event.getCapabilities().containsKey(Constants.IMMERSION_DATA_CAPABILITY)) {
+                if (event.getObject() instanceof LivingEntity) {
+                    final ImmersionData immersionData = new ImmersionData();
+                    event.addCapability(Constants.IMMERSION_DATA_CAPABILITY, createProvider(immersionData));
+                }
             }
         }
     }

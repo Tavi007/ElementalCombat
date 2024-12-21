@@ -149,12 +149,12 @@ public class AttackData {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("isInitialized: " + isInitialized + "\n");
-        builder.append("areEnchantmentChangesApplied: " + areEnchantmentChangesApplied + "\n");
-        builder.append("as layer: " + toLayer().toString() + "\n");
+        builder.append("isInitialized: " + isInitialized + " \n ");
+        builder.append("areEnchantmentChangesApplied: " + areEnchantmentChangesApplied + " \n ");
+        builder.append("as layer: " + toLayer().toString() + " \n ");
         builder.append("layers: \n");
         attackLayers.forEach((rl, layer) -> {
-            builder.append(rl.toString() + ":" + layer.toString() + "\n");
+            builder.append(rl.toString() + ":" + layer.toString() + " \n ");
         });
         return builder.toString();
     }

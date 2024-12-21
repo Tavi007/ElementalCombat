@@ -4,9 +4,13 @@ import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 public class AttackDataCapability {
@@ -29,16 +33,22 @@ public class AttackDataCapability {
     @Mod.EventBusSubscriber(modid = Constants.MOD_ID)
     private static class EventHandler {
 
+        @SubscribeEvent(priority = EventPriority.LOWEST)
         public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
-            final AttackData attackData = new AttackData();
-            Constants.LOG.info("AttackData entity");
-            event.addCapability(Constants.ATTACK_DATA_CAPABILITY, createProvider(attackData));
+            if (event.getObject() instanceof LivingEntity || event.getObject() instanceof Projectile) {
+                if (!event.getCapabilities().containsKey(Constants.ATTACK_DATA_CAPABILITY)) {
+                    final AttackData attackData = new AttackData();
+                    event.addCapability(Constants.ATTACK_DATA_CAPABILITY, createProvider(attackData));
+                }
+            }
         }
 
+        @SubscribeEvent(priority = EventPriority.LOWEST)
         public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-            final AttackData attackData = new AttackData();
-            Constants.LOG.info("AttackData stack");
-            event.addCapability(Constants.ATTACK_DATA_CAPABILITY, createProvider(attackData));
+            if (!event.getCapabilities().containsKey(Constants.ATTACK_DATA_CAPABILITY)) {
+                final AttackData attackData = new AttackData();
+                event.addCapability(Constants.ATTACK_DATA_CAPABILITY, createProvider(attackData));
+            }
         }
     }
 }
