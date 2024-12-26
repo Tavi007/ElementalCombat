@@ -13,8 +13,10 @@ public class Constants {
     public static final Minecraft INSTANCE = Minecraft.getInstance();
 
     // Capabilities
-    public static final ResourceLocation ATTACK_DATA_CAPABILITY = new ResourceLocation(MOD_ID, "attack");
-    public static final ResourceLocation DEFENSE_DATA_CAPABILITY = new ResourceLocation(MOD_ID, "defense");
+    public static final ResourceLocation ATTACK_DATA_CAPABILITY_MOB = new ResourceLocation(MOD_ID, "attack/mob");
+    public static final ResourceLocation ATTACK_DATA_CAPABILITY_ITEM = new ResourceLocation(MOD_ID, "attack/item");
+    public static final ResourceLocation DEFENSE_DATA_CAPABILITY_MOB = new ResourceLocation(MOD_ID, "defense/mob");
+    public static final ResourceLocation DEFENSE_DATA_CAPABILITY_ITEM = new ResourceLocation(MOD_ID, "defense/item");
     public static final ResourceLocation IMMERSION_DATA_CAPABILITY = new ResourceLocation(MOD_ID, "immersion");
 
     // Elements

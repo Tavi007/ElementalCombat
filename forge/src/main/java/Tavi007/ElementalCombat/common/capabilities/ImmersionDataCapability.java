@@ -25,18 +25,4 @@ public class ImmersionDataCapability {
     public static ICapabilityProvider createProvider(final ImmersionData immersionData) {
         return new SerializableCapabilityProvider<>(IMMERSION_DATA_CAPABILITY, DEFAULT_FACING, new ImmersionDataSerializer(immersionData));
     }
-
-    @Mod.EventBusSubscriber(modid = Constants.MOD_ID)
-    private static class EventHandler {
-
-        @SubscribeEvent(priority = EventPriority.LOWEST)
-        public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
-            if (!event.getCapabilities().containsKey(Constants.IMMERSION_DATA_CAPABILITY)) {
-                if (event.getObject() instanceof LivingEntity) {
-                    final ImmersionData immersionData = new ImmersionData();
-                    event.addCapability(Constants.IMMERSION_DATA_CAPABILITY, createProvider(immersionData));
-                }
-            }
-        }
-    }
 }

@@ -28,27 +28,4 @@ public class AttackDataCapability {
     public static ICapabilityProvider createProvider(final AttackData attackData) {
         return new SerializableCapabilityProvider<>(ELEMENTAL_ATTACK_CAPABILITY, DEFAULT_FACING, new AttackDataSerializer(attackData));
     }
-
-
-    @Mod.EventBusSubscriber(modid = Constants.MOD_ID)
-    private static class EventHandler {
-
-        @SubscribeEvent(priority = EventPriority.LOWEST)
-        public static void attachCapabilitiesEntity(final AttachCapabilitiesEvent<Entity> event) {
-            if (event.getObject() instanceof LivingEntity || event.getObject() instanceof Projectile) {
-                if (!event.getCapabilities().containsKey(Constants.ATTACK_DATA_CAPABILITY)) {
-                    final AttackData attackData = new AttackData();
-                    event.addCapability(Constants.ATTACK_DATA_CAPABILITY, createProvider(attackData));
-                }
-            }
-        }
-
-        @SubscribeEvent(priority = EventPriority.LOWEST)
-        public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
-            if (!event.getCapabilities().containsKey(Constants.ATTACK_DATA_CAPABILITY)) {
-                final AttackData attackData = new AttackData();
-                event.addCapability(Constants.ATTACK_DATA_CAPABILITY, createProvider(attackData));
-            }
-        }
-    }
 }
