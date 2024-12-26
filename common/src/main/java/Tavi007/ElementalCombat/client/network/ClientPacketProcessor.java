@@ -9,9 +9,9 @@ import java.util.Optional;
 public class ClientPacketProcessor {
 
     public static boolean processPacket(AbstractPacket packet, Optional<Level> level) {
-        Constants.LOG.info("handling " + packet.getClass().getName() + " on client.");
+        Constants.LOG.debug("handling " + packet.getClass().getName() + " on client.");
         if (!packet.isValid()) {
-            Constants.LOG.warn("invalid " + packet.getClass().getName() + " encountered.");
+            Constants.LOG.debug("invalid " + packet.getClass().getName() + " encountered.");
             return false;
         }
 

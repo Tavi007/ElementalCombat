@@ -106,8 +106,6 @@ public class ModPotions {
     }
 
     public static void register(BiConsumer<String, Potion> registerConsumer) {
-        registry.forEach((name, potion) -> {
-            registerConsumer.accept(name, potion);
-        });
+        registry.forEach(registerConsumer);
     }
 }

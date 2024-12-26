@@ -27,6 +27,6 @@ public class ModBlocks {
     }
 
     public static void register(BiConsumer<String, Supplier<Block>> registerConsumer) {
-        registry.forEach((name, block) -> registerConsumer.accept(name, block));
+        registry.forEach(registerConsumer);
     }
 }

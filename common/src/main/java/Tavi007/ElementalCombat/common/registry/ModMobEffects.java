@@ -54,7 +54,7 @@ public class ModMobEffects {
     }
 
     public static void register(BiConsumer<String, MobEffect> registerConsumer) {
-        registry.forEach((name, effect) -> registerConsumer.accept(name, effect));
+        registry.forEach(registerConsumer);
     }
 
 }

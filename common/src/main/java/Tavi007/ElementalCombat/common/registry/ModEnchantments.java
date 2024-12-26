@@ -37,6 +37,6 @@ public class ModEnchantments {
     }
 
     public static void register(BiConsumer<String, Enchantment> registerConsumer) {
-        registry.forEach((name, enchantment) -> registerConsumer.accept(name, enchantment));
+        registry.forEach(registerConsumer);
     }
 }

@@ -77,7 +77,7 @@ public class ModBrewingRecipes {
     }
 
     public static void register(Consumer<BrewingRecipeData> registerConsumer) {
-        recipes.forEach(recipe -> registerConsumer.accept(recipe));
+        recipes.forEach(registerConsumer);
     }
 
 }
