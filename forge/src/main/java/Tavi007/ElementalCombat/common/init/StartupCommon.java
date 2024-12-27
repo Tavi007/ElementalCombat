@@ -6,6 +6,7 @@ import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
 import Tavi007.ElementalCombat.common.network.PacketManager;
+import Tavi007.ElementalCombat.common.potions.SpecificPotionIngredient;
 import Tavi007.ElementalCombat.common.registry.ModBrewingRecipes;
 import Tavi007.ElementalCombat.common.util.ResourceLocationAccessor;
 import net.minecraft.world.item.ItemStack;
@@ -114,15 +115,15 @@ public class StartupCommon {
     private static void registerBrewingRecipes() {
         ModBrewingRecipes.register(brewingData -> {
             BrewingRecipeRegistry.addRecipe(
-                    Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), brewingData.getFrom())),
+                    new SpecificPotionIngredient(PotionUtils.setPotion(new ItemStack(Items.POTION), brewingData.getFrom())),
                     Ingredient.of(new ItemStack(brewingData.getWith())),
                     PotionUtils.setPotion(new ItemStack(Items.POTION), brewingData.getTo()));
             BrewingRecipeRegistry.addRecipe(
-                    Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), brewingData.getFrom())),
+                    new SpecificPotionIngredient(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), brewingData.getFrom())),
                     Ingredient.of(new ItemStack(brewingData.getWith())),
                     PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), brewingData.getTo()));
             BrewingRecipeRegistry.addRecipe(
-                    Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), brewingData.getFrom())),
+                    new SpecificPotionIngredient(PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), brewingData.getFrom())),
                     Ingredient.of(new ItemStack(brewingData.getWith())),
                     PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), brewingData.getTo()));
         });
