@@ -9,6 +9,12 @@ import Tavi007.ElementalCombat.common.network.PacketManager;
 import Tavi007.ElementalCombat.common.potions.SpecificPotionIngredient;
 import Tavi007.ElementalCombat.common.registry.ModBrewingRecipes;
 import Tavi007.ElementalCombat.common.util.ResourceLocationAccessor;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -140,22 +146,14 @@ public class StartupCommon {
         ResourceLocationAccessor.setItemAccessor((stack) -> {
             return ForgeRegistries.ITEMS.getKey(stack.getItem());
         });
-        ResourceLocationAccessor.setBiomeAccessor((biome) -> {
-            return ForgeRegistries.BIOMES.getKey(biome);
+        ResourceLocationAccessor.setBiomeAccessor(ForgeRegistries.BIOMES::getKey);
+        ResourceLocationAccessor.setEnchantmentAccessor(ForgeRegistries.ENCHANTMENTS::getKey);
+        ResourceLocationAccessor.setDamageSourceAccessor((damageSource) -> {
+            return damageSource.typeHolder()
+                .unwrapKey()
+                .map(ResourceKey::location)
+                .orElse(new ResourceLocation("empty"));
         });
-        ResourceLocationAccessor.setEnchantmentAccessor((enchantment) -> {
-            return ForgeRegistries.ENCHANTMENTS.getKey(enchantment);
-        });
-        //TODO: fix
-//        ResourceLocationAccessor.setDamageTypeAccessor((damageType) -> {
-//            ResourceKey<DamageType> damageTypeKey = BuiltInRegistries. .getResourceKey(damageType)
-//                    .orElse(null);
-//
-//            VanillaRegistries.createLookup()
-//                    .lookup(Registries.DAMAGE_TYPE)
-//                    .get()
-//                    .get(damageType)
-//        });
     }
 
 }

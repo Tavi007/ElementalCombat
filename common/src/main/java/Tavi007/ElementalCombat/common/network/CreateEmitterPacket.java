@@ -52,25 +52,6 @@ public class CreateEmitterPacket extends AbstractPacket {
         return entityId != null && particleName != null && amount != null;
     }
 
-//    @Override
-//    public void handle(Context context) {
-//        LogicalSide sideReceived = context.getDirection().getReceptionSide();
-//        context.enqueueWork(() -> {
-//            if (!isValid()) {
-//                return;
-//            }
-//
-//            Optional<Level> level = LogicalSidedProvider.CLIENTWORLD.get(sideReceived);
-//            if (!level.isPresent()) {
-//                ElementalCombat.LOGGER.warn(" context could not provide a ClientLevel.");
-//                return;
-//            }
-//            processMessage(level.get());
-//            context.setPacketHandled(true);
-//        });
-//    }
-
-
     @Override
     public void processPacket(Optional<Level> level) {
         if (level.isEmpty()) {

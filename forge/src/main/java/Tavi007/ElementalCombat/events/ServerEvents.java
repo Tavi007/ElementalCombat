@@ -48,12 +48,6 @@ public class ServerEvents {
         PotionEvents.onRemovePotionEvent(event.getEntity(), event.getEffectInstance());
     }
 
-//    @SubscribeEvent(priority = EventPriority.HIGHEST)
-//    public static void onElementifyDamageSource(ElementifyDamageSourceEvent event) {
-//        DamageSource damageSource = event.getDamageSource();
-//        event.addLayer(new ResourceLocation("base"), DatapackDataAccessor.getDamageTypeDefaultLayer(damageSource.type()));
-//    }
-
     @SubscribeEvent
     public static void elementifyLivingHurtEvent(LivingHurtEvent event) {
         float damageAmount = CombatEvents.elementifyDamageCalculation(event.getEntity(), event.getSource(), event.getAmount());

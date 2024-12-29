@@ -1,6 +1,7 @@
 package Tavi007.ElementalCombat.common.util;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +16,7 @@ public class ResourceLocationAccessor {
     private static Function<ItemStack, ResourceLocation> itemAccessor;
     private static Function<Biome, ResourceLocation> biomeAccessor;
     private static Function<Enchantment, ResourceLocation> enchantmentAccessor;
-    private static Function<DamageType, ResourceLocation> damageTypeAccessor;
+    private static Function<DamageSource, ResourceLocation> damageSourceAccessor;
 
     public static void setEntityAccessor(Function<Entity, ResourceLocation> accessor) {
         entityAccessor = accessor;
@@ -49,12 +50,11 @@ public class ResourceLocationAccessor {
         return enchantmentAccessor.apply(enchantment);
     }
 
-    public static void setDamageTypeAccessor(Function<DamageType, ResourceLocation> accessor) {
-        damageTypeAccessor = accessor;
+    public static void setDamageSourceAccessor(Function<DamageSource, ResourceLocation> accessor) {
+        damageSourceAccessor = accessor;
     }
 
-    // TODO: change to DamageSource?
-    public static ResourceLocation getResourceLocation(DamageType damageType) {
-        return damageTypeAccessor.apply(damageType);
+    public static ResourceLocation getResourceLocation(DamageSource damageSource) {
+        return damageSourceAccessor.apply(damageSource);
     }
 }

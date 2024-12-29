@@ -7,6 +7,7 @@ import Tavi007.ElementalCombat.common.api.data.ElementalCombatMobData;
 import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.util.ResourceLocationAccessor;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -61,7 +62,7 @@ public class DatapackDataAPI {
         return DatapackDataAccessor.getDamageTypeDefaultLayer(rl);
     }
 
-    public static AttackLayer getAttackLayer(DamageType damageType) {
-        return getDamageTypeAttackLayer(ResourceLocationAccessor.getResourceLocation(damageType));
+    public static AttackLayer getAttackLayer(DamageSource damageSource) {
+        return getDamageTypeAttackLayer(ResourceLocationAccessor.getResourceLocation(damageSource));
     }
 }

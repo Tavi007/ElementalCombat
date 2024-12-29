@@ -4,6 +4,7 @@ import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.api.AttackDataAPI;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
+import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.items.LensItem;
@@ -11,10 +12,12 @@ import Tavi007.ElementalCombat.common.network.CreateEmitterPacket;
 import Tavi007.ElementalCombat.common.network.DisableDamageRenderPacket;
 import Tavi007.ElementalCombat.common.registry.ModItems;
 import Tavi007.ElementalCombat.common.util.DamageCalculationHelper;
+import Tavi007.ElementalCombat.common.util.ResourceLocationAccessor;
 import Tavi007.ElementalCombat.server.ServerConfig;
 import Tavi007.ElementalCombat.server.network.ServerPacketSender;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -22,18 +25,15 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class CombatEvents {
-
-//    public static void onElementifyDamageSource(ElementifyDamageSourceEvent event) {
-//        DamageSource damageSource = event.getDamageSource();
-//        event.addLayer(new ResourceLocation("base"), DatapackDataAccessor.getDamageTypeDefaultLayer(damageSource.type()));
-//    }
 
     public static float elementifyDamageCalculation(LivingEntity target, DamageSource damageSource, float damageAmount) {
 
@@ -42,9 +42,8 @@ public class CombatEvents {
             return damageAmount;
         }
 
-        // TODO: fix
         // Get the attack data from the damage source
-        AttackData sourceData = new AttackData();
+        AttackData sourceData = getAttackData(damageSource);
         //MinecraftForge.EVENT_BUS.post(new ElementifyDamageSourceEvent(damageSource, sourceData));
 
         // Get the protection data from target
@@ -59,23 +58,22 @@ public class CombatEvents {
         int maxParticle = 12;
         int amountScale = 16;
         if (defenseStyleScaling < 1) {
-            sendParticleMessage(target, "resistent_style", Math.min(maxParticle, 1 + Math.round((1 - defenseStyleScaling) * amountScale)));
+            sendParticleMessage(target, Constants.RESIST_STYLE, Math.min(maxParticle, 1 + Math.round((1 - defenseStyleScaling) * amountScale)));
         } else if (defenseStyleScaling > 1) {
-            sendParticleMessage(target, "critical_style", Math.min(maxParticle, 1 + Math.round((defenseStyleScaling - 1) * amountScale)));
+            sendParticleMessage(target, Constants.CRIT_STYLE, Math.min(maxParticle, 1 + Math.round((defenseStyleScaling - 1) * amountScale)));
         }
 
         if (defenseElementScaling < 0) {
-            sendParticleMessage(target, "absorb", Math.min(maxParticle, 1 + Math.round(-defenseElementScaling * amountScale)));
+            sendParticleMessage(target, Constants.ABSORB, Math.min(maxParticle, 1 + Math.round(-defenseElementScaling * amountScale)));
         } else if (defenseElementScaling >= 0 && defenseElementScaling < 1) {
-            sendParticleMessage(target, "resistent_element", Math.min(maxParticle, 1 + Math.round((1 - defenseElementScaling) * amountScale)));
+            sendParticleMessage(target, Constants.RESIST_ELEMENT, Math.min(maxParticle, 1 + Math.round((1 - defenseElementScaling) * amountScale)));
         } else if (defenseElementScaling > 1) {
-            sendParticleMessage(target, "critical_element", Math.min(maxParticle, 1 + Math.round((defenseElementScaling - 1) * amountScale)));
+            sendParticleMessage(target, Constants.CRIT_ELEMENT, Math.min(maxParticle, 1 + Math.round((defenseElementScaling - 1) * amountScale)));
         }
 
         // heal the target, if damage is lower than 0
         if (newDamageAmount <= 0) {
             target.heal(-newDamageAmount);
-            newDamageAmount = 0;
 
             // send message to disable the hurt animation and sound.
             ServerPacketSender.sendPacket(new DisableDamageRenderPacket(target.getId()));
@@ -85,6 +83,7 @@ public class CombatEvents {
                 SoundEvent sound = SoundEvents.PLAYER_LEVELUP; // need better sound
                 target.getCommandSenderWorld().playSound(null, target.blockPosition(), sound, SoundSource.MASTER, 1.0f, 2.0f);
             }
+            newDamageAmount = 0;
         }
 
         // handle lens items
@@ -97,6 +96,30 @@ public class CombatEvents {
         }
 
         return newDamageAmount;
+    }
+
+    private static AttackData getAttackData(DamageSource damageSource) {
+        AttackData data = new AttackData();
+        if (damageSource == null) {
+            return data;
+        }
+        Entity immediateSource = damageSource.getDirectEntity();
+        if (immediateSource != null) {
+            if (immediateSource instanceof LivingEntity) {
+                data.putLayer(new ResourceLocation("direct_entity"), CapabilitiesAccessors.getAttackData((LivingEntity) immediateSource).toLayer());
+            } else if (immediateSource instanceof Projectile) {
+                data.putLayer(new ResourceLocation("direct_entity"), CapabilitiesAccessors.getAttackData((Projectile) immediateSource).toLayer());
+            }
+            return data;
+        }
+        ResourceLocation rl = ResourceLocationAccessor.getResourceLocation(damageSource);
+        data.putLayer(new ResourceLocation("base"), DatapackDataAccessor.getDamageTypeDefaultLayer(rl));
+        return data;
+
+    }
+
+    private static AttackLayer getBaseLayer(DamageSource source) {
+        return new AttackLayer();
     }
 
     private static void sendParticleMessage(LivingEntity entity, String name, int amount) {
