@@ -120,7 +120,7 @@ public class DatapackDataAccessor {
         logLoadedData("server", loadedItemLayers.size(), "items");
         logLoadedData("server", loadedBiomeLayers.size(), "biomes");
         logLoadedData("server", loadedProjectileLayers.size(), "projectiles");
-        logLoadedData("server", loadedDamageTypeLayers.size(), "damage sources");
+        logLoadedData("server", loadedDamageTypeLayers.size(), "damage types");
     }
 
     private static void logLoadedData(String side, int size, String type) {
