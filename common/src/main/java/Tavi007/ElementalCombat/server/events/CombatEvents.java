@@ -33,7 +33,15 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.function.BiFunction;
+
 public class CombatEvents {
+
+    private static BiFunction<DamageSource, AttackData, AttackData> elementifyDamageSourceApiFunction;
+
+    public static void setElementifyDamageSourceFunction(BiFunction<DamageSource, AttackData, AttackData> elementifyDamageSourceFunction) {
+        CombatEvents.elementifyDamageSourceApiFunction = elementifyDamageSourceFunction;
+    }
 
     public static float elementifyDamageCalculation(LivingEntity target, DamageSource damageSource, float damageAmount) {
 
@@ -44,7 +52,7 @@ public class CombatEvents {
 
         // Get the attack data from the damage source
         AttackData sourceData = getAttackData(damageSource);
-        //MinecraftForge.EVENT_BUS.post(new ElementifyDamageSourceEvent(damageSource, sourceData));
+        sourceData = elementifyDamageSourceApiFunction.apply(damageSource, sourceData);
 
         // Get the protection data from target
         DefenseData defCap = CapabilitiesAccessors.getDefenseData(target);

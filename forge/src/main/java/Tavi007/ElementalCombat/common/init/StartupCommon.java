@@ -1,6 +1,7 @@
 package Tavi007.ElementalCombat.common.init;
 
 import Tavi007.ElementalCombat.common.Constants;
+import Tavi007.ElementalCombat.common.api.ElementifyDamageSourceEvent;
 import Tavi007.ElementalCombat.common.capabilities.*;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
@@ -9,6 +10,7 @@ import Tavi007.ElementalCombat.common.network.PacketManager;
 import Tavi007.ElementalCombat.common.potions.SpecificPotionIngredient;
 import Tavi007.ElementalCombat.common.registry.ModBrewingRecipes;
 import Tavi007.ElementalCombat.common.util.ResourceLocationAccessor;
+import Tavi007.ElementalCombat.server.events.CombatEvents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -20,6 +22,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
@@ -115,6 +118,7 @@ public class StartupCommon {
         registerBrewingRecipes();
         registerNetworking();
         registerResourceLocationAccessor();
+        registerApiEvents();
         Constants.LOG.info("setup method registered.");
     }
 
@@ -153,6 +157,13 @@ public class StartupCommon {
                 .unwrapKey()
                 .map(ResourceKey::location)
                 .orElse(new ResourceLocation("empty"));
+        });
+    }
+
+    private static void registerApiEvents() {
+        CombatEvents.setElementifyDamageSourceFunction((damageSource, attackData) -> {
+            MinecraftForge.EVENT_BUS.post(new ElementifyDamageSourceEvent(damageSource, attackData));
+            return attackData;
         });
     }
 
