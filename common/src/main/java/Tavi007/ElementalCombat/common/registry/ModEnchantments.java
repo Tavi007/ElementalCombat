@@ -22,7 +22,7 @@ public class ModEnchantments {
     public static final Enchantment FLORA_PROTECTION = register(Constants.FLORA_PROTECTION, new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.FLORA));
     public static final Enchantment ELEMENT_PROTECTION = register(Constants.ELEMENT_PROTECTION, new ElementalResistanceEnchantment(ElementalResistanceEnchantment.Type.ELEMENT));
     public static final Enchantment MAGIC_PROTECTION = register(Constants.MAGIC_PROTECTION, new StyleResistanceEnchantment(StyleResistanceEnchantment.Type.MAGIC));
-    public static final Enchantment ICE_ASPECT = register(Constants.ICE_PROTECTION, new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.ICE));
+    public static final Enchantment ICE_ASPECT = register(Constants.ICE_ASPECT, new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.ICE));
     public static final Enchantment WATER_ASPECT = register(Constants.WATER_ASPECT, new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.WATER));
     public static final Enchantment THUNDER_ASPECT = register(Constants.THUNDER_ASPECT, new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.THUNDER));
     public static final Enchantment DARKNESS_ASPECT = register(Constants.DARKNESS_ASPECT, new ElementalWeaponEnchantment(ElementalWeaponEnchantment.Type.DARKNESS));
