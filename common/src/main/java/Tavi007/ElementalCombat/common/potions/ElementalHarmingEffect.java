@@ -27,22 +27,24 @@ public class ElementalHarmingEffect extends MobEffect {
 
     @Override
     public void applyEffectTick(LivingEntity livingEntity, int level) {
+        ResourceLocation rl = new ResourceLocation(Constants.MOD_ID, element + "_magic");
+        ResourceKey<DamageType> resourceKey = ResourceKey.create(Registries.DAMAGE_TYPE, rl);
         Reference<DamageType> damageType = livingEntity.level()
                 .registryAccess()
                 .registryOrThrow(Registries.DAMAGE_TYPE)
-                .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Constants.MOD_ID, element + "_magic")));
+                .getHolderOrThrow(resourceKey);
         livingEntity.hurt(new DamageSource(damageType), (float) (6 << level));
     }
 
     @Override
     public void applyInstantenousEffect(@Nullable Entity potionEntity, @Nullable Entity potionEntityOwner, LivingEntity target, int level, double distance) {
         int damage = (int) (distance * (double) (6 << level) + 0.5D);
+        ResourceLocation rl = new ResourceLocation(Constants.MOD_ID, element + "_magic");
+        ResourceKey<DamageType> resourceKey = ResourceKey.create(Registries.DAMAGE_TYPE, rl);
         Reference<DamageType> damageType = potionEntity.level()
                 .registryAccess()
                 .registryOrThrow(Registries.DAMAGE_TYPE)
-                .getHolderOrThrow(DamageTypes.MAGIC); // temporary fix
-        // TODO: register this damage type?
-        //.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Constants.MOD_ID, element + "_magic")));
+                .getHolderOrThrow(resourceKey);
         target.hurt(new DamageSource(damageType), (float) damage);
     }
 

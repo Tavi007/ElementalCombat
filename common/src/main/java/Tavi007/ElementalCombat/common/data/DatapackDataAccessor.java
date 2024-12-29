@@ -133,8 +133,8 @@ public class DatapackDataAccessor {
                 loadedMobLayers,
                 loadedItemLayers,
                 loadedBiomeLayers,
-                loadedProjectileLayers,
-                loadedDamageTypeLayers);
+                loadedDamageTypeLayers,
+                loadedProjectileLayers);
         ServerPacketSender.sendPacket(packet, player);
     }
 }
