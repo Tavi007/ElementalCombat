@@ -5,6 +5,7 @@ import Tavi007.ElementalCombat.common.ElementalCombat;
 import Tavi007.ElementalCombat.server.events.CombatEvents;
 import Tavi007.ElementalCombat.server.events.GameEvents;
 import Tavi007.ElementalCombat.server.events.PotionEvents;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -56,7 +57,10 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void onLivingDropsEvent(LivingDropsEvent event) {
-        event.getDrops().add(CombatEvents.getEssenceItemDrops(event.getEntity(), event.getLootingLevel()));
+        ItemEntity item = CombatEvents.getEssenceItemDrops(event.getEntity(), event.getLootingLevel());
+        if(item != null) {
+            event.getDrops().add(item);
+        }
     }
 
 }
