@@ -4,6 +4,7 @@ import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.items.LensItem;
+import Tavi007.ElementalCombat.common.util.ResourceLocationAccessor;
 import Tavi007.ElementalCombat.server.network.NetworkHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -20,22 +21,10 @@ public class PlayerInputEvents {
         NetworkHelper.syncJsonMessageForClients(player);
     }
 
-    // TODO: handle key input
-//    @SubscribeEvent
-//    public static void onKeyInput(InputEvent.Key event) {
-//        if (StartupClientOnly.TOGGLE_HUD.isDown()) {
-//            ClientConfig.toogleHUD();
-//        }
-//    }
-
     public static void onInteractEntity(Player player, Entity targetEntity, ItemStack stack) {
         if (stack.getItem() instanceof LensItem) {
-            //TODO: get rlEntity
-            //ResourceLocation rlEntity = ForgeRegistries.ENTITY_TYPES.getKey(event.getTarget().getType());
-            ResourceLocation rlEntity = new ResourceLocation("");
-            if (targetEntity instanceof LivingEntity) {
-                LivingEntity target = (LivingEntity) targetEntity;
-
+            ResourceLocation rlEntity = ResourceLocationAccessor.getResourceLocation(targetEntity);
+            if (targetEntity instanceof LivingEntity target) {
                 player.sendSystemMessage(Component.literal("Elemental Combat properties of mob " + rlEntity));
 
                 AttackData attackData = CapabilitiesAccessors.getAttackData(target);
@@ -61,8 +50,7 @@ public class PlayerInputEvents {
                 }
                 player.sendSystemMessage(Component.literal("Resulting defense values: "));
                 player.sendSystemMessage(Component.literal(defenseData.toLayer().toString()));
-            } else if (targetEntity instanceof Projectile) {
-                Projectile target = (Projectile) targetEntity;
+            } else if (targetEntity instanceof Projectile target) {
                 player.sendSystemMessage(Component.literal("Elemental Combat properties of projectile " + rlEntity));
 
                 AttackData attackData = CapabilitiesAccessors.getAttackData(target);

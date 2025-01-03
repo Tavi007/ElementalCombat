@@ -6,7 +6,6 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-// TODO: adjust such that packet can be sent to explicit player
 public class ServerPacketSender {
 
     private static BiConsumer<CreateEmitterPacket, ServerPlayer> createEmitterPacketSender;

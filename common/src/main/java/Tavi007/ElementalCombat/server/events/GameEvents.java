@@ -14,14 +14,6 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 
 public class GameEvents {
 
-//  TODO: fix reload listener
-
-//    public static void addReloadListenerEvent(AddReloadListenerEvent event) {
-//        event.addListener(ElementalCombat.COMBAT_PROPERTIES_MANGER);
-//        Constants.LOG.info("ReloadListener for combat data registered.");
-//    }
-
-
     public static void onEntityJoinWorld(Entity entity) {
         if (entity == null) {
             return;
