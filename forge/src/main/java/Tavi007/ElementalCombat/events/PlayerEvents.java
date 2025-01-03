@@ -1,6 +1,6 @@
 package Tavi007.ElementalCombat.events;
 
-import Tavi007.ElementalCombat.client.ClientConfig;
+import Tavi007.ElementalCombat.client.ClientConfigAccessors;
 import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.common.api.GainDefenseFromEquipmentEvent;
@@ -81,7 +81,7 @@ public class PlayerEvents {
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
         if (StartupClientOnly.TOGGLE_HUD.isDown()) {
-            ClientConfig.toogleHUD();
+            ClientConfigAccessors.toogleHUD();
         }
     }
 

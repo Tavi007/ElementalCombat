@@ -2,7 +2,7 @@ package Tavi007.ElementalCombat.server;
 
 import java.util.function.Supplier;
 
-public class ServerConfig {
+public class ServerConfigAccessors {
 
     private static Supplier<Integer> maxFactor;
     private static Supplier<Integer> enchantmentScalingElement;
@@ -15,30 +15,30 @@ public class ServerConfig {
                             Supplier<Integer> enchantmentScalingStyle,
                             Supplier<Integer> potionScaling,
                             Supplier<Double> essenceSpawnWeight) {
-        ServerConfig.maxFactor = maxFactor;
-        ServerConfig.enchantmentScalingElement = enchantmentScalingElement;
-        ServerConfig.enchantmentScalingStyle = enchantmentScalingStyle;
-        ServerConfig.potionScaling = potionScaling;
-        ServerConfig.essenceSpawnWeight = essenceSpawnWeight;
+        ServerConfigAccessors.maxFactor = maxFactor;
+        ServerConfigAccessors.enchantmentScalingElement = enchantmentScalingElement;
+        ServerConfigAccessors.enchantmentScalingStyle = enchantmentScalingStyle;
+        ServerConfigAccessors.potionScaling = potionScaling;
+        ServerConfigAccessors.essenceSpawnWeight = essenceSpawnWeight;
     }
 
     public static int getMaxFactor() {
-        return ServerConfig.maxFactor.get();
+        return ServerConfigAccessors.maxFactor.get();
     }
 
     public static int getEnchantmentScalingElement() {
-        return ServerConfig.enchantmentScalingElement.get();
+        return ServerConfigAccessors.enchantmentScalingElement.get();
     }
 
     public static int getEnchantmentScalingStyle() {
-        return ServerConfig.enchantmentScalingStyle.get();
+        return ServerConfigAccessors.enchantmentScalingStyle.get();
     }
 
     public static int getPotionScaling() {
-        return ServerConfig.potionScaling.get();
+        return ServerConfigAccessors.potionScaling.get();
     }
 
     public static double getEssenceSpawnWeight() {
-        return ServerConfig.essenceSpawnWeight.get();
+        return ServerConfigAccessors.essenceSpawnWeight.get();
     }
 }

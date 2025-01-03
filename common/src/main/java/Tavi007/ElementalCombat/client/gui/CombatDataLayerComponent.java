@@ -1,6 +1,6 @@
 package Tavi007.ElementalCombat.client.gui;
 
-import Tavi007.ElementalCombat.client.ClientConfig;
+import Tavi007.ElementalCombat.client.ClientConfigAccessors;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.util.DamageCalculationHelper;
@@ -39,7 +39,7 @@ public class CombatDataLayerComponent implements TooltipComponent {
 
     public static void increaseTickCounter() { // call once per game tick
         tickCounter++;
-        if (tickCounter >= ClientConfig.getIterationSpeed()) {
+        if (tickCounter >= ClientConfigAccessors.getIterationSpeed()) {
             iteratorCounter++;
             if (iteratorCounter == Integer.MAX_VALUE) {
                 iteratorCounter = 0;

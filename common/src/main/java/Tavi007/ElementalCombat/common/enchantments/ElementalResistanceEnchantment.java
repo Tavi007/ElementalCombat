@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.common.enchantments;
 
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
-import Tavi007.ElementalCombat.server.ServerConfig;
+import Tavi007.ElementalCombat.server.ServerConfigAccessors;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
@@ -47,9 +47,9 @@ public class ElementalResistanceEnchantment extends Enchantment implements IResi
     public DefenseLayer getDefenseLayer(int level) {
         HashMap<String, Integer> defElement = new HashMap<String, Integer>();
         protectionType.elements
-                .forEach(element -> defElement.put(element, (int) (level * ServerConfig.getEnchantmentScalingElement() * protectionType.scaling)));
+                .forEach(element -> defElement.put(element, (int) (level * ServerConfigAccessors.getEnchantmentScalingElement() * protectionType.scaling)));
         protectionType.antiElements
-                .forEach(element -> defElement.put(element, (int) (-level * ServerConfig.getEnchantmentScalingElement() * protectionType.scalingAnti)));
+                .forEach(element -> defElement.put(element, (int) (-level * ServerConfigAccessors.getEnchantmentScalingElement() * protectionType.scalingAnti)));
         return new DefenseLayer(new HashMap<String, Integer>(), defElement);
     }
 

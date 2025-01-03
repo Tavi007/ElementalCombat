@@ -3,7 +3,7 @@ package Tavi007.ElementalCombat.common.util;
 import Tavi007.ElementalCombat.common.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
-import Tavi007.ElementalCombat.server.ServerConfig;
+import Tavi007.ElementalCombat.server.ServerConfigAccessors;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,7 +18,7 @@ public class DamageCalculationHelper {
     }
 
     public static float getPercentage(Integer factor, boolean isStyle) {
-        float percentage = ((float) factor) / ServerConfig.getMaxFactor();
+        float percentage = ((float) factor) / ServerConfigAccessors.getMaxFactor();
         if (isStyle) {
             return Math.min(1.0f, percentage);
         }

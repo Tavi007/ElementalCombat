@@ -1,6 +1,6 @@
 package Tavi007.ElementalCombat.client.events;
 
-import Tavi007.ElementalCombat.client.ClientConfig;
+import Tavi007.ElementalCombat.client.ClientConfigAccessors;
 import Tavi007.ElementalCombat.client.gui.CombatDataLayerComponent;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
@@ -23,7 +23,7 @@ public class TooltipEvents {
                 defenseData.toLayer(),
                 false,
                 false,
-                ClientConfig.isDoubleRowDefenseTooltip())));
+                ClientConfigAccessors.isDoubleRowDefenseTooltip())));
     }
 
 }

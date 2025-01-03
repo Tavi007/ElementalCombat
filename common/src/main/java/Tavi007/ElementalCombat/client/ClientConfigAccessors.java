@@ -4,7 +4,7 @@ import Tavi007.ElementalCombat.client.gui.HudAnchor;
 
 import java.util.function.Supplier;
 
-public class ClientConfig {
+public class ClientConfigAccessors {
 
 
     private static boolean enableHUD = true;
@@ -23,58 +23,58 @@ public class ClientConfig {
                             Supplier<Integer> iterationSpeed,
                             Supplier<Boolean> doubleRowDefenseHUD,
                             Supplier<Boolean> doubleRowDefenseTooltip) {
-        ClientConfig.hudAnchor = hudAnchor;
-        ClientConfig.xOffset = xOffset;
-        ClientConfig.yOffset = yOffset;
-        ClientConfig.scale = scale;
-        ClientConfig.iterationSpeed = iterationSpeed;
-        ClientConfig.doubleRowDefenseHUD = doubleRowDefenseHUD;
-        ClientConfig.doubleRowDefenseTooltip = doubleRowDefenseTooltip;
+        ClientConfigAccessors.hudAnchor = hudAnchor;
+        ClientConfigAccessors.xOffset = xOffset;
+        ClientConfigAccessors.yOffset = yOffset;
+        ClientConfigAccessors.scale = scale;
+        ClientConfigAccessors.iterationSpeed = iterationSpeed;
+        ClientConfigAccessors.doubleRowDefenseHUD = doubleRowDefenseHUD;
+        ClientConfigAccessors.doubleRowDefenseTooltip = doubleRowDefenseTooltip;
     }
 
     public static HudAnchor getHudAnchor() {
-        return ClientConfig.hudAnchor.get();
+        return ClientConfigAccessors.hudAnchor.get();
     }
 
     public static int getXOffset() {
-        return ClientConfig.xOffset.get();
+        return ClientConfigAccessors.xOffset.get();
     }
 
     public static int getYOffset() {
-        return ClientConfig.yOffset.get();
+        return ClientConfigAccessors.yOffset.get();
     }
 
     public static double getScale() {
-        return ClientConfig.scale.get();
+        return ClientConfigAccessors.scale.get();
     }
 
     public static int getIterationSpeed() {
-        return ClientConfig.iterationSpeed.get();
+        return ClientConfigAccessors.iterationSpeed.get();
     }
 
     public static boolean isDoubleRowDefenseHUD() {
-        return ClientConfig.doubleRowDefenseHUD.get();
+        return ClientConfigAccessors.doubleRowDefenseHUD.get();
     }
 
     public static boolean isDoubleRowDefenseTooltip() {
-        return ClientConfig.doubleRowDefenseTooltip.get();
+        return ClientConfigAccessors.doubleRowDefenseTooltip.get();
     }
 
     public static boolean isHUDEnabled() {
-        return ClientConfig.enableHUD;
+        return ClientConfigAccessors.enableHUD;
     }
 
     public static void toogleHUD() {
-        ClientConfig.enableHUD = !ClientConfig.enableHUD;
+        ClientConfigAccessors.enableHUD = !ClientConfigAccessors.enableHUD;
     }
 
     public static boolean isLeft() {
         return HudAnchor.BOTTOM_LEFT.equals(hudAnchor.get())
-                || HudAnchor.TOP_LEFT.equals(ClientConfig.hudAnchor.get());
+                || HudAnchor.TOP_LEFT.equals(ClientConfigAccessors.hudAnchor.get());
     }
 
     public static boolean isTop() {
-        return HudAnchor.TOP_LEFT.equals(ClientConfig.hudAnchor.get())
-                || HudAnchor.TOP_RIGHT.equals(ClientConfig.hudAnchor.get());
+        return HudAnchor.TOP_LEFT.equals(ClientConfigAccessors.hudAnchor.get())
+                || HudAnchor.TOP_RIGHT.equals(ClientConfigAccessors.hudAnchor.get());
     }
 }

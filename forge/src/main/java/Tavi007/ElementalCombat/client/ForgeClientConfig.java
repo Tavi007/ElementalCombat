@@ -19,7 +19,7 @@ public class ForgeClientConfig {
     }
 
     ForgeClientConfig(ForgeConfigSpec.Builder builder) {
-        ClientConfig.init(builder
+        ClientConfigAccessors.init(builder
                         .comment("Decides in which corner the Hud should be displayed.")
                         .defineEnum("hudAnchor", HudAnchor.BOTTOM_RIGHT),
                 builder

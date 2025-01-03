@@ -3,7 +3,7 @@ package Tavi007.ElementalCombat.common.potions;
 import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.api.DefenseDataAPI;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
-import Tavi007.ElementalCombat.server.ServerConfig;
+import Tavi007.ElementalCombat.server.ServerConfigAccessors;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -30,8 +30,8 @@ public class ElementalResistanceEffect extends MobEffect {
 
     private HashMap<String, Integer> getResistanceMap(int level) {
         HashMap<String, Integer> map = new HashMap<>();
-        buffs.forEach(buff -> map.put(buff, level * ServerConfig.getPotionScaling()));
-        debuffs.forEach(debuff -> map.put(debuff, -level * ServerConfig.getPotionScaling() / 2));
+        buffs.forEach(buff -> map.put(buff, level * ServerConfigAccessors.getPotionScaling()));
+        debuffs.forEach(debuff -> map.put(debuff, -level * ServerConfigAccessors.getPotionScaling() / 2));
         return map;
     }
 

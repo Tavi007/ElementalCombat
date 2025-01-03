@@ -13,7 +13,7 @@ import Tavi007.ElementalCombat.common.network.DisableDamageRenderPacket;
 import Tavi007.ElementalCombat.common.registry.ModItems;
 import Tavi007.ElementalCombat.common.util.DamageCalculationHelper;
 import Tavi007.ElementalCombat.common.util.ResourceLocationAccessor;
-import Tavi007.ElementalCombat.server.ServerConfig;
+import Tavi007.ElementalCombat.server.ServerConfigAccessors;
 import Tavi007.ElementalCombat.server.network.ServerPacketSender;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -150,7 +150,7 @@ public class CombatEvents {
             return null;
         }
 
-        int numberOfDrops = (int) Math.round(Math.random() * ServerConfig.getEssenceSpawnWeight() * (1 + lootingLevel));
+        int numberOfDrops = (int) Math.round(Math.random() * ServerConfigAccessors.getEssenceSpawnWeight() * (1 + lootingLevel));
         if (numberOfDrops < 1) {
             return null;
         }

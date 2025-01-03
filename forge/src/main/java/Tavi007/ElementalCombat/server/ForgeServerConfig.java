@@ -16,7 +16,7 @@ public class ForgeServerConfig {
     }
 
     ForgeServerConfig(ForgeConfigSpec.Builder builder) {
-        ServerConfig.init(builder
+        ServerConfigAccessors.init(builder
                         .comment("The maximal combat factor. See vanilla Enchantment Protection Factor.")
                         .defineInRange("maxFactor", 100, 1, 200),
                 builder
