@@ -16,34 +16,34 @@ import java.util.Optional;
 
 public class SyncronizeDatapackPacket extends AbstractPacket {
 
-    private final AttackLayer baseAttackProperties;
-    private final Map<ResourceLocation, ElementalCombatMobData> mobData;
-    private final Map<ResourceLocation, ElementalCombatLayer> itemData;
-    private final Map<ResourceLocation, DefenseLayer> biomeData;
-    private final Map<ResourceLocation, AttackLayer> damageTypeData;
-    private final Map<ResourceLocation, AttackLayer> projectileData;
+    private final AttackLayer defaultAttackLayer;
+    private final Map<ResourceLocation, ElementalCombatMobData> defaultMobLayers;
+    private final Map<ResourceLocation, ElementalCombatLayer> defaultItemLayers;
+    private final Map<ResourceLocation, DefenseLayer> defaultBiomeLayers;
+    private final Map<ResourceLocation, AttackLayer> defaultProjectileLayers;
+    private final Map<ResourceLocation, AttackLayer> defaultDamageTypeLayers;
 
-    public SyncronizeDatapackPacket(AttackLayer baseAttackProperties,
-                                    Map<ResourceLocation, ElementalCombatMobData> mobData,
-                                    Map<ResourceLocation, ElementalCombatLayer> itemData,
-                                    Map<ResourceLocation, DefenseLayer> biomeData,
-                                    Map<ResourceLocation, AttackLayer> damageTypeData,
-                                    Map<ResourceLocation, AttackLayer> projectileData) {
-        this.baseAttackProperties = baseAttackProperties;
-        this.mobData = mobData;
-        this.itemData = itemData;
-        this.biomeData = biomeData;
-        this.damageTypeData = damageTypeData;
-        this.projectileData = projectileData;
+    public SyncronizeDatapackPacket(AttackLayer defaultAttackLayer,
+                                    Map<ResourceLocation, ElementalCombatMobData> defaultMobLayers,
+                                    Map<ResourceLocation, ElementalCombatLayer> defaultItemLayers,
+                                    Map<ResourceLocation, DefenseLayer> defaultBiomeLayers,
+                                    Map<ResourceLocation, AttackLayer> defaultProjectileLayers,
+                                    Map<ResourceLocation, AttackLayer> defaultDamageTypeLayers) {
+        this.defaultAttackLayer = defaultAttackLayer;
+        this.defaultMobLayers = defaultMobLayers;
+        this.defaultItemLayers = defaultItemLayers;
+        this.defaultBiomeLayers = defaultBiomeLayers;
+        this.defaultProjectileLayers = defaultProjectileLayers;
+        this.defaultDamageTypeLayers = defaultDamageTypeLayers;
     }
 
     public SyncronizeDatapackPacket(FriendlyByteBuf buf) {
-        this.baseAttackProperties = readBaseAttack(buf);
-        this.mobData = readMob(buf);
-        this.itemData = readItem(buf);
-        this.biomeData = readBiome(buf);
-        this.projectileData = readAttackOnly(buf, baseAttackProperties);
-        this.damageTypeData = readAttackOnly(buf, baseAttackProperties);
+        this.defaultAttackLayer = readBaseAttack(buf);
+        this.defaultMobLayers = readMob(buf);
+        this.defaultItemLayers = readItem(buf);
+        this.defaultBiomeLayers = readBiome(buf);
+        this.defaultProjectileLayers = readAttackOnly(buf, defaultAttackLayer);
+        this.defaultDamageTypeLayers = readAttackOnly(buf, defaultAttackLayer);
     }
 
     private static AttackLayer readBaseAttack(FriendlyByteBuf buf) {
@@ -100,30 +100,6 @@ public class SyncronizeDatapackPacket extends AbstractPacket {
         return builder.build();
     }
 
-    public AttackLayer getBaseAttack() {
-        return baseAttackProperties;
-    }
-
-    public Map<ResourceLocation, ElementalCombatMobData> getMobData() {
-        return mobData;
-    }
-
-    public Map<ResourceLocation, ElementalCombatLayer> getItemData() {
-        return itemData;
-    }
-
-    public Map<ResourceLocation, DefenseLayer> getBiomeData() {
-        return biomeData;
-    }
-
-    public Map<ResourceLocation, AttackLayer> getProjectileData() {
-        return projectileData;
-    }
-
-    public Map<ResourceLocation, AttackLayer> getDamageTypeData() {
-        return damageTypeData;
-    }
-
     public void encode(FriendlyByteBuf buf) {
         writeBaseAttack(buf);
         writeMob(buf);
@@ -134,44 +110,44 @@ public class SyncronizeDatapackPacket extends AbstractPacket {
     }
 
     private void writeBaseAttack(FriendlyByteBuf buf) {
-        baseAttackProperties.writeToBuffer(buf);
+        defaultAttackLayer.writeToBuffer(buf);
     }
 
     private void writeMob(FriendlyByteBuf buf) {
-        buf.writeInt(mobData.size());
-        mobData.forEach((key, value) -> {
+        buf.writeInt(defaultMobLayers.size());
+        defaultMobLayers.forEach((key, value) -> {
             buf.writeUtf(key.toString());
             value.writeToBuffer(buf);
         });
     }
 
     private void writeItem(FriendlyByteBuf buf) {
-        buf.writeInt(itemData.size());
-        itemData.forEach((key, value) -> {
+        buf.writeInt(defaultItemLayers.size());
+        defaultItemLayers.forEach((key, value) -> {
             buf.writeUtf(key.toString());
             value.writeToBuffer(buf);
         });
     }
 
     private void writeBiome(FriendlyByteBuf buf) {
-        buf.writeInt(biomeData.size());
-        biomeData.forEach((key, value) -> {
+        buf.writeInt(defaultBiomeLayers.size());
+        defaultBiomeLayers.forEach((key, value) -> {
             buf.writeUtf(key.toString());
             value.writeToBuffer(buf);
         });
     }
 
     private void writeProjectile(FriendlyByteBuf buf) {
-        buf.writeInt(projectileData.size());
-        projectileData.forEach((key, value) -> {
+        buf.writeInt(defaultProjectileLayers.size());
+        defaultProjectileLayers.forEach((key, value) -> {
             buf.writeUtf(key.toString());
             value.writeToBuffer(buf);
         });
     }
 
     private void writeDamageType(FriendlyByteBuf buf) {
-        buf.writeInt(damageTypeData.size());
-        damageTypeData.forEach((key, value) -> {
+        buf.writeInt(defaultDamageTypeLayers.size());
+        defaultDamageTypeLayers.forEach((key, value) -> {
             buf.writeUtf(key.toString());
             value.writeToBuffer(buf);
         });
@@ -179,17 +155,16 @@ public class SyncronizeDatapackPacket extends AbstractPacket {
 
     @Override
     public void processPacket(Optional<Level> level) {
-        DatapackDataAccessor.clear();
-        DatapackDataAccessor.setDefaultAttackLayer(baseAttackProperties);
-        mobData.forEach((rl, data) -> DatapackDataAccessor.putMobDefaultData(rl, data));
-        itemData.forEach((rl, data) -> DatapackDataAccessor.putItemDefaultLayer(rl, data));
-        biomeData.forEach((rl, data) -> DatapackDataAccessor.putBiomeDefaultLayer(rl, data));
-        projectileData.forEach((rl, data) -> DatapackDataAccessor.putProjectileDefaultLayer(rl, data));
-        damageTypeData.forEach((rl, data) -> DatapackDataAccessor.putDamageTypeDefaultLayer(rl, data));
+        DatapackDataAccessor.resetDatapackData(defaultAttackLayer,
+                defaultMobLayers,
+                defaultItemLayers,
+                defaultBiomeLayers,
+                defaultProjectileLayers,
+                defaultDamageTypeLayers);
     }
 
     @Override
     public boolean isValid() {
-        return baseAttackProperties != null && mobData != null && itemData != null && biomeData != null && projectileData != null && damageTypeData != null;
+        return defaultAttackLayer != null && defaultMobLayers != null && defaultItemLayers != null && defaultBiomeLayers != null && defaultProjectileLayers != null && defaultDamageTypeLayers != null;
     }
 }
