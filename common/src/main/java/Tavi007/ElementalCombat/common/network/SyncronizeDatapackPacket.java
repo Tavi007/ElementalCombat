@@ -1,9 +1,6 @@
 package Tavi007.ElementalCombat.common.network;
 
-import Tavi007.ElementalCombat.common.api.data.AttackLayer;
-import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
-import Tavi007.ElementalCombat.common.api.data.ElementalCombatLayer;
-import Tavi007.ElementalCombat.common.api.data.ElementalCombatMobData;
+import Tavi007.ElementalCombat.common.api.data.*;
 import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
@@ -47,7 +44,7 @@ public class SyncronizeDatapackPacket extends AbstractPacket {
     }
 
     private static AttackLayer readBaseAttack(FriendlyByteBuf buf) {
-        AttackLayer value = new AttackLayer("hit", "normal");
+        AttackLayer value = new AttackLayer("hit", "normal", Condition.BASE);
         value.readFromBuffer(buf);
         return value;
     }
@@ -93,7 +90,7 @@ public class SyncronizeDatapackPacket extends AbstractPacket {
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
             ResourceLocation key = new ResourceLocation(buf.readUtf());
-            AttackLayer value = new AttackLayer(base.getStyle(), base.getElement());
+            AttackLayer value = new AttackLayer(base.getStyle(), base.getElement(), Condition.BASE);
             value.readFromBuffer(buf);
             builder.put(key, value);
         }

@@ -7,10 +7,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
 import java.util.List;
 
+@Deprecated
 public class CombatDataLayerClientComponent implements ClientTooltipComponent {
 
     private final CombatDataLayerComponent component;
@@ -29,7 +31,7 @@ public class CombatDataLayerClientComponent implements ClientTooltipComponent {
     }
 
     @Override
-    public int getWidth(Font font) {
+    public int getWidth(@NotNull Font font) {
         return component.getWidth(font);
     }
 
@@ -38,7 +40,7 @@ public class CombatDataLayerClientComponent implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderText(Font font, int x, int y, Matrix4f matrix4f, MultiBufferSource.BufferSource bufferSource) {
+    public void renderText(@NotNull Font font, int x, int y, @NotNull Matrix4f matrix4f, MultiBufferSource.@NotNull BufferSource bufferSource) {
         List<String> tooltip = component.getTooltip();
         for (int i = 0; i < tooltip.size(); i++) {
             font.drawInBatch(tooltip.get(i),
@@ -56,13 +58,13 @@ public class CombatDataLayerClientComponent implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderImage(Font font, int x, int y, GuiGraphics guiGraphics) {
+    public void renderImage(@NotNull Font font, int x, int y, @NotNull GuiGraphics guiGraphics) {
         List<TextureData> textureData = component.getTextureData(font, x, y);
         textureData.forEach(data -> {
-            ResourceLocation texture = new ResourceLocation(Constants.MOD_ID, "textures/icons/" + data.getName() + ".png");
+            ResourceLocation texture = new ResourceLocation(Constants.MOD_ID, "textures/icons/" + data.name() + ".png");
             guiGraphics.blit(texture,
-                    data.getPosX(),
-                    data.getPosY(),
+                    data.posX(),
+                    data.posY(),
                     0,
                     0,
                     CombatDataLayerComponent.iconSize,

@@ -33,9 +33,7 @@ public class ElementalCombatNBTHelper {
      */
     public static AttackData readAttackDataFromNBT(CompoundTag nbt) {
         AttackData data = new AttackData();
-        fromNBTToAttackLayers(nbt.getCompound("elementalcombat_attack")).forEach((rl, layer) -> {
-            data.putLayer(rl, layer);
-        });
+        fromNBTToAttackLayers(nbt.getCompound("elementalcombat_attack")).forEach(data::putLayer);
         return data;
     }
 
@@ -58,9 +56,7 @@ public class ElementalCombatNBTHelper {
      */
     public static DefenseData readDefenseDataFromNBT(CompoundTag nbt) {
         DefenseData data = new DefenseData();
-        fromNBTToDefenseLayers(nbt.getCompound("elementalcombat_defense")).forEach((rl, layer) -> {
-            data.putLayer(rl, layer);
-        });
+        fromNBTToDefenseLayers(nbt.getCompound("elementalcombat_defense")).forEach(data::putLayer);
         return data;
     }
 
@@ -159,9 +155,7 @@ public class ElementalCombatNBTHelper {
     private static CompoundTag fromDefenseMapToNBT(Map<String, Integer> map) {
         CompoundTag nbt = new CompoundTag();
         if (map != null) {
-            map.forEach((elemString, value) -> {
-                nbt.putInt(elemString, value);
-            });
+            map.forEach(nbt::putInt);
         }
         return nbt;
     }

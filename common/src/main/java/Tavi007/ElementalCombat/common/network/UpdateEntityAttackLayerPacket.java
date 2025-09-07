@@ -2,6 +2,7 @@ package Tavi007.ElementalCombat.common.network;
 
 import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
+import Tavi007.ElementalCombat.common.api.data.Condition;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +28,7 @@ public class UpdateEntityAttackLayerPacket extends AbstractPacket {
         this.id = buf.readInt();
         this.resourceLocation = buf.readResourceLocation();
         // rest of the combat properties
-        this.attackLayer = new AttackLayer(buf.readUtf(), buf.readUtf());
+        this.attackLayer = new AttackLayer(buf.readUtf(), buf.readUtf(), Condition.BASE);
     }
 
     public void encode(FriendlyByteBuf buf) {

@@ -3,6 +3,7 @@ package Tavi007.ElementalCombat.common.data.capabilities;
 import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
+import Tavi007.ElementalCombat.common.api.data.Condition;
 import Tavi007.ElementalCombat.common.capabilities.AttackDataNBT;
 import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.util.ElementalCombatNBTHelper;
@@ -10,13 +11,17 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.Level;
 
+import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AttackData {
 
@@ -36,32 +41,64 @@ public class AttackData {
         return attackLayers;
     }
 
-    public String getElement() {
-        List<AttackLayer> values = new ArrayList<AttackLayer>(attackLayers.values());
-        Collections.reverse(values);
-        for (AttackLayer value : values) {
-            String element = value.getElement();
-            if (!element.equals(DatapackDataAccessor.getDefaultElement())) {
-                return element;
-            }
-        }
-        return DatapackDataAccessor.getDefaultElement();
+
+    public LinkedHashMap<Condition, List<AttackLayer>> getLayersSortedByCondition() {
+        return this.attackLayers.values().stream()
+                .collect(Collectors.groupingBy(
+                        AttackLayer::getCondition,
+                        LinkedHashMap::new, // preserve outer order
+                        Collectors.toList() // preserves inner order
+                ));
     }
 
-    public String getStyle() {
-        List<AttackLayer> values = new ArrayList<AttackLayer>(attackLayers.values());
-        Collections.reverse(values);
-        for (AttackLayer value : values) {
-            String style = value.getStyle();
-            if (!style.equals(DatapackDataAccessor.getDefaultStyle())) {
-                return style;
-            }
-        }
-        return DatapackDataAccessor.getDefaultStyle();
+    // like getLayersSortedByCondition, but the List of AttackLayers is compressed into a single AttackLayer
+    public LinkedHashMap<Condition, AttackLayer> getLayerSortedByCondition() {
+        LinkedHashMap<Condition, AttackLayer> groupedLayers = new LinkedHashMap<Condition, AttackLayer>();
+        getLayersSortedByCondition().forEach((condition, layers) -> {
+            List<String> elements = layers.stream().map(AttackLayer::getElement).toList();
+            String element = getLastNonDefaultValue(elements, DatapackDataAccessor.getDefaultElement());
+            List<String> styles = layers.stream().map(AttackLayer::getStyle).toList();
+            String style = getLastNonDefaultValue(styles, DatapackDataAccessor.getDefaultStyle());
+            groupedLayers.put(condition, new AttackLayer(style, element, null));
+        });
+        return groupedLayers;
     }
 
-    public AttackLayer toLayer() {
-        return new AttackLayer(getStyle(), getElement());
+    public String getElement(@Nullable Entity entity, @Nullable ItemStack stack, @Nullable Level level) {
+        List<AttackLayer> layers = getActiveLayers(entity, stack, level);
+        List<String> elements = layers.stream().map(AttackLayer::getElement).toList();
+        return getLastNonDefaultValue(elements, DatapackDataAccessor.getDefaultElement());
+    }
+
+    public String getStyle(@Nullable Entity entity, @Nullable ItemStack stack, @Nullable Level level) {
+        List<AttackLayer> layers = getActiveLayers(entity, stack, level);
+        List<String> styles = layers.stream().map(AttackLayer::getStyle).toList();
+        return getLastNonDefaultValue(styles, DatapackDataAccessor.getDefaultStyle());
+    }
+
+    private List<AttackLayer> getActiveLayers(@Nullable Entity entity, @Nullable ItemStack stack, @Nullable Level level) {
+        LinkedHashMap<Condition, List<AttackLayer>> conditionLayerMap = getLayersSortedByCondition();
+        for (Map.Entry<Condition, List<AttackLayer>> entry : conditionLayerMap.entrySet()) {
+            Condition condition = entry.getKey();
+            if (condition.isActive(entity, stack, level)) {
+                return entry.getValue();
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    private String getLastNonDefaultValue(List<String> values, String defaultValue) {
+        // Collections.reverse(values);
+        for (String val : values) {
+            if (!val.equals(defaultValue)) {
+                return val;
+            }
+        }
+        return defaultValue;
+    }
+
+    public AttackLayer toLayer(@Nullable Entity entity, @Nullable ItemStack stack, @Nullable Level level) {
+        return new AttackLayer(getStyle(entity, stack, level), getElement(entity, stack, level), null);
     }
 
     public AttackLayer getLayer(ResourceLocation rl) {
@@ -77,11 +114,6 @@ public class AttackData {
         if (!layer.isDefault()) {
             attackLayers.put(rl, layer);
         }
-    }
-
-    public boolean isDefault() {
-        return getElement().equals(DatapackDataAccessor.getDefaultElement())
-                && getStyle().equals(DatapackDataAccessor.getDefaultStyle());
     }
 
     public void applyEnchantmentChanges(Map<Enchantment, Integer> currentEnchantments) {
@@ -148,13 +180,12 @@ public class AttackData {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("isInitialized: " + isInitialized + " \n ");
-        builder.append("areEnchantmentChangesApplied: " + areEnchantmentChangesApplied + " \n ");
-        builder.append("as layer: " + toLayer().toString() + " \n ");
-        builder.append("layers: \n");
+        StringBuilder builder = new StringBuilder()
+                .append("isInitialized: ").append(isInitialized).append("\n")
+                .append("areEnchantmentChangesApplied:").append(areEnchantmentChangesApplied).append("\n")
+                .append("layers: \n");
         attackLayers.forEach((rl, layer) -> {
-            builder.append(rl.toString() + ":" + layer.toString() + " \n ");
+            builder.append(rl.toString()).append(":").append(layer.toString()).append("\n");
         });
         return builder.toString();
     }

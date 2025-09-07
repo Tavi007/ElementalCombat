@@ -14,6 +14,6 @@ public class CapabilitiesHelper {
             return;
         }
         AttackData attackDataItem = CapabilitiesAccessors.getAttackData(entity.getMainHandItem());
-        AttackDataAPI.putLayer(entity, attackDataItem.toLayer(), mainHandLocation);
+        AttackDataAPI.putLayer(entity, attackDataItem.toLayer(entity, entity.getMainHandItem(), entity.level()), mainHandLocation);
     }
 }

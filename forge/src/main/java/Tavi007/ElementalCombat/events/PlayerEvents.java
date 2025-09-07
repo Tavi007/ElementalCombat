@@ -90,8 +90,7 @@ public class PlayerEvents {
         Player player = event.getEntity();
         if (event.getItemStack().getItem() instanceof LensItem) {
             ResourceLocation rlEntity = ForgeRegistries.ENTITY_TYPES.getKey(event.getTarget().getType());
-            if (event.getTarget() instanceof LivingEntity) {
-                LivingEntity target = (LivingEntity) event.getTarget();
+            if (event.getTarget() instanceof LivingEntity target) {
 
                 player.sendSystemMessage(Component.literal("Elemental Combat properties of mob " + rlEntity));
 
@@ -105,7 +104,7 @@ public class PlayerEvents {
                     });
                 }
                 player.sendSystemMessage(Component.literal("Resulting attack values: "));
-                player.sendSystemMessage(Component.literal(attackData.toLayer().toString()));
+                player.sendSystemMessage(Component.literal(attackData.toString()));
 
                 DefenseData defenseData = CapabilitiesAccessors.getDefenseData(target);
                 if (defenseData.getLayers().isEmpty()) {
@@ -118,8 +117,7 @@ public class PlayerEvents {
                 }
                 player.sendSystemMessage(Component.literal("Resulting defense values: "));
                 player.sendSystemMessage(Component.literal(defenseData.toLayer().toString()));
-            } else if (event.getTarget() instanceof Projectile) {
-                Projectile target = (Projectile) event.getTarget();
+            } else if (event.getTarget() instanceof Projectile target) {
                 player.sendSystemMessage(Component.literal("Elemental Combat properties of projectile " + rlEntity));
 
                 AttackData attackData = CapabilitiesAccessors.getAttackData(target);
@@ -132,7 +130,7 @@ public class PlayerEvents {
                     });
                 }
                 player.sendSystemMessage(Component.literal("Resulting attack values: "));
-                player.sendSystemMessage(Component.literal(attackData.toLayer().toString()));
+                player.sendSystemMessage(Component.literal(attackData.toString()));
             }
         }
     }

@@ -22,7 +22,7 @@ public class DatapackDataAccessor {
             .registerTypeAdapter(DefenseMap.class, new DefenseMapAdapater())
             .create();
     private static final ResourceLocation BASE_ATTACK = new ResourceLocation("base_attack");
-    private static final AttackLayer defaultAttackLayer = new AttackLayer("hit", "normal");
+    private static final AttackLayer defaultAttackLayer = new AttackLayer("hit", "normal", Condition.BASE);
     private static Map<ResourceLocation, ElementalCombatMobData> defaultMobLayers = new HashMap<>();
     private static Map<ResourceLocation, ElementalCombatLayer> defaultItemLayers = new HashMap<>();
     private static Map<ResourceLocation, DefenseLayer> defaultBiomeLayers = new HashMap<>();
@@ -32,7 +32,7 @@ public class DatapackDataAccessor {
     public static void resetDatapackData(Map<ResourceLocation, JsonElement> jsonObjects) {
         Map<String, Map<String, Integer>> counter = new HashMap<String, Map<String, Integer>>(); // for logging
 
-        AttackLayer defaultAttackLayer = new AttackLayer("hit", "normal");
+        AttackLayer defaultAttackLayer = new AttackLayer("hit", "normal", Condition.BASE);
         Map<ResourceLocation, ElementalCombatMobData> defaultMobLayers = new HashMap<>();
         Map<ResourceLocation, ElementalCombatLayer> defaultItemLayers = new HashMap<>();
         Map<ResourceLocation, DefenseLayer> defaultBiomeLayers = new HashMap<>();

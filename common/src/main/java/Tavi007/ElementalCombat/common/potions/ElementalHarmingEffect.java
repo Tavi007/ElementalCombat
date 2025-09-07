@@ -2,13 +2,13 @@ package Tavi007.ElementalCombat.common.potions;
 
 import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
+import Tavi007.ElementalCombat.common.api.data.Condition;
 import net.minecraft.core.Holder.Reference;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
@@ -54,6 +54,6 @@ public class ElementalHarmingEffect extends MobEffect {
     }
 
     public AttackLayer getAttackLayer() {
-        return new AttackLayer("magic", element);
+        return new AttackLayer("magic", element, Condition.BASE);
     }
 }

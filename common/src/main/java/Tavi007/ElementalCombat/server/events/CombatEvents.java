@@ -32,6 +32,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import java.util.function.BiFunction;
 
@@ -50,16 +51,19 @@ public class CombatEvents {
             return damageAmount;
         }
 
+        Entity sourceEntity = getSourceEntity(damageSource);
+        Level level = target.level();
+
         // Get the attack data from the damage source
-        AttackData sourceData = getAttackData(damageSource);
+        AttackData sourceData = getAttackData(damageSource, level);
         sourceData = elementifyDamageSourceApiFunction.apply(damageSource, sourceData);
 
         // Get the protection data from target
         DefenseData defCap = CapabilitiesAccessors.getDefenseData(target);
 
         // compute new Damage value
-        float defenseStyleScaling = DamageCalculationHelper.getScaling(defCap.getStyles(), sourceData.getStyle(), true);
-        float defenseElementScaling = DamageCalculationHelper.getScaling(defCap.getElements(), sourceData.getElement(), false);
+        float defenseStyleScaling = DamageCalculationHelper.getScaling(defCap.getStyles(), sourceData.getStyle(sourceEntity, null, level), true);
+        float defenseElementScaling = DamageCalculationHelper.getScaling(defCap.getElements(), sourceData.getElement(sourceEntity, null, level), false);
         float newDamageAmount = damageAmount * defenseStyleScaling * defenseElementScaling;
 
         // display particles
@@ -106,24 +110,31 @@ public class CombatEvents {
         return newDamageAmount;
     }
 
-    private static AttackData getAttackData(DamageSource damageSource) {
+    private static Entity getSourceEntity(DamageSource damageSource) {
         AttackData data = new AttackData();
         if (damageSource == null) {
-            return data;
+            return null;
         }
-        Entity immediateSource = damageSource.getDirectEntity();
+        return damageSource.getDirectEntity();
+    }
+
+    private static AttackData getAttackData(DamageSource damageSource, Level level) {
+        AttackData data = new AttackData();
+        Entity immediateSource = getSourceEntity(damageSource);
         if (immediateSource != null) {
+            AttackData sourceData = new AttackData();
             if (immediateSource instanceof LivingEntity) {
-                data.putLayer(new ResourceLocation("direct_entity"), CapabilitiesAccessors.getAttackData((LivingEntity) immediateSource).toLayer());
+                sourceData = CapabilitiesAccessors.getAttackData((LivingEntity) immediateSource);
             } else if (immediateSource instanceof Projectile) {
-                data.putLayer(new ResourceLocation("direct_entity"), CapabilitiesAccessors.getAttackData((Projectile) immediateSource).toLayer());
+                sourceData = CapabilitiesAccessors.getAttackData((Projectile) immediateSource);
             }
+            AttackLayer summedLayer = sourceData.toLayer(immediateSource, null, level);
+            data.putLayer(new ResourceLocation("direct_entity"), summedLayer);
             return data;
         }
         ResourceLocation rl = ResourceLocationAccessor.getResourceLocation(damageSource);
         data.putLayer(new ResourceLocation("base"), DatapackDataAccessor.getDamageTypeDefaultLayer(rl));
         return data;
-
     }
 
     private static AttackLayer getBaseLayer(DamageSource source) {

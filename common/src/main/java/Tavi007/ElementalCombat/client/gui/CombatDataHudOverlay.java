@@ -23,7 +23,7 @@ public class CombatDataHudOverlay {
                 DefenseData defenseData = CapabilitiesAccessors.getDefenseData(mc.player);
 
                 CombatDataLayerComponent component = new CombatDataLayerComponent(
-                        attackData.toLayer(),
+                        attackData.toLayer(mc.player, null, mc.player.level()),
                         defenseData.toLayer(),
                         true,
                         false,

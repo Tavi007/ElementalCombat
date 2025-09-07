@@ -37,7 +37,7 @@ public class PlayerInputEvents {
                     });
                 }
                 player.sendSystemMessage(Component.literal("Resulting attack values: "));
-                player.sendSystemMessage(Component.literal(attackData.toLayer().toString()));
+                player.sendSystemMessage(Component.literal(attackData.toLayer(targetEntity, null, targetEntity.level()).toString()));
 
                 DefenseData defenseData = CapabilitiesAccessors.getDefenseData(target);
                 if (defenseData.getLayers().isEmpty()) {
@@ -63,7 +63,7 @@ public class PlayerInputEvents {
                     });
                 }
                 player.sendSystemMessage(Component.literal("Resulting attack values: "));
-                player.sendSystemMessage(Component.literal(attackData.toLayer().toString()));
+                player.sendSystemMessage(Component.literal(attackData.toLayer(targetEntity, null, targetEntity.level()).toString()));
             }
         }
     }

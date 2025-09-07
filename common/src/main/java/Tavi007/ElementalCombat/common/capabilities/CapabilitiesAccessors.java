@@ -86,9 +86,9 @@ public class CapabilitiesAccessors {
         Entity immediateSource = damageSource.getDirectEntity();
         if (immediateSource != null) {
             if (immediateSource instanceof LivingEntity) {
-                data.putLayer(new ResourceLocation("direct_entity"), getAttackData((LivingEntity) immediateSource).toLayer());
+                data.putLayer(new ResourceLocation("direct_entity"), getAttackData((LivingEntity) immediateSource).toLayer(immediateSource, null, immediateSource.level()));
             } else if (immediateSource instanceof Projectile) {
-                data.putLayer(new ResourceLocation("direct_entity"), getAttackData((Projectile) immediateSource).toLayer());
+                data.putLayer(new ResourceLocation("direct_entity"), getAttackData((Projectile) immediateSource).toLayer(immediateSource, null, immediateSource.level()));
             }
         }
 

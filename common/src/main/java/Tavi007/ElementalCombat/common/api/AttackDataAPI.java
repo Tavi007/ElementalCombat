@@ -27,7 +27,7 @@ public class AttackDataAPI {
      * @param entity A LivingEntity.
      */
     public static AttackLayer getFullDataAsLayer(LivingEntity entity) {
-        return new AttackLayer(CapabilitiesAccessors.getAttackData(entity).toLayer());
+        return new AttackLayer(CapabilitiesAccessors.getAttackData(entity).toLayer(entity, null, entity.level()));
     }
 
     /**
@@ -100,7 +100,7 @@ public class AttackDataAPI {
      * @param entity A Projectile.
      */
     public static AttackLayer getFullDataAsLayer(Projectile entity) {
-        return new AttackLayer(CapabilitiesAccessors.getAttackData(entity).toLayer());
+        return new AttackLayer(CapabilitiesAccessors.getAttackData(entity).toLayer(entity, null, entity.level()));
     }
 
     /**
@@ -166,7 +166,7 @@ public class AttackDataAPI {
      * @param stack A ItemStack.
      */
     public static AttackLayer getFullDataAsLayer(ItemStack stack) {
-        return new AttackLayer(CapabilitiesAccessors.getAttackData(stack).toLayer());
+        return new AttackLayer(CapabilitiesAccessors.getAttackData(stack).toLayer(null, stack, null));
     }
 
     /**
@@ -240,6 +240,6 @@ public class AttackDataAPI {
      * @param source A DamageSource.
      */
     public static AttackLayer getFullDataAsLayer(DamageSource source) {
-        return new AttackLayer(CapabilitiesAccessors.getAttackData(source).toLayer());
+        return new AttackLayer(CapabilitiesAccessors.getAttackData(source).toLayer(null, null, null));
     }
 }

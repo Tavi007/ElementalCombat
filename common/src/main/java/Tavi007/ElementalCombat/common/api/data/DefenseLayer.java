@@ -1,28 +1,26 @@
 package Tavi007.ElementalCombat.common.api.data;
 
 import Tavi007.ElementalCombat.common.util.PacketBufferHelper;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.Map;
-import java.util.function.BiFunction;
 
 public class DefenseLayer {
-    public static final Codec<DefenseLayer> CODEC = RecordCodecBuilder.create(
-            instance -> instance.group(
-                    DefenseMap.CODEC.fieldOf("styles").forGetter((DefenseLayer layer) -> layer.styles),
-                    DefenseMap.CODEC.fieldOf("elements").forGetter((DefenseLayer layer) -> layer.elements)
-            ).apply(instance, new BiFunction<DefenseMap, DefenseMap, DefenseLayer>() {
-                @Override
-                public DefenseLayer apply(DefenseMap styles, DefenseMap elements) {
-                    return new DefenseLayer(styles, elements);
-                }
-            })
-    );
+//    public static final Codec<DefenseLayer> CODEC = RecordCodecBuilder.create(
+//            instance -> instance.group(
+//                    DefenseMap.CODEC.fieldOf("styles").forGetter((DefenseLayer layer) -> layer.styles),
+//                    DefenseMap.CODEC.fieldOf("elements").forGetter((DefenseLayer layer) -> layer.elements)
+//            ).apply(instance, new BiFunction<DefenseMap, DefenseMap, DefenseLayer>() {
+//                @Override
+//                public DefenseLayer apply(DefenseMap styles, DefenseMap elements) {
+//                    return new DefenseLayer(styles, elements);
+//                }
+//            })
+//    );
 
     private DefenseMap styles = new DefenseMap();
     private DefenseMap elements = new DefenseMap();
+    private Condition condition;
 
     public DefenseLayer() {
     }

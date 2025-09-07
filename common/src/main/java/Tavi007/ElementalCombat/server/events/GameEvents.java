@@ -34,7 +34,7 @@ public class GameEvents {
     private static void addLayerFromSource(AttackData projectileData, Entity source) {
         if (source != null && source instanceof LivingEntity) {
             AttackData sourceData = CapabilitiesAccessors.getAttackData((LivingEntity) source);
-            projectileData.putLayer(new ResourceLocation("mob"), sourceData.toLayer());
+            projectileData.putLayer(new ResourceLocation("mob"), sourceData.toLayer(source, null, source.level()));
         }
     }
 
@@ -47,7 +47,7 @@ public class GameEvents {
                 PotionUtils.getAllEffects(compound).forEach(effect -> {
                     potionLayer.putLayer(new ResourceLocation(effect.getDescriptionId()), BasePropertiesAPI.getAttackLayer(effect));
                 });
-                projectileData.putLayer(new ResourceLocation("potion"), potionLayer.toLayer());
+                projectileData.putLayer(new ResourceLocation("potion"), potionLayer.toLayer(projectile, null, projectile.level()));
             }
         }
     }
