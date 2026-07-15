@@ -19,7 +19,8 @@ public class ForgeClientConfig {
     }
 
     ForgeClientConfig(ForgeConfigSpec.Builder builder) {
-        ClientConfigAccessors.init(builder
+        ClientConfigAccessors.init(
+                builder
                         .comment("Decides in which corner the Hud should be displayed.")
                         .defineEnum("hudAnchor", HudAnchor.BOTTOM_RIGHT),
                 builder
@@ -30,16 +31,7 @@ public class ForgeClientConfig {
                         .defineInRange("yOffSet", 0, 0, 500),
                 builder
                         .comment("The multiplier of the combat data HUD size.")
-                        .defineInRange("scale", 1.0D, 0.25D, 4.0D),
-                builder
-                        .comment("value for the speed of defense data iteratation in any HUD element. 45 equals about 1 second")
-                        .defineInRange("speed", 45, 20, 100),
-                builder
-                        .comment("If true, displays the defense values of the HUD in two rows (split in element and style).")
-                        .define("doubleRowDefenseHUD", true),
-                builder
-                        .comment("If true, displays the defense values of the item tooltip in two rows (split in element and style).")
-                        .define("doubleRowDefenseTooltip", true)
+                        .defineInRange("scale", 1.0D, 0.25D, 4.0D)
         );
     }
 }

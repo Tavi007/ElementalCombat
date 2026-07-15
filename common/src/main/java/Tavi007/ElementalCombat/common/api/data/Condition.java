@@ -3,6 +3,7 @@ package Tavi007.ElementalCombat.common.api.data;
 import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.registry.ConditionRegistry;
 import com.google.gson.JsonObject;
+import com.google.gson.annotations.SerializedName;
 import com.mojang.datafixers.util.Function4;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -15,6 +16,7 @@ public class Condition {
     public static Condition BASE = new Condition("base", null); // always true
 
     private final String id;
+    @SerializedName("description_id")
     private final String descriptionId;
     private final JsonObject arguments;
 
