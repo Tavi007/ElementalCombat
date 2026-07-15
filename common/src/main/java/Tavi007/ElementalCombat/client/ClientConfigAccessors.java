@@ -11,25 +11,16 @@ public class ClientConfigAccessors {
     private static Supplier<Integer> xOffset;
     private static Supplier<Integer> yOffset;
     private static Supplier<Double> scale;
-    private static Supplier<Integer> iterationSpeed;
-    private static Supplier<Boolean> doubleRowDefenseHUD;
-    private static Supplier<Boolean> doubleRowDefenseTooltip;
     private static Supplier<HudAnchor> hudAnchor;
 
     public static void init(Supplier<HudAnchor> hudAnchor,
                             Supplier<Integer> xOffset,
                             Supplier<Integer> yOffset,
-                            Supplier<Double> scale,
-                            Supplier<Integer> iterationSpeed,
-                            Supplier<Boolean> doubleRowDefenseHUD,
-                            Supplier<Boolean> doubleRowDefenseTooltip) {
+                            Supplier<Double> scale) {
         ClientConfigAccessors.hudAnchor = hudAnchor;
         ClientConfigAccessors.xOffset = xOffset;
         ClientConfigAccessors.yOffset = yOffset;
         ClientConfigAccessors.scale = scale;
-        ClientConfigAccessors.iterationSpeed = iterationSpeed;
-        ClientConfigAccessors.doubleRowDefenseHUD = doubleRowDefenseHUD;
-        ClientConfigAccessors.doubleRowDefenseTooltip = doubleRowDefenseTooltip;
     }
 
     public static HudAnchor getHudAnchor() {
@@ -48,23 +39,12 @@ public class ClientConfigAccessors {
         return ClientConfigAccessors.scale.get();
     }
 
-    public static int getIterationSpeed() {
-        return ClientConfigAccessors.iterationSpeed.get();
-    }
-
-    public static boolean isDoubleRowDefenseHUD() {
-        return ClientConfigAccessors.doubleRowDefenseHUD.get();
-    }
-
-    public static boolean isDoubleRowDefenseTooltip() {
-        return ClientConfigAccessors.doubleRowDefenseTooltip.get();
-    }
 
     public static boolean isHUDEnabled() {
         return ClientConfigAccessors.enableHUD;
     }
 
-    public static void toogleHUD() {
+    public static void toggleHUD() {
         ClientConfigAccessors.enableHUD = !ClientConfigAccessors.enableHUD;
     }
 

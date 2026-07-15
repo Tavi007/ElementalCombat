@@ -12,6 +12,9 @@ public class Constants {
     public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
     public static final Minecraft INSTANCE = Minecraft.getInstance();
 
+    // GUI
+    public static final int iconSize = 8;
+
     // Capabilities
     public static final ResourceLocation ATTACK_DATA_CAPABILITY_MOB = new ResourceLocation(MOD_ID, "attack/mob");
     public static final ResourceLocation ATTACK_DATA_CAPABILITY_ITEM = new ResourceLocation(MOD_ID, "attack/item");
