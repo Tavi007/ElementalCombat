@@ -18,7 +18,8 @@ public class ClientDataHandler {
     private static TooltipAttackData getTooltipAttackData(CombatDataTree<AttackData> attackTree) {
         // TODO: get correct values
         Map<Condition, Tuple<String, String>> conditionals = new HashMap<>();
-        conditionals.put(new Condition("test", "testId", null), new Tuple<>("hit", "normal"));
+        String descriptionId = "description.elemental_combat.condition.test_id";
+        conditionals.put(new Condition("test", descriptionId, null), new Tuple<>("hit", "normal"));
         return new TooltipAttackData("hit", "normal", conditionals);
     }
 
@@ -26,8 +27,9 @@ public class ClientDataHandler {
         // TODO: get correct values
         Map<String, Integer> baseStyle = Map.of("slash", 10, "bash", -10);
         Map<String, Integer> baseElement = Map.of("fire", 100, "ice", 105);
+        String descriptionId = "description.elemental_combat.condition.test_id";
         Map<Condition, Tuple<Map<String, Integer>, Map<String, Integer>>> conditionals = new HashMap<>();
-        conditionals.put(new Condition("test", "testId", null), new Tuple<>(baseStyle, baseElement));
+        conditionals.put(new Condition("test", descriptionId, null), new Tuple<>(baseStyle, baseElement));
         return new TooltipDefenseData(baseStyle, baseElement, conditionals);
     }
 
