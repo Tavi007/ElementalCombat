@@ -7,7 +7,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
@@ -42,18 +44,20 @@ public class ElementalCombatTooltipComponent implements ClientTooltipComponent {
     public void renderText(@NotNull Font font, int x, int y, @NotNull Matrix4f matrix4f, MultiBufferSource.@NotNull BufferSource bufferSource) {
         List<TextData> textData = component.getTextData(x, y);
         textData.forEach(data -> {
+            Component text = Component.translatable(data.textId())
+                    .withStyle(ChatFormatting.GRAY);
             font.drawInBatch(
-                    ChatFormatting.GRAY + data.textId() + ChatFormatting.RESET, // TODO: resolve Id
+                    text,
                     (float) data.posX(),
                     (float) data.posY(),
-                    0,
-                    false,
+                    0xFFFFFF,
+                    true,
                     matrix4f,
                     bufferSource,
                     Font.DisplayMode.NORMAL,
                     0,
-                    15728880,
-                    false);
+                    LightTexture.FULL_BRIGHT
+            );
         });
     }
 
