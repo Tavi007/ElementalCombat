@@ -4,6 +4,7 @@ import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.items.LensItem;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -26,15 +27,15 @@ public class ModItems {
     public static final Supplier<Item> ESSENCE_WIND = register(Constants.ESSENCE_WIND, () -> new Item(fullStack));
     public static final Supplier<Item> ESSENCE_FLORA = register(Constants.ESSENCE_FLORA, () -> new Item(fullStack));
 
-    public static final Supplier<Item> ESSENCE_BLOCK_FIRE = register(Constants.ESSENCE_BLOCK_FIRE, () -> new Item(fullStack));
-    public static final Supplier<Item> ESSENCE_BLOCK_ICE = register(Constants.ESSENCE_BLOCK_ICE, () -> new Item(fullStack));
-    public static final Supplier<Item> ESSENCE_BLOCK_WATER = register(Constants.ESSENCE_BLOCK_WATER, () -> new Item(fullStack));
-    public static final Supplier<Item> ESSENCE_BLOCK_THUNDER = register(Constants.ESSENCE_BLOCK_THUNDER, () -> new Item(fullStack));
-    public static final Supplier<Item> ESSENCE_BLOCK_DARKNESS = register(Constants.ESSENCE_BLOCK_DARKNESS, () -> new Item(fullStack));
-    public static final Supplier<Item> ESSENCE_BLOCK_LIGHT = register(Constants.ESSENCE_BLOCK_LIGHT, () -> new Item(fullStack));
-    public static final Supplier<Item> ESSENCE_BLOCK_EARTH = register(Constants.ESSENCE_BLOCK_EARTH, () -> new Item(fullStack));
-    public static final Supplier<Item> ESSENCE_BLOCK_WIND = register(Constants.ESSENCE_BLOCK_WIND, () -> new Item(fullStack));
-    public static final Supplier<Item> ESSENCE_BLOCK_FLORA = register(Constants.ESSENCE_BLOCK_FLORA, () -> new Item(fullStack));
+    public static final Supplier<Item> ESSENCE_BLOCK_FIRE = register(Constants.ESSENCE_BLOCK_FIRE, () -> new BlockItem(ModBlocks.ESSENCE_BLOCK_FIRE.get(), fullStack));
+    public static final Supplier<Item> ESSENCE_BLOCK_ICE = register(Constants.ESSENCE_BLOCK_ICE, () -> new BlockItem(ModBlocks.ESSENCE_BLOCK_ICE.get(), fullStack));
+    public static final Supplier<Item> ESSENCE_BLOCK_WATER = register(Constants.ESSENCE_BLOCK_WATER, () -> new BlockItem(ModBlocks.ESSENCE_BLOCK_WATER.get(), fullStack));
+    public static final Supplier<Item> ESSENCE_BLOCK_THUNDER = register(Constants.ESSENCE_BLOCK_THUNDER, () -> new BlockItem(ModBlocks.ESSENCE_BLOCK_THUNDER.get(), fullStack));
+    public static final Supplier<Item> ESSENCE_BLOCK_DARKNESS = register(Constants.ESSENCE_BLOCK_DARKNESS, () -> new BlockItem(ModBlocks.ESSENCE_BLOCK_DARKNESS.get(), fullStack));
+    public static final Supplier<Item> ESSENCE_BLOCK_LIGHT = register(Constants.ESSENCE_BLOCK_LIGHT, () -> new BlockItem(ModBlocks.ESSENCE_BLOCK_LIGHT.get(), fullStack));
+    public static final Supplier<Item> ESSENCE_BLOCK_EARTH = register(Constants.ESSENCE_BLOCK_EARTH, () -> new BlockItem(ModBlocks.ESSENCE_BLOCK_EARTH.get(), fullStack));
+    public static final Supplier<Item> ESSENCE_BLOCK_WIND = register(Constants.ESSENCE_BLOCK_WIND, () -> new BlockItem(ModBlocks.ESSENCE_BLOCK_WIND.get(), fullStack));
+    public static final Supplier<Item> ESSENCE_BLOCK_FLORA = register(Constants.ESSENCE_BLOCK_FLORA, () -> new BlockItem(ModBlocks.ESSENCE_BLOCK_FLORA.get(), fullStack));
 
     private static Supplier<Item> register(String name, Supplier<Item> supplier) {
         Supplier<Item> memoize = Suppliers.memoize(supplier);
