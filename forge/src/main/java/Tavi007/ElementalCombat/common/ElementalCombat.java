@@ -38,12 +38,12 @@ public class ElementalCombat {
 
         ItemList.ITEMS.register(ElementalCombat.MOD_EVENT_BUS);
         BlockList.BLOCKS.register(ElementalCombat.MOD_EVENT_BUS);
+        CreativeTabList.TABS.register(ElementalCombat.MOD_EVENT_BUS);
 
         PotionList.MOB_EFFECTS.register(ElementalCombat.MOD_EVENT_BUS);
         PotionList.POTIONS.register(ElementalCombat.MOD_EVENT_BUS);
         MOD_EVENT_BUS.register(PotionList.class);
 
-        CreativeTabList.TABS.register(ElementalCombat.MOD_EVENT_BUS);
 
         // register common stuff
         MOD_EVENT_BUS.register(StartupCommon.class);
