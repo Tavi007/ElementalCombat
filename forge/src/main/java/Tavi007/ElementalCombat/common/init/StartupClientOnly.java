@@ -1,8 +1,8 @@
 package Tavi007.ElementalCombat.common.init;
 
 import Tavi007.ElementalCombat.client.ForgeCombatDataHudOverlay;
-import Tavi007.ElementalCombat.client.gui.CombatDataComponent;
-import Tavi007.ElementalCombat.client.gui.CombatDataTooltipComponent;
+import Tavi007.ElementalCombat.client.data.TooltipData;
+import Tavi007.ElementalCombat.client.gui.ElementalCombatTooltipComponent;
 import Tavi007.ElementalCombat.client.particles.CombatParticle;
 import Tavi007.ElementalCombat.client.registry.ModParticles;
 import Tavi007.ElementalCombat.common.Constants;
@@ -32,7 +32,7 @@ public class StartupClientOnly {
 
     @SubscribeEvent
     public static void onRegisterClientTooltipComponentFactoriesEvent(RegisterClientTooltipComponentFactoriesEvent event) {
-        event.register(CombatDataComponent.class, CombatDataTooltipComponent::new);
+        event.register(TooltipData.class, ElementalCombatTooltipComponent::new);
         Constants.LOG.info("ElementalCombat tooltip component factory registered.");
     }
 
