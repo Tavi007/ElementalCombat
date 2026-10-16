@@ -5,7 +5,7 @@ import Tavi007.ElementalCombat.common.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.Condition;
 import Tavi007.ElementalCombat.common.capabilities.AttackDataNBT;
-import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
+import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
 import Tavi007.ElementalCombat.common.util.ElementalCombatNBTHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -56,9 +56,9 @@ public class AttackData {
         LinkedHashMap<Condition, AttackLayer> groupedLayers = new LinkedHashMap<Condition, AttackLayer>();
         getLayersSortedByCondition().forEach((condition, layers) -> {
             List<String> elements = layers.stream().map(AttackLayer::getElement).toList();
-            String element = getLastNonDefaultValue(elements, DatapackDataAccessor.getDefaultElement());
+            String element = getLastNonDefaultValue(elements, CombatPropertiesManager.getDefaultElement());
             List<String> styles = layers.stream().map(AttackLayer::getStyle).toList();
-            String style = getLastNonDefaultValue(styles, DatapackDataAccessor.getDefaultStyle());
+            String style = getLastNonDefaultValue(styles, CombatPropertiesManager.getDefaultStyle());
             groupedLayers.put(condition, new AttackLayer(style, element, null));
         });
         return groupedLayers;
@@ -67,13 +67,13 @@ public class AttackData {
     public String getElement(@Nullable Entity entity, @Nullable ItemStack stack, @Nullable Level level) {
         List<AttackLayer> layers = getActiveLayers(entity, stack, level);
         List<String> elements = layers.stream().map(AttackLayer::getElement).toList();
-        return getLastNonDefaultValue(elements, DatapackDataAccessor.getDefaultElement());
+        return getLastNonDefaultValue(elements, CombatPropertiesManager.getDefaultElement());
     }
 
     public String getStyle(@Nullable Entity entity, @Nullable ItemStack stack, @Nullable Level level) {
         List<AttackLayer> layers = getActiveLayers(entity, stack, level);
         List<String> styles = layers.stream().map(AttackLayer::getStyle).toList();
-        return getLastNonDefaultValue(styles, DatapackDataAccessor.getDefaultStyle());
+        return getLastNonDefaultValue(styles, CombatPropertiesManager.getDefaultStyle());
     }
 
     private List<AttackLayer> getActiveLayers(@Nullable Entity entity, @Nullable ItemStack stack, @Nullable Level level) {
@@ -130,7 +130,7 @@ public class AttackData {
 
     public void initialize(ItemStack stack) {
         ResourceLocation itemRl = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        putLayer(new ResourceLocation(Constants.MOD_ID, "base"), DatapackDataAccessor.getItemDefaultLayer(itemRl).getAttack());
+        putLayer(new ResourceLocation(Constants.MOD_ID, "base"), CombatPropertiesManager.getItemDefaultLayer(itemRl).getAttack());
         List<MobEffectInstance> potionEffects = PotionUtils.getMobEffects(stack);
         potionEffects.forEach(effect -> {
             putLayer(new ResourceLocation("potion_" + effect.getDescriptionId()), BasePropertiesAPI.getAttackLayer(effect));
@@ -140,14 +140,14 @@ public class AttackData {
 
     public void initialize(LivingEntity entity) {
         ResourceLocation entityRl = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
-        AttackLayer base = DatapackDataAccessor.getMobDefaultData(entityRl).getAttack();
+        AttackLayer base = CombatPropertiesManager.getMobDefaultData(entityRl).getAttack();
         attackLayers.put(new ResourceLocation("base"), base);
         isInitialized = true;
     }
 
     public void initialize(Projectile entity) {
         ResourceLocation entityRl = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
-        AttackLayer base = DatapackDataAccessor.getProjectileDefaultLayer(entityRl);
+        AttackLayer base = CombatPropertiesManager.getProjectileDefaultLayer(entityRl);
         attackLayers.put(new ResourceLocation("base"), base);
         isInitialized = true;
     }

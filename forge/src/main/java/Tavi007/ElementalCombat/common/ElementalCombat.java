@@ -2,7 +2,6 @@ package Tavi007.ElementalCombat.common;
 
 import Tavi007.ElementalCombat.client.ForgeClientConfig;
 import Tavi007.ElementalCombat.common.compatibility.curios.HandleCuriosInventory;
-import Tavi007.ElementalCombat.common.data.CombatPropertiesManager;
 import Tavi007.ElementalCombat.common.init.*;
 import Tavi007.ElementalCombat.server.ForgeServerConfig;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,7 +18,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class ElementalCombat {
 
     public static ElementalCombat instance;
-    public static CombatPropertiesManager COMBAT_PROPERTIES_MANGER = new CombatPropertiesManager();
     public static IEventBus MOD_EVENT_BUS;
 
     @SuppressWarnings("deprecation")

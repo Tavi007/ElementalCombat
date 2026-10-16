@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.events;
 
 import Tavi007.ElementalCombat.common.Constants;
-import Tavi007.ElementalCombat.common.ElementalCombat;
+import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesListener;
 import Tavi007.ElementalCombat.server.events.CombatEvents;
 import Tavi007.ElementalCombat.server.events.GameEvents;
 import Tavi007.ElementalCombat.server.events.PotionEvents;
@@ -20,7 +20,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void addReloadListenerEvent(AddReloadListenerEvent event) {
-        event.addListener(ElementalCombat.COMBAT_PROPERTIES_MANGER);
+        event.addListener(new CombatPropertiesListener("elemental_combat_properties"));
         Constants.LOG.info("ReloadListener for combat data registered.");
     }
 

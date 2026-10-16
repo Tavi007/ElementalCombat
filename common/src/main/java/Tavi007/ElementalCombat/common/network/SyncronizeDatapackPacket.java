@@ -1,7 +1,8 @@
 package Tavi007.ElementalCombat.common.network;
 
+import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.api.data.*;
-import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
+import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 import net.minecraft.network.FriendlyByteBuf;
@@ -152,16 +153,23 @@ public class SyncronizeDatapackPacket extends AbstractPacket {
 
     @Override
     public void processPacket(Optional<Level> level) {
-        DatapackDataAccessor.resetDatapackData(defaultAttackLayer,
+        CombatPropertiesManager.replace(
+                defaultAttackLayer,
                 defaultMobLayers,
                 defaultItemLayers,
                 defaultBiomeLayers,
                 defaultProjectileLayers,
-                defaultDamageTypeLayers);
+                defaultDamageTypeLayers
+        );
     }
 
     @Override
     public boolean isValid() {
-        return defaultAttackLayer != null && defaultMobLayers != null && defaultItemLayers != null && defaultBiomeLayers != null && defaultProjectileLayers != null && defaultDamageTypeLayers != null;
+        return defaultAttackLayer != null
+                && defaultMobLayers != null
+                && defaultItemLayers != null
+                && defaultBiomeLayers != null
+                && defaultProjectileLayers != null
+                && defaultDamageTypeLayers != null;
     }
 }

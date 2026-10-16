@@ -4,9 +4,9 @@ import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesHelper;
-import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
+import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
 import Tavi007.ElementalCombat.common.network.UpdateEntityAttackLayerPacket;
 import Tavi007.ElementalCombat.common.network.UpdateEntityDefenseLayerPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -62,7 +62,7 @@ public class NetworkHelper {
 
     public static void syncJsonMessageForClients(Player player) {
         if (!player.level().isClientSide && player instanceof ServerPlayer) {
-            DatapackDataAccessor.sendSyncMessage((ServerPlayer) player);
+            CombatPropertiesManager.sendSyncMessage((ServerPlayer) player);
         }
     }
 }

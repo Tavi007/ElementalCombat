@@ -1,9 +1,9 @@
 package Tavi007.ElementalCombat.common.capabilities;
 
-import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
+import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -80,7 +80,7 @@ public class CapabilitiesAccessors {
 
         damageSource.typeHolder().unwrapKey().ifPresent(resourceKey -> {
             ResourceLocation resourceLocation = resourceKey.location();
-            data.putLayer(new ResourceLocation("base"), DatapackDataAccessor.getDamageTypeDefaultLayer(resourceLocation));
+            data.putLayer(new ResourceLocation("base"), CombatPropertiesManager.getDamageTypeDefaultLayer(resourceLocation));
         });
 
         Entity immediateSource = damageSource.getDirectEntity();

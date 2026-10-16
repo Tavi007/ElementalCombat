@@ -1,6 +1,6 @@
 package Tavi007.ElementalCombat.common.api.data;
 
-import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
+import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -80,14 +80,14 @@ public class AttackLayer {
 
     public String getElement() {
         if (element == null || element.trim().isEmpty()) {
-            element = DatapackDataAccessor.getDefaultElement();
+            element = CombatPropertiesManager.getDefaultElement();
         }
         return element;
     }
 
     public void setElement(String element) {
         if (element == null || element.trim().isEmpty()) {
-            this.element = DatapackDataAccessor.getDefaultElement();
+            this.element = CombatPropertiesManager.getDefaultElement();
         } else {
             this.element = element;
         }
@@ -95,14 +95,14 @@ public class AttackLayer {
 
     public String getStyle() {
         if (style == null || style.trim().isEmpty()) {
-            style = DatapackDataAccessor.getDefaultStyle();
+            style = CombatPropertiesManager.getDefaultStyle();
         }
         return style;
     }
 
     public void setStyle(String style) {
         if (style == null || style.trim().isEmpty()) {
-            this.style = DatapackDataAccessor.getDefaultStyle();
+            this.style = CombatPropertiesManager.getDefaultStyle();
         } else {
             this.style = style;
         }
@@ -122,8 +122,8 @@ public class AttackLayer {
         String element = getElement();
         String style = getStyle();
         Condition condition = getCondition();
-        return element.isEmpty() || element.equals(DatapackDataAccessor.getDefaultElement())
-                && (style.isEmpty() || style.equals(DatapackDataAccessor.getDefaultStyle()))
+        return element.isEmpty() || element.equals(CombatPropertiesManager.getDefaultElement())
+                && (style.isEmpty() || style.equals(CombatPropertiesManager.getDefaultStyle()))
                 && condition == null;
     }
 }

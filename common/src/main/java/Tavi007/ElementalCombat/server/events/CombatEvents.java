@@ -4,9 +4,9 @@ import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.api.AttackDataAPI;
 import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
-import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
 import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
 import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
+import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
 import Tavi007.ElementalCombat.common.items.LensItem;
 import Tavi007.ElementalCombat.common.network.CreateEmitterPacket;
 import Tavi007.ElementalCombat.common.network.DisableDamageRenderPacket;
@@ -133,7 +133,7 @@ public class CombatEvents {
             return data;
         }
         ResourceLocation rl = ResourceLocationAccessor.getResourceLocation(damageSource);
-        data.putLayer(new ResourceLocation("base"), DatapackDataAccessor.getDamageTypeDefaultLayer(rl));
+        data.putLayer(new ResourceLocation("base"), CombatPropertiesManager.getDamageTypeDefaultLayer(rl));
         return data;
     }
 

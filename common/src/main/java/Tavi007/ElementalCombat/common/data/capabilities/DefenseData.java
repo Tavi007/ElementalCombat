@@ -4,7 +4,7 @@ import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
 import Tavi007.ElementalCombat.common.capabilities.DefenseDataNBT;
-import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
+import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
 import Tavi007.ElementalCombat.common.util.ElementalCombatNBTHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -101,7 +101,7 @@ public class DefenseData {
 
     public void initialize(ItemStack stack) {
         ResourceLocation itemRl = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        putLayer(new ResourceLocation(Constants.MOD_ID, "base"), DatapackDataAccessor.getItemDefaultLayer(itemRl).getDefense());
+        putLayer(new ResourceLocation(Constants.MOD_ID, "base"), CombatPropertiesManager.getItemDefaultLayer(itemRl).getDefense());
 
         List<MobEffectInstance> potionEffects = PotionUtils.getMobEffects(stack);
         potionEffects.forEach(effect -> {
@@ -112,7 +112,7 @@ public class DefenseData {
 
     public void initialize(LivingEntity entity) {
         ResourceLocation entityRl = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
-        putLayer(new ResourceLocation(Constants.MOD_ID, "base"), DatapackDataAccessor.getMobDefaultData(entityRl).getDefense());
+        putLayer(new ResourceLocation(Constants.MOD_ID, "base"), CombatPropertiesManager.getMobDefaultData(entityRl).getDefense());
         isInitialized = true;
     }
 
