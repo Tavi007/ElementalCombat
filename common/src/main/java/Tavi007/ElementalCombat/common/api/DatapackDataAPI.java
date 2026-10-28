@@ -1,10 +1,11 @@
 package Tavi007.ElementalCombat.common.api;
 
-import Tavi007.ElementalCombat.common.api.data.AttackLayer;
-import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
-import Tavi007.ElementalCombat.common.api.data.ElementalCombatLayer;
-import Tavi007.ElementalCombat.common.api.data.ElementalCombatMobData;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackProperty;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseConfig;
+import Tavi007.ElementalCombat.common.data.datapack.CombatConfig;
 import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
+import Tavi007.ElementalCombat.common.data.datapack.MobCombatConfig;
 import Tavi007.ElementalCombat.common.util.ResourceLocationAccessor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
@@ -24,44 +25,44 @@ public class DatapackDataAPI {
         return CombatPropertiesManager.getDefaultElement();
     }
 
-    public static ElementalCombatMobData getMobElementalCombatMobData(ResourceLocation rl) {
-        return CombatPropertiesManager.getMobDefaultData(rl);
+    public static MobCombatConfig getMobElementalCombatMobData(ResourceLocation rl) {
+        return CombatPropertiesManager.getMobDefaultConfig(rl);
     }
 
-    public static ElementalCombatMobData getElementalCombatMobData(LivingEntity entity) {
+    public static MobCombatConfig getMobElementalCombatMobData(LivingEntity entity) {
         return getMobElementalCombatMobData(ResourceLocationAccessor.getResourceLocation(entity));
     }
 
-    public static ElementalCombatLayer getItemElementalCombatLayer(ResourceLocation rl) {
-        return CombatPropertiesManager.getItemDefaultLayer(rl);
+    public static CombatConfig getItemElementalCombatConfig(ResourceLocation rl) {
+        return CombatPropertiesManager.getItemDefaultConfig(rl);
     }
 
-    public static ElementalCombatLayer getElementalCombatLayer(ItemStack stack) {
-        return getItemElementalCombatLayer(ResourceLocationAccessor.getResourceLocation(stack));
+    public static CombatConfig getItemElementalCombatConfig(ItemStack stack) {
+        return getItemElementalCombatConfig(ResourceLocationAccessor.getResourceLocation(stack));
     }
 
 
-    public static DefenseLayer getBiomeDefenseLayer(ResourceLocation rl) {
-        return CombatPropertiesManager.getBiomeDefaultLayer(rl);
+    public static DefenseConfig getBiomeDefenseConfig(ResourceLocation rl) {
+        return CombatPropertiesManager.getBiomeDefaultConfig(rl);
     }
 
-    public static DefenseLayer getDefenseLayer(Biome biome) {
-        return getBiomeDefenseLayer(ResourceLocationAccessor.getResourceLocation(biome));
+    public static DefenseConfig getDefenseConfig(Biome biome) {
+        return getBiomeDefenseConfig(ResourceLocationAccessor.getResourceLocation(biome));
     }
 
-    public static AttackLayer getProjectileAttackLayer(ResourceLocation rl) {
-        return CombatPropertiesManager.getProjectileDefaultLayer(rl);
+    public static AttackConfig getProjectileAttackConfig(ResourceLocation rl) {
+        return CombatPropertiesManager.getProjectileDefaultConfig(rl);
     }
 
-    public static AttackLayer getAttackLayer(Projectile entity) {
-        return getProjectileAttackLayer(ResourceLocationAccessor.getResourceLocation(entity));
+    public static AttackConfig getAttackConfig(Projectile entity) {
+        return getProjectileAttackConfig(ResourceLocationAccessor.getResourceLocation(entity));
     }
 
-    public static AttackLayer getDamageTypeAttackLayer(ResourceLocation rl) {
-        return CombatPropertiesManager.getDamageTypeDefaultLayer(rl);
+    public static AttackProperty getDamageTypeAttackProperty(ResourceLocation rl) {
+        return CombatPropertiesManager.getDamageTypeDefaultProperty(rl);
     }
 
-    public static AttackLayer getAttackLayer(DamageSource damageSource) {
-        return getDamageTypeAttackLayer(ResourceLocationAccessor.getResourceLocation(damageSource));
+    public static AttackProperty getAttackProperty(DamageSource damageSource) {
+        return getDamageTypeAttackProperty(ResourceLocationAccessor.getResourceLocation(damageSource));
     }
 }

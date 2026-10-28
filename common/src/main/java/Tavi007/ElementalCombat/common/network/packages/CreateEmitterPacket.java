@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.common.network;
+package Tavi007.ElementalCombat.common.network.packages;
 
 import Tavi007.ElementalCombat.client.registry.ModParticles;
 import Tavi007.ElementalCombat.common.Constants;
@@ -12,44 +12,28 @@ import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
-public class CreateEmitterPacket extends AbstractPacket {
+public record CreateEmitterPacket(int entityId, String particleName, int amount) implements IPacket {
 
-    private final Integer entityId;
-    private final String particleName;
-    private final Integer amount;
-
-    public CreateEmitterPacket(Integer entityId, String particleName, Integer amount) {
-        this.entityId = entityId;
-        this.particleName = particleName;
-        this.amount = amount;
+    public static CreateEmitterPacket read(FriendlyByteBuf buf) {
+        return new CreateEmitterPacket(
+                buf.readInt(),
+                buf.readUtf(),
+                buf.readInt()
+        );
     }
 
-    public CreateEmitterPacket(FriendlyByteBuf buf) {
-        this.entityId = buf.readInt();
-        this.particleName = buf.readUtf();
-        this.amount = buf.readInt();
+    public static void write(FriendlyByteBuf buf, CreateEmitterPacket packet) {
+        buf.writeInt(packet.entityId);
+        buf.writeUtf(packet.particleName);
+        buf.writeInt(packet.amount);
     }
 
     public void encode(FriendlyByteBuf buf) {
-        buf.writeInt(entityId);
-        buf.writeUtf(particleName);
-        buf.writeInt(amount);
-    }
-
-    public int getEntityId() {
-        return this.entityId;
-    }
-
-    public String getParticleName() {
-        return this.particleName;
-    }
-
-    public int getAmount() {
-        return this.amount;
+        write(buf, this);
     }
 
     public boolean isValid() {
-        return entityId != null && particleName != null && amount != null;
+        return particleName != null;
     }
 
     @Override
@@ -62,7 +46,12 @@ public class CreateEmitterPacket extends AbstractPacket {
         if (amount == 0) {
             return; // Nothing to do
         }
+        
         Entity entity = level.get().getEntity(entityId);
+        if (entity == null) {
+            return;
+        }
+
         SimpleParticleType particle = ParticleTypes.CRIT;
         switch (particleName) {
             case Constants.CRIT_ELEMENT:

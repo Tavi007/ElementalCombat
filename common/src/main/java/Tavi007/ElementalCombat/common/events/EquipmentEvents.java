@@ -1,8 +1,14 @@
 package Tavi007.ElementalCombat.common.events;
 
-import Tavi007.ElementalCombat.common.api.DefenseDataAPI;
+import Tavi007.ElementalCombat.common.api.AttackAPI;
+import Tavi007.ElementalCombat.common.api.DefenseAPI;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
-import Tavi007.ElementalCombat.common.capabilities.CapabilitiesHelper;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackLayer;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackProperty;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseConfig;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseLayer;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseProperty;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,13 +21,15 @@ import net.minecraft.world.item.alchemy.Potions;
 
 public class EquipmentEvents {
 
+    static private final ResourceLocation MAIN_HAND = new ResourceLocation("mainhand");
+
     public static void livingEquipmentChange(LivingEntity entity, EquipmentSlot slot, ItemStack to) {
         if (entity == null) {
             return;
         }
 
         if (EquipmentSlot.MAINHAND.equals(slot)) {
-            CapabilitiesHelper.updateMainHandItemLayer(entity);
+            updateMainHandItemLayer(entity);
         }
 //TODO: fix
 //        GainDefenseFromEquipmentEvent gainDefenseEvent = new GainDefenseFromEquipmentEvent(
@@ -30,11 +38,26 @@ public class EquipmentEvents {
 //        MinecraftForge.EVENT_BUS.post(gainDefenseEvent);
         boolean isCanceled = false;
         if (!isCanceled) {
-            DefenseDataAPI.putLayer(
-                    entity,
-                    CapabilitiesAccessors.getDefenseData(to).toLayer(),
-                    new ResourceLocation(slot.name().toLowerCase()));
+            changeEquipment(entity, new ResourceLocation(slot.getName()), to);
         }
+    }
+
+
+    public static void updateMainHandItemLayer(LivingEntity entity) {
+        if (entity == null) {
+            return;
+        }
+        AttackConfig config = CapabilitiesAccessors.getAttackConfig(entity.getMainHandItem());
+        AttackProperty property = config.getSummedProperty(entity, entity.getMainHandItem(), entity.level());
+        AttackLayer layer = new AttackLayer(25, property);
+        AttackAPI.put(entity, layer, MAIN_HAND);
+    }
+
+    public static void changeEquipment(LivingEntity entity, ResourceLocation location, ItemStack newEquipment) {
+        DefenseConfig config = CapabilitiesAccessors.getDefenseConfig(newEquipment);
+        DefenseProperty property = config.getSummedProperty(entity, newEquipment, entity.level());
+        DefenseLayer layer = new DefenseLayer(property);
+        DefenseAPI.put(entity, layer, location);
     }
 
     public static boolean shouldItemGiveDefenseData(ItemStack stack, EquipmentSlot slot) {

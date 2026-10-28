@@ -22,7 +22,20 @@ public class Constants {
     public static final ResourceLocation DEFENSE_DATA_CAPABILITY_ITEM = new ResourceLocation(MOD_ID, "defense/item");
     public static final ResourceLocation IMMERSION_DATA_CAPABILITY = new ResourceLocation(MOD_ID, "immersion");
 
+    // Styles
+    public static final String STYLE = "style";
+    public static final String HIT = "hit";
+    public static final String SLASH = "slash";
+    public static final String STAB = "stab";
+    public static final String BASH = "bash";
+    public static final String BITE = "bite";
+    public static final String EXPLOSION = "explosion";
+    public static final String PROJECTILE = "projectile";
+    public static final String MAGIC = "magic";
+
     // Elements
+    public static final String ELEMENT = "element";
+    public static final String NORMAL = "normal";
     public static final String FIRE = "fire";
     public static final String ICE = "ice";
     public static final String WATER = "water";

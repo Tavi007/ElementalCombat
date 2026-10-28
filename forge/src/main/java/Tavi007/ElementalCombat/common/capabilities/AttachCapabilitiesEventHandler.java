@@ -1,9 +1,9 @@
 package Tavi007.ElementalCombat.common.capabilities;
 
 import Tavi007.ElementalCombat.common.Constants;
-import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
-import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseConfig;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -21,14 +21,14 @@ public class AttachCapabilitiesEventHandler {
         Object object = event.getObject();
         if (object instanceof LivingEntity) {
             if (!event.getCapabilities().containsKey(Constants.ATTACK_DATA_CAPABILITY_MOB)) {
-                final AttackData attackData = new AttackData();
+                final AttackConfig attackData = new AttackConfig();
                 event.addCapability(Constants.ATTACK_DATA_CAPABILITY_MOB,
-                        AttackDataCapability.createProvider(attackData));
+                        AttackConfigCapability.createProvider(attackData));
             }
             if (!event.getCapabilities().containsKey(Constants.DEFENSE_DATA_CAPABILITY_MOB)) {
-                final DefenseData defenseData = new DefenseData();
+                final DefenseConfig defenseData = new DefenseConfig();
                 event.addCapability(Constants.DEFENSE_DATA_CAPABILITY_MOB,
-                        DefenseDataCapability.createProvider(defenseData));
+                        DefenseConfigCapability.createProvider(defenseData));
             }
 
             if (!event.getCapabilities().containsKey(Constants.IMMERSION_DATA_CAPABILITY)) {
@@ -39,9 +39,9 @@ public class AttachCapabilitiesEventHandler {
         }
         if (object instanceof Projectile) {
             if (!event.getCapabilities().containsKey(Constants.ATTACK_DATA_CAPABILITY_MOB)) {
-                final AttackData attackData = new AttackData();
+                final AttackConfig attackData = new AttackConfig();
                 event.addCapability(Constants.ATTACK_DATA_CAPABILITY_MOB,
-                        AttackDataCapability.createProvider(attackData));
+                        AttackConfigCapability.createProvider(attackData));
             }
         }
     }
@@ -49,14 +49,14 @@ public class AttachCapabilitiesEventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void attachCapabilitiesItem(final AttachCapabilitiesEvent<ItemStack> event) {
         if (!event.getCapabilities().containsKey(Constants.ATTACK_DATA_CAPABILITY_ITEM)) {
-            final AttackData attackData = new AttackData();
+            final AttackConfig attackData = new AttackConfig();
             event.addCapability(Constants.ATTACK_DATA_CAPABILITY_ITEM,
-                                AttackDataCapability.createProvider(attackData));
+                    AttackConfigCapability.createProvider(attackData));
         }
         if (!event.getCapabilities().containsKey(Constants.DEFENSE_DATA_CAPABILITY_MOB)) {
-            final DefenseData defenseData = new DefenseData();
+            final DefenseConfig defenseData = new DefenseConfig();
             event.addCapability(Constants.DEFENSE_DATA_CAPABILITY_MOB,
-                    DefenseDataCapability.createProvider(defenseData));
+                    DefenseConfigCapability.createProvider(defenseData));
         }
     }
 }

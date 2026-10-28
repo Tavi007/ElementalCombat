@@ -1,6 +1,6 @@
 package Tavi007.ElementalCombat.client.data;
 
-import Tavi007.ElementalCombat.common.api.data.Condition;
+import Tavi007.ElementalCombat.common.data.capabilities.Condition;
 import net.minecraft.client.gui.Font;
 import net.minecraft.util.Tuple;
 
@@ -67,7 +67,8 @@ public record TooltipDefenseData(Map<String, Integer> baseStyle,
         posY += TEXTURE_DELTA * (getNumberOfRows(baseStyle) + getNumberOfRows(baseElement));
         ArrayList<TextData> textData = new ArrayList<>();
         for (Map.Entry<Condition, Tuple<Map<String, Integer>, Map<String, Integer>>> entry : conditionals.entrySet()) {
-            textData.add(new TextData(entry.getKey().getDescriptionId(), posX, posY));
+            Condition condition = entry.getKey();
+            textData.add(new TextData(condition.id(), condition.getDescriptionArguments(), posX, posY));
             Map<String, Integer> style = entry.getValue().getA();
             Map<String, Integer> element = entry.getValue().getB();
             posY += TEXTURE_DELTA * (getNumberOfRows(style) + getNumberOfRows(element) + 1);

@@ -44,7 +44,8 @@ public class ElementalCombatTooltipComponent implements ClientTooltipComponent {
     public void renderText(@NotNull Font font, int x, int y, @NotNull Matrix4f matrix4f, MultiBufferSource.@NotNull BufferSource bufferSource) {
         List<TextData> textData = component.getTextData(x, y);
         textData.forEach(data -> {
-            Component text = Component.translatable(data.textId())
+            Component text = Component
+                    .translatable(data.textId(), data.textArguments().toArray())
                     .withStyle(ChatFormatting.GRAY);
             font.drawInBatch(
                     text,

@@ -1,4 +1,4 @@
-package Tavi007.ElementalCombat.common.network;
+package Tavi007.ElementalCombat.common.network.packages;
 
 import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
@@ -10,24 +10,10 @@ import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
-public class DisableDamageRenderPacket extends AbstractPacket {
+public record DisableDamageRenderPacket(Integer id) implements IPacket {
 
-    private Integer id;
-
-    public DisableDamageRenderPacket(Integer id) {
-        this.id = id;
-    }
-
-    public DisableDamageRenderPacket(FriendlyByteBuf buf) {
-        this.setId(buf.readInt());
-    }
-
-    public Integer getId() {
-        return this.id;
-    }
-
-    private void setId(Integer id) {
-        this.id = id;
+    public static DisableDamageRenderPacket read(FriendlyByteBuf buf) {
+        return new DisableDamageRenderPacket(buf.readInt());
     }
 
     public void encode(FriendlyByteBuf buf) {

@@ -1,6 +1,5 @@
 package Tavi007.ElementalCombat.common.enchantments;
 
-import Tavi007.ElementalCombat.common.api.data.AttackLayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
@@ -25,10 +24,8 @@ public class ElementalWeaponEnchantment extends Enchantment {
         return 1;
     }
 
-    public AttackLayer getAttackLayer() {
-        AttackLayer layer = new AttackLayer();
-        layer.setElement(protectionType.element);
-        return layer;
+    public String getElement() {
+        return protectionType.element;
     }
 
     protected boolean canApplyTogether(Enchantment ench) {

@@ -2,6 +2,7 @@ package Tavi007.ElementalCombat.common.network;
 
 import Tavi007.ElementalCombat.client.network.ClientPacketProcessor;
 import Tavi007.ElementalCombat.common.Constants;
+import Tavi007.ElementalCombat.common.network.packages.*;
 import Tavi007.ElementalCombat.server.network.ServerPacketSender;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -35,26 +36,26 @@ public class PacketManager {
     }
 
     public static void init() {
-        register(SyncronizeDatapackPacket.class, SyncronizeDatapackPacket::new);
-        register(CreateEmitterPacket.class, CreateEmitterPacket::new);
-        register(DisableDamageRenderPacket.class, DisableDamageRenderPacket::new);
-        register(UpdateEntityAttackLayerPacket.class, UpdateEntityAttackLayerPacket::new);
-        register(UpdateEntityDefenseLayerPacket.class, UpdateEntityDefenseLayerPacket::new);
+        register(SynchronizeDatapackPacket.class, SynchronizeDatapackPacket::read);
+        register(CreateEmitterPacket.class, CreateEmitterPacket::read);
+        register(DisableDamageRenderPacket.class, DisableDamageRenderPacket::read);
+        register(UpdateEntityAttackLayerPacket.class, UpdateEntityAttackLayerPacket::read);
+        register(UpdateEntityDefenseLayerPacket.class, UpdateEntityDefenseLayerPacket::read);
 
         ServerPacketSender.initSender(
-                (packet, player) -> sendToClient(packet, player),
-                packet -> sendToAllClients(packet),
-                (packet, player) -> sendToClient(packet, player),
-                packet -> sendToAllClients(packet),
-                packet -> sendToAllClients(packet));
+                PacketManager::sendToClient,
+                PacketManager::sendToAllClients,
+                PacketManager::sendToClient,
+                PacketManager::sendToAllClients,
+                PacketManager::sendToAllClients);
         Constants.LOG.info("Registered {} packets", NUM_PACKETS);
     }
 
-    public static void sendToAllClients(AbstractPacket packet) {
+    public static void sendToAllClients(IPacket packet) {
         CHANNEL.send(PacketDistributor.ALL.noArg(), packet);
     }
 
-    public static void sendToClient(AbstractPacket packet, @NotNull Player player) {
+    public static void sendToClient(IPacket packet, @NotNull Player player) {
         if (!player.level().isClientSide()) {
             CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), packet);
         } else {
@@ -62,7 +63,7 @@ public class PacketManager {
         }
     }
 
-    public static <MSG extends AbstractPacket> void register(Class<MSG> clazz, Function<FriendlyByteBuf, MSG> decoder) {
+    public static <MSG extends IPacket> void register(Class<MSG> clazz, Function<FriendlyByteBuf, MSG> decoder) {
         CHANNEL.messageBuilder(clazz, NUM_PACKETS++)
                 .encoder(MSG::encode)
                 .decoder(decoder)

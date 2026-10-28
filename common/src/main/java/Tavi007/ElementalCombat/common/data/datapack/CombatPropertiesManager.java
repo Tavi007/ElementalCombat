@@ -1,8 +1,10 @@
 package Tavi007.ElementalCombat.common.data.datapack;
 
 import Tavi007.ElementalCombat.common.Constants;
-import Tavi007.ElementalCombat.common.api.data.*;
-import Tavi007.ElementalCombat.common.network.SyncronizeDatapackPacket;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackProperty;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseConfig;
+import Tavi007.ElementalCombat.common.network.packages.SynchronizeDatapackPacket;
 import Tavi007.ElementalCombat.server.network.ServerPacketSender;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -10,67 +12,67 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CombatPropertiesManager  {
+public class CombatPropertiesManager {
 
     private static final ResourceLocation BASE_ATTACK = new ResourceLocation("base_attack");
-    private static AttackLayer defaultAttackLayer = new AttackLayer("hit", "normal", Condition.BASE);
-    private static Map<ResourceLocation, ElementalCombatMobData> defaultMobLayers = new HashMap<>();
-    private static Map<ResourceLocation, ElementalCombatLayer> defaultItemLayers = new HashMap<>();
-    private static Map<ResourceLocation, DefenseLayer> defaultBiomeLayers = new HashMap<>();
-    private static Map<ResourceLocation, AttackLayer> defaultProjectileLayers = new HashMap<>();
-    private static Map<ResourceLocation, AttackLayer> defaultDamageTypeLayers = new HashMap<>();
+    private static AttackProperty defaultAttack = new AttackProperty("hit", "normal");
+    private static Map<ResourceLocation, MobCombatConfig> defaultMobConfigs = new HashMap<>();
+    private static Map<ResourceLocation, CombatConfig> defaultItemConfigs = new HashMap<>();
+    private static Map<ResourceLocation, DefenseConfig> defaultBiomeConfigs = new HashMap<>();
+    private static Map<ResourceLocation, AttackConfig> defaultProjectileConfigs = new HashMap<>();
+    private static Map<ResourceLocation, AttackProperty> defaultDamageTypeProperties = new HashMap<>();
 
     public static void replace(
-        AttackLayer defaultAttackLayer,
-        Map<ResourceLocation, ElementalCombatMobData> defaultMobLayers,
-        Map<ResourceLocation, ElementalCombatLayer> defaultItemLayers,
-        Map<ResourceLocation, DefenseLayer> defaultBiomeLayers,
-        Map<ResourceLocation, AttackLayer> defaultProjectileLayers,
-        Map<ResourceLocation, AttackLayer> defaultDamageTypeLayers
+            AttackProperty defaultAttack,
+            Map<ResourceLocation, MobCombatConfig> defaultMobConfigs,
+            Map<ResourceLocation, CombatConfig> defaultItemConfigs,
+            Map<ResourceLocation, DefenseConfig> defaultBiomeConfigs,
+            Map<ResourceLocation, AttackConfig> defaultProjectileConfigs,
+            Map<ResourceLocation, AttackProperty> defaultDamageTypeProperties
     ) {
-        Constants.LOG.info(defaultAttackLayer.toString());
-        CombatPropertiesManager.defaultAttackLayer = defaultAttackLayer;
-        CombatPropertiesManager.defaultMobLayers = defaultMobLayers;
-        CombatPropertiesManager.defaultItemLayers = defaultItemLayers;
-        CombatPropertiesManager.defaultBiomeLayers = defaultBiomeLayers;
-        CombatPropertiesManager.defaultProjectileLayers = defaultProjectileLayers;
-        CombatPropertiesManager.defaultDamageTypeLayers = defaultDamageTypeLayers;
+        Constants.LOG.info(defaultAttack.toString());
+        CombatPropertiesManager.defaultAttack = defaultAttack;
+        CombatPropertiesManager.defaultMobConfigs = defaultMobConfigs;
+        CombatPropertiesManager.defaultItemConfigs = defaultItemConfigs;
+        CombatPropertiesManager.defaultBiomeConfigs = defaultBiomeConfigs;
+        CombatPropertiesManager.defaultProjectileConfigs = defaultProjectileConfigs;
+        CombatPropertiesManager.defaultDamageTypeProperties = defaultDamageTypeProperties;
     }
 
     public static String getDefaultStyle() {
-        return defaultAttackLayer.getStyle();
+        return defaultAttack.style();
     }
 
     public static String getDefaultElement() {
-        return defaultAttackLayer.getElement();
+        return defaultAttack.element();
     }
 
-    public static ElementalCombatMobData getMobDefaultData(ResourceLocation rl) {
-        return defaultMobLayers.getOrDefault(rl, new ElementalCombatMobData());
+    public static MobCombatConfig getMobDefaultConfig(ResourceLocation rl) {
+        return defaultMobConfigs.getOrDefault(rl, new MobCombatConfig());
     }
 
-    public static ElementalCombatLayer getItemDefaultLayer(ResourceLocation rl) {
-        return defaultItemLayers.getOrDefault(rl, new ElementalCombatLayer());
+    public static CombatConfig getItemDefaultConfig(ResourceLocation rl) {
+        return defaultItemConfigs.getOrDefault(rl, new CombatConfig());
     }
 
-    public static DefenseLayer getBiomeDefaultLayer(ResourceLocation rl) {
-        return defaultBiomeLayers.getOrDefault(rl, new DefenseLayer());
+    public static DefenseConfig getBiomeDefaultConfig(ResourceLocation rl) {
+        return defaultBiomeConfigs.getOrDefault(rl, new DefenseConfig());
     }
 
-    public static AttackLayer getProjectileDefaultLayer(ResourceLocation rl) {
-        return defaultProjectileLayers.getOrDefault(rl, new AttackLayer());
+    public static AttackConfig getProjectileDefaultConfig(ResourceLocation rl) {
+        return defaultProjectileConfigs.getOrDefault(rl, new AttackConfig());
     }
 
-    public static AttackLayer getDamageTypeDefaultLayer(ResourceLocation rl) {
-        return defaultDamageTypeLayers.getOrDefault(rl, new AttackLayer());
+    public static AttackProperty getDamageTypeDefaultProperty(ResourceLocation rl) {
+        return defaultDamageTypeProperties.getOrDefault(rl, defaultAttack);
     }
 
     private static void logLoadedData() {
-        logLoadedData("server", defaultMobLayers.size(), "mobs");
-        logLoadedData("server", defaultItemLayers.size(), "items");
-        logLoadedData("server", defaultBiomeLayers.size(), "biomes");
-        logLoadedData("server", defaultProjectileLayers.size(), "projectiles");
-        logLoadedData("server", defaultDamageTypeLayers.size(), "damage types");
+        logLoadedData("server", defaultMobConfigs.size(), "mobs");
+        logLoadedData("server", defaultItemConfigs.size(), "items");
+        logLoadedData("server", defaultBiomeConfigs.size(), "biomes");
+        logLoadedData("server", defaultProjectileConfigs.size(), "projectiles");
+        logLoadedData("server", defaultDamageTypeProperties.size(), "damage types");
     }
 
     private static void logLoadedData(String side, int size, String type) {
@@ -78,13 +80,13 @@ public class CombatPropertiesManager  {
     }
 
     public static void sendSyncMessage(ServerPlayer player) {
-        SyncronizeDatapackPacket packet = new SyncronizeDatapackPacket(
-                defaultAttackLayer,
-                defaultMobLayers,
-                defaultItemLayers,
-                defaultBiomeLayers,
-                defaultProjectileLayers,
-                defaultDamageTypeLayers);
+        SynchronizeDatapackPacket packet = new SynchronizeDatapackPacket(
+                defaultAttack,
+                defaultMobConfigs,
+                defaultItemConfigs,
+                defaultBiomeConfigs,
+                defaultProjectileConfigs,
+                defaultDamageTypeProperties);
         ServerPacketSender.sendPacket(packet, player);
     }
 }

@@ -1,8 +1,10 @@
 package Tavi007.ElementalCombat.common.capabilities;
 
-import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
-import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackLayer;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackProperty;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseConfig;
 import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
@@ -16,11 +18,11 @@ import java.util.function.Function;
 public class CapabilitiesAccessors {
 
     private static Function<LivingEntity, ImmersionData> mobImmersionDataAccessor;
-    private static Function<LivingEntity, AttackData> mobAttackDataAccessor;
-    private static Function<LivingEntity, DefenseData> mobDefenseDataAccessor;
-    private static Function<ItemStack, AttackData> itemAttackDataAccessor;
-    private static Function<ItemStack, DefenseData> itemDefenseDataAccessor;
-    private static Function<Projectile, AttackData> projectileAttackDataAccessor;
+    private static Function<LivingEntity, AttackConfig> mobAttackConfigAccessor;
+    private static Function<LivingEntity, DefenseConfig> mobDefenseConfigAccessor;
+    private static Function<ItemStack, AttackConfig> itemAttackConfigAccessor;
+    private static Function<ItemStack, DefenseConfig> itemDefenseConfigAccessor;
+    private static Function<Projectile, AttackConfig> projectileAttackConfigAccessor;
 
 
     public static void setMobImmersionDataAccessor(Function<LivingEntity, ImmersionData> accessor) {
@@ -31,64 +33,82 @@ public class CapabilitiesAccessors {
         return mobImmersionDataAccessor.apply(entity);
     }
 
-    public static void setMobAttackDataAccessor(Function<LivingEntity, AttackData> accessor) {
-        mobAttackDataAccessor = accessor;
+    public static void setMobAttackConfigAccessor(Function<LivingEntity, AttackConfig> accessor) {
+        mobAttackConfigAccessor = accessor;
     }
 
-    public static AttackData getAttackData(LivingEntity entity) {
-        return mobAttackDataAccessor.apply(entity);
+    public static AttackConfig getAttackConfig(Entity entity) {
+        if (entity instanceof LivingEntity) {
+            return CapabilitiesAccessors.getAttackConfig((LivingEntity) entity);
+        } else if (entity instanceof Projectile) {
+            return CapabilitiesAccessors.getAttackConfig((Projectile) entity);
+        }
+        throw new IllegalArgumentException();
     }
 
-    public static void setMobDefenseDataAccessor(Function<LivingEntity, DefenseData> accessor) {
-        mobDefenseDataAccessor = accessor;
+    public static AttackConfig getAttackConfig(LivingEntity entity) {
+        return mobAttackConfigAccessor.apply(entity);
     }
 
-    public static DefenseData getDefenseData(LivingEntity entity) {
-        return mobDefenseDataAccessor.apply(entity);
+    public static void setMobDefenseConfigAccessor(Function<LivingEntity, DefenseConfig> accessor) {
+        mobDefenseConfigAccessor = accessor;
     }
 
-    public static void setItemAttackDataAccessor(Function<ItemStack, AttackData> accessor) {
-        itemAttackDataAccessor = accessor;
+    public static DefenseConfig getDefenseConfig(LivingEntity entity) {
+        return mobDefenseConfigAccessor.apply(entity);
     }
 
-    public static AttackData getAttackData(ItemStack stack) {
-        return itemAttackDataAccessor.apply(stack);
+    public static void setItemAttackConfigAccessor(Function<ItemStack, AttackConfig> accessor) {
+        itemAttackConfigAccessor = accessor;
     }
 
-    public static void setItemDefenseDataAccessor(Function<ItemStack, DefenseData> accessor) {
-        itemDefenseDataAccessor = accessor;
+    public static AttackConfig getAttackConfig(ItemStack stack) {
+        return itemAttackConfigAccessor.apply(stack);
     }
 
-    public static DefenseData getDefenseData(ItemStack stack) {
-        return itemDefenseDataAccessor.apply(stack);
+    public static void setItemDefenseConfigAccessor(Function<ItemStack, DefenseConfig> accessor) {
+        itemDefenseConfigAccessor = accessor;
+    }
+
+    public static DefenseConfig getDefenseConfig(ItemStack stack) {
+        return itemDefenseConfigAccessor.apply(stack);
     }
 
 
-    public static void setProjectileAttackDataAccessor(Function<Projectile, AttackData> accessor) {
-        projectileAttackDataAccessor = accessor;
+    public static void setProjectileAttackConfigAccessor(Function<Projectile, AttackConfig> accessor) {
+        projectileAttackConfigAccessor = accessor;
     }
 
-    public static AttackData getAttackData(Projectile projectile) {
-        return projectileAttackDataAccessor.apply(projectile);
+    public static AttackConfig getAttackConfig(Projectile projectile) {
+        return projectileAttackConfigAccessor.apply(projectile);
     }
 
-    public static AttackData getAttackData(DamageSource damageSource) {
-        AttackData data = new AttackData();
+    public static AttackConfig getAttackConfig(DamageSource damageSource) {
+        AttackConfig data = new AttackConfig();
         if (damageSource == null) {
             return data;
         }
 
         damageSource.typeHolder().unwrapKey().ifPresent(resourceKey -> {
             ResourceLocation resourceLocation = resourceKey.location();
-            data.putLayer(new ResourceLocation("base"), CombatPropertiesManager.getDamageTypeDefaultLayer(resourceLocation));
+            AttackProperty defaultProperty = CombatPropertiesManager.getDamageTypeDefaultProperty(resourceLocation);
+            AttackLayer layer = new AttackLayer(100, defaultProperty);
+            data.put(new ResourceLocation("base"), layer);
         });
 
         Entity immediateSource = damageSource.getDirectEntity();
         if (immediateSource != null) {
+            AttackConfig sourceConfig = null;
             if (immediateSource instanceof LivingEntity) {
-                data.putLayer(new ResourceLocation("direct_entity"), getAttackData((LivingEntity) immediateSource).toLayer(immediateSource, null, immediateSource.level()));
+                sourceConfig = getAttackConfig((LivingEntity) immediateSource);
             } else if (immediateSource instanceof Projectile) {
-                data.putLayer(new ResourceLocation("direct_entity"), getAttackData((Projectile) immediateSource).toLayer(immediateSource, null, immediateSource.level()));
+                sourceConfig = getAttackConfig((Projectile) immediateSource);
+            }
+
+            if (sourceConfig != null) {
+                AttackProperty property = sourceConfig.getSummedProperty(immediateSource, null, immediateSource.level());
+                AttackLayer layer = new AttackLayer(99, property);
+                data.put(new ResourceLocation("immediate_source"), layer);
             }
         }
 

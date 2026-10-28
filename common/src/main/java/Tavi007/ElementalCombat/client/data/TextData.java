@@ -1,5 +1,7 @@
 package Tavi007.ElementalCombat.client.data;
 
-public record TextData(String textId, int posX, int posY) {
+import java.util.List;
+
+public record TextData(String textId, List<String> textArguments, int posX, int posY) {
 
 }

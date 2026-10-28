@@ -1,8 +1,10 @@
 package Tavi007.ElementalCombat.common.potions;
 
 import Tavi007.ElementalCombat.common.Constants;
-import Tavi007.ElementalCombat.common.api.DefenseDataAPI;
-import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
+import Tavi007.ElementalCombat.common.api.DefenseAPI;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseLayer;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseMap;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseProperty;
 import Tavi007.ElementalCombat.server.ServerConfigAccessors;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -35,14 +37,16 @@ public class ElementalResistanceEffect extends MobEffect {
         return map;
     }
 
-    public DefenseLayer getDefenseLayer(MobEffectInstance instance) {
-        DefenseLayer layer = new DefenseLayer();
-        layer.addElements(getResistanceMap(instance.getAmplifier() + 1));
-        return layer;
+    public DefenseMap getDefenseMap(MobEffectInstance instance) {
+        DefenseMap map = new DefenseMap();
+        map.add(getResistanceMap(instance.getAmplifier() + 1));
+        return map;
     }
 
     public void applyEffect(LivingEntity target, MobEffectInstance instance) {
-        DefenseDataAPI.putLayer(target, getDefenseLayer(instance), getResourceLocation());
+        DefenseMap element = getDefenseMap(instance);
+        DefenseLayer layer = new DefenseLayer(new DefenseProperty(new DefenseMap(), element));
+        DefenseAPI.put(target, layer, getResourceLocation());
     }
 
     public ResourceLocation getResourceLocation() {
@@ -50,6 +54,6 @@ public class ElementalResistanceEffect extends MobEffect {
     }
 
     public void removeEffect(LivingEntity target) {
-        DefenseDataAPI.deleteLayer(target, getResourceLocation());
+        DefenseAPI.remove(target, getResourceLocation());
     }
 }

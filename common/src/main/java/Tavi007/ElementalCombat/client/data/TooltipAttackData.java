@@ -1,8 +1,8 @@
 package Tavi007.ElementalCombat.client.data;
 
 import Tavi007.ElementalCombat.client.gui.GuiHelper;
-import Tavi007.ElementalCombat.common.api.data.Condition;
-import Tavi007.ElementalCombat.common.data.DatapackDataAccessor;
+import Tavi007.ElementalCombat.common.data.capabilities.Condition;
+import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
 import net.minecraft.client.gui.Font;
 import net.minecraft.util.Tuple;
 
@@ -26,8 +26,8 @@ public record TooltipAttackData(String baseStyle, String baseElement,
     }
 
     public boolean isDefault() {
-        boolean isDefaultStyle = DatapackDataAccessor.getDefaultStyle().equals(baseStyle);
-        boolean isDefaultElement = DatapackDataAccessor.getDefaultElement().equals(baseElement);
+        boolean isDefaultStyle = CombatPropertiesManager.getDefaultStyle().equals(baseStyle);
+        boolean isDefaultElement = CombatPropertiesManager.getDefaultElement().equals(baseElement);
         return conditionals.isEmpty() && isDefaultStyle && isDefaultElement;
     }
 
@@ -35,7 +35,7 @@ public record TooltipAttackData(String baseStyle, String baseElement,
         posY += TEXTURE_DELTA;
         ArrayList<TextData> textData = new ArrayList<>();
         for (Condition condition : conditionals.keySet()) {
-            textData.add(new TextData(condition.getDescriptionId(), posX, posY));
+            textData.add(new TextData(condition.id(), condition.getDescriptionArguments(), posX, posY));
             posY += TEXTURE_DELTA * 2;
         }
         return textData;

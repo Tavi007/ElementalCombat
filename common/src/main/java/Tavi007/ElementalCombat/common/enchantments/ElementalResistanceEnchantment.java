@@ -1,15 +1,13 @@
 package Tavi007.ElementalCombat.common.enchantments;
 
-import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseMap;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseProperty;
 import Tavi007.ElementalCombat.server.ServerConfigAccessors;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class ElementalResistanceEnchantment extends Enchantment implements IResistanceEnchantment {
 
@@ -30,10 +28,10 @@ public class ElementalResistanceEnchantment extends Enchantment implements IResi
     }
 
     /**
-     * Determines if the enchantment passed can be applyied together with this enchantment.
+     * Determines if the enchantment passed can be applied together with this enchantment.
      */
-    protected boolean canApplyTogether(Enchantment ench) {
-        return !(ench instanceof ElementalResistanceEnchantment);
+    protected boolean canApplyTogether(Enchantment enchantment) {
+        return !(enchantment instanceof ElementalResistanceEnchantment);
     }
 
     /**
@@ -44,13 +42,14 @@ public class ElementalResistanceEnchantment extends Enchantment implements IResi
     }
 
     @Override
-    public DefenseLayer getDefenseLayer(int level) {
-        HashMap<String, Integer> defElement = new HashMap<String, Integer>();
+    public DefenseProperty getDefenseProperty(int level) {
+        Map<String, Integer> element = new HashMap<String, Integer>();
         protectionType.elements
-                .forEach(element -> defElement.put(element, (int) (level * ServerConfigAccessors.getEnchantmentScalingElement() * protectionType.scaling)));
+                .forEach(ele -> element.put(ele, (int) (level * ServerConfigAccessors.getEnchantmentScalingElement() * protectionType.scaling)));
         protectionType.antiElements
-                .forEach(element -> defElement.put(element, (int) (-level * ServerConfigAccessors.getEnchantmentScalingElement() * protectionType.scalingAnti)));
-        return new DefenseLayer(new HashMap<String, Integer>(), defElement);
+                .forEach(ele -> element.put(ele, (int) (-level * ServerConfigAccessors.getEnchantmentScalingElement() * protectionType.scalingAnti)));
+
+        return new DefenseProperty(new DefenseMap(), new DefenseMap(element));
     }
 
     public enum Type {

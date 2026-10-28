@@ -3,29 +3,23 @@ package Tavi007.ElementalCombat.common.init;
 import Tavi007.ElementalCombat.common.Constants;
 import Tavi007.ElementalCombat.common.api.ElementifyDamageSourceEvent;
 import Tavi007.ElementalCombat.common.capabilities.*;
-import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
-import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
 import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseConfig;
 import Tavi007.ElementalCombat.common.network.PacketManager;
 import Tavi007.ElementalCombat.common.potions.SpecificPotionIngredient;
 import Tavi007.ElementalCombat.common.registry.ModBrewingRecipes;
 import Tavi007.ElementalCombat.common.util.ResourceLocationAccessor;
 import Tavi007.ElementalCombat.server.events.CombatEvents;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -36,79 +30,72 @@ public class StartupCommon {
     public static void onRegisterCapabilitiesEvent(RegisterCapabilitiesEvent event) {
         // capabilities
         ImmersionDataCapability.register(event);
-        AttackDataCapability.register(event);
-        DefenseDataCapability.register(event);
+        AttackConfigCapability.register(event);
+        DefenseConfigCapability.register(event);
 
         CapabilitiesAccessors.setMobImmersionDataAccessor((entity) -> {
             if (entity == null) {
                 return new ImmersionData();
             }
-            ImmersionData immersionData = entity.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null).orElse(new ImmersionDataSerializer()).getData();
-            return immersionData;
-        });
-
-        CapabilitiesAccessors.setMobAttackDataAccessor((entity) -> {
-            if (entity == null) {
-                return new AttackData();
-            }
-
-            AttackData attackData = entity.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null)
-                    .orElse(new AttackDataSerializer())
+            return entity.getCapability(ImmersionDataCapability.IMMERSION_DATA_CAPABILITY, null)
+                    .orElse(new ImmersionDataSerializer())
                     .getData();
-            if (!attackData.isInitialized()) {
-                attackData.initialize(entity);
-            }
-            return attackData;
         });
 
-        CapabilitiesAccessors.setItemAttackDataAccessor((stack) -> {
-            if (stack == null) {
-                return new AttackData();
-            }
-            AttackData attackData = stack.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackDataSerializer()).getData();
-            if (!attackData.isInitialized()) {
-                attackData.initialize(stack);
-            }
-            if (!attackData.areEnchantmentChangesApplied()) {
-                attackData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
-            }
-            return attackData;
-        });
-
-        CapabilitiesAccessors.setProjectileAttackDataAccessor((projectile) -> {
-            if (projectile == null) {
-                return new AttackData();
-            }
-            AttackData attackData = projectile.getCapability(AttackDataCapability.ELEMENTAL_ATTACK_CAPABILITY, null).orElse(new AttackDataSerializer()).getData();
-            if (!attackData.isInitialized()) {
-                attackData.initialize(projectile);
-            }
-            return attackData;
-        });
-
-        CapabilitiesAccessors.setMobDefenseDataAccessor((entity) -> {
+        CapabilitiesAccessors.setMobAttackConfigAccessor((entity) -> {
             if (entity == null) {
-                return new DefenseData();
+                return new AttackConfig();
             }
-            DefenseData defenseData = entity.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseDataSerializer()).getData();
-            if (!defenseData.isInitialized()) {
-                defenseData.initialize(entity);
-            }
-            return defenseData;
+
+            AttackConfig attackConfig = entity.getCapability(AttackConfigCapability.ELEMENTAL_ATTACK_CAPABILITY, null)
+                    .orElse(new AttackConfigSerializer())
+                    .getData();
+            attackConfig.initValues(entity);
+            return attackConfig;
         });
 
-        CapabilitiesAccessors.setItemDefenseDataAccessor((stack) -> {
+        CapabilitiesAccessors.setItemAttackConfigAccessor((stack) -> {
             if (stack == null) {
-                return new DefenseData();
+                return new AttackConfig();
             }
-            DefenseData defenseData = stack.getCapability(DefenseDataCapability.ELEMENTAL_DEFENSE_CAPABILITY, null).orElse(new DefenseDataSerializer()).getData();
-            if (!defenseData.isInitialized()) {
-                defenseData.initialize(stack);
+            AttackConfig attackConfig = stack.getCapability(AttackConfigCapability.ELEMENTAL_ATTACK_CAPABILITY, null)
+                    .orElse(new AttackConfigSerializer())
+                    .getData();
+            attackConfig.initValues(stack);
+            return attackConfig;
+        });
+
+        CapabilitiesAccessors.setProjectileAttackConfigAccessor((projectile) -> {
+            if (projectile == null) {
+                return new AttackConfig();
             }
-            if (!defenseData.areEnchantmentChangesApplied()) {
-                defenseData.applyEnchantmentChanges(EnchantmentHelper.getEnchantments(stack));
+            AttackConfig attackConfig = projectile.getCapability(AttackConfigCapability.ELEMENTAL_ATTACK_CAPABILITY, null)
+                    .orElse(new AttackConfigSerializer())
+                    .getData();
+            attackConfig.initValues(projectile);
+            return attackConfig;
+        });
+
+        CapabilitiesAccessors.setMobDefenseConfigAccessor((entity) -> {
+            if (entity == null) {
+                return new DefenseConfig();
             }
-            return defenseData;
+            DefenseConfig defenseConfig = entity.getCapability(DefenseConfigCapability.ELEMENTAL_DEFENSE_CAPABILITY, null)
+                    .orElse(new DefenseConfigSerializer())
+                    .getData();
+            defenseConfig.initValues(entity);
+            return defenseConfig;
+        });
+
+        CapabilitiesAccessors.setItemDefenseConfigAccessor((stack) -> {
+            if (stack == null) {
+                return new DefenseConfig();
+            }
+            DefenseConfig defenseConfig = stack.getCapability(DefenseConfigCapability.ELEMENTAL_DEFENSE_CAPABILITY, null)
+                    .orElse(new DefenseConfigSerializer())
+                    .getData();
+            defenseConfig.initValues(stack);
+            return defenseConfig;
         });
     }
 
@@ -154,16 +141,16 @@ public class StartupCommon {
         ResourceLocationAccessor.setEnchantmentAccessor(ForgeRegistries.ENCHANTMENTS::getKey);
         ResourceLocationAccessor.setDamageSourceAccessor((damageSource) -> {
             return damageSource.typeHolder()
-                .unwrapKey()
-                .map(ResourceKey::location)
-                .orElse(new ResourceLocation("empty"));
+                    .unwrapKey()
+                    .map(ResourceKey::location)
+                    .orElse(new ResourceLocation("empty"));
         });
     }
 
     private static void registerApiEvents() {
-        CombatEvents.setElementifyDamageSourceFunction((damageSource, attackData) -> {
-            MinecraftForge.EVENT_BUS.post(new ElementifyDamageSourceEvent(damageSource, attackData));
-            return attackData;
+        CombatEvents.setElementifyDamageSourceFunction((damageSource, attackConfig) -> {
+            MinecraftForge.EVENT_BUS.post(new ElementifyDamageSourceEvent(damageSource, attackConfig));
+            return attackConfig;
         });
     }
 

@@ -1,7 +1,15 @@
 package Tavi007.ElementalCombat.common.items;
 
+import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseConfig;
+import com.google.gson.Gson;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -12,8 +20,26 @@ import java.util.List;
 
 public class LensItem extends Item {
 
+    private static final Gson GSON = new Gson();
+
     public LensItem(Properties builderIn) {
         super(builderIn);
+    }
+
+    public static void analyze(Player player, Entity entity) {
+        if (entity instanceof LivingEntity target) {
+            AttackConfig attack = CapabilitiesAccessors.getAttackConfig(target);
+            String attackMessage = GSON.toJson(attack);
+            player.sendSystemMessage(Component.literal(attackMessage));
+
+            DefenseConfig defense = CapabilitiesAccessors.getDefenseConfig(target);
+            String defenseMessage = GSON.toJson(attack);
+            player.sendSystemMessage(Component.literal(defenseMessage));
+        } else if (entity instanceof Projectile target) {
+            AttackConfig attack = CapabilitiesAccessors.getAttackConfig(target);
+            String attackMessage = GSON.toJson(attack);
+            player.sendSystemMessage(Component.literal(attackMessage));
+        }
     }
 
     @Override

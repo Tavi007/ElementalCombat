@@ -1,12 +1,13 @@
 package Tavi007.ElementalCombat.common.enchantments;
 
-import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseMap;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseProperty;
 import Tavi007.ElementalCombat.server.ServerConfigAccessors;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class StyleResistanceEnchantment extends Enchantment implements IResistanceEnchantment {
 
@@ -42,10 +43,10 @@ public class StyleResistanceEnchantment extends Enchantment implements IResistan
     }
 
     @Override
-    public DefenseLayer getDefenseLayer(int level) {
-        HashMap<String, Integer> defStyle = new HashMap<>();
-        defStyle.put(protectionType.style, level * ServerConfigAccessors.getEnchantmentScalingStyle());
-        return new DefenseLayer(defStyle, new HashMap<>());
+    public DefenseProperty getDefenseProperty(int level) {
+        DefenseMap style = new DefenseMap();
+        style.add(Map.of(protectionType.style, level * ServerConfigAccessors.getEnchantmentScalingStyle()));
+        return new DefenseProperty(style, new DefenseMap());
     }
 
     public enum Type {

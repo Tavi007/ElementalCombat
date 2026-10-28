@@ -1,6 +1,6 @@
 package Tavi007.ElementalCombat.common.data.datapack;
 
-import Tavi007.ElementalCombat.common.api.data.DefenseMap;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseMap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import org.jetbrains.annotations.NotNull;
@@ -8,14 +8,14 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-public class DefenseMapAdapater implements JsonSerializer<DefenseMap>, JsonDeserializer<DefenseMap> {
+public class DefenseMapAdapter implements JsonSerializer<DefenseMap>, JsonDeserializer<DefenseMap> {
 
     private static final Type type = new TypeToken<Map<String, Integer>>() {
     }.getType();
 
     @Override
     public JsonElement serialize(@NotNull DefenseMap map, Type typeOfSrc, JsonSerializationContext context) {
-        return context.serialize(map.getMap());
+        return context.serialize(map.map());
     }
 
     @Override

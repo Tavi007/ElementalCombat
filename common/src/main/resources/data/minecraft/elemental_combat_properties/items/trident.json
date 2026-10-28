@@ -1,6 +1,11 @@
 {
   "attack": {
     "style": "stab",
-    "element": "water"
+    "element": "water",
+    "condition": {
+      "id": "is_raining",
+      "description_id": "test",
+      "arguments": {}
+    }
   }
 }

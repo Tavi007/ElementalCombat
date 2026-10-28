@@ -1,18 +1,17 @@
 package Tavi007.ElementalCombat.server.events;
 
 import Tavi007.ElementalCombat.common.Constants;
-import Tavi007.ElementalCombat.common.api.AttackDataAPI;
-import Tavi007.ElementalCombat.common.api.data.AttackLayer;
-import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
-import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
-import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
-import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
+import Tavi007.ElementalCombat.common.data.capabilities.Condition;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackLayer;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackProperty;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseMap;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseProperty;
 import Tavi007.ElementalCombat.common.items.LensItem;
-import Tavi007.ElementalCombat.common.network.CreateEmitterPacket;
-import Tavi007.ElementalCombat.common.network.DisableDamageRenderPacket;
+import Tavi007.ElementalCombat.common.network.packages.CreateEmitterPacket;
+import Tavi007.ElementalCombat.common.network.packages.DisableDamageRenderPacket;
 import Tavi007.ElementalCombat.common.registry.ModItems;
 import Tavi007.ElementalCombat.common.util.DamageCalculationHelper;
-import Tavi007.ElementalCombat.common.util.ResourceLocationAccessor;
 import Tavi007.ElementalCombat.server.ServerConfigAccessors;
 import Tavi007.ElementalCombat.server.network.ServerPacketSender;
 import net.minecraft.core.BlockPos;
@@ -29,18 +28,20 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 public class CombatEvents {
 
-    private static BiFunction<DamageSource, AttackData, AttackData> elementifyDamageSourceApiFunction;
+    private static BiFunction<DamageSource, AttackConfig, AttackConfig> elementifyDamageSourceApiFunction;
 
-    public static void setElementifyDamageSourceFunction(BiFunction<DamageSource, AttackData, AttackData> elementifyDamageSourceFunction) {
+    public static void setElementifyDamageSourceFunction(BiFunction<DamageSource, AttackConfig, AttackConfig> elementifyDamageSourceFunction) {
         CombatEvents.elementifyDamageSourceApiFunction = elementifyDamageSourceFunction;
     }
 
@@ -55,15 +56,32 @@ public class CombatEvents {
         Level level = target.level();
 
         // Get the attack data from the damage source
-        AttackData sourceData = getAttackData(damageSource, level);
-        sourceData = elementifyDamageSourceApiFunction.apply(damageSource, sourceData);
+        //AttackData sourceData = getAttackData(damageSource, level);
+        //sourceData = elementifyDamageSourceApiFunction.apply(damageSource, sourceData);
 
         // Get the protection data from target
-        DefenseData defCap = CapabilitiesAccessors.getDefenseData(target);
+        //DefenseConfig defCap = CapabilitiesAccessors.getDefenseConfig(target);
+
+        // TESTING STARTS HERE
+        Map<ResourceLocation, AttackLayer> layers = new HashMap<>();
+        Set<Condition> conditions = new HashSet<>();
+        AttackProperty atkProperty = new AttackProperty("magic", "fire");
+        AttackLayer custom_layer = new AttackLayer(conditions, 1, atkProperty);
+        layers.put(new ResourceLocation(Constants.MOD_ID, "test"), custom_layer);
+        AttackConfig atkConfig = new AttackConfig(layers);
+
+        AttackProperty attack = atkConfig.getSummedProperty(sourceEntity, null, level);
+
+        DefenseMap defStyle = new DefenseMap();
+        defStyle.add(Map.of("magic", -10));
+        DefenseMap defElement = new DefenseMap();
+        defElement.add(Map.of("fire", 10));
+        DefenseProperty defense = new DefenseProperty(defStyle, defElement);
+        // TESTING ENDS HERE
 
         // compute new Damage value
-        float defenseStyleScaling = DamageCalculationHelper.getScaling(defCap.getStyles(), sourceData.getStyle(sourceEntity, null, level), true);
-        float defenseElementScaling = DamageCalculationHelper.getScaling(defCap.getElements(), sourceData.getElement(sourceEntity, null, level), false);
+        float defenseStyleScaling = DamageCalculationHelper.getScaling(defense.style().map(), attack.style(), true);
+        float defenseElementScaling = DamageCalculationHelper.getScaling(defense.element().map(), attack.element(), false);
         float newDamageAmount = damageAmount * defenseStyleScaling * defenseElementScaling;
 
         // display particles
@@ -102,7 +120,7 @@ public class CombatEvents {
         if (target.getOffhandItem().getItem() instanceof LensItem ||
                 target.getMainHandItem().getItem() instanceof LensItem) {
             target.sendSystemMessage(Component.literal("Attack properties of damage source " + damageSource.getMsgId() + ":"));
-            sourceData.getLayers().forEach((rl, layer) -> {
+            atkConfig.layers().forEach((rl, layer) -> {
                 target.sendSystemMessage(Component.literal(" - " + rl + ": " + layer));
             });
         }
@@ -111,35 +129,29 @@ public class CombatEvents {
     }
 
     private static Entity getSourceEntity(DamageSource damageSource) {
-        AttackData data = new AttackData();
         if (damageSource == null) {
             return null;
         }
         return damageSource.getDirectEntity();
     }
 
-    private static AttackData getAttackData(DamageSource damageSource, Level level) {
-        AttackData data = new AttackData();
-        Entity immediateSource = getSourceEntity(damageSource);
-        if (immediateSource != null) {
-            AttackData sourceData = new AttackData();
-            if (immediateSource instanceof LivingEntity) {
-                sourceData = CapabilitiesAccessors.getAttackData((LivingEntity) immediateSource);
-            } else if (immediateSource instanceof Projectile) {
-                sourceData = CapabilitiesAccessors.getAttackData((Projectile) immediateSource);
-            }
-            AttackLayer summedLayer = sourceData.toLayer(immediateSource, null, level);
-            data.putLayer(new ResourceLocation("direct_entity"), summedLayer);
-            return data;
-        }
-        ResourceLocation rl = ResourceLocationAccessor.getResourceLocation(damageSource);
-        data.putLayer(new ResourceLocation("base"), CombatPropertiesManager.getDamageTypeDefaultLayer(rl));
-        return data;
-    }
+//    private static AttackData getAttackData(DamageSource damageSource, Level level) {
+//        AttackData data = new AttackData();
+//        Entity immediateSource = getSourceEntity(damageSource);
+//        if (immediateSource != null) {
+//            AttackData sourceData = CapabilitiesAccessors.getAttackData(immediateSource);
+//            AttackLayer summedLayer = sourceData.toLayer(immediateSource, null, level);
+//            data.putLayer(new ResourceLocation("direct_entity"), summedLayer);
+//            return data;
+//        }
+//        ResourceLocation rl = ResourceLocationAccessor.getResourceLocation(damageSource);
+//        data.putLayer(new ResourceLocation("base"), CombatPropertiesManager.getDamageTypeDefaultLayer(rl));
+//        return data;
+//    }
 
-    private static AttackLayer getBaseLayer(DamageSource source) {
-        return new AttackLayer();
-    }
+//    private static AttackLayer getBaseLayer(DamageSource source) {
+//        return new AttackLayer();
+//    }
 
     private static void sendParticleMessage(LivingEntity entity, String name, int amount) {
         // define message
@@ -166,13 +178,14 @@ public class CombatEvents {
             return null;
         }
 
-        AttackLayer layer = AttackDataAPI.getFullDataAsLayer(entity);
-        Item item = getEssenceItem(layer.getElement());
-        if (item == null) {
-            return null;
-        }
+//        AttackLayer layer = AttackDataAPI.getFullDataAsLayer(entity);
+//        Item item = getEssenceItem(layer.getElement());
+//        if (item == null) {
+//            return null;
+//        }
 
-        return new ItemEntity(entity.getCommandSenderWorld(), entity.getX(), entity.getY(), entity.getZ(), new ItemStack(item, numberOfDrops));
+//        return new ItemEntity(entity.getCommandSenderWorld(), entity.getX(), entity.getY(), entity.getZ(), new ItemStack(item, numberOfDrops));
+        return null;
     }
 
     private static Item getEssenceItem(String element) {

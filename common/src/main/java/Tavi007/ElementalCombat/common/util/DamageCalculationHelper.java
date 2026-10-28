@@ -1,8 +1,10 @@
 package Tavi007.ElementalCombat.common.util;
 
-import Tavi007.ElementalCombat.common.api.DefenseDataAPI;
-import Tavi007.ElementalCombat.common.api.data.AttackLayer;
-import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
+import Tavi007.ElementalCombat.common.api.AttackAPI;
+import Tavi007.ElementalCombat.common.api.DefenseAPI;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackProperty;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseMap;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseProperty;
 import Tavi007.ElementalCombat.server.ServerConfigAccessors;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -11,6 +13,10 @@ import net.minecraft.world.entity.LivingEntity;
 import java.util.Map;
 
 public class DamageCalculationHelper {
+
+    public static float getScaling(DefenseMap map, String key, boolean isStyle) {
+        return getScaling(map.map(), key, isStyle);
+    }
 
     public static float getScaling(Map<String, Integer> map, String key, boolean isStyle) {
         Integer factor = map.getOrDefault(key, 0);
@@ -26,17 +32,16 @@ public class DamageCalculationHelper {
     }
 
     public static float getNewDamageValue(float oldValue, DamageSource damageSource, LivingEntity target) {
-
         // no modification. Entity should take normal damage and die eventually.
         if (damageSource == null || damageSource.is(DamageTypes.GENERIC)) {
             return oldValue;
         }
 
-        AttackLayer attack = null;
-        DefenseLayer defense = DefenseDataAPI.getFullDataAsLayer(target);
+        AttackProperty attack = AttackAPI.getSummedProperty(damageSource);
+        DefenseProperty defense = DefenseAPI.getSummedProperty(target);
 
-        float defenseStyleScaling = getScaling(defense.getStyles(), attack.getStyle(), true);
-        float defenseElementScaling = getScaling(defense.getElements(), attack.getElement(), false);
+        float defenseStyleScaling = getScaling(defense.style(), attack.style(), true);
+        float defenseElementScaling = getScaling(defense.element(), attack.element(), false);
 
         return oldValue * defenseStyleScaling * defenseElementScaling;
     }

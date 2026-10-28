@@ -1,9 +1,11 @@
 package Tavi007.ElementalCombat.common.api;
 
-import Tavi007.ElementalCombat.common.api.data.AttackLayer;
-import Tavi007.ElementalCombat.common.api.data.DefenseLayer;
-import Tavi007.ElementalCombat.common.data.capabilities.AttackData;
-import Tavi007.ElementalCombat.common.data.capabilities.DefenseData;
+import Tavi007.ElementalCombat.common.Constants;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackProperty;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseMap;
+import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseProperty;
+import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
 import Tavi007.ElementalCombat.common.enchantments.ElementalResistanceEnchantment;
 import Tavi007.ElementalCombat.common.enchantments.ElementalWeaponEnchantment;
 import Tavi007.ElementalCombat.common.enchantments.IResistanceEnchantment;
@@ -19,6 +21,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ProtectionEnchantment;
 
+import java.util.Map;
+
 public class BasePropertiesAPI {
 
     ////////////////
@@ -27,83 +31,95 @@ public class BasePropertiesAPI {
 
 
     /**
-     * Returns a copy of the {@link AttackData} of the {@link EffectInstance}.
+     * Returns a copy of the {@link AttackProperty} of the {@link EffectInstance}.
      * Currently only checks for INSTANT_DAMAGE, which has the style 'magic'. Might rework at some point.
      *
-     * @param effect The EffectInstance.
-     * @return copy of AttackData.
+     * @param effectInstance The EffectInstance.
+     * @return copy of AttackProperty.
      */
-    public static AttackLayer getAttackLayer(MobEffectInstance effectInstance) {
-        AttackLayer base = new AttackLayer();
+    public static AttackProperty getAttackProperty(MobEffectInstance effectInstance) {
+        String style = CombatPropertiesManager.getDefaultStyle();
+        String element = CombatPropertiesManager.getDefaultElement();
         MobEffect effect = effectInstance.getEffect();
         if (MobEffects.HARM.equals(effect)) {
-            base.setStyle("magic");
+            style = Constants.MAGIC;
         } else if (effect instanceof ElementalHarmingEffect) {
-            base = ((ElementalHarmingEffect) effect).getAttackLayer();
+            return ((ElementalHarmingEffect) effect).getAttackProperty();
         }
-        return base;
+        return new AttackProperty(style, element);
     }
 
     /**
-     * Returns a copy of the {@link AttackData} of the {@link Enchantment}.
+     * Returns a copy of the {@link AttackProperty} of the {@link Enchantment}.
      * Currently only checks hardcoded values. Might rework at some point.
      *
-     * @param ench The Enchantment.
-     * @return copy of AttackData.
+     * @param enchantment The Enchantment.
+     * @return copy of AttackProperty.
      */
-    public static AttackLayer getAttackLayer(Enchantment ench) {
-        AttackLayer layer = new AttackLayer();
-        if (ench instanceof ElementalWeaponEnchantment) {
-            layer = ((ElementalWeaponEnchantment) ench).getAttackLayer();
-        } else if (ench.equals(Enchantments.FIRE_ASPECT) || ench.equals(Enchantments.FLAMING_ARROWS)) {
-            layer.setElement("fire");
-        } else if (ench.equals(Enchantments.CHANNELING)) {
-            layer.setElement("thunder");
+    public static AttackProperty getAttackProperty(Enchantment enchantment) {
+        String style = CombatPropertiesManager.getDefaultStyle();
+        if (enchantment instanceof ElementalWeaponEnchantment) {
+            String element = ((ElementalWeaponEnchantment) enchantment).getElement();
+            return new AttackProperty(style, element);
+        } else if (enchantment.equals(Enchantments.FIRE_ASPECT)
+                || enchantment.equals(Enchantments.FLAMING_ARROWS)) {
+            String element = Constants.FIRE;
+            return new AttackProperty(style, element);
+        } else if (enchantment.equals(Enchantments.CHANNELING)) {
+            String element = Constants.THUNDER;
+            return new AttackProperty(style, element);
         }
-        return layer;
+        return null;
+    }
+
+    public static AttackConfig getAttackConfig(Map<Enchantment, Integer> enchantments) {
+        return null;
     }
 
 
+    /////////////////
+    // Defensedata //
+    /////////////////
+
     /**
-     * Returns a copy of the {@link DefenseData} of any {@link Enchantment}.
+     * Returns a copy of the {@link DefenseProperty} of the {@link EffectInstance}.
+     * Currently only checks for my own Effect class and vanilla ones.
      *
-     * @param ench The Enchantment.
-     * @return copy of DefenseData.
+     * @param effectInstance The EffectInstance.
+     * @return copy of DefenseProperty.
      */
-    public static DefenseLayer getDefenseLayer(Enchantment ench, int level) {
-        DefenseLayer defenseLayer = new DefenseLayer();
+    public static DefenseProperty getDefenseProperty(MobEffectInstance effectInstance) {
+        DefenseMap element = new DefenseMap();
+        MobEffect effect = effectInstance.getEffect();
+        if (effect instanceof ElementalResistanceEffect) {
+            element = ((ElementalResistanceEffect) effect).getDefenseMap(effectInstance);
+        } else if (MobEffects.FIRE_RESISTANCE.equals(effect)) {
+            element = ((ElementalResistanceEffect) ModMobEffects.FIRE_RESISTANCE).getDefenseMap(effectInstance);
+        }
+        return new DefenseProperty(new DefenseMap(), element);
+    }
+
+    /**
+     * Returns a copy of the {@link DefenseProperty} of any {@link Enchantment}.
+     *
+     * @param enchantment The Enchantment.
+     * @return copy of DefenseProperty.
+     */
+    public static DefenseProperty getDefenseProperty(Enchantment enchantment, int level) {
         if (level != 0) {
-            if (ench instanceof IResistanceEnchantment resistEnchantment) {
-                defenseLayer = resistEnchantment.getDefenseLayer(level);
-            } else if (ench instanceof ProtectionEnchantment protectEnchantment) { // vanilla enchantments
+            if (enchantment instanceof IResistanceEnchantment resistEnchantment) {
+                return resistEnchantment.getDefenseProperty(level);
+            } else if (enchantment instanceof ProtectionEnchantment protectEnchantment) { // vanilla enchantments
                 if (protectEnchantment.type == ProtectionEnchantment.Type.FIRE) {
-                    defenseLayer = ElementalResistanceEnchantment.FIRE_RESISTANCE.getDefenseLayer(level);
+                    return ElementalResistanceEnchantment.FIRE_RESISTANCE.getDefenseProperty(level);
                 } else if (protectEnchantment.type == ProtectionEnchantment.Type.EXPLOSION) {
-                    defenseLayer = StyleResistanceEnchantment.EXPLOSION_RESISTANCE.getDefenseLayer(level);
+                    return StyleResistanceEnchantment.EXPLOSION_RESISTANCE.getDefenseProperty(level);
                 } else if (protectEnchantment.type == ProtectionEnchantment.Type.PROJECTILE) {
-                    defenseLayer = StyleResistanceEnchantment.PROJECTILE_RESISTANCE.getDefenseLayer(level);
+                    return StyleResistanceEnchantment.PROJECTILE_RESISTANCE.getDefenseProperty(level);
                 }
             }
         }
-        return defenseLayer;
-    }
-
-    /**
-     * Returns a copy of the {@link DefenseLayer} of the {@link EffectInstance}.
-     * Currently only checks for my own Effect class and vanilla ones.
-     *
-     * @param effect The EffectInstance.
-     * @return copy of DefenseLayer.
-     */
-    public static DefenseLayer getDefenseLayer(MobEffectInstance effectInstance) {
-        DefenseLayer base = new DefenseLayer();
-        MobEffect effect = effectInstance.getEffect();
-        if (effect instanceof ElementalResistanceEffect) {
-            base = ((ElementalResistanceEffect) effect).getDefenseLayer(effectInstance);
-        } else if (MobEffects.FIRE_RESISTANCE.equals(effect)) {
-            base = ((ElementalResistanceEffect) ModMobEffects.FIRE_RESISTANCE).getDefenseLayer(effectInstance);
-        }
-        return base;
+        return new DefenseProperty();
     }
 
 }
