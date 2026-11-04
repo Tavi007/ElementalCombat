@@ -9,14 +9,22 @@ base {
 }
 minecraft {
     version(minecraft_version)
-    if(file("src/main/resources/${mod_id}.accesswidener").exists()){
+    if (file("src/main/resources/${mod_id}.accesswidener").exists()) {
         accessWideners(file("src/main/resources/${mod_id}.accesswidener"))
     }
 }
 
 dependencies {
-     compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
-     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+
+    testImplementation platform('org.junit:junit-bom:5.13.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
 }
 
 publishing {
