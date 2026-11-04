@@ -1,10 +1,12 @@
 package Tavi007.ElementalCombat.common.api;
 
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackBranch;
 import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
-import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackProperty;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackTree;
 import Tavi007.ElementalCombat.server.network.NetworkHelper;
+import com.google.common.base.Optional;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -14,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
+import java.util.Queue;
 
 public class AttackAPI {
 
@@ -42,37 +45,27 @@ public class AttackAPI {
     }
 
     /**
-     * Get a copy of the fully merged {@link AttackLayer} of the {@link Projectile}.
-     * Use this to get the attack properties, which will be used in combat.
+     * Get an {@link AttackBranch} of the {@link Entity} by traversing its {@link AttackTree} by using a {@link ResourceLocation} queue.
+     * This returns an empty Optional, in case the queue could not be fully resolved.
+     * Use {@link AttackAPI#put(Entity, AttackBranch, ResourceLocation)} to apply changes.
      *
-     * @param entity A Projectile.
+     * @param entity    A LivingEntity.
+     * @param locations The ResourceLocation queue.
      */
-    public static AttackProperty getFullDataAsLayer(Projectile entity) {
-        AttackConfig config = CapabilitiesAccessors.getAttackConfig(entity);
-        return config.getSummedProperty(entity, null, entity.level());
+    public static Optional<AttackBranch> get(Entity entity, Queue<ResourceLocation> locations) {
+        return CapabilitiesAccessors.getAttackConfig(entity).get(locations);
     }
 
     /**
-     * Get the {@link AttackLayer} of the {@link Entity} at the {@link ResourceLocation}.
-     * Use {@link AttackAPI#put(Entity, AttackLayer, ResourceLocation)} to apply changes.
-     *
-     * @param entity   A LivingEntity.
-     * @param location The ResourceLocation.
-     */
-    public static AttackLayer get(Entity entity, ResourceLocation location) {
-        return new AttackLayer(CapabilitiesAccessors.getAttackConfig(entity).get(location));
-    }
-
-    /**
-     * Set the {@link AttackLayer} of the {@link LivingEntity} at the {@link ResourceLocation}.
+     * Set the {@link AttackBranch} of the {@link LivingEntity} at the end of the {@link ResourceLocation} queue.
      * This method will also update client side.
      *
-     * @param entity   A LivingEntity.
-     * @param location The ResourceLocation.
-     * @param layer    The attack layer to be set.
+     * @param entity    A LivingEntity.
+     * @param locations The ResourceLocation queue.
+     * @param branch    The attack layer to be set.
      */
-    public static void put(Entity entity, AttackLayer layer, ResourceLocation location) {
-        CapabilitiesAccessors.getAttackConfig(entity).put(location, layer);
+    public static void put(Entity entity, Queue<ResourceLocation> locations, AttackBranch branch) {
+        CapabilitiesAccessors.getAttackConfig(entity).put(locations, branch);
         if (!entity.level().isClientSide) {
             NetworkHelper.syncAttackLayerMessageForClients(entity, layer, location);
         }

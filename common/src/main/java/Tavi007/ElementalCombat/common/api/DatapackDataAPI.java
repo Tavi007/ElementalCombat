@@ -17,6 +17,10 @@ import net.minecraft.world.level.biome.Biome;
 public class DatapackDataAPI {
 
 
+    public static AttackProperty getDefaultAttack() {
+        return new AttackProperty(getDefaultStyle(), getDefaultElement());
+    }
+
     public static String getDefaultStyle() {
         return CombatPropertiesManager.getDefaultStyle();
     }

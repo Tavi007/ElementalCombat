@@ -3,7 +3,6 @@ package Tavi007.ElementalCombat.common.data.capabilities.attack;
 import Tavi007.ElementalCombat.common.api.BasePropertiesAPI;
 import Tavi007.ElementalCombat.common.api.DatapackDataAPI;
 import Tavi007.ElementalCombat.common.data.datapack.CombatConfig;
-import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
 import Tavi007.ElementalCombat.common.data.datapack.MobCombatConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -16,41 +15,38 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.Queue;
 
 //TODO: change to a tree like structure. Because then an entity can have the full attack config from the held item.
 // For now keep it like this for Condition testing.
-public record AttackConfig(Map<ResourceLocation, AttackLayer> layers) {
+public record AttackConfig(AttackTree tree) {
     private static final ResourceLocation BASE = new ResourceLocation("base");
     private static final ResourceLocation ENCHANTMENT = new ResourceLocation("enchantment");
 
     public AttackConfig() {
-        this(new HashMap<>());
+        this(new AttackTree());
     }
 
     public static AttackConfig read(FriendlyByteBuf buf) {
-        Map<ResourceLocation, AttackLayer> layers = buf.readMap(FriendlyByteBuf::readResourceLocation, AttackLayer::read);
+        AttackTree layers = AttackTree.read(buf);
         return new AttackConfig(layers);
     }
 
     public static void write(FriendlyByteBuf buf, AttackConfig attack) {
-        buf.writeMap(attack.layers, FriendlyByteBuf::writeResourceLocation, AttackLayer::write);
+        AttackTree.write(buf, attack.tree);
     }
 
     public static CompoundTag writeTag(AttackConfig attack) {
         CompoundTag tag = new CompoundTag();
-        attack.layers.forEach((rl, layer) -> tag.put(rl.toString(), AttackLayer.writeTag(layer)));
+        tag.put("tree", AttackTree.writeTag(attack.tree));
         return tag;
     }
 
     public static AttackConfig readTag(CompoundTag tag) {
-        Map<ResourceLocation, AttackLayer> layers = new HashMap<>();
-        for (String key : tag.getAllKeys()) {
-            layers.put(new ResourceLocation(key), AttackLayer.readTag((CompoundTag) tag.get(key)));
-        }
-        return new AttackConfig(layers);
+        CompoundTag treeTag = tag.getCompound("tree");
+        AttackTree tree = AttackTree.readTag(treeTag);
+        return new AttackConfig(tree);
     }
 
     public void initValues(Entity entity) {
@@ -73,55 +69,49 @@ public record AttackConfig(Map<ResourceLocation, AttackLayer> layers) {
         if (!has(ENCHANTMENT)) {
             //TODO: properly init enchantments
             AttackConfig enchantmentConfig = BasePropertiesAPI.getAttackConfig(EnchantmentHelper.getEnchantments(stack));
+            if (enchantmentConfig != null) {
+                put(enchantmentConfig);
+            }
         }
     }
 
     public boolean has(ResourceLocation location) {
-        return layers.containsKey(location);
+        return tree.has(location);
     }
 
-    public AttackLayer get(ResourceLocation location) {
-        return layers.get(location);
+    public AttackBranch get(ResourceLocation location) {
+        return tree.get(location);
     }
 
-    public AttackConfig put(ResourceLocation location, AttackLayer layer) {
-        layers.put(location, layer);
+    // traverse the tree until end of queue or a leaf (AttackProperty) is encountered
+    public Optional<AttackBranch> get(Queue<ResourceLocation> locations) {
+        return tree.get(locations);
+    }
+
+    public AttackConfig put(ResourceLocation location, AttackBranch branch) {
+        tree.put(location, branch);
+        return this;
+    }
+
+    public AttackConfig put(Queue<ResourceLocation> locations, AttackBranch branch) {
+        tree.put(locations, branch);
         return this;
     }
 
     public AttackConfig put(AttackConfig other) {
-        other.layers.forEach(this::put);
+        this.tree.put(other.tree);
         return this;
     }
 
-    public AttackLayer remove(ResourceLocation location) {
-        return layers.remove(location);
+    public AttackBranch remove(ResourceLocation location) {
+        return tree.remove(location);
     }
 
     public AttackProperty getSummedProperty(@Nullable Entity entity, @Nullable ItemStack stack, @Nullable Level level) {
-        // this could be slow, but I don't think we will ever have enough entries for this to matter.
-        List<AttackLayer> layers = this.layers.values().stream().sorted(AttackLayer.COMPARATOR).toList();
-        String style = CombatPropertiesManager.getDefaultStyle();
-        String element = CombatPropertiesManager.getDefaultElement();
-        for (AttackLayer layer : layers) {
-            if (layer.isActive(entity, stack, level)) {
-                if (style.equals(CombatPropertiesManager.getDefaultStyle())) {
-                    style = layer.getStyle();
-                }
-                if (element.equals(CombatPropertiesManager.getDefaultElement())) {
-                    element = layer.getElement();
-                }
-                if (!style.equals(CombatPropertiesManager.getDefaultStyle())
-                        && !element.equals(CombatPropertiesManager.getDefaultElement())) {
-                    break;
-                }
-            }
-        }
-        return new AttackProperty(style, element);
+        return tree.getSummedProperty(entity, stack, level);
     }
 
     public boolean isValid() {
-        return layers != null
-                && layers.values().stream().allMatch(obj -> obj != null && obj.isValid());
+        return tree != null && tree.isValid();
     }
 }

@@ -8,13 +8,13 @@ import net.minecraft.network.FriendlyByteBuf;
 
 public record AttackProperty(String style, String element) {
 
-    public static AttackProperty read(FriendlyByteBuf buf) {
-        return new AttackProperty(buf.readUtf(), buf.readUtf());
-    }
-
     public static void write(FriendlyByteBuf buf, AttackProperty property) {
         buf.writeUtf(property.style);
         buf.writeUtf(property.element);
+    }
+
+    public static AttackProperty read(FriendlyByteBuf buf) {
+        return new AttackProperty(buf.readUtf(), buf.readUtf());
     }
 
     public static CompoundTag writeTag(AttackProperty property) {
@@ -34,7 +34,7 @@ public record AttackProperty(String style, String element) {
     public boolean hasDefaultStyle() {
         return CombatPropertiesManager.getDefaultStyle().equals(style);
     }
-    
+
     public boolean hasDefaultElement() {
         return CombatPropertiesManager.getDefaultElement().equals(element);
     }
