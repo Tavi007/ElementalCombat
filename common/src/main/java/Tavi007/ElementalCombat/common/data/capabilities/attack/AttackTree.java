@@ -140,12 +140,15 @@ public record AttackTree(
 
     public AttackTree put(Queue<ResourceLocation> locations, AttackBranch branch) {
         ResourceLocation location = locations.poll();
-        if (has(location)) {
+        if(locations.isEmpty()) {
+            branches.put(location, branch);
+        } else if (has(location)) {
             get(location).put(locations, branch);
         }
         return this;
     }
 
+    // TODO: maybe remove once it not used anymore
     public AttackTree put(AttackTree other) {
         other.branches.forEach(this::put);
         return this;
@@ -153,6 +156,17 @@ public record AttackTree(
 
     public AttackBranch remove(ResourceLocation location) {
         return branches.remove(location);
+    }
+
+    public Optional<AttackBranch> remove(Queue<ResourceLocation> locations) {
+        ResourceLocation location = locations.poll();
+        if(locations.isEmpty()) {
+            AttackBranch removedBranch = branches.remove(location);
+            return Optional.of(removedBranch);
+        } else if (has(location)) {
+            return get(location).remove(locations);
+        }
+        return Optional.empty();
     }
 
     public boolean isValid() {

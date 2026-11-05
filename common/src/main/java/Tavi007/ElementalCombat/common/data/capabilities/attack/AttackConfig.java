@@ -83,28 +83,23 @@ public record AttackConfig(AttackTree tree) {
         return tree.get(location);
     }
 
-    // traverse the tree until end of queue or a leaf (AttackProperty) is encountered
-    public Optional<AttackBranch> get(Queue<ResourceLocation> locations) {
-        return tree.get(locations);
+    public Optional<AttackBranch> get(Queue<ResourceLocation> treePath) {
+        return tree.get(treePath);
     }
 
-    public AttackConfig put(ResourceLocation location, AttackBranch branch) {
-        tree.put(location, branch);
-        return this;
-    }
-
-    public AttackConfig put(Queue<ResourceLocation> locations, AttackBranch branch) {
-        tree.put(locations, branch);
+    public AttackConfig put(Queue<ResourceLocation> treePath, AttackBranch branch) {
+        tree.put(treePath, branch);
         return this;
     }
 
     public AttackConfig put(AttackConfig other) {
+        //TODO: maybe remove
         this.tree.put(other.tree);
         return this;
     }
 
-    public AttackBranch remove(ResourceLocation location) {
-        return tree.remove(location);
+    public Optional<AttackBranch> remove(Queue<ResourceLocation> treePath) {
+        return tree.remove(treePath);
     }
 
     public AttackProperty getSummedProperty(@Nullable Entity entity, @Nullable ItemStack stack, @Nullable Level level) {

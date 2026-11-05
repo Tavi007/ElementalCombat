@@ -81,10 +81,10 @@ public record AttackBranch(Either<AttackTree, AttackProperty> value, int priorit
 
 
     public AttackProperty getSummedProperty(@Nullable Entity entity, @Nullable ItemStack stack, @Nullable Level level) {
-        if (value.left().isPresent()) {
+        if (connectsTree()) {
             return value.left().get().getSummedProperty(entity, stack, level);
         }
-        if (value.right().isPresent()) {
+        if (connectsLeaf()) {
             return value.right().get();
         }
         return DatapackDataAPI.getDefaultAttack();
@@ -94,21 +94,39 @@ public record AttackBranch(Either<AttackTree, AttackProperty> value, int priorit
         if (locations.isEmpty()) {
             return Optional.of(this);
         }
-        if (value.left().isPresent()) {
-            return value.left().get().get(locations);
-        }
-        return Optional.empty();
+        return value.left().flatMap(tree -> tree.get(locations));
     }
 
     public AttackBranch put(Queue<ResourceLocation> locations, AttackBranch branch) {
-        if (locations.isEmpty()) {
-            this.value.;
+        if (!locations.isEmpty()) {
+            if(connectsLeaf()) {
+                throw new IllegalArgumentException("AttackTree leaf reached, but ResourceLocation queue is not empty.");
+            }
+            this.value.ifLeft(tree -> tree.put(locations, branch));
         }
-
         return this;
     }
 
+    public Optional<AttackBranch> remove(Queue<ResourceLocation> locations) {
+        if (!locations.isEmpty()) {
+            if(connectsLeaf()) {
+                throw new IllegalArgumentException("AttackTree leaf reached, but ResourceLocation queue is not empty.");
+            }
+            return this.value.left().flatMap(tree -> tree.remove(locations));
+        }
+        return Optional.of(this);
+    }
+
+    // use ^ as xor here. Only one option should be available
     public boolean isValid() {
-        return false;
+        return connectsTree() ^ connectsLeaf();
+    }
+
+    public boolean connectsTree() {
+        return this.value.left().isPresent();
+    }
+
+    public boolean connectsLeaf() {
+        return this.value.right().isPresent();
     }
 }

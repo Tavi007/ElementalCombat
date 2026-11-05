@@ -5,8 +5,6 @@ import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackBranch;
 import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
 import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackProperty;
 import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackTree;
-import Tavi007.ElementalCombat.server.network.NetworkHelper;
-import com.google.common.base.Optional;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -16,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.Queue;
 
 public class AttackAPI {
@@ -47,13 +46,13 @@ public class AttackAPI {
     /**
      * Get an {@link AttackBranch} of the {@link Entity} by traversing its {@link AttackTree} by using a {@link ResourceLocation} queue.
      * This returns an empty Optional, in case the queue could not be fully resolved.
-     * Use {@link AttackAPI#put(Entity, AttackBranch, ResourceLocation)} to apply changes.
+     * Use {@link AttackAPI#put(Entity, Queue, AttackBranch)} to apply changes.
      *
      * @param entity    A LivingEntity.
-     * @param locations The ResourceLocation queue.
+     * @param treePath The ResourceLocation queue used to traverse the tree..
      */
-    public static Optional<AttackBranch> get(Entity entity, Queue<ResourceLocation> locations) {
-        return CapabilitiesAccessors.getAttackConfig(entity).get(locations);
+    public static Optional<AttackBranch> get(Entity entity, Queue<ResourceLocation> treePath) {
+        return CapabilitiesAccessors.getAttackConfig(entity).get(treePath);
     }
 
     /**
@@ -61,28 +60,31 @@ public class AttackAPI {
      * This method will also update client side.
      *
      * @param entity    A LivingEntity.
-     * @param locations The ResourceLocation queue.
+     * @param treePath The ResourceLocation queue used to traverse the tree.
      * @param branch    The attack layer to be set.
      */
-    public static void put(Entity entity, Queue<ResourceLocation> locations, AttackBranch branch) {
-        CapabilitiesAccessors.getAttackConfig(entity).put(locations, branch);
-        if (!entity.level().isClientSide) {
-            NetworkHelper.syncAttackLayerMessageForClients(entity, layer, location);
-        }
+    public static void put(Entity entity, Queue<ResourceLocation> treePath, AttackBranch branch) {
+        CapabilitiesAccessors.getAttackConfig(entity).put(treePath, branch);
+//        TODO: reactivate networking
+//        if (!entity.level().isClientSide) {
+//            NetworkHelper.syncAttackLayerMessageForClients(entity, layer, location);
+//        }
     }
 
     /**
-     * Delete the {@link AttackLayer} of the {@link LivingEntity} at the {@link ResourceLocation}.
+     * Delete the {@link AttackBranch} of the {@link LivingEntity} at the {@link ResourceLocation} queue.
      * This method will also update client side.
      *
      * @param entity   A LivingEntity.
-     * @param location The ResourceLocation.
+     * @param treePath The ResourceLocation queue used to traverse the tree.
      */
-    public static void remove(Entity entity, ResourceLocation location) {
-        CapabilitiesAccessors.getAttackConfig(entity).remove(location);
-        if (!entity.level().isClientSide) {
-            NetworkHelper.syncAttackLayerMessageForClients(entity, null, location);
-        }
+    public static void remove(Entity entity, Queue<ResourceLocation> treePath) {
+        AttackConfig config = CapabilitiesAccessors.getAttackConfig(entity);
+        Optional<AttackBranch> branch = config.remove(treePath);
+//        TODO: reactivate networking. if remove returned an empty, no need to do anything
+//        if (!entity.level().isClientSide) {
+//            NetworkHelper.syncAttackLayerMessageForClients(entity, null, location);
+//        }
     }
 
 
@@ -102,84 +104,79 @@ public class AttackAPI {
     }
 
     /**
-     * Get the {@link AttackLayer} of the {@link ItemStack} at the {@link ResourceLocation}.
-     * Use {@link AttackAPI#put(ItemStack, AttackLayer, ResourceLocation)} to apply changes.
+     * Get an {@link AttackBranch} of the {@link ItemStack} by traversing its {@link AttackTree} by using a {@link ResourceLocation} queue.
+     * This returns an empty Optional, in case the queue could not be fully resolved.
+     * Use {@link AttackAPI#put(Entity, Queue, AttackBranch)} to apply changes.
      *
      * @param stack    An ItemStack.
-     * @param location The ResourceLocation.
+     * @param treePath The ResourceLocation queue used to traverse the tree..
      */
-    public static AttackLayer get(ItemStack stack, ResourceLocation location) {
-        return new AttackLayer(CapabilitiesAccessors.getAttackConfig(stack).get(location));
+    public static Optional<AttackBranch> get(ItemStack stack, Queue<ResourceLocation> treePath) {
+        return CapabilitiesAccessors.getAttackConfig(stack).get(treePath);
     }
 
     /**
-     * Set the {@link AttackLayer} of the {@link ItemStack} at the {@link ResourceLocation}.
+     * Set the {@link AttackBranch} of the {@link ItemStack} at the end of the {@link ResourceLocation} queue.
      * This method will also update client side.
      *
      * @param stack    An ItemStack.
-     * @param location The ResourceLocation.
-     * @param layer    The attack layer to be set.
+     * @param treePath The ResourceLocation queue used to traverse the tree.
+     * @param branch    The attack layer to be set.
      */
-    public static void put(ItemStack stack, AttackLayer layer, ResourceLocation location) {
-        CapabilitiesAccessors.getAttackConfig(stack).put(location, layer);
-//        if (!entity.level().isClientSide) {
-//            NetworkHelper.syncAttackLayerMessageForClients(entity, layer, location);
+    public static void put(ItemStack stack, Queue<ResourceLocation> treePath, AttackBranch branch) {
+        CapabilitiesAccessors.getAttackConfig(stack).put(treePath, branch);
+    }
+
+    /**
+     * Delete the {@link AttackBranch} of the {@link ItemStack} at the {@link ResourceLocation} queue.
+     * This method will also update client side.
+     *
+     * @param stack   An ItemStack.
+     * @param treePath The ResourceLocation queue used to traverse the tree.
+     */
+    public static void remove(ItemStack stack, Queue<ResourceLocation> treePath) {
+        AttackConfig config = CapabilitiesAccessors.getAttackConfig(stack);
+        Optional<AttackBranch> branch = config.remove(treePath);
+    }
+
+//    /**
+//     * Set the {@link AttackLayer} of the {@link ItemStack} at the {@link ResourceLocation}.
+//     * This method will also update client side.
+//     * Returns the new AttackConfig
+//     *
+//     * @param stack    A ItemStack.
+//     * @param location The ResourceLocation.
+//     * @param layer    The attack layer to be set.
+//     * @param entity   The LivingEntity, which might be holding the ItemStack. Needed to update 'item'-layer of the entity.
+//     */
+//    public static AttackConfig put(ItemStack stack, AttackLayer layer, ResourceLocation location, @Nullable LivingEntity entity) {
+//        AttackConfig itemConfig = CapabilitiesAccessors.getAttackConfig(stack).put(location, layer);
+//        if (entity != null) {
+//            AttackProperty itemProperty = itemConfig.getSummedProperty(null, stack, entity.level());
+//            AttackLayer itemLayer = new AttackLayer(50, itemProperty);
+//            put(entity, itemLayer, new ResourceLocation("item"));
 //        }
-    }
-
-    /**
-     * Delete the {@link AttackLayer} of the {@link ItemStack} at the {@link ResourceLocation}.
-     * This method will also update client side.
-     * Returns the removed AttackLayer
-     *
-     * @param stack    An ItemStack.
-     * @param location The ResourceLocation.
-     */
-    public static AttackLayer remove(ItemStack stack, ResourceLocation location) {
-        return CapabilitiesAccessors.getAttackConfig(stack).remove(location);
-//        if (!entity.level().isClientSide) {
-//            NetworkHelper.syncAttackLayerMessageForClients(entity, null, location);
+//        return itemConfig;
+//    }
+//
+//    /**
+//     * Delete the {@link AttackLayer} of the {@link ItemStack} at the {@link ResourceLocation}.
+//     * This method will also update clients.
+//     * Returns the new AttackConfig
+//     *
+//     * @param stack    A ItemStack.
+//     * @param location The ResourceLocation.
+//     */
+//    public static AttackConfig remove(ItemStack stack, ResourceLocation location, @Nullable LivingEntity entity) {
+//        AttackConfig itemConfig = CapabilitiesAccessors.getAttackConfig(stack);
+//        itemConfig.remove(location);
+//        if (entity != null) {
+//            AttackProperty itemProperty = itemConfig.getSummedProperty(null, stack, entity.level());
+//            AttackLayer itemLayer = new AttackLayer(50, itemProperty);
+//            put(entity, itemLayer, new ResourceLocation("item"));
 //        }
-    }
-
-    /**
-     * Set the {@link AttackLayer} of the {@link ItemStack} at the {@link ResourceLocation}.
-     * This method will also update client side.
-     * Returns the new AttackConfig
-     *
-     * @param stack    A ItemStack.
-     * @param location The ResourceLocation.
-     * @param layer    The attack layer to be set.
-     * @param entity   The LivingEntity, which might be holding the ItemStack. Needed to update 'item'-layer of the entity.
-     */
-    public static AttackConfig put(ItemStack stack, AttackLayer layer, ResourceLocation location, @Nullable LivingEntity entity) {
-        AttackConfig itemConfig = CapabilitiesAccessors.getAttackConfig(stack).put(location, layer);
-        if (entity != null) {
-            AttackProperty itemProperty = itemConfig.getSummedProperty(null, stack, entity.level());
-            AttackLayer itemLayer = new AttackLayer(50, itemProperty);
-            put(entity, itemLayer, new ResourceLocation("item"));
-        }
-        return itemConfig;
-    }
-
-    /**
-     * Delete the {@link AttackLayer} of the {@link ItemStack} at the {@link ResourceLocation}.
-     * This method will also update clients.
-     * Returns the new AttackConfig
-     *
-     * @param stack    A ItemStack.
-     * @param location The ResourceLocation.
-     */
-    public static AttackConfig remove(ItemStack stack, ResourceLocation location, @Nullable LivingEntity entity) {
-        AttackConfig itemConfig = CapabilitiesAccessors.getAttackConfig(stack);
-        itemConfig.remove(location);
-        if (entity != null) {
-            AttackProperty itemProperty = itemConfig.getSummedProperty(null, stack, entity.level());
-            AttackLayer itemLayer = new AttackLayer(50, itemProperty);
-            put(entity, itemLayer, new ResourceLocation("item"));
-        }
-        return itemConfig;
-    }
+//        return itemConfig;
+//    }
 
     //////////////////
     // DamageSource //
