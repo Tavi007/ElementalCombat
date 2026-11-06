@@ -1,7 +1,7 @@
 package Tavi007.ElementalCombat.server.network;
 
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackBranch;
 import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
-import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseConfig;
 import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseLayer;
 import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
@@ -34,13 +34,6 @@ public class NetworkHelper {
 //        }
     }
 
-    /**
-     * Sends a message to all clients. The provided DefenseLayer {@link DefenseLayer} will be put to the entity on the client.
-     * In addition the message syncs the AttackConfig {@link AttackData} of the {@link LivingEntity}.
-     *
-     * @param livingEntity A LivingEntity.
-     * @param layer        The DefenseLayer to be added to the defense values of the LivingEntity (on the client).
-     */
     public static void syncDefenseLayerMessageForClients(Entity livingEntity, DefenseLayer layer, ResourceLocation location) {
 //        if (!livingEntity.level().isClientSide) {
 //            CapabilitiesAccessors.getDefenseConfig(livingEntity).putLayer(location, layer);
@@ -49,7 +42,14 @@ public class NetworkHelper {
 //        }
     }
 
-    public static void syncAttackLayerMessageForClients(Entity livingEntity, AttackLayer layer, ResourceLocation location) {
+    /**
+     * Sends a message to all clients. The provided AttackBranch {@link AttackBranch} will be put to the entity on the client.
+     * In addition the message syncs the AttackConfig {@link AttackConfig} of the {@link LivingEntity}.
+     *
+     * @param livingEntity A LivingEntity.
+     * @param branch        The AttackBranch to be added to the LivingEntity (on the client).
+     */
+    public static void syncAttackLayerMessageForClients(Entity livingEntity, AttackBranch branch, ResourceLocation location) {
 //        if (!livingEntity.level().isClientSide) {
 //            CapabilitiesAccessors.getAttackData(livingEntity).putLayer(location, layer);
 //            UpdateEntityAttackLayerPacket attackMessageToClient = new UpdateEntityAttackLayerPacket(layer, location, livingEntity.getId());

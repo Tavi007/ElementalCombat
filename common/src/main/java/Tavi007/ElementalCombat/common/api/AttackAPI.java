@@ -189,6 +189,13 @@ public class AttackAPI {
      * @param source A DamageSource.
      */
     public static AttackProperty getSummedProperty(DamageSource source) {
-        return CapabilitiesAccessors.getAttackConfig(source).getSummedProperty(null, null, null);
+        Entity entity = source.getEntity();
+        Level level = null;
+        if(entity != null) {
+             level = entity.level();
+        }
+        return CapabilitiesAccessors.getAttackConfig(source).getSummedProperty(entity, null, level);
+
+
     }
 }

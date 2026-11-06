@@ -1,9 +1,9 @@
 package Tavi007.ElementalCombat.server.events;
 
 import Tavi007.ElementalCombat.common.Constants;
+import Tavi007.ElementalCombat.common.api.AttackAPI;
 import Tavi007.ElementalCombat.common.data.capabilities.Condition;
 import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
-import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackProperty;
 import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseMap;
 import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseProperty;
@@ -56,21 +56,11 @@ public class CombatEvents {
         Level level = target.level();
 
         // Get the attack data from the damage source
-        //AttackData sourceData = getAttackData(damageSource, level);
-        //sourceData = elementifyDamageSourceApiFunction.apply(damageSource, sourceData);
+        AttackProperty attack = AttackAPI.getSummedProperty(damageSource);
+//        sourceData = elementifyDamageSourceApiFunction.apply(damageSource, sourceData);
 
         // Get the protection data from target
         //DefenseConfig defCap = CapabilitiesAccessors.getDefenseConfig(target);
-
-        // TESTING STARTS HERE
-        Map<ResourceLocation, AttackLayer> layers = new HashMap<>();
-        Set<Condition> conditions = new HashSet<>();
-        AttackProperty atkProperty = new AttackProperty("magic", "fire");
-        AttackLayer custom_layer = new AttackLayer(conditions, 1, atkProperty);
-        layers.put(new ResourceLocation(Constants.MOD_ID, "test"), custom_layer);
-        AttackConfig atkConfig = new AttackConfig(layers);
-
-        AttackProperty attack = atkConfig.getSummedProperty(sourceEntity, null, level);
 
         DefenseMap defStyle = new DefenseMap();
         defStyle.add(Map.of("magic", -10));
@@ -119,10 +109,11 @@ public class CombatEvents {
         // handle lens items
         if (target.getOffhandItem().getItem() instanceof LensItem ||
                 target.getMainHandItem().getItem() instanceof LensItem) {
-            target.sendSystemMessage(Component.literal("Attack properties of damage source " + damageSource.getMsgId() + ":"));
-            atkConfig.layers().forEach((rl, layer) -> {
-                target.sendSystemMessage(Component.literal(" - " + rl + ": " + layer));
-            });
+            // TODO: fix output
+//            target.sendSystemMessage(Component.literal("Attack properties of damage source " + damageSource.getMsgId() + ":"));
+//            attack.layers().forEach((rl, layer) -> {
+//                target.sendSystemMessage(Component.literal(" - " + rl + ": " + layer));
+//            });
         }
 
         return newDamageAmount;

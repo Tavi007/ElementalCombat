@@ -3,8 +3,8 @@ package Tavi007.ElementalCombat.common.events;
 import Tavi007.ElementalCombat.common.api.AttackAPI;
 import Tavi007.ElementalCombat.common.api.DefenseAPI;
 import Tavi007.ElementalCombat.common.capabilities.CapabilitiesAccessors;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackBranch;
 import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
-import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackProperty;
 import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseConfig;
 import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseLayer;
@@ -18,6 +18,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class EquipmentEvents {
 
@@ -48,9 +51,12 @@ public class EquipmentEvents {
             return;
         }
         AttackConfig config = CapabilitiesAccessors.getAttackConfig(entity.getMainHandItem());
-        AttackProperty property = config.getSummedProperty(entity, entity.getMainHandItem(), entity.level());
-        AttackLayer layer = new AttackLayer(25, property);
-        AttackAPI.put(entity, layer, MAIN_HAND);
+
+        Queue<ResourceLocation> treePath = new LinkedList<>();
+        treePath.add(MAIN_HAND);
+
+        AttackBranch branch = new AttackBranch(config.tree(), 25);
+        AttackAPI.put(entity, treePath, branch);
     }
 
     public static void changeEquipment(LivingEntity entity, ResourceLocation location, ItemStack newEquipment) {

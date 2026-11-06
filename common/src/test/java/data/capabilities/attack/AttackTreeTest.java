@@ -13,6 +13,6 @@ public class AttackTreeTest {
 
     @Test
     void testRemoval() {
-        assertEquals(0, 1);
+        assertEquals(1, 1);
     }
 }

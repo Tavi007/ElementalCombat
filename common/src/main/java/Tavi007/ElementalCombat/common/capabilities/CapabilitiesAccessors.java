@@ -1,9 +1,10 @@
 package Tavi007.ElementalCombat.common.capabilities;
 
 import Tavi007.ElementalCombat.common.data.capabilities.ImmersionData;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackBranch;
 import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackConfig;
-import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackLayer;
 import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackProperty;
+import Tavi007.ElementalCombat.common.data.capabilities.attack.AttackTree;
 import Tavi007.ElementalCombat.common.data.capabilities.defense.DefenseConfig;
 import Tavi007.ElementalCombat.common.data.datapack.CombatPropertiesManager;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +14,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 import java.util.function.Function;
 
 public class CapabilitiesAccessors {
@@ -91,9 +96,13 @@ public class CapabilitiesAccessors {
 
         damageSource.typeHolder().unwrapKey().ifPresent(resourceKey -> {
             ResourceLocation resourceLocation = resourceKey.location();
+            // This will return a Tree or Config at some point
             AttackProperty defaultProperty = CombatPropertiesManager.getDamageTypeDefaultProperty(resourceLocation);
-            AttackLayer layer = new AttackLayer(100, defaultProperty);
-            data.put(new ResourceLocation("base"), layer);
+
+            AttackBranch branch = new AttackBranch(defaultProperty, 100);
+            Queue<ResourceLocation> locations = new LinkedList<>();
+            locations.add(new ResourceLocation("base"));
+            data.put( locations, branch);
         });
 
         Entity immediateSource = damageSource.getDirectEntity();
@@ -106,9 +115,11 @@ public class CapabilitiesAccessors {
             }
 
             if (sourceConfig != null) {
-                AttackProperty property = sourceConfig.getSummedProperty(immediateSource, null, immediateSource.level());
-                AttackLayer layer = new AttackLayer(99, property);
-                data.put(new ResourceLocation("immediate_source"), layer);
+                AttackTree entityTree = sourceConfig.tree();
+                AttackBranch branch = new AttackBranch(entityTree, 50);
+                Queue<ResourceLocation> locations = new LinkedList<>();
+                locations.add(new ResourceLocation("entity"));
+                data.put(locations, branch);
             }
         }
 
