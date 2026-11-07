@@ -37,17 +37,17 @@ public record AttackTree(
         return new AttackTree(conditions, branches);
     }
 
-    public static CompoundTag writeTag(AttackTree layer) {
+    public static CompoundTag writeTag(AttackTree tree) {
         CompoundTag tag = new CompoundTag();
 
         ListTag conditionTag = new ListTag();
-        layer.conditions.forEach((condition -> {
+        tree.conditions.forEach((condition -> {
             conditionTag.add(Condition.writeTag(condition));
         }));
         tag.put("conditions", conditionTag);
 
         CompoundTag branches = new CompoundTag();
-        layer.branches.forEach((rl, branch) -> {
+        tree.branches.forEach((rl, branch) -> {
             branches.put(rl.toString(), AttackBranch.writeTag(branch));
         });
         tag.put("branches", branches);
@@ -64,11 +64,11 @@ public record AttackTree(
                 });
 
         Map<ResourceLocation, AttackBranch> branches = new HashMap<>();
-        tag.getCompound("branches")
-                .getAllKeys()
+        CompoundTag branchTag = tag.getCompound("branches");
+        branchTag.getAllKeys()
                 .forEach(key -> {
                     ResourceLocation rl = new ResourceLocation(key);
-                    AttackBranch branch = AttackBranch.readTag((CompoundTag) tag.get(key));
+                    AttackBranch branch = AttackBranch.readTag((CompoundTag) branchTag.get(key));
                     branches.put(rl, branch);
                 });
         return new AttackTree(conditions, branches);

@@ -19,6 +19,7 @@ public class NetworkHelper {
      * @param livingEntity A LivingEntity.
      */
     public static void syncMessageForClients(LivingEntity livingEntity) {
+//        TODO: fix
 //        if (!livingEntity.level().isClientSide) {
 //            CapabilitiesHelper.updateMainHandItemLayer(livingEntity);
 //            AttackConfig attackData = CapabilitiesAccessors.getAttackConfig(livingEntity);
@@ -35,6 +36,7 @@ public class NetworkHelper {
     }
 
     public static void syncDefenseLayerMessageForClients(Entity livingEntity, DefenseLayer layer, ResourceLocation location) {
+//        TODO: fix
 //        if (!livingEntity.level().isClientSide) {
 //            CapabilitiesAccessors.getDefenseConfig(livingEntity).putLayer(location, layer);
 //            UpdateEntityDefenseLayerPacket defenseMessageToClient = new UpdateEntityDefenseLayerPacket(layer, location, livingEntity.getId());
@@ -50,6 +52,7 @@ public class NetworkHelper {
      * @param branch        The AttackBranch to be added to the LivingEntity (on the client).
      */
     public static void syncAttackLayerMessageForClients(Entity livingEntity, AttackBranch branch, ResourceLocation location) {
+//        TODO: fix
 //        if (!livingEntity.level().isClientSide) {
 //            CapabilitiesAccessors.getAttackData(livingEntity).putLayer(location, layer);
 //            UpdateEntityAttackLayerPacket attackMessageToClient = new UpdateEntityAttackLayerPacket(layer, location, livingEntity.getId());
