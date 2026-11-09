@@ -140,11 +140,13 @@ public record AttackTree(
 
     public AttackTree put(Queue<ResourceLocation> locations, AttackBranch branch) {
         ResourceLocation location = locations.poll();
-        if(locations.isEmpty()) {
+        if (locations.isEmpty()) {
             branches.put(location, branch);
-        } else if (has(location)) {
-            get(location).put(locations, branch);
+        } else if (!has(location)) {
+            // make sure tree at location exists. Set a default priority
+            put(location, new AttackBranch(new AttackTree(), 50));
         }
+        get(location).put(locations, branch);
         return this;
     }
 
@@ -160,9 +162,11 @@ public record AttackTree(
 
     public Optional<AttackBranch> remove(Queue<ResourceLocation> locations) {
         ResourceLocation location = locations.poll();
-        if(locations.isEmpty()) {
+        if (locations.isEmpty()) {
             AttackBranch removedBranch = branches.remove(location);
-            return Optional.of(removedBranch);
+            if (removedBranch != null) {
+                return Optional.of(removedBranch);
+            }
         } else if (has(location)) {
             return get(location).remove(locations);
         }
